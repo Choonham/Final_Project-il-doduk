@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:replace="~{/fragments/nav :: navi}"></div>
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">문의사항</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>문의사항</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<br/>
+
+<div class="row form-group">
+
+    <div class="col-md-12">
+        <label class="text-black">제목</label>
+        <input type="text" readonly class="form-control" th:value="${board.cusTitle}" name="cusTitle" />
+    </div>
+</div>
+
+<div class="row form-group">
+    <div class="col-md-12">
+        <label class="text-black">내용</label>
+        <textarea name="cusContent" rows="10" cols="10" th:text="${board.cusContent}" readonly class="form-control">
+        </textarea>
+    </div>
+</div>
+
+<div class="row form-group">
+
+    <div class="col-md-12">
+        <label class="text-black">작성자</label>
+        <input readonly class="form-control" type="text" th:value="${board.cusTitle}" name="cusTitle" />
+    </div>
+</div>
+
+<div class="row form-group">
+
+    <div class="col-md-12">
+        <label class="text-black">작성일</label>
+        <input type="text" th:value="${#temporals.format(board.modDate, 'yyyy-MM-dd')}" name="modDate"
+               readonly class="form-control"/>
+    </div>
+</div>
+
+<div th:if="${user != null}">
+    <a th:href="@{/serviceCenter/customerUpdateBoard(cusNo = ${board.cusNo}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
+        <button type="button">게시글 수정</button>
+    </a>
+    <a th:href="@{/serviceCenter/customerBoard}">
+        <button type="button">목록으로</button>
+    </a>
+</div>
+<div th:if="${otherUser != null}">
+    <a th:href="@{/serviceCenter/customerBoard}">
+        <button type="button">목록으로</button>
+    </a>
+</div>
+
+<!-- 관리자 영역 -->
+
+<!-- 댓글 목록  -->
+
+<div th:if="${answer != null}">
+    <div class="mb-3">
+        <label class="form-label">문의내용</label>
+            <div contenteditable="true" th:utext="${answer.aContent}" rows="3"></div>
+            <div contenteditable="true" th:text="${#temporals.format(answer.modDate, 'yyyy-MM-dd')}" ></div>
+        <div th:if="${session.user.id == 'admin'}">
+            <a id="delete">
+                <button type="button" class="btn btn-primary" >답변삭제</button>
+                <input type="hidden" th:value="${answer.aNo}" id="aNo" />
+
+            </a>
+        </div>
+    </div>
+</div>
+<!-- 댓글 목록 관련 끝 -->
+
+<!-- 댓글 쓰기 관련 -->
+<div class="form-group" th:if="${answer == null} and ${session.user.id == 'admin'} ">
+    <label>comments</label>
+    <form method = "post">
+        <textarea cols = "40" rows="5" class="form-control" name="aContent" id = "comment"></textarea>
+        <input type = "text" name = "aWriter" value="admin" id = "commentWriter">
+    </form>
+    <button class = "btn btn-info" id = "commentRegister" type ="button">답변등록</button>
+</div>
+<!-- 댓글 쓰기 관련 끝 -->
+
+<script th:inline="javascript">
+
+     // 댓글 등록
+    $("#commentRegister").click(function () {
+
+        // 줄바꿈을 태그로 같이 저장하기 위한 로직 시작
+        txtBox = document.getElementById("comment");
+        var lines = txtBox.value.split("\n");
+
+        var resultString = "<p>";
+
+        for (var i = 0; i < lines.length; i++) {
+            resultString += lines[i] + "<br />";
+        }
+        resultString += "</p>"; // textarea에 담긴 데이터를 저장할 변수
+        // 줄바꿈을 태그로 같이 저장하기 위한 로직 끝
+
+        writer = $("#commentWriter").val();
+
+        // json 형태의 댓글 데이터
+        var commentData = {
+
+            aContent: resultString,
+            aWriter: writer,
+            cusNo: [[${board.cusNo}]]
+        }
+        console.log("작성자 : " +commentData.aWriter);
+        $.ajax({
+            data: JSON.stringify(commentData), //json 데이터를 String으로
+            type: "post",
+            url: '/serviceCenter/boardComment',
+            cache: false,
+            contentType: 'application/json; charset=utf8',
+            dataType: 'json',
+            processData: false,
+
+
+            success: function (data) {
+                location.reload(); // 페이지 전체를 리로드(tempPage 변수 때문에 부분 리로드하기 복잡)
+            },
+
+            error: function(jqXHR, textStatus, errorThorwn){
+                alert("실패");
+            }
+        });
+        console.log("내용 : " + commentData.aContent)
+    })
+    // 댓글 등록 끝
+
+    // 댓글 삭제
+    $("#delete button").click(function() {
+        var aNo = $("#aNo").val();
+
+        $.ajax({
+            data : aNo,
+            type: "delete",
+            url: '/serviceCenter/deleteComment',
+            cache: false,
+            contentType: 'application/json; charset=utf8',
+            dataType: 'json',
+            processData: false,
+
+            success: function (data) {
+                (location).reload();
+            },
+            error: function(jqXHR, textStatus, errorThorwn){
+                alert("실패");
+            }
+        })
+    })
+    // 댓글 삭제 끝
+
+
+
+</script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+
+
+</body>
+</html>
