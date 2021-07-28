@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body id="top">
+<nav th:replace="~{/fragments/nav :: navi}"></nav>
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">문의사항</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>문의사항</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">제목</th>
+        <th scope="col">작성자</th>
+        <th scope="col">작성일</th>
+        <th scope="col">답변여부</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr scope="row" th:each="dto : ${cusBoard.dtoList}" th:if="${cusBoard.totalPage > 0}">
+        <td>
+            [[${dto.cusNo}]]
+        </td>
+        <td>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY2g5o5J8JUwnx0Ax-EopdjYPH_CzZufP0Ag&usqp=CAU" width="14" th:if="${dto.cusTitle == '비공개 게시글 입니다.'}">
+            <a href=""  name="pw" th:href="@{/serviceCenter/customerGetBoard(cusNo = ${dto.cusNo},cusWriter = ${session.user.id},
+            page= ${cusBoard.page},type=${pageRequestDTO.type},keyword = ${pageRequestDTO.keyword})}">
+                [[${dto.cusTitle}]]
+            </a>
+        </td>
+        <td>[[${dto.cusWriter}]]</td>
+        <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+        <td>[[${dto.answerCheck}]]</td>
+        <form id="pwForm" th:action="@{/serviceCenter/customerGetBoard}" method="post">
+            <input type="hidden" name="cusNo" id="cusNoPw" />
+        </form>
+    </tr>
+    </tbody>
+
+</table>
+<a href="" th:href="@{/serviceCenter/customerWriteForm}" >글작성</a>
+
+<!-- 페이징 -->
+
+<div class="row pagination-wrap mt-5">
+
+    <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+            <a href="#" class="prev">Prev</a>
+
+            <div class="d-inline-block">
+                <ul>
+                    <li th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} " th:each="page: ${cusBoard.pageList}">
+                        <a th:href="@{/serviceCenter/customerBoard(page = ${page} ,
+                   type=${pageRequestDTO.type} ,
+                   keyword = ${pageRequestDTO.keyword}  )}">
+                            [[${page}]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <a href="#" class="next">Next</a>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- 검색 -->
+<form th:action="@{/serviceCenter/customerBoard}" method="get" id="searchForm">
+    <div>
+        <input type="hidden" name="page" value = "1">
+        <div>
+            <select name="type">
+                <option th:selected="${pageRequestDTO.type == null}">--</option>
+                <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
+                <option value="w"  th:selected="${pageRequestDTO.type =='w'}" >작성자</option>
+                <option value="tw"  th:selected="${pageRequestDTO.type =='tw'}" >제목 + 내용</option>
+            </select>
+        <input name="keyword" th:value="${pageRequestDTO.keyword}">
+        </div>
+
+        <div>
+            <button type="submit">검색</button>
+        </div>
+    </div>
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">비공개 게시글</h4>
+            </div>
+            <div class="modal-body">
+                <p class="noOpenBoard">비밀번호 입력</p>
+                <input type="password" name="passwordBoard" id="password_val" placeholder="password" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="password_check" data-dismiss="modal">확인</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .modal-content{
+        position: relative;
+        top:80px;
+    }
+</style>
+<script th:inline="javascript">
+
+    var password = [[${password}]];
+    var noOpen = [[${noOpen}]]; //다른 사람 게시글을 누를 경우
+    var pwNo = [[${pwNo}]]; //비밀번호 입력 후에 넘겨줄 게시번호
+
+    console.log("넘어온 비밀번호 : "+password);
+
+    $(document).ready(function(){
+
+        if(noOpen != null){
+
+            $(".noOpenBoard").text("비공개된 게시물 입니다.");
+            $("input").remove("#password_val");
+            $("#myModal").modal();
+
+            $("#password_check").click(function(){
+               self.close();
+            });
+        }
+
+        //넘어온 패스워드가 있을 경우 모달창 뜨게
+        if(password != null){
+            $("#myModal").modal();
+
+            $("#password_check").click(function(){
+                //입력한 값을 받고
+                var input_password = $("#password_val").val();
+
+                console.log("내가 입력한 비밀번호" + input_password);
+
+                if(password == input_password){
+                    //a태그 내부에 있는 정보와 함께 비밀번호 정보도 같이 보내야한다.
+                    $("#cusNoPw").val(pwNo);
+                    $("#pwForm").submit();
+                } else {
+                    alert("비밀번호가 틀립니다. 다시 확인해주세요.");
+                }
+            });
+        }
+        //확인 버튼을 누르게 되면
+
+    });
+</script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

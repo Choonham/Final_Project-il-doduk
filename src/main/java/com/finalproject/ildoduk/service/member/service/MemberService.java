@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.service.member.service;
 
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,6 +20,11 @@ public interface MemberService {
 
     void userDelete(String id);
 
+// 유저 포인트 관련
+
+    void updatePoint(PaymentDTO dto);
+    void minusPonit(MemberDto dto);
+    void plusPoint(MemberDto dto);
 
 
     MemberDto kakaoLogin(@RequestBody String json) ;
