@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+
+    <table>
+        <tr th:each="client : ${clientList}">
+            <td ><a th:href="@{/chat(id=${client})}"><span th:text="${client}"></span></a> </td>
+
+        </tr>
+
+    </table>
+</body>
+</html>
