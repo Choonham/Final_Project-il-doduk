@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Post A Job</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>Post a Job</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form th:action="@{/serviceCenter/update}" method="post">
+    <input type="hidden" name="cusNo" th:value="${board.cusNo}" />
+    <table>
+        <tr>
+            <td>제목</td>
+            <td>
+                <input type="text" th:value="${board.cusTitle}" name="cusTitle" />
+            </td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td>
+                <textarea name="cusContent" rows="10" cols="10" th:text="${board.cusContent}">
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>작성자</td>
+            <td>
+                <input type="text" th:value="${board.cusWriter}" name="cusWriter" readonly="readonly" />
+            </td>
+        </tr>
+        <tr>
+            <td>작성일</td>
+            <td>
+                <input type="text" th:value="${#temporals.format(board.modDate, 'yyyy-MM-dd')}" readonly="readonly"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<div>
+
+   <button type="button" id="update">게시글 수정</button>
+   <button type="button" id="delete">게시글 삭제</button>
+   <a th:href="@{/serviceCenter/customerBoard}">
+       <button type="button" >목록으로</button>
+   </a>
+</div>
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+
+</body>
+</html>

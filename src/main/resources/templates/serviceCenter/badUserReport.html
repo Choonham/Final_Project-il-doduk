@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:replace="~{/fragments/nav :: navi}"></div>
+
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">사용자 신고</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <a href="#">Job</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>사용자 신고</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<table>
+  <tr>
+    <td colspan="5">신고 내용이 없습니다.</td>
+  </tr>
+  <tr>
+    <th>#</th>
+    <th>신고</th>
+    <th>신고 대상</th>
+    <th>신고 일시</th>
+    <th>처리상황</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>너 신고한다..</td>
+    <td>전다훈</td>
+    <td>오늘</td>
+    <td>처리완료</td>
+  </tr>
+</table>
+<a href="#" th:href="@{/serviceCenter/badUserReportForm}">
+  <button>신고하기</button>
+</a>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

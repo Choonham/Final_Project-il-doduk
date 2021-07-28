@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="top">
+<nav th:replace="~{/fragments/nav :: navi}"></nav>
+
+<style>
+  #payHistory,#tradeHistory{
+    display: none;
+  }
+</style>
+
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">결제 내역 조회</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#" th:href="@{/main}">Home</a> <span class="mx-2 slash">/</span>
+          <a href="#">Job</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>결제 내역 조회</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <a id="none">
+        <button>~~~</button>
+      </a>
+      <a id="pay_btn">
+        <button>결제내역조회</button>
+      </a>
+
+      <a id="trade_btn">
+        <button>거래내역조회</button>
+      </a>
+
+<div id="notSelected">
+  <table >
+    <tr>
+      <td colspan="5">선택된 항목이 없습니다.</td>
+    </tr>
+  </table>
+</div>
+<script>
+  $(document).ready(function(){
+    $("#none").click(function(){
+      $("#notSelected").show();
+      $("#payHistory").hide();
+      $("#tradeHistory").hide();
+    });
+
+    $("#pay_btn").click(function(){
+      $("#payHistory").show();
+      $("#tradeHistory").hide();
+      $("#notSelected").hide();
+    });
+
+    $("#trade_btn").click(function(){
+      $("#payHistory").hide();
+      $("#tradeHistory").show();
+      $("#notSelected").hide();
+    });
+
+
+
+  });
+</script>
+
+
+<div id="payHistory">
+  <table >
+    <tr>
+      <th>#</th>
+      <th>결제금액</th>
+      <th>결제 여부</th>
+      <th>결제한 날짜</th>
+      <th>.</th>
+    </tr>
+
+    <tr th:if="${result.totalPage} == 0">
+      <td colspan="5"> 결제 이력이 존재하지 않습니다.</td>
+    </tr>
+
+    <tr th:each="dto : ${result.dtoList}" th:if="${result.totalPage} != 0">
+      <td>[[${dto.pointNo}]]</td>
+      <td>[[${dto.totalPoint}]]</td>
+      <td>[[${dto.payCheck}]]</td>
+      <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+
+      <td th:if="${dto.payCheck == '결제완료'}">
+        <a href="" th:href="@{/serviceCenter/toRefund(pointNo = ${dto.pointNo})}"
+           onclick="window.open(this.href,'환불 진행중..','width=460, height=380, scrollbars=no, resizeable=no');return false;">환불신청</a>
+      </td>
+
+      <td th:if="${dto.payCheck == '환불완료'}">
+        <a href="#"></a>
+      </td>
+    </tr>
+  </table>
+
+  <ul>
+    <li th:each="page: ${result.pageList}">
+      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page},userID=${session.user.id})}">
+        [[${page}]]
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div id="tradeHistory">
+  <table>
+    <tr>
+      <td>#</td>
+      <td>제목</td>
+      <td>가격</td>
+      <td>거래대상</td>
+      <td>거래상태</td>
+      <td>거래일</td>
+    </tr>
+    <tr th:each="trade : ${trade.dtoList}">
+      <td>[[${trade.tNo}]]</td>
+      <td>[[${trade.aucTitle}]]</td>
+      <td>[[${trade.aucPrice}]]</td>
+      <td>[[${trade.userId}]]</td>
+      <td>[[${trade.aucState}]]</td>
+      <td th:text="${#temporals.format(trade.regDate, 'yyyy-MM-dd')}"></td>
+    </tr>
+  </table>
+
+  <ul>
+    <li th:each="page: ${trade.pageList}">
+      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page},userID=${session.user.id})}">
+        [[${page}]]
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+
+<script>
+
+  $(document).ready(function (){
+
+    });
+
+</script>
+
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+}
+
+#refund_container {
+   margin: 4px;
+    font-size: 17px;
+
+}
+#refund_container h4{
+    text-align: center;
+    border-radius: 8px;
+    color: #FAFAFA;
+    display: block;
+    background-color: #89ba16;
+    width: 113px;
+    height: 25px;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+#refund_user{
+    border: 1px solid gray;
+    border-radius: 15px;
+    margin: 14px;
+    padding: 17px;
+}
+#refund_user input {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid gray;
+    width: 65px;
+
+}
+
+#refund_user #userID {
+    margin-left: 18px;
+}
+
+#refund_terms {
+    border: 1px solid gray;
+    border-radius: 13px;
+    font-size: 14px;
+    padding: 10px;
+    margin: 10px;
+    line-height: 25px;
+
+}
+

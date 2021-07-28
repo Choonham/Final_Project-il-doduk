@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:replace="~{/fragments/nav :: navi}"></div>
+
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">사용자 신고</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <a href="#">Job</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>사용자 신고</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="site-section" id="next-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+
+
+        <form method="post" th:action="@{/serviceCenter/userReportWrite}">
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black" for="fname">신고 대상</label>
+              <input type="text" id="fname" name="reportTarget" class="form-control">
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black"  for="fname">신고 유형</label>
+              <select class="form-control" name="reportKind">
+                <option value="" checked>유형을 선택해주세요.</option>
+                <option>유형1</option>
+                <option>유형2</option>
+                <option>유형3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row form-group">
+
+            <div class="col-md-12">
+              <label class="text-black">신고제목</label>
+              <input type="text" name="reportTitle" class="form-control">
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="text-black" for="message">신고 상세 내용</label>
+              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control">신고 내용을 상세하게 기재해 주세요.
+              </textarea>
+            </div>
+
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+              <input type="submit" value="신고접수" class="btn btn-primary btn-md text-white">
+              <a th:href="@{/serviceCenter/badUserReport}">
+                <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-lg-5 ml-auto">
+        <div class="p-4 mb-3 bg-white">
+          <p class="mb-0 font-weight-bold">최근 나와 거래한 헬퍼 목록</p>
+          <p class="mb-4"><a href="">최근 거래 5개를 뽑아올까..???</a></p>
+
+         <p class="mb-4"><a href="#">링크 누르면 옆의 신고 대상에 들어갈 수 있도록??</a></p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 신고 작성 -->
+
+
+
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

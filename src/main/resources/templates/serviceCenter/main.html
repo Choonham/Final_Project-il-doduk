@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body id="top">
+
+
+<div th:replace="~{/fragments/nav :: navi}"></div>
+
+<section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-md-12">
+        <div class="mb-5 text-center">
+          <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur perferendis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#next" class="scroll-button smoothscroll">
+    <span class=" icon-keyboard_arrow_down"></span>
+  </a>
+
+</section>
+<h2>회원 정보 불러오기</h2>
+
+<br/>
+<table>
+  <tr>
+    <th><b>아이디</b></th>
+    <th><b>이메일</b></th>
+    <th><b>번호</b></th>
+    <th><b>캐쉬보유량</b></th>
+  </tr>
+  <tr th:each="user : ${session.user}">
+    <td>[[${user.nickname}]]</td>
+    <td>[[${user.id}]]</td>
+    <td>[[${user.phone}]]</td>
+    <td>[[${user.point}]]</td>
+  </tr>
+</table>
+
+
+
+<button type="button" id="btn_submit">결제
+</button>
+
+
+<form th:action="@{/kakaoPay/trade}" method="post">
+<table>
+  <tr>
+    <th colspan="3">거래게시판</th>
+  </tr>
+  <tr>
+    <th>게시번호</th>
+    <th>제목</th>
+    <th>가격</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>아이스크림 사다주실분</td>
+    <td>3000원부터 시작</td>
+  </tr>
+</table>
+  <label for="pay2">거래금액</label>
+  <br/>
+  <input id="pay2" type="text" name="pay" value="2000" />
+  <input type="hidden" name="userID" th:value="${session.user.nickname}" />
+  <input type="hidden" name="helper" value="test_helper" />
+  <br/>
+  <input type="submit" value="거래" />
+</form>
+
+<br/>
+<br/>
+
+<form th:action="@{/kakaoPay/trade}" method="post">
+  <label for="pay">거래금액</label>
+  <input id="pay" type="text" name="pay" />
+  <input type="submit" value="거래" />
+  <input type="hidden" name="userID" th:value="${session.user.nickname}" />
+</form>
+
+
+
+<script th:inline="javascript" th:src="@{/pay/kakaoPay.js}">
+</script>
+
+
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

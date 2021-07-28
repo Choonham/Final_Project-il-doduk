@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>환불 진행중...</title>
+
+    <link rel="stylesheet" th:href="@{/css/refund.css}">
+
+</head>
+
+<body id="top">
+
+<form id="refundForm" target="refundForm" th:action="@{/serviceCenter/postRefund}" method="post">
+
+    <div id="refund_container">
+        <h4>사용자 정보</h4>
+        <div id="refund_user">
+           <label for="userID">아아디</label>
+            <input id="userID" type="text" name="userID" th:value="${result.userId}" />
+            <br/>
+            <label for="payBack">환불금액</label>
+            <input id="payBack" type="text" name="totalPoint" th:value="${result.totalPoint}" />원
+        </div>
+
+        <div>
+            <h4>환불 안내</h4>
+            <div id="refund_terms">
+                1. <b>환불금액</b>이 가지고 있는 <u>포인트보다 높을 경우</u> 환불이 불가능합니다.
+                <br/>
+                2. 카드 취소후 영업일 기준에 따라 <b>1~3일</b>정도 소요될 수 있습니다.
+                <br/>
+                * 더 궁금하신 내용은 문의 게시판을 통하여 부탁드립니다.
+            </div>
+            <input type="hidden" name="pointNo" th:value="${result.pointNo}" />
+            <br/>
+            위의 내용을 확인 하였습니다.
+            <input type="checkbox" name="refund_check" />
+            <button id="refund_checkBtn">환불하기</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<script th:inline="javascript" th:src="@{/pay/kakaoPay.js}"></script>
+
+</body>
+</html>
