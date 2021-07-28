@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.controller.chat;
 
 
+import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.service.chat.ChatService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,9 @@ MemberService service;
     public void chat(@RequestParam("id") String id, Model model, HttpServletRequest request){
         model.addAttribute("id", id);
         HttpSession session = request.getSession();
-        model.addAttribute("userID", (String)session.getAttribute("user"));
-        model.addAttribute("list",chatService.get_chatList((String)session.getAttribute("user"),id));
+        model.addAttribute("user", session.getAttribute("user"));
+        MemberDto dto =(MemberDto)session.getAttribute("user");
+        model.addAttribute("list",chatService.get_chatList(dto.getId(),id));
     }
 
 
