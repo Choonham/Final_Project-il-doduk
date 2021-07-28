@@ -9,7 +9,7 @@
 
     <table>
         <tr th:each="client : ${clientList}">
-            <td ><a th:href="@{/chat(id=${client})}"><span th:text="${client}"></span></a> </td>
+            <td ><a th:href="@{/chat/chatting(id=${client})}"><span th:text="${client}"></span></a> </td>
 
         </tr>
 
