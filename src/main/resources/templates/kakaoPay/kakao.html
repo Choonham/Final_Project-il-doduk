@@ -94,7 +94,7 @@
       var IMP = window.IMP;
       IMP.init('imp83165308');
       var money = $('input[name="cp_item"]:checked').val();
-      var userid = $('input[name="pay_id"]').val();
+     // var userid = $('input[name="pay_id"]').val();
 
       console.log(money);
 
@@ -104,7 +104,7 @@
 
         name: '프로젝트 일도둑',
         amount: money,
-        buyer_email: userid,
+        buyer_email: [[${session.user.id}]],
         buyer_name: [[${session.user.nickname}]],
         buyer_tel: [[${session.user.phone}]],
         buyer_addr: [[${session.user.address}]],
@@ -123,7 +123,7 @@
             url: "/kakaoPay/success", //충전 금액값을 보낼 url 설정
             data: {
               "totalPoint": money,
-              "userId": userid
+              "userId":[[${session.user.id}]]
             },
           });
         } else {
@@ -132,7 +132,7 @@
         }
         alert(msg);
         //alert창 확인 후 이동할 url 설정
-        window.open().location.href = "/main";
+        window.open().location.href = "/index";
         self.close();
 
       });
