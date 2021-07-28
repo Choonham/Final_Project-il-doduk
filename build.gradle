@@ -1,0 +1,77 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.8'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'  // 동적 쿼리를 위한 추가
+}
+
+group = 'com.finalproject'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.3'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time'
+
+    implementation 'com.querydsl:querydsl-jpa'  //추가
+
+    //gson
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.7'
+    // multipart 등을 사용하기 위함
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.1'
+    // 대용량 파일 처리
+    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+
+    //Timer 관련 Dependency - j쿼리, 부트스트랩
+    implementation 'org.webjars:jquery:3.4.1'
+    implementation 'org.webjars:bootstrap:4.3.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+/** 동적 쿼리를 사용하기 위한 추가 작업  **/
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/member/userModify" method="post">
+        아이디 <input type="email" name="id" readonly /> <br />
+        비밀번호 <input type="password" name="pwd" /> <br />
+        이름 <input type="text" name="name" /> <br />
+        생년월일 <input type="text" name="birth" /> <br />
+        성별 <input type="text" name="gender" readonly/> <br />
+        닉네임 <input type="text" name="nickname" /> <br />
+        주소 <input type="text" name="address" /> <br />
+        연락처 <input type="tel" name="phone" /> <br />
+        사진 <input type="text" name="photo" />
+        소개 <input type="text" name="intro" />
+    </form>
+</body>
+</html>
