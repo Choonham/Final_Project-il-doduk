@@ -112,7 +112,7 @@ public class ServiceCenterController {
 
         memberService.minusPonit(user);
 
-        return "/main";
+        return "/index";
     }
 
 
