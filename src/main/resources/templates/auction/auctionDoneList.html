@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 경매 완료, 매칭 미완료 4  -->
+<h1>경매완료, 매칭 미완료 </h1>
+<br />
+<table th:border="1">
+    <thead>
+    <tr>
+        <th scope="col">경매제목</th>
+        <th scope="col">카테고리</th>
+        <th scope="col">시간</th>
+        <th scope="col">지역</th>
+        <th scope="col">현황보기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dto : ${auctionDoneList.dtoList}">
+        <th scope="row">
+            <a th:href="@{@{/auction/getOnAuction(aucSeq=${dto.aucSeq})}}">[[${dto.title}]]</a>
+        </th>
+        <td>
+            [[${dto.category}]]
+        </td>
+        <td>
+            [[${dto.doDateTime}]]
+        </td>
+        <td>
+            [[${dto.address}]]
+        </td>
+        <td>
+            <button th:href="@{#}">현황보기</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br /><br />
+</body>
+</html>
