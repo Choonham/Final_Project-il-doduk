@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- 진행 중인 내 경매 목록 2 : 카테고리, 경매제목(클릭 시 상세페이지), 시간, 지역 : 나중에 카드 형식으로 만들던가 말던가,, 지금은 테이블 형식-->
+<h1>경매 진행 중 </h1>
+<br />
+<table th:border="1">
+    <thead>
+    <tr>
+        <th scope="col">경매제목</th>
+        <th scope="col">카테고리</th>
+        <th scope="col">시간</th>
+        <th scope="col">지역</th>h>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dto : ${onAuctionList.dtoList}">
+        <th scope="row">
+            <a th:href="@{/auction/getOnAuction(aucSeq=${dto.aucSeq})}">[[${dto.title}]]</a>
+        </th>
+        <td>
+            [[${dto.category}]]
+        </td>
+        <td>
+            [[${dto.doDateTime}]]
+        </td>
+        <td>
+            [[${dto.address}]]
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br /><br />
+
+
+
+</body>
+</html>
