@@ -102,7 +102,12 @@ public class MemberController {
 
         session.getAttribute(session.getId())
     }*/
+    @GetMapping("/index")
 
+    public String totheindex(){
+
+    return "index";
+    }
     //카카오 로그인 페이지
     @GetMapping("/kakao")
     public void kakao(){
@@ -127,13 +132,13 @@ public class MemberController {
 
             HttpSession session = request.getSession();
             session.setAttribute("user", dto1);
-            return "index";
+            return "../index";
         }
 
         else{
 
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
-            return "userRegister";
+            return "../member/userRegister";
         }
 
     }
