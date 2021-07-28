@@ -72,7 +72,7 @@ public class AuctionList {
     @ColumnDefault(value = "0")
     private int state;
 
-    public void changetState(int state){
+    public void changeState(int state){
         this.state = state;
     }
 

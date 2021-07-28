@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h3> 환영합니다. user1님 </h3>
+<br><br><br>
+<a th:href="@{/auction/onAuctionList(user='user1')}">진행 중인 경매</a><br><br>
+<a th:href="@{/auction/auctionDoneList(user='user1')}">경매 완료, 선택 미완료</a><br><br>
+<a th:href="@{/auction/matchedAuctionList(user='user1')}">경매완료, 매칭완료</a><br><br>
+<a th:href="@{/auction/allDoneList(user='user1')}">지난 일 목록</a><br><br>
+
+<a th:href="@{/auction/register(user='user1')}">일 요청 작성으로 이동하기</a>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 해당 옥션 정보 : auction -->
+<div th:utext="${auction.content}" >[[${auction.content}]]</div>
+
+<!-- 낙찰 비딩 정보 : chosenBidding -->
+
+<!-- 채팅하기 혹은 리뷰쓰기 버튼 -->
+<div th:if="isAllDone">
+    <button> 리뷰쓰기 </button>
+</div>
+<div th:unless="isAllDone">
+    <button> 채팅하기 </button>
+</div>
+
+</body>
+</html>
