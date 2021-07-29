@@ -115,11 +115,14 @@ public class MemberServiceImpl implements MemberService {
 
             dto.setId(email);
             dto.setNickname(nickname);
-            dto.setGender(gender);
-
-            System.out.println("id::::  " + dto.getId());
-            System.out.println("gender::::  " + dto.getGender());
-            System.out.println("nickname:::   " + dto.getNickname());
+            if(gender.equals("male")){
+            dto.setGender("남");
+            }else{
+                dto.setGender("여");
+            }
+            System.out.println(" kakaoLogin :: dto get id::::  " + dto.getId());
+            System.out.println(" kakaoLogin :: dto get gender::::  " + dto.getGender());
+            System.out.println(" kakaoLogin :: dto get nickname:::   " + dto.getNickname());
 
 
         }catch(ParseException e){
