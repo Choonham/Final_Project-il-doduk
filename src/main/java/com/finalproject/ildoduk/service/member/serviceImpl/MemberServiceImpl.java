@@ -48,6 +48,8 @@ public class MemberServiceImpl implements MemberService {
 
         Optional<Member> result = repo.findById(id);
 
+        log.info(" userIdDtoInit result ::::::" + result);
+
         return result.isPresent() ? EntityToDto(result.get()) : null;
 
     }
