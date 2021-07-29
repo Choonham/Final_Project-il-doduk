@@ -102,17 +102,19 @@ public class MemberController {
 
         session.getAttribute(session.getId())
     }*/
-    @GetMapping("/index")
 
+    @GetMapping("/index")
     public String totheindex(){
 
-    return "index";
+        return "index";
     }
+
     //카카오 로그인 페이지
     @GetMapping("/kakao")
     public void kakao(){
 
     }
+
     //카카오 로그인 세션 전달
     @ResponseBody
     @PostMapping(value = "/kakao2", produces = "application/json; charset=utf8")

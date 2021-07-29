@@ -3,6 +3,7 @@ package com.finalproject.ildoduk.controller.blog;
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.*;
+import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.blog.BlogLike;
@@ -47,7 +48,6 @@ public class BlogController {
     // "/" 요청에 대한 처리
     @GetMapping("/")
     public String main(HttpSession session) {
-        session.setAttribute("id", "choonham");
         return "redirect:/blog/blogMain";
     }
 
@@ -65,7 +65,8 @@ public class BlogController {
     @GetMapping("/blogList")
     public void list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, String writer, HttpSession session) {
         if(writer.equals("myBlog")){
-            String sessionId = (String)session.getAttribute("id");
+            MemberDto memberDto = (MemberDto)session.getAttribute("user");
+            String sessionId = memberDto.getId();
             log.info("세션");
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);

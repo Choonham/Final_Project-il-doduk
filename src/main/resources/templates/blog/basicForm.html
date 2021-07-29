@@ -18,7 +18,7 @@
         <input type = "hidden" name = "postNo" id = "postNo" th:value = "${postNo}">
 
         <div class="form-group">
-          <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.id}" required/>
+          <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.user.getId()}" required/>
         </div>
         <input type="text" class="form-control" id="thumbnail" name="thumbnail" readonly/>
 
