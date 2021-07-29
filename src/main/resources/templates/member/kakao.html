@@ -2,8 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Insert title here</title>
-</head>s
+</head>
 <body>
 
 <!--라이브러리 include-->
@@ -14,7 +15,7 @@
 
 <script>
     <!--bf1bc4277610e01ce736d93571683a3e-->
-    window.Kakao.init("bf1bc4277610e01ce736d93571683a3e"); //웹어플리케이션 검증
+    window.Kakao.init("69d6697e0a8e4d6248c163b516a887e8"); //웹어플리케이션 검증
     kakao.isInitialized(); //카카오 sdk초기화
 
     function kakaoLogin(){ //로그인시 실제 실행될 function
@@ -60,9 +61,6 @@
 
 <a href="javascript:kakaoLogin();" id="kakaoPost"><img src="http://gi.esmplus.com/buybye1/page/kakao-login.png" style=height:70px; width=auto; /></a>
 
-<form action="/member/userCheck" method="post">
-    <input type="text" name="id" />
-    <input type="submit" />
 
 </form>
 
