@@ -63,8 +63,8 @@ public class MemberController {
         HttpSession session = request.getSession();
 
         if(dto != null){
-            session.setAttribute("user",dto.getId());
-            return "/index";
+            session.setAttribute("user",dto);
+            return "index";
         }else{
             return "/member/userRegister";
         }
