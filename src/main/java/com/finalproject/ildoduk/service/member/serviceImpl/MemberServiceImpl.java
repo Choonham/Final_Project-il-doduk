@@ -129,10 +129,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-<<<<<<< HEAD
 
-
-=======
 //---------   유저 포인트 관련  -----------
 //유저 포인트 증가
 @Override
@@ -212,6 +209,6 @@ public void updatePoint(PaymentDTO dto) {
             repo.pointUpdate(total, entity.getId());
         }
     }
->>>>>>> 877223ba161a89a8fdcf774c93c8912fcb3a232d
+
 
 }
