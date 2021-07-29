@@ -1,11 +1,21 @@
 package com.finalproject.ildoduk.service.serviceCenter;
 
+import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
+import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
+import com.finalproject.ildoduk.repository.member.MemberRepository;
+import com.finalproject.ildoduk.repository.pay.TradeRepository;
 import com.finalproject.ildoduk.repository.serviceCenter.UserReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -13,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class UserReportServiceImpl implements UserReportService{
 
     private final UserReportRepository userReportRepository;
+    private final MemberRepository memberRepository;
+    private final TradeRepository tradeRepository;
 
     //신고 작성
     @Override
@@ -22,4 +34,21 @@ public class UserReportServiceImpl implements UserReportService{
 
         userReportRepository.save(entity);
     }
+
+    //나와 거래했던 유저 정보 검색
+    @Override
+    public TradeHistoryDTO getUser(String id) {
+
+
+        //내 거래 목록 조회
+        Optional<TradeHistory> trade = tradeRepository.findAllByIdId(id);
+
+        //조회된 결과가 있을 경우
+        TradeHistory trade_result = trade.get();
+
+        return trade.isPresent() ? entityToDtoTrade(trade_result) : null;
+    }
+
+
+
 }

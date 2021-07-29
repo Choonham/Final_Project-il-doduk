@@ -9,6 +9,7 @@ import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.PaymentService;
@@ -301,19 +302,36 @@ public class ServiceCenterController {
     public void report(String userId){
         //현재 신고 현황..??
         //신고 내역이 있을 경우 신고 내역을 보여주고, 없을 경우에 신고 작성 페이지로..
+        //화면에는 아이디가 아닌 닉네임으로 출력
 
     }
 
     //신고 작성 폼으로 이동
     @GetMapping("/badUserReportForm")
-    public void reportForm(){
+    public void reportForm(@RequestParam("member") String id,
+                           PageRequestDTO pageRequestDTO
+                           ,Model model){
         //폼으로 이동할 때 세션 유저 값과 해당 신고 대상자의 아이디 필요..
+        //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
+        log.info("신고하는 계정 : " + id);
+        //거래했던 유저 목록 조회
+        TradeHistoryDTO tradeList = new TradeHistoryDTO();
+
+        tradeList.setId(id);
+        PageResultsDTO<TradeHistoryDTO, TradeHistory> test = tradeService.allContents(tradeList, pageRequestDTO);
+        log.info("거래 내역 뽑아오기" + test);
+        if(test != null){
+            model.addAttribute("tradeList",test);
+        }
+
     }
 
     //신고 작성
     @PostMapping("/userReportWrite")
     public String writeReport(UserReportDTO reportDTO){
+
         userReportService.insertReport(reportDTO);
+
         return "redirect:/serviceCenter/badUserReport";
     }
 

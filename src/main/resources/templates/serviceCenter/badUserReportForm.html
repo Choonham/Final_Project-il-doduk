@@ -35,6 +35,7 @@
 
 
         <form method="post" th:action="@{/serviceCenter/userReportWrite}">
+          <input type="hidden" name="id" th:value="${session.user.id}" />
           <div class="row form-group">
             <div class="col-md-6 mb-3 mb-md-0">
               <label class="text-black" for="fname">신고 대상</label>
@@ -47,9 +48,13 @@
               <label class="text-black"  for="fname">신고 유형</label>
               <select class="form-control" name="reportKind">
                 <option value="" checked>유형을 선택해주세요.</option>
-                <option>유형1</option>
-                <option>유형2</option>
-                <option>유형3</option>
+                <option value="1">광고</option>
+                <option value="2">도배</option>
+                <option value="3">음란물</option>
+                <option value="4">욕설</option>
+                <option value="5">저작권 침해</option>
+                <option value="6">개인정보 침해</option>
+                <option value="7">기타</option>
               </select>
             </div>
           </div>
@@ -65,7 +70,7 @@
           <div class="row form-group">
             <div class="col-md-12">
               <label class="text-black" for="message">신고 상세 내용</label>
-              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control">신고 내용을 상세하게 기재해 주세요.
+              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control" placeholder="신고 내용을 상세히 적어주세요.">
               </textarea>
             </div>
 
@@ -82,14 +87,14 @@
         </form>
       </div>
 
-      <div class="col-lg-5 ml-auto">
-        <div class="p-4 mb-3 bg-white">
+      <div class="col-lg-5 ml-auto" >
+
+        <div class="p-4 mb-3 bg-white" >
           <p class="mb-0 font-weight-bold">최근 나와 거래한 헬퍼 목록</p>
-          <p class="mb-4"><a href="">최근 거래 5개를 뽑아올까..???</a></p>
-
-         <p class="mb-4"><a href="#">링크 누르면 옆의 신고 대상에 들어갈 수 있도록??</a></p>
-
+          <p class="mb-4" th:if="${tradeList != null}" th:each="tradeList : ${tradeList.dtoList}"><a id="badUser" href="">[[${tradeList.userId}]]</a></p>
+          <p th:if="${tradeList.totalPage == 0}" class="mb-4">최근 거래한 유저가 없습니다.<a href=""></a></p>
         </div>
+
       </div>
     </div>
   </div>
@@ -99,7 +104,17 @@
 <!-- 신고 작성 -->
 
 
+<script type="text/javascript">
+  $(document).ready(function() {
 
+    //유저 클릭 했을때
+    $("#badUser").click(function(){
+      //클릭 이벤트가 발생된 사용자를 대상에 올려야하는데 이거는...
+      //뭘 선택한건지 구별이 안되는 방법....
+      $('#fname').val($('#badUser').val());
+    });
+  });
+</script>
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
