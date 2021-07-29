@@ -5,8 +5,10 @@ import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public interface MemberService {
+import java.util.List;
 
+public interface MemberService {
+    public List<String> getList();
 
     void userRegister(MemberDto dto);
 

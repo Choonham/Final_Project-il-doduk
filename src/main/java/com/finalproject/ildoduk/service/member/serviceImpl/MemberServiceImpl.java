@@ -11,6 +11,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberRepository repo;
+
+    @Override
+    public List<String> getList() {
+
+        List<String> list_st = new ArrayList<>();
+        List<Member> list=repo.findAll();
+        for (Member m: list
+             ) {
+              list_st.add(m.getId());
+
+        }
+        return list_st;
+    }
 
     @Override
     public void userRegister(MemberDto dto) {
@@ -114,6 +129,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+<<<<<<< HEAD
+
+
+=======
 //---------   유저 포인트 관련  -----------
 //유저 포인트 증가
 @Override
@@ -193,5 +212,6 @@ public void updatePoint(PaymentDTO dto) {
             repo.pointUpdate(total, entity.getId());
         }
     }
+>>>>>>> 877223ba161a89a8fdcf774c93c8912fcb3a232d
 
 }
