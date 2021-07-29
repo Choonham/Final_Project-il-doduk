@@ -45,6 +45,7 @@ public interface MemberService {
                 .point(dto.getPoint())
                 .photo(dto.getPhoto())
                 .intro(dto.getIntro())
+                .state(dto.getState())
                 .build();
 
         return entity;
@@ -62,6 +63,7 @@ public interface MemberService {
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())
+                .state(entity.getState())
                 .build();
 
         return dto;

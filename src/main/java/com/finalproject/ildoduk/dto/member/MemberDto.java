@@ -22,6 +22,7 @@ public class MemberDto {
     private int point;          //캐쉬포인트
     private String photo;       //사진
     private String intro;       //유저 소개
+    private int state;       //구분
 
 
 

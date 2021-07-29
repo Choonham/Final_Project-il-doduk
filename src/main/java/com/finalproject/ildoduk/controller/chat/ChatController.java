@@ -33,7 +33,7 @@ MemberService service;
 
     @GetMapping("/chatList")
     public void chatList(Model model){
-        //헬퍼 고객 상관 없이 전리스트 출력중
+        //헬퍼 와 고객 모두 상관 없이 전리스트 출력중
         List<String> list=service.getList();
         model.addAttribute("clientList",list);
 
@@ -49,22 +49,5 @@ MemberService service;
         MemberDto dto =(MemberDto)session.getAttribute("user");
         model.addAttribute("list",chatService.get_chatList(dto.getId(),id));
     }
-
-
-  /*  @GetMapping("/chatting")
-    public void chat(@RequestParam("id") String id, Model model, HttpServletRequest request, HttpServletResponse response){
-        model.addAttribute("id", id);
-        HttpSession session = request.getSession();
-        model.addAttribute("userID", (String)session.getAttribute("userID"));
-        model.addAttribute("list",chatService.get_chatList((String)session.getAttribute("userID"),id));
-
-
-
-    }*/
-
-
-
-
-
 
 }

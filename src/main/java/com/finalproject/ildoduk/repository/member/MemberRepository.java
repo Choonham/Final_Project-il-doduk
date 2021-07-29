@@ -15,6 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     public List<Member> findAll();
     Optional<Member> findById(String id);
 
+
     //결제 관련
 
     @Transactional

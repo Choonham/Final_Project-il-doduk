@@ -8,7 +8,7 @@
 
 <body>
 <!-- Navigation-->
-<div th:fragment="navi">
+<div th:fragment="naviUser">
 
 
 <div class="site-wrap">
@@ -36,7 +36,11 @@
                         <li class="has-children">
                             <a href="job-listings.html">미션</a>
                             <ul class="dropdown">
-                                <li><a th:href = "@{/auction/main}">경매 메인</a></li>
+                                <li><a th:href = "@{/auction/register}">작업 등록</a></li>
+                                <li><a th:href = "@{/auction/onAuctionList}">경매 진행 목록</a></li>
+                                <li><a th:href = "@{/auction/auctionDoneList}">경매 완료 목록</a></li>
+                                <li><a th:href = "@{/auction/matchedAuctionList}">매칭 완료 목록</a></li>
+                                <li><a th:href = "@{/auction/allDoneList}">작업 수행 완료 목록</a></li>
                             </ul>
                         </li>
                         <li class="has-children">
@@ -47,35 +51,21 @@
                         </li>
                         <li class="has-children">
                             <a href="" >고객센터</a>
-                            <li class="d-lg-none"><a href="#">로그인</a></li>
 
-                            <ul class="dropdown" th:if="${session.user != null}">
-                                <li><a href="services.html" th:href="@{/serviceCenter/customerBoard}">문의</a></li>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
                                 <li><a  href="blog-single.html"  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
                                 <li><a  href="blog-single.html"  th:href="@{/serviceCenter/badUserReport(member = ${session.user.id})}">사용자 신고</a></li>
                             </ul>
                         </li>
-                        <div th:if = "${session.user == null}">
-                            <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> 헬퍼와 일반 사용자 구분해야합니다.</a></li>
-                            <li class="d-lg-none"><a th:href="@{/member/kakao}">로그인</a></li>
-                        </div>
-
-                        <div th:if = "${session.user != null}">
-                            <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> 헬퍼와 일반 사용자 구분해야합니다.</a></li>
-                            <li class="d-lg-none"><a th:href="@{/member/userLogout}">로그아웃</a></li>
-                        </div>
 
                     </ul>
                 </nav>
 
                 <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
-                    <div class="ml-auto" th:if = "${session.user == null}">
-                        <a th:href="@{/member/kakao}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
-                    </div>
                     <div class="ml-auto" th:if = "${session.user != null}">
                         <a th:href="@{/member/userLogout}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
                     </div>
-                    <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
                 </div>
 
             </div>

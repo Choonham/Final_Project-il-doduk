@@ -95,13 +95,13 @@ public class MemberController {
     }
 
     //유저 로그아웃
-/*    @GetMapping("/userLogout")
-    public void userLogout(HttpServletRequest request) throws Exception{
+    @GetMapping("/userLogout")
+    public String userLogout(HttpServletRequest request) throws Exception{
 
         HttpSession session = request.getSession();
-
-        session.getAttribute(session.getId())
-    }*/
+        session.invalidate();
+        return "redirect:/index";
+    }
 
     @GetMapping("/index")
     public String totheindex(){

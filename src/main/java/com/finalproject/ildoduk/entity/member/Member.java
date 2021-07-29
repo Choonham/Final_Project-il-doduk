@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -37,7 +38,7 @@ public class Member {
     private String address;     //주소
 
     @Column(name="phone")
-    private String phone;         //연락처
+    private String phone;       //연락처
 
     @Column(name="point")
     private int point;          //캐쉬포인트
@@ -48,6 +49,8 @@ public class Member {
     @Column(name="intro")
     private String intro;       //유저 소개
 
+    @Column(name = "state")
+    private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
     /**정보수정**/
     public void changePwd(String pwd){this.pwd = pwd;}

@@ -209,11 +209,13 @@ jQuery(function($) {
 		$('.single-carousel').owlCarousel({
 	    loop:true,
 	    margin:0,
+
 	    autoplay: true,
 	    items:1,
 	    nav: false,
 	    smartSpeed: 1000
 		});
+
 	}
 	owlCarouselFunction();
 

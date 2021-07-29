@@ -26,7 +26,7 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
-    @GetMapping({"/","/main"})
+    @GetMapping("/main")
     public void main(PageRequestDTO pageRequestDTO){
         //경매 리스트 시간에 따라 상태값 변화 하기
         auctionService.changeState1(pageRequestDTO); //경매 시간 끝난 것 state=1로 변경

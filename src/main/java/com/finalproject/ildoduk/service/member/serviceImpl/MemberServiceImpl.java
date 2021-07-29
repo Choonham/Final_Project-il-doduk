@@ -127,8 +127,6 @@ public class MemberServiceImpl implements MemberService {
         }
         return dto;
     }
-
-
 //---------   유저 포인트 관련  -----------
 //유저 포인트 증가
 @Override

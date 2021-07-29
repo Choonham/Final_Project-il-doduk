@@ -13,7 +13,7 @@ public class MainController {
 
     @GetMapping("/")
     public String main(){
-        return "redirect:/member/kakao";
+        return "redirect:/index";
     }
 
 

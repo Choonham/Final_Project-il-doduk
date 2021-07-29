@@ -8,8 +8,21 @@
 
 <body id="top">
 
+<div th:if = "${session.user != null}">
 
-<div th:replace="~{/fragments/nav :: navi}"></div>
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+</div>
+
+<div th:if = "${session.user == null}">
+    <div th:replace="~{/fragments/nav :: navi}"></div>
+</div>
 
 <section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
 
@@ -30,14 +43,17 @@
 
 </section>
 
-<span th:text="${session.user.id}"></span>님 환영합니다.
+<div th:if = "${session.user != null}">
 
-<a href="/chat/chatList">채팅으로</a>
-<!--<span th:if(session.user.id !="null")></span>-->
+    <span th:text="${session.user.id}"></span>님 환영합니다.
 
+    <a href="/chat/chatList">채팅으로</a>
+    <!--<span th:if(session.user.id !="null")></span>-->
 
-<button type="button" id="btn_submit">결제
-</button>
+    <button type="button" id="btn_submit">결제
+    </button>
+
+</div>
 
 
 <script>
