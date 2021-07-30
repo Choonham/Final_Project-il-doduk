@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface MemberService {
-    public List<String> getList();
+    List<String> getList();
 
+//회원 CRUD
     void userRegister(MemberDto dto);
 
+   int nickNameCheck(String nickname);
+
     MemberDto userIdCheck(String id);
-
-    MemberDto userIdDtoInit(MemberDto dto);
-
-    MemberDto userIdPwdCheck(String id, String pwd);
 
     void userModify(MemberDto dto);
 
@@ -40,6 +39,8 @@ public interface MemberService {
                 .gender(dto.getGender())
                 .birth(dto.getBirth())
                 .nickname(dto.getNickname())
+                .sido(dto.getSido())
+                .sigungu(dto.getSigungu())
                 .address(dto.getAddress())
                 .phone(dto.getPhone())
                 .point(dto.getPoint())
@@ -60,6 +61,8 @@ public interface MemberService {
                 .gender(entity.getGender())
                 .birth(entity.getBirth())
                 .nickname(entity.getNickname())
+                .sido(entity.getSido())
+                .sigungu(entity.getSigungu())
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())

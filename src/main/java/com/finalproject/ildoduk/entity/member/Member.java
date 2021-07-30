@@ -34,8 +34,14 @@ public class Member {
     @Column(name="nickname")
     private String nickname;    //닉네임
 
+    @Column(name="sido")
+    private String sido;        //주소 시도 포함
+
+    @Column(name="sigungu")
+    private String sigungu;     //주소 시군구 포함
+
     @Column(name="address")
-    private String address;     //주소
+    private String address;     //지번주소
 
     @Column(name="phone")
     private String phone;       //연락처

@@ -11,9 +11,16 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    Optional<Member> findByIdAndPwd(String id, String pwd);
+
+    //회원관리 - DB검색(nickname 중복체크)
+    int countByNickname(String nickname);
+
+
     public List<Member> findAll();
     Optional<Member> findById(String id);
+
+
+
 
 
     //결제 관련

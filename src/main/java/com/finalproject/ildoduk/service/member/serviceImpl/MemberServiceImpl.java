@@ -24,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository repo;
 
+
     @Override
     public List<String> getList() {
 
@@ -37,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
         return list_st;
     }
 
+    //회원가입
     @Override
     public void userRegister(MemberDto dto) {
 
@@ -44,35 +46,29 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    //유저 닉네임 db확인
+    @Override
+    public int nickNameCheck(String nickname) {
+
+       int cnt = repo.countByNickname(nickname);
+       log.info("nicknameCheck result ::: " + cnt);
+
+        return cnt;
+    }
+
+
+    //유저 아이디 DB에서 확인
     public MemberDto userIdCheck(String id) {
 
         Optional<Member> result = repo.findById(id);
 
-        log.info(" userIdDtoInit result ::::::" + result);
+        log.info(" userIdCheck result ::::::" + result);
 
         return result.isPresent() ? EntityToDto(result.get()) : null;
 
     }
 
-    @Override
-    public MemberDto userIdDtoInit(MemberDto dto) {
-        Optional<Member> result = repo.findById(dto.getId());
-
-        log.info(" userIdDtoInit result ::::::" + result.get());
-
-        return result.isPresent() ? EntityToDto(result.get()) : null;
-    }
-
-    @Override
-    public MemberDto userIdPwdCheck(String id, String pwd) {
-
-        Optional<Member> result = repo.findByIdAndPwd(id,pwd);
-
-        return result.isPresent()? EntityToDto(result.get()) : null;
-
-    }
-
-
+    //회원 수정 관련
     @Override
     public void userModify(MemberDto dto) {
         Optional<Member> result = repo.findById(dto.getId());
@@ -91,12 +87,14 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    //회원 탈퇴
     @Override
     public void userDelete(String id) {
         repo.deleteById(id);
 
     }
 
+    //카카오 로그인 관련 JSON parser -> return dto;
     @Override
     public MemberDto kakaoLogin(String json)  {
         MemberDto ud = new MemberDto();

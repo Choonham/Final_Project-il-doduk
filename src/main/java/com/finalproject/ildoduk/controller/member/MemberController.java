@@ -31,18 +31,44 @@ public class MemberController {
 
     //유저 회원가입
     @PostMapping("/userRegister")
-    public String userRegister(MemberDto dto){
+    public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
 
-        service.userRegister(dto);
+        log.info("userRegister 닉네임 받아옴 ::: " + nickname);
+
+        int cnt = service.nickNameCheck(nickname);
+
+        if(cnt == 0){
+            service.userRegister(dto);
+
+        }else{
+            model.addAttribute("msg","닉네임이 중복되었습니다");
+            return "/member/userRegister";
+        }
+
+
         System.out.println(dto.getId());
         System.out.println(dto.getPwd());
 
         return "/member/kakao";
     }
 
+    //유저 회원가입 간 닉네임 중복 확인
+    @PostMapping(value = "/nicknameCheck" ,produces = "application/json; charset=utf8")
+    @ResponseBody
+    public int userNicknameCheck(@RequestBody String nickname, MemberDto memberDto){
+         log.info("nicknameCheck ::: " + nickname);
+         int cnt= service.nickNameCheck(nickname);
+
+        log.info("nickname 결과확인 ::: " +cnt);
+
+        return cnt;
+
+
+    }
+
     //유저 정보 조회
     @GetMapping("/userSearch")
-    public void userSearch(String id, @ModelAttribute("userDto") MemberDto userDto, Model model){
+    public void userSearch(String id, @ModelAttribute("userDto") MemberDto memberDto, Model model){
 
         log.info("userSearch id ::" + id);
 
@@ -52,7 +78,7 @@ public class MemberController {
 
     }
 
-    //유저 가입여부 확인
+    //유저 가입여부 확인 (더미 테스트용)
     @PostMapping("/userCheck")
     public String userCheck(String id, HttpServletRequest request){
 
@@ -66,7 +92,7 @@ public class MemberController {
             session.setAttribute("user",dto);
             return "index";
         }else{
-            return "/member/userRegister";
+            return "member/userRegister";
         }
 
     }
@@ -123,22 +149,24 @@ public class MemberController {
         System.out.println(json); //js값 확인  json 문자열로 들어온 걸 parse로 쪼개야함
 
 
-        MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디 값
+        MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디, 성별, 닉네임 값
 
         log.info("dto Id:::::: " + dto.getId());
+        log.info("dto gender:::: " + dto.getGender());
+        log.info("dto nick:::: " + dto.getNickname());
 
-        MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디값
-
+        MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
+        HttpSession session = request.getSession();
 
         if (dto1!=null) {
 
-            HttpSession session = request.getSession();
             session.setAttribute("user", dto1);
             return "../index";
         }
 
         else{
 
+            session.setAttribute("user", dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
             return "../member/userRegister";
         }
