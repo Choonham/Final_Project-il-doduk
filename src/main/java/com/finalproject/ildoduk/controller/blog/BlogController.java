@@ -103,7 +103,6 @@ public class BlogController {
 
         MemberDto memberDto = (MemberDto)session.getAttribute("user");
         String sessionId = memberDto.getId();
-
         List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
         AuctionBiddingDTO doneJob = doneList.get(0);
         log.info(doneJob.getHelper());
@@ -118,6 +117,7 @@ public class BlogController {
         Long tempPostNo = blogService.findMaxID();
         model.addAttribute("postNo", tempPostNo);
         model.addAttribute("doneList", doneList);
+        //model.addAttribute("index", 0);
     }
 
     // 글 쓰기 완료 후, 리다이렉트 기능
@@ -127,6 +127,7 @@ public class BlogController {
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
         return result;
     }
+
     //=================================== 포스트 관련 끝 ===================================//
 
 
@@ -235,6 +236,7 @@ public class BlogController {
         String url = "redirect:/blog/blogList?writer=" + writer + "&page=" + tempPageDTO.getTempPage();
         return url;
     }
+
 
     //================================== 글 수정/삭제 관련 끝 ====================================//
 
