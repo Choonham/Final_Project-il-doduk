@@ -1,5 +1,7 @@
 package com.finalproject.ildoduk.service.serviceCenter;
 
+import com.finalproject.ildoduk.dto.PageRequestDTO;
+import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
@@ -11,7 +13,16 @@ public interface UserReportService {
 
     void insertReport(UserReportDTO userReportDTO);
 
+    //신고를 위한 거래 목록 조회
     TradeHistoryDTO getUser(String id);
+
+    //신고 내역 조회
+    PageResultsDTO<UserReportDTO, UserReport>  getReportList(UserReportDTO userReportDTO,PageRequestDTO pageRequestDTO);
+
+    //신고 글 상세보기
+    UserReportDTO badUserReportDetail(UserReportDTO userReportDTO);
+
+
 
     default UserReport dtoToEntity(UserReportDTO dto){
 

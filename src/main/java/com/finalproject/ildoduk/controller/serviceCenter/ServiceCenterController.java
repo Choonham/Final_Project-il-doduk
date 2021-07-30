@@ -11,6 +11,7 @@ import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
+import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.PaymentService;
 import com.finalproject.ildoduk.service.pay.TradeService;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @RequestMapping("/serviceCenter")
@@ -141,6 +143,11 @@ public class ServiceCenterController {
             } else if(board.get(i).getAnswerCheck().equals("y")){
                 board.get(i).setAnswerCheck("답변 완료");
             }
+            //게시글 작성자를 닉네임으로 나오게
+            String writer = board.get(i).getCusWriter();
+            MemberDto memberDto = memberService.userIdCheck(writer);
+            String nick = memberDto.getNickname();
+            board.get(i).setCusWriter(nick);
 
             result.setDtoList(board);
         }
@@ -176,7 +183,6 @@ public class ServiceCenterController {
         }
         CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
 
-        //추가 되야할 부분 => 관리자페이지를 따로 만들지 않을려면 이쪽에서처리 : 관리자는 모든 글을 읽을 수 있다.
 
         //관리자의 답글이 존재할 경우 같이 값에 담아서 전달해야함..
 
@@ -288,21 +294,34 @@ public class ServiceCenterController {
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }
 
-    // 댓글 수정
-    @ResponseBody
-    @DeleteMapping(value = "/modifyComment", produces = "application/json; charset=utf8")
-    public ResponseEntity<Long> modifyComment(@RequestBody Long aNo) {
-        log.info("넘어온 데이터 : " + aNo);
-        // blogCommentService.modifyComment(customerAnswerDTO);
-        return new ResponseEntity<>(1L, HttpStatus.OK);
-    }
 
 //사용자 신고 게시판으로 이동
     @GetMapping("/badUserReport")
-    public void report(String userId){
-        //현재 신고 현황..??
-        //신고 내역이 있을 경우 신고 내역을 보여주고, 없을 경우에 신고 작성 페이지로..
-        //화면에는 아이디가 아닌 닉네임으로 출력
+    public void report(@RequestParam("member") String id,PageRequestDTO pageRequestDTO,Model model){
+        log.info("들어온 아이디 값은 ???? "+id);
+
+        UserReportDTO dto = new UserReportDTO();
+        dto.setId(id);
+        PageResultsDTO<UserReportDTO, UserReport> list = userReportService.getReportList(dto,pageRequestDTO);
+
+        log.info("신고 게시판 이동 시 뽑아내는 데이터 : "+list.getDtoList());
+
+        if(list != null){
+
+            ArrayList<UserReportDTO> userList = (ArrayList<UserReportDTO>) list.getDtoList();
+
+            for (int i=0;i<list.getDtoList().size();i++){
+                //해당 계정의 닉네임......
+                 String reportTarget = userList.get(i).getReportTarget();
+                 MemberDto memberDto = memberService.userIdCheck(reportTarget);
+
+                 String nick = memberDto.getNickname();
+                 list.getDtoList().get(i).setReportTarget(nick);
+            }
+        }
+        model.addAttribute("reportList",list);
+
+
 
     }
 
@@ -318,22 +337,45 @@ public class ServiceCenterController {
         TradeHistoryDTO tradeList = new TradeHistoryDTO();
 
         tradeList.setId(id);
-        PageResultsDTO<TradeHistoryDTO, TradeHistory> test = tradeService.allContents(tradeList, pageRequestDTO);
-        log.info("거래 내역 뽑아오기" + test);
-        if(test != null){
-            model.addAttribute("tradeList",test);
+        PageResultsDTO<TradeHistoryDTO, TradeHistory> list = tradeService.allContents(tradeList, pageRequestDTO);
+        log.info("거래 내역 뽑아오기" + list);
+
+        if(list != null){
+            for(int i=0;i<list.getDtoList().size();i++){
+                //닉네임으로 변환
+                MemberDto memberDto = memberService.userIdCheck(list.getDtoList().get(i).getUserId());
+                log.info(memberDto.getNickname() + i);
+                list.getDtoList().get(i).setUserId(memberDto.getNickname());
+            }
+            model.addAttribute("tradeList",list);
         }
-        //
 
     }
 
     //신고 작성
     @PostMapping("/userReportWrite")
     public String writeReport(UserReportDTO reportDTO){
+        //넘어오는 신고 대상 아이디는 닉네임으로 되어있다. 다시 아이디로 변환...
+        String nick = reportDTO.getReportTarget();
+
 
         userReportService.insertReport(reportDTO);
 
+
         return "redirect:/serviceCenter/badUserReport";
+    }
+
+    //신고 내용 상세 보기
+    @GetMapping("/badUserReportDetail")
+    public void badUserReportDetail(UserReportDTO userReportDTO,Model model) {
+
+        UserReportDTO reportDetail = userReportService.badUserReportDetail(userReportDTO);
+        MemberDto memberDto = memberService.userIdCheck(reportDetail.getReportTarget());
+        //님네임으로 변환
+        reportDetail.setReportTarget(memberDto.getNickname());
+        // 남은 작업 : 상세보기시에 종류에 따라 해당 값 세팅, 신고 처리 상태에 따라 값 세팅
+
+        model.addAttribute("reportDetail",reportDetail);
     }
 
 

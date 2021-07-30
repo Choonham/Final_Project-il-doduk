@@ -39,23 +39,14 @@
           <div class="row form-group">
             <div class="col-md-6 mb-3 mb-md-0">
               <label class="text-black" for="fname">신고 대상</label>
-              <input type="text" id="fname" name="reportTarget" class="form-control">
+              <input type="text" id="fname" name="reportTarget" th:value="${reportDetail.reportTarget}" class="form-control" readonly>
             </div>
           </div>
 
           <div class="row form-group">
             <div class="col-md-6 mb-3 mb-md-0">
               <label class="text-black"  for="fname">신고 유형</label>
-              <select class="form-control" name="reportKind">
-                <option value="" checked>유형을 선택해주세요.</option>
-                <option value="1">광고</option>
-                <option value="2">도배</option>
-                <option value="3">음란물</option>
-                <option value="4">욕설</option>
-                <option value="5">저작권 침해</option>
-                <option value="6">개인정보 침해</option>
-                <option value="7">기타</option>
-              </select>
+              <input type="text" th:value="${reportDetail.reportKind}" class="form-control" name="reportKind" readonly />
             </div>
           </div>
 
@@ -63,14 +54,14 @@
 
             <div class="col-md-12">
               <label class="text-black">신고제목</label>
-              <input type="text" name="reportTitle" class="form-control">
+              <input type="text" name="reportTitle" th:value="${reportDetail.reportTitle}" class="form-control" readonly>
             </div>
           </div>
 
           <div class="row form-group">
             <div class="col-md-12">
               <label class="text-black" for="message">신고 상세 내용</label>
-              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control" placeholder="신고 내용을 상세히 적어주세요.">
+              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control" th:text="${reportDetail.reportContent}" readonly>
               </textarea>
             </div>
 
@@ -78,64 +69,16 @@
 
           <div class="row form-group">
             <div class="col-md-12">
-              <input type="submit" value="신고접수" class="btn btn-primary btn-md text-white">
+              <input type="submit" value="삭제" class="btn btn-primary btn-md text-white">
               <a th:href="@{/serviceCenter/badUserReport(member = ${session.user.id})}">
                 <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
               </a>
             </div>
           </div>
+
         </form>
       </div>
 
-      <div class="col-lg-5 ml-auto" >
-        <div class="p-4 mb-3 bg-white" >
-          <p class="mb-0 font-weight-bold">최근 나와 거래한 헬퍼 목록</p>
-          <div class="mb-4" th:if="${tradeList != null}">
-            <table id="badUser">
-              <tr th:each="tradeList : ${tradeList.dtoList}">
-                <td>
-                  <a>[[${tradeList.userId}]]</a>
-                </td>
-              </tr>
-            </table>
-
-          </div>
-          <p th:if="${tradeList.totalPage == 0}" class="mb-4">최근 거래한 유저가 없습니다.<a href=""></a></p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- 신고 작성 -->
-
-
-<script type="text/javascript">
-
-  $(document).ready(function() {
-
-    //유저 클릭 했을때
-    $("#badUser tr").click(function(){
-      var str = ""
-      var tdArr = new Array();
-
-      var tr = $(this);
-      var td = tr.children();
-
-      td.each(function(i){
-        tdArr.push(td.eq(i).text());
-      });
-
-      var user = td.eq(0).text();
-      str += user;
-      $("#fname").val(str);
-
-
-    });
-  });
-</script>
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>

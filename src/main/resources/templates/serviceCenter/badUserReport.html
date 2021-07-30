@@ -27,9 +27,7 @@
 </section>
 
 <table>
-  <tr>
-    <td colspan="5">신고 내용이 없습니다.</td>
-  </tr>
+
   <tr>
     <th>#</th>
     <th>신고</th>
@@ -37,17 +35,44 @@
     <th>신고 일시</th>
     <th>처리상황</th>
   </tr>
-  <tr>
-    <td>1</td>
-    <td>너 신고한다..</td>
-    <td>전다훈</td>
-    <td>오늘</td>
-    <td>처리완료</td>
+  <tr th:if="${reportList.totalPage == 0}">
+    <td colspan="5">신고 내용이 없습니다.</td>
+  </tr>
+  <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
+    <td>[[${report.reportNo}]]</td>
+    <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
+    <td>[[${report.reportTarget}]]</td>
+    <td th:text="${#temporals.format(report.regDate, 'yyyy-MM-dd')}"></td>
+    <td>[[${report.reportState}]]</td>
   </tr>
 </table>
 <a href="#" th:href="@{/serviceCenter/badUserReportForm(member = ${session.user.id})}">
   <button>신고하기</button>
 </a>
+
+<!-- 페이징 -->
+
+<div class="row pagination-wrap mt-5">
+
+  <div class="col-md-12 text-center ">
+    <div class="custom-pagination ml-auto">
+      <a href="#" class="prev">Prev</a>
+
+      <div class="d-inline-block">
+        <ul>
+          <li th:class=" 'page-item ' + ${reportList.page == page?'active':''} " th:each="page: ${reportList.pageList}">
+            <a th:href="@{/serviceCenter/badUserReport(page = ${page},member = ${session.user.id})}">
+              [[${page}]]
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <a href="#" class="next">Next</a>
+    </div>
+  </div>
+</div>
+
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>

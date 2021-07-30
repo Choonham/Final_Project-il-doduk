@@ -13,6 +13,8 @@ public interface MemberService {
     void userRegister(MemberDto dto);
 
     MemberDto userIdCheck(String id);
+    //닉네임으로 정보 뽑아오기
+    MemberDto userNickCheck(String nick);
 
     MemberDto userIdDtoInit(MemberDto dto);
 

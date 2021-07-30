@@ -53,6 +53,13 @@ public class MemberServiceImpl implements MemberService {
         return result.isPresent() ? EntityToDto(result.get()) : null;
 
     }
+    //해당 닉네임에 관련된 정보 가져오기
+    @Override
+    public MemberDto userNickCheck(String nick) {
+        Optional<Member> member = repo.findById(nick);
+
+        return member.isPresent() ? EntityToDto(member.get()) : null;
+    }
 
     @Override
     public MemberDto userIdDtoInit(MemberDto dto) {
@@ -117,6 +124,7 @@ public class MemberServiceImpl implements MemberService {
 
             dto.setId(email);
             dto.setNickname(nickname);
+
             if(gender.equals("male")){
             dto.setGender("남");
             }else{

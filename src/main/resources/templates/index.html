@@ -20,18 +20,28 @@
 
 </div>
 
+<div id="cash_status" th:if="${session.user != null}">
+    <span id="user" th:text="${session.user.nickname}"></span> 님
+    <span th:text="${session.user.point}"></span> point
+<button type="button" id="btn_submit">충전하기</button>
+<a href="/chat/chatList">채팅</a>
+</div>
+
 <div th:if = "${session.user == null}">
     <div th:replace="~{/fragments/nav :: navi}"></div>
 </div>
 
-<section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+<section class="home-section section-hero overlay bg-image" id="home-section" style="background-image: url('images/hero_1.jpg');">
 
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-12">
                 <div class="mb-5 text-center">
-                    <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur perferendis.</p>
+                    <h1 class="text-white font-weight-bold">
+                        일도둑 뿜뿜<br/>
+                        뿜뿜
+                    </h1>
+                    <p>뿜뿜</p>
                 </div>
             </div>
         </div>
@@ -43,79 +53,31 @@
 
 </section>
 
-<!-- ------------------- -->
-
-<section class="py-5 bg-image overlay-primary fixed overlay" id="next" style="background-image: url('images/hero_1.jpg');">
-    <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <div class="col-md-7 text-center">
-                <h2 class="section-title mb-2 text-white">JobBoard Site Stats</h2>
-                <p class="lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita unde officiis recusandae sequi excepturi corrupti.</p>
-            </div>
-        </div>
-        <div class="row pb-0 block__19738 section-counter">
-
-            <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-                <div class="d-flex align-items-center justify-content-center mb-2">
-                    <strong class="number" data-number="1930">0</strong>
-                </div>
-                <span class="caption">Candidates</span>
-            </div>
-
-            <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-                <div class="d-flex align-items-center justify-content-center mb-2">
-                    <strong class="number" data-number="54">0</strong>
-                </div>
-                <span class="caption">Jobs Posted</span>
-            </div>
-
-            <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-                <div class="d-flex align-items-center justify-content-center mb-2">
-                    <strong class="number" data-number="120">0</strong>
-                </div>
-                <span class="caption">Jobs Filled</span>
-            </div>
-
-            <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-                <div class="d-flex align-items-center justify-content-center mb-2">
-                    <strong class="number" data-number="550">0</strong>
-                </div>
-                <span class="caption">Companies</span>
-            </div>
-
-
-        </div>
-    </div>
-</section>
-
-
 
 <section class="site-section">
     <div class="container">
 
         <div class="row mb-5 justify-content-center">
             <div class="col-md-7 text-center">
-                <h2 class="section-title mb-2">43,167 Job Listed</h2>
+                <h2 class="section-title mb-2">진행중인 경매</h2>
             </div>
         </div>
 
         <ul class="job-listings mb-5">
             <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                 <a href="job-single.html"></a>
-                <div class="job-listing-logo">
-                    <img src="images/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
-                </div>
+
 
                 <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                     <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                        <h2>Product Designer</h2>
-                        <strong>Adidas</strong>
+                        <h2>경매 리스트????</h2>
+                        <strong>올린사람</strong>
                     </div>
                     <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                        <span class="icon-room"></span> New York, New York
+                        <span class="icon-room"></span>상세내용
                     </div>
                     <div class="job-listing-meta">
-                        <span class="badge badge-danger">Part Time</span>
+                        <span class="badge badge-danger">진행 중인 경매 가격</span>
                     </div>
                 </div>
 
@@ -124,7 +86,7 @@
 
         <div class="row pagination-wrap">
             <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-                <span>Showing 1-7 Of 43,167 Jobs</span>
+                <span>총 게시글 수</span>
             </div>
             <div class="col-md-6 text-center text-md-right">
                 <div class="custom-pagination ml-auto">
@@ -142,15 +104,16 @@
     </div>
 </section>
 
+
 <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h2 class="text-white">Looking For A Job?</h2>
-                <p class="mb-0 text-white lead">Lorem ipsum dolor sit amet consectetur adipisicing elit tempora adipisci impedit.</p>
+                <h2 class="text-white">그 일 제가 할께요</h2>
+                <p class="mb-0 text-white lead">ㅎ</p>
             </div>
             <div class="col-md-3 ml-auto">
-                <a href="#" class="btn btn-warning btn-block btn-lg">Sign Up</a>
+                <a href="#" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
             </div>
         </div>
     </div>
@@ -167,12 +130,12 @@
             <div class="row">
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
-                        <p>&ldquo;Soluta quasi cum delectus eum facilis recusandae nesciunt molestias accusantium libero dolores repellat id in dolorem laborum ad modi qui at quas dolorum voluptatem voluptatum repudiandae.&rdquo;</p>
-                        <p><cite> &mdash; Corey Woods, @Dribbble</cite></p>
+                        <p>&ldquo;일도둑 뿜뿜&rdquo;</p>
+                        <p><cite> &mdash; 아무내용</cite></p>
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
-                    <img src="images/person_transparent_2.png" alt="Image" class="img-fluid mb-0">
+                    <img src="https://i.pinimg.com/originals/56/2f/ed/562fed1cddb951e04ba2d349733f067f.gif" alt="Image" class="img-fluid mb-0">
                 </div>
             </div>
         </div>
@@ -181,12 +144,12 @@
             <div class="row">
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
-                        <p>&ldquo;Soluta quasi cum delectus eum facilis recusandae nesciunt molestias accusantium libero dolores repellat id in dolorem laborum ad modi qui at quas dolorum voluptatem voluptatum repudiandae.&rdquo;</p>
-                        <p><cite> &mdash; Chris Peters, @Google</cite></p>
+                        <p>&ldquo;뿜뿜&rdquo;</p>
+                        <p><cite> &mdash; 귀찮음</cite></p>
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
-                    <img src="images/person_transparent.png" alt="Image" class="img-fluid mb-0">
+                    <img src="https://og.kakaobank.io/view/fed11c12-cd91-4b3c-b41d-7d93c0551c3e" alt="Image" class="img-fluid mb-0">
                 </div>
             </div>
         </div>
@@ -199,11 +162,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
-                <h2 class="text-white">Get The Mobile Apps</h2>
-                <p class="mb-5 lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit tempora adipisci impedit.</p>
+                <h2 class="text-white">구분</h2>
+                <p class="mb-5 lead text-white">아무내용</p>
                 <p class="mb-0">
-                    <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-apple mr-3"></span>App Store</a>
-                    <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-android mr-3"></span>Play Store</a>
+                    <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-apple mr-3"></span>일반 사용자</a>
+                    <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-android mr-3"></span>헬퍼</a>
                 </p>
             </div>
             <div class="col-md-6 ml-auto align-self-end">
@@ -212,21 +175,6 @@
         </div>
     </div>
 </section>
-
-
-
-<div th:if = "${session.user != null}">
-
-    <span th:text="${session.user.id}"></span>님 환영합니다.
-
-    <a href="/chat/chatList">채팅으로</a>
-    <!--<span th:if(session.user.id !="null")></span>-->
-
-    <button type="button" id="btn_submit">결제
-    </button>
-
-</div>
-
 
 <script>
     $(document).ready(function(){
