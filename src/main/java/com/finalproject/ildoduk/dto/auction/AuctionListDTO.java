@@ -15,6 +15,7 @@ public class AuctionListDTO {
 
     //User(id)외래키
     private String user;
+    private String userNickName;
 
     private String address;
     private String sido;
