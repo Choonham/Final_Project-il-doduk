@@ -104,7 +104,9 @@ public class BlogController {
         MemberDto memberDto = (MemberDto)session.getAttribute("user");
         String sessionId = memberDto.getId();
 
-        //List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+        List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+        AuctionBiddingDTO doneJob = doneList.get(0);
+        log.info(doneJob.getHelper());
 
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")
@@ -115,7 +117,7 @@ public class BlogController {
         blogService.registerPost(dto);
         Long tempPostNo = blogService.findMaxID();
         model.addAttribute("postNo", tempPostNo);
-        //model.addAttribute("doneList", doneList);
+        model.addAttribute("doneList", doneList);
     }
 
     // 글 쓰기 완료 후, 리다이렉트 기능
