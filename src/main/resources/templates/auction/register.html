@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
     <meta charset="UTF-8">
     <title> 옥션 입력 페이지 </title>
 </head>
-<body>
+<body id="top">
 
+<div th:replace="~{/fragments/nav :: navi}"></div>
 
 <!-- 입력창 : 우선 간단하게 -->
-<form th:action="@{/auction/register}" th:method="post">
+<form th:action="@{/auction/register}" th:method="post"><!-- 부트 스트랩 -->
 
     유저아이디
     <input th:type="text" name="user">
