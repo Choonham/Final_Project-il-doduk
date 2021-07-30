@@ -2,11 +2,13 @@ package com.finalproject.ildoduk.controller.blog;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.blog.*;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.blog.BlogLike;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.blog.service.BlogCommentService;
 import com.finalproject.ildoduk.service.blog.service.BlogFilesService;
 import com.finalproject.ildoduk.service.blog.service.BlogLikeService;
@@ -42,6 +44,7 @@ public class BlogController {
     private final BlogCommentService blogCommentService;
     private final BlogLikeService blogLikeService;
     private final BlogFilesService blogFilesService;
+    private final AuctionService auctionService;
 
     //=================================== 메인 관련 시작===================================//
 
@@ -96,7 +99,12 @@ public class BlogController {
 
     // 글 쓰기
     @GetMapping("/basicForm")
-    public void index(Model model) {
+    public void index(Model model, HttpSession session) {
+
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
+        String sessionId = memberDto.getId();
+
+        //List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
 
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")
@@ -107,6 +115,7 @@ public class BlogController {
         blogService.registerPost(dto);
         Long tempPostNo = blogService.findMaxID();
         model.addAttribute("postNo", tempPostNo);
+        //model.addAttribute("doneList", doneList);
     }
 
     // 글 쓰기 완료 후, 리다이렉트 기능
