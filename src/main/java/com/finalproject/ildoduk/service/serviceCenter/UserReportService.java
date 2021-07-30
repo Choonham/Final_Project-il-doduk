@@ -22,6 +22,9 @@ public interface UserReportService {
     //신고 글 상세보기
     UserReportDTO badUserReportDetail(UserReportDTO userReportDTO);
 
+    //신고 삭제
+    void reportDelete(UserReportDTO userReportDTO);
+
 
 
     default UserReport dtoToEntity(UserReportDTO dto){

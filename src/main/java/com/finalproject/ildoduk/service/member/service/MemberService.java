@@ -63,6 +63,7 @@ public interface MemberService {
                 .birth(entity.getBirth())
                 .nickname(entity.getNickname())
                 .address(entity.getAddress())
+                .point(entity.getPoint())
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())
                 .state(entity.getState())

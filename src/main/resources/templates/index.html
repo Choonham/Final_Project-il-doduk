@@ -18,6 +18,9 @@
         <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
     </div>
 
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
 </div>
 
 <div id="cash_status" th:if="${session.user != null}">

@@ -17,6 +17,7 @@ public class TradeHistoryDTO {
     private Long aucNo;
     private String id;       // 현재 접속 계정
     private String userId;   // 거래한 상대방 계정
+    private String nickName; // 닉네임??
 
     private String aucTitle; // 경매 제목
     private String aucContent; //경매 내용

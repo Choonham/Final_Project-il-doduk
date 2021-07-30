@@ -83,5 +83,12 @@ public class UserReportServiceImpl implements UserReportService{
         return result.isPresent() ? entityToDto(result.get()) : null;
     }
 
+    //신고글 삭제
+    @Override
+    public void reportDelete(UserReportDTO userReportDTO) {
+        Optional<UserReport> result = userReportRepository.findById(userReportDTO.getReportNo());
+        userReportRepository.delete(result.get());
+    }
+
 
 }

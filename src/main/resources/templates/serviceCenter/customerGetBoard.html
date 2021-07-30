@@ -45,7 +45,7 @@
 
     <div class="col-md-12">
         <label class="text-black">작성자</label>
-        <input readonly class="form-control" type="text" th:value="${board.cusTitle}" name="cusTitle" />
+        <input readonly class="form-control" type="text" th:value="${board.cusWriter}" name="cusTitle" />
     </div>
 </div>
 
@@ -81,7 +81,7 @@
         <label class="form-label">문의내용</label>
             <div contenteditable="true" th:utext="${answer.aContent}" rows="3"></div>
             <div contenteditable="true" th:text="${#temporals.format(answer.modDate, 'yyyy-MM-dd')}" ></div>
-        <div th:if="${session.user.id == 'admin'}">
+        <div th:if="${session.user.state == 0}">
             <a id="delete">
                 <button type="button" class="btn btn-primary" >답변삭제</button>
                 <input type="hidden" th:value="${answer.aNo}" id="aNo" />
@@ -93,11 +93,11 @@
 <!-- 댓글 목록 관련 끝 -->
 
 <!-- 댓글 쓰기 관련 -->
-<div class="form-group" th:if="${answer == null} and ${session.user.id == 'admin'} ">
+<div class="form-group" th:if="${answer == null} and ${session.user.state == 0} ">
     <label>comments</label>
     <form method = "post">
         <textarea cols = "40" rows="5" class="form-control" name="aContent" id = "comment"></textarea>
-        <input type = "text" name = "aWriter" value="admin" id = "commentWriter">
+        <input type = "hidden" name = "aWriter" th:value="${session.user.id}" id = "commentWriter">
     </form>
     <button class = "btn btn-info" id = "commentRegister" type ="button">답변등록</button>
 </div>

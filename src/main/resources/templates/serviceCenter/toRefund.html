@@ -48,7 +48,42 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
 
-<script th:inline="javascript" th:src="@{/pay/kakaoPay.js}"></script>
+<script th:inline="javascript">
+    //유저 포인트 조회
+    var point = [[${result.totalPoint}]];
+    var userPoint = [[${userPoint}]];
+
+    $(document).ready(function(){
+        //환불 작업 시작
+        $('#refund_checkBtn').click(function (e) {
+
+            if($("input:checkbox[name=refund_check]").is(":checked") == true){
+                if(userPoint > point){
+                e.preventDefault();
+                var check = confirm("정말 환불하시겠습니까???");
+
+                if(check){
+                    alert("환불 신청되었습니다..")
+                    $("#refundForm")[0].submit();
+                    self.close();
+                } else {
+                    alert("취소되었습니다.")
+                    self.close();
+                    return false;
+                }
+            } else {
+                    alert("보유하고있는 포인트가 부족합니다.");
+                    return false;
+                }
+            } else {
+                alert("약관에 동의 하지 않으셨습니다. 다시 한번 확인해주세요.");
+                return false;
+            }
+
+        });
+
+    });
+</script>
 
 </body>
 </html>

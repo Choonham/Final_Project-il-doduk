@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
     //해당 닉네임에 관련된 정보 가져오기
     @Override
     public MemberDto userNickCheck(String nick) {
-        Optional<Member> member = repo.findById(nick);
+        Optional<Member> member = repo.findAllByNickname(nick);
 
         return member.isPresent() ? EntityToDto(member.get()) : null;
     }

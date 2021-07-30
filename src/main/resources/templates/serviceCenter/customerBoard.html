@@ -71,7 +71,7 @@
                     <li th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} " th:each="page: ${cusBoard.pageList}">
                         <a th:href="@{/serviceCenter/customerBoard(page = ${page} ,
                    type=${pageRequestDTO.type} ,
-                   keyword = ${pageRequestDTO.keyword}  )}">
+                   keyword = ${pageRequestDTO.keyword})}">
                             [[${page}]]
                         </a>
                     </li>
