@@ -317,6 +317,16 @@ public class AuctionServiceImpl implements AuctionService {
     //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
     @Override
     public List<AuctionBiddingDTO> getAllWithState4ForHelper(String helper){
-        return auctionListRepository.getAllWith4ForHelper(helper);
+
+        List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();
+
+        List<Object[]> entityList = auctionListRepository.getAllWith4ForHelper(helper);
+
+        for(Object[] entity : entityList){
+            AuctionBiddingDTO dto = entityToDTO((AuctionList) entity[0], (BiddingList) entity[1]);
+            auctionBiddingDTOList.add(dto);
+        }
+
+        return auctionBiddingDTOList;
     }
 }
