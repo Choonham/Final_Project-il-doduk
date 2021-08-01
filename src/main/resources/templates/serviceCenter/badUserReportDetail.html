@@ -34,8 +34,9 @@
       <div class="col-lg-6 mb-5 mb-lg-0">
 
 
-        <form method="post" th:action="@{/serviceCenter/userReportWrite}">
+        <form method="post" th:action="@{/serviceCenter/reportDelete}">
           <input type="hidden" name="id" th:value="${session.user.id}" />
+          <input type="hidden" name="reportNo" th:value="${reportDetail.reportNo}">
           <div class="row form-group">
             <div class="col-md-6 mb-3 mb-md-0">
               <label class="text-black" for="fname">신고 대상</label>
@@ -69,8 +70,8 @@
 
           <div class="row form-group">
             <div class="col-md-12">
-              <input type="submit" value="삭제" class="btn btn-primary btn-md text-white">
-              <a th:href="@{/serviceCenter/badUserReport(member = ${session.user.id})}">
+              <input type="button" value="삭제" id="reportDelete" class="btn btn-primary btn-md text-white">
+              <a th:href="@{/serviceCenter/badUserReport}">
                 <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
               </a>
             </div>
@@ -79,7 +80,7 @@
         </form>
       </div>
 
-
+<script th:src="@{/pay/serviceCenter.js}"></script>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 

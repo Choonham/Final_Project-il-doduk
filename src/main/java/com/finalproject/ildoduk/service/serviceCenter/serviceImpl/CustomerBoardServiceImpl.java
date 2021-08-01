@@ -1,4 +1,4 @@
-package com.finalproject.ildoduk.service.serviceCenter;
+package com.finalproject.ildoduk.service.serviceCenter.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
@@ -9,6 +9,7 @@ import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.QCustomerBoard;
 import com.finalproject.ildoduk.repository.serviceCenter.CustomerAnswerRepository;
 import com.finalproject.ildoduk.repository.serviceCenter.CustomerBoardRepository;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class CustomerBoardServiceImpl implements CustomerBoardService{
+public class CustomerBoardServiceImpl implements CustomerBoardService {
 
     private final CustomerBoardRepository customerBoardRepository;
     private final CustomerAnswerRepository customerAnswerRepository;
@@ -42,6 +43,7 @@ public class CustomerBoardServiceImpl implements CustomerBoardService{
 
         return new PageResultsDTO<>(result, fn);
     }
+
     //검색 조건
     private BooleanBuilder getSearch(PageRequestDTO pageRequestDTO){
         String type = pageRequestDTO.getType();
@@ -65,7 +67,7 @@ public class CustomerBoardServiceImpl implements CustomerBoardService{
         }
         //연관관계를 한 이후부터 에러..500
         if(type.contains("w")){
-            conditionBuilder.or(qMember.id.contains(keyword));
+            conditionBuilder.or(qCustomerBoard.cusWriter.nickname.contains(keyword));
         }
         booleanBuilder.and(conditionBuilder);
         return booleanBuilder;

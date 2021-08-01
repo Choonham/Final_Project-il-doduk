@@ -1,18 +1,14 @@
-package com.finalproject.ildoduk.service.serviceCenter;
+package com.finalproject.ildoduk.service.serviceCenter.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
-import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
-import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
-import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
-import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
-import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.repository.pay.TradeRepository;
 import com.finalproject.ildoduk.repository.serviceCenter.UserReportRepository;
+import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -20,18 +16,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class UserReportServiceImpl implements UserReportService{
+public class UserReportServiceImpl implements UserReportService {
 
     private final UserReportRepository userReportRepository;
-    private final MemberRepository memberRepository;
     private final TradeRepository tradeRepository;
 
 

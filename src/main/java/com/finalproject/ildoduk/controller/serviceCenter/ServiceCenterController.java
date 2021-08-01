@@ -13,11 +13,11 @@ import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.member.service.MemberService;
-import com.finalproject.ildoduk.service.pay.PaymentService;
-import com.finalproject.ildoduk.service.pay.TradeService;
-import com.finalproject.ildoduk.service.serviceCenter.CustomerAnswerService;
-import com.finalproject.ildoduk.service.serviceCenter.CustomerBoardService;
-import com.finalproject.ildoduk.service.serviceCenter.UserReportService;
+import com.finalproject.ildoduk.service.pay.service.PaymentService;
+import com.finalproject.ildoduk.service.pay.service.TradeService;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
+import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -27,9 +27,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 @RequestMapping("/serviceCenter")
@@ -47,16 +47,41 @@ public class ServiceCenterController {
     private final UserReportService userReportService;
 
 
-    //결제 이력 페이지로 이동
+    //결제 및 거래 조회 페이지로 이동
     @GetMapping("/paymentHistory")
-    public void getPaymentHistroy(@RequestParam("member") String id, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
-
+    public void getPaymentHistroy(HttpSession session, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
+        MemberDto id = (MemberDto)session.getAttribute("user");
         //해당 계정을 통하여 결제이력 불러오기
-        PageResultsDTO pageResultsDTO = paymentService.getHistory(id,pageRequestDTO);
+        PageResultsDTO pageResultsDTO = paymentService.getHistory(id.getId(),pageRequestDTO);
 
         //거래 내역 조회
-        tradeHistoryDTO.setId(id);
+        tradeHistoryDTO.setId(id.getId());
         PageResultsDTO pageResultsDTO_trade = tradeService.allContents(tradeHistoryDTO,pageRequestDTO);
+
+        if(pageResultsDTO_trade != null){
+
+            ArrayList<TradeHistoryDTO> tradeDTO = (ArrayList<TradeHistoryDTO>) pageResultsDTO_trade.getDtoList();
+
+            for(int i=0;i<pageResultsDTO_trade.getDtoList().size();i++){
+
+                String userId = tradeDTO.get(i).getUserId();
+                //닉네임 꺼내기 위함
+                MemberDto memberDto = memberService.userIdCheck(userId);
+                tradeDTO.get(i).setUserId(memberDto.getNickname());
+
+                //거래 상황 업데이트
+                if(tradeDTO.get(i).getAucState().equals("1")){
+                    tradeDTO.get(i).setAucState("경매 완료");
+                } else if(tradeDTO.get(i).getAucState().equals("2")){
+                    tradeDTO.get(i).setAucState("경매 진행중");
+                } else {
+                    tradeDTO.get(i).setAucState("경매 취소");
+                }
+
+                pageResultsDTO_trade.setDtoList(tradeDTO);
+            }
+
+        }
 
         //값이 존재한다면 payCheck : y -> 결제 완료로 수정
         if(pageResultsDTO != null) {
@@ -307,13 +332,14 @@ public class ServiceCenterController {
     }
 
 
-//-------  사용자 신고 게시판으로 이동
-    @GetMapping("/badUserReport")
-    public void report(@RequestParam("member") String id,PageRequestDTO pageRequestDTO,Model model){
-        log.info("들어온 아이디 값은 ???? "+id);
+//--------  사용자 신고 --------------
 
+    //사용자 신고 게시판으로 이동
+    @GetMapping("/badUserReport")
+    public void report(HttpSession session,PageRequestDTO pageRequestDTO,Model model){
+        MemberDto id = (MemberDto) session.getAttribute("user");
         UserReportDTO dto = new UserReportDTO();
-        dto.setId(id);
+        dto.setId(id.getId());
         PageResultsDTO<UserReportDTO, UserReport> list = userReportService.getReportList(dto,pageRequestDTO);
 
         log.info("신고 게시판 이동 시 뽑아내는 데이터 : "+list.getDtoList());
@@ -339,16 +365,17 @@ public class ServiceCenterController {
 
     //신고 작성 폼으로 이동
     @GetMapping("/badUserReportForm")
-    public void reportForm(@RequestParam("member") String id,
+    public void reportForm(HttpSession session,
                            PageRequestDTO pageRequestDTO
-                           ,Model model){
+                           , Model model){
         //폼으로 이동할 때 세션 유저 값과 해당 신고 대상자의 아이디 필요..
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
-        log.info("신고하는 계정 : " + id);
+        MemberDto id = (MemberDto) session.getAttribute("user");
+        log.info("신고하는 계정 : " + id.getId());
         //거래했던 유저 목록 조회
         TradeHistoryDTO tradeList = new TradeHistoryDTO();
 
-        tradeList.setId(id);
+        tradeList.setId(id.getId());
         PageResultsDTO<TradeHistoryDTO, TradeHistory> list = tradeService.allContents(tradeList, pageRequestDTO);
 
         if(list != null){
@@ -375,7 +402,7 @@ public class ServiceCenterController {
 
         userReportService.insertReport(reportDTO);
 
-        return "redirect:/serviceCenter/badUserReport(member ="+reportDTO.getId()+")";
+        return "redirect:/serviceCenter/badUserReport";
     }
 
     //신고 내용 상세 보기
@@ -387,13 +414,31 @@ public class ServiceCenterController {
         //님네임으로 변환
         reportDetail.setReportTarget(memberDto.getNickname());
         // 남은 작업 : 상세보기시에 종류에 따라 해당 값 세팅, 신고 처리 상태에 따라 값 세팅
+        if(reportDetail.getReportKind().equals("1")){
+            reportDetail.setReportKind("광고");
+        }else if(reportDetail.getReportKind().equals("2")){
+            reportDetail.setReportKind("도배");
+        }else if(reportDetail.getReportKind().equals("3")){
+            reportDetail.setReportKind("불법 음란물 게시");
+        }else if(reportDetail.getReportKind().equals("4")){
+            reportDetail.setReportKind("욕설 및 폭언");
+        }else if(reportDetail.getReportKind().equals("5")){
+            reportDetail.setReportKind("저작권 침해");
+        }else if(reportDetail.getReportKind().equals("6")){
+            reportDetail.setReportKind("개인정보 침해");
+        } else {
+            reportDetail.setReportKind("기타");
+        }
+
 
         model.addAttribute("reportDetail",reportDetail);
     }
     //신고 삭제
-    @GetMapping("/reportDelete")
+    @PostMapping("/reportDelete")
     public String reportDelete(UserReportDTO userReportDTO){
+
         MemberDto memberDto = memberService.userNickCheck(userReportDTO.getReportTarget());
+
         String id = memberDto.getId();
         userReportDTO.setReportTarget(id);
 

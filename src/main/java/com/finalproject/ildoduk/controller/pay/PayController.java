@@ -5,7 +5,7 @@ import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.service.member.service.MemberService;
-import com.finalproject.ildoduk.service.pay.PaymentService;
+import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -17,11 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Log4j2
 public class PayController {
-
-    /**
-     *  필요한 데이터 : 회원 정보 세션값
-     */
-
 
     private final PaymentService paymentService;
     private final MemberService memberService;

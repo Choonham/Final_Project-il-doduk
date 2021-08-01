@@ -22,7 +22,7 @@ public class TradeHistoryDTO {
     private String aucTitle; // 경매 제목
     private String aucContent; //경매 내용
     private int aucPrice;     // 경매 가격
-    private int aucState;    // 경매 상황
+    private String aucState;    // 경매 상황
 
     private LocalDateTime regDate;
 

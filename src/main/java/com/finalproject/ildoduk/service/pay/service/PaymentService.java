@@ -1,4 +1,4 @@
-package com.finalproject.ildoduk.service.pay;
+package com.finalproject.ildoduk.service.pay.service;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;

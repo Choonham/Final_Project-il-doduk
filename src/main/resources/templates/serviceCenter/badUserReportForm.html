@@ -78,8 +78,8 @@
 
           <div class="row form-group">
             <div class="col-md-12">
-              <input type="submit" value="신고접수" class="btn btn-primary btn-md text-white">
-              <a th:href="@{/serviceCenter/badUserReport(member = ${session.user.id})}">
+              <input type="button" value="신고접수" id="report" class="btn btn-primary btn-md text-white">
+              <a th:href="@{/serviceCenter/badUserReport}">
                 <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
               </a>
             </div>
@@ -112,30 +112,7 @@
 <!-- 신고 작성 -->
 
 
-<script type="text/javascript">
-
-  $(document).ready(function() {
-
-    //유저 클릭 했을때
-    $("#badUser tr").click(function(){
-      var str = ""
-      var tdArr = new Array();
-
-      var tr = $(this);
-      var td = tr.children();
-
-      td.each(function(i){
-        tdArr.push(td.eq(i).text());
-      });
-
-      var user = td.eq(0).text();
-      str += user;
-      $("#fname").val(str);
-
-
-    });
-  });
-</script>
+<script th:src="@{/pay/serviceCenter.js}"></script>
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>

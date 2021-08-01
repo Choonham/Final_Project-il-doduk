@@ -47,30 +47,6 @@
     </tr>
   </table>
 </div>
-<script>
-  $(document).ready(function(){
-    $("#none").click(function(){
-      $("#notSelected").show();
-      $("#payHistory").hide();
-      $("#tradeHistory").hide();
-    });
-
-    $("#pay_btn").click(function(){
-      $("#payHistory").show();
-      $("#tradeHistory").hide();
-      $("#notSelected").hide();
-    });
-
-    $("#trade_btn").click(function(){
-      $("#payHistory").hide();
-      $("#tradeHistory").show();
-      $("#notSelected").hide();
-    });
-
-
-
-  });
-</script>
 
 
 <div id="payHistory">
@@ -125,7 +101,7 @@
     </tr>
     <tr th:each="trade : ${trade.dtoList}">
       <td>[[${trade.tNo}]]</td>
-      <td>[[${trade.aucTitle}]]</td>
+      <td><a href="">[[${trade.aucTitle}]]</a></td>
       <td>[[${trade.aucPrice}]]</td>
       <td>[[${trade.userId}]]</td>
       <td>[[${trade.aucState}]]</td>
@@ -143,16 +119,7 @@
 </div>
 
 
-
-<script>
-
-  $(document).ready(function (){
-
-    });
-
-</script>
-
-
+<script th:src="@{/pay/serviceCenter.js}"></script>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 </body>
