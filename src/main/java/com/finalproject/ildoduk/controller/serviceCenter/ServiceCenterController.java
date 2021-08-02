@@ -11,12 +11,13 @@ import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
+import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.member.service.MemberService;
-import com.finalproject.ildoduk.service.pay.PaymentService;
-import com.finalproject.ildoduk.service.pay.TradeService;
-import com.finalproject.ildoduk.service.serviceCenter.CustomerAnswerService;
-import com.finalproject.ildoduk.service.serviceCenter.CustomerBoardService;
-import com.finalproject.ildoduk.service.serviceCenter.UserReportService;
+import com.finalproject.ildoduk.service.pay.service.PaymentService;
+import com.finalproject.ildoduk.service.pay.service.TradeService;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
+import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,16 +47,41 @@ public class ServiceCenterController {
     private final UserReportService userReportService;
 
 
-    //결제 이력 페이지로 이동
+    //결제 및 거래 조회 페이지로 이동
     @GetMapping("/paymentHistory")
-    public void getPaymentHistroy(@RequestParam("member") String id, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
-
+    public void getPaymentHistroy(HttpSession session, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
+        MemberDto id = (MemberDto)session.getAttribute("user");
         //해당 계정을 통하여 결제이력 불러오기
-        PageResultsDTO pageResultsDTO = paymentService.getHistory(id,pageRequestDTO);
+        PageResultsDTO pageResultsDTO = paymentService.getHistory(id.getId(),pageRequestDTO);
 
         //거래 내역 조회
-        tradeHistoryDTO.setId(id);
+        tradeHistoryDTO.setId(id.getId());
         PageResultsDTO pageResultsDTO_trade = tradeService.allContents(tradeHistoryDTO,pageRequestDTO);
+
+        if(pageResultsDTO_trade != null){
+
+            ArrayList<TradeHistoryDTO> tradeDTO = (ArrayList<TradeHistoryDTO>) pageResultsDTO_trade.getDtoList();
+
+            for(int i=0;i<pageResultsDTO_trade.getDtoList().size();i++){
+
+                String userId = tradeDTO.get(i).getUserId();
+                //닉네임 꺼내기 위함
+                MemberDto memberDto = memberService.userIdCheck(userId);
+                tradeDTO.get(i).setUserId(memberDto.getNickname());
+
+                //거래 상황 업데이트
+                if(tradeDTO.get(i).getAucState().equals("1")){
+                    tradeDTO.get(i).setAucState("경매 완료");
+                } else if(tradeDTO.get(i).getAucState().equals("2")){
+                    tradeDTO.get(i).setAucState("경매 진행중");
+                } else {
+                    tradeDTO.get(i).setAucState("경매 취소");
+                }
+                log.info(tradeDTO+"결제 이력 체크~~~~~~");
+                pageResultsDTO_trade.setDtoList(tradeDTO);
+            }
+
+        }
 
         //값이 존재한다면 payCheck : y -> 결제 완료로 수정
         if(pageResultsDTO != null) {
@@ -82,11 +109,13 @@ public class ServiceCenterController {
     public void toRefund(@RequestParam("pointNo") Long pointNo, Model model){
 
         PaymentDTO dto = paymentService.toRefund(pointNo);
-        //환불창을 열때 해당 금액보다 유저의 포인트가 없을 경우 다시 리스트로 돌아가서 경고창..
+        //해당 유저의 총포인트 값을 같이 넘겨준다
+        MemberDto memberDto = memberService.userIdCheck(dto.getUserId());
 
         int point = dto.getTotalPoint();
 
         model.addAttribute("result",dto);
+        model.addAttribute("userPoint", memberDto.getPoint());
     }
 
     //환불 시작(POST)
@@ -142,6 +171,12 @@ public class ServiceCenterController {
                 board.get(i).setAnswerCheck("답변 완료");
             }
 
+            //게시글 작성자를 닉네임으로 나오게
+            String writer = board.get(i).getCusWriter();
+            MemberDto memberDto = memberService.userIdCheck(writer);
+            String nick = memberDto.getNickname();
+            board.get(i).setCusWriter(nick);
+
             result.setDtoList(board);
         }
         model.addAttribute("cusBoard",result);
@@ -156,7 +191,7 @@ public class ServiceCenterController {
 //문의글 작성
     @PostMapping("/postCusWrite")
     public String postWriteForm(CustomerBoardDTO dto){
-        //넘어오는 데이터 : 제목, 내용, 작성자, 비밀글 여부, ( 비밀글일시 비밀번호)
+        //넘어오는 데이터 : 제목, 내용, 작성자, 비밀글 여부, (비밀글일시 비밀번호)
 
         customerBoardService.insertCusBoard(dto);
         return "redirect:/serviceCenter/customerBoard";
@@ -176,11 +211,16 @@ public class ServiceCenterController {
         }
         CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
 
-        //추가 되야할 부분 => 관리자페이지를 따로 만들지 않을려면 이쪽에서처리 : 관리자는 모든 글을 읽을 수 있다.
 
-        //관리자의 답글이 존재할 경우 같이 값에 담아서 전달해야함..
+        //접속 아이디가 관리자일 경우 모든 글 읽기 가능
+        MemberDto memberDto = memberService.userIdCheck(dto.getCusWriter());
+        //접속한 계정의 닉네임
+        String nickName = memberDto.getNickname();
 
-        if(dto.getCusWriter().equals("admin")){
+
+        //관리자일 경우 모든 글 확인
+        if(memberDto.getState() == 0){
+            customerBoardDTO.setCusWriter(nickName);
             model.addAttribute("board",customerBoardDTO);
             model.addAttribute("user","check");
             return "/serviceCenter/customerGetBoard";
@@ -192,6 +232,9 @@ public class ServiceCenterController {
         model.addAttribute("board",customerBoardDTO);
 
         if(dto.getCusWriter().equals(boardWriter)){
+
+            customerBoardDTO.setCusWriter(nickName);
+
             if(customerBoardDTO.getSecretBoard().equals("y")){
                 redirectAttributes.addFlashAttribute("password",customerBoardDTO.getPasswordBoard());
                 redirectAttributes.addFlashAttribute("pwNo",customerBoardDTO.getCusNo());
@@ -216,8 +259,13 @@ public class ServiceCenterController {
  //문의글 (비공개글) 열기
     @PostMapping("/customerGetBoard")
     public void postGetBoard(CustomerBoardDTO dto,@ModelAttribute("requestDTO") PageRequestDTO requestDTO,Model model){
-        log.info("비밀번호 체크하기 위한 게시글 번호" + dto.getCusNo());
-        model.addAttribute("board",customerBoardService.getBoardList(dto.getCusNo()));
+
+
+        CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
+        MemberDto memberDto = memberService.userIdCheck(customerBoardDTO.getCusWriter());
+        customerBoardDTO.setCusWriter(memberDto.getNickname());
+
+        model.addAttribute("board",customerBoardDTO);
         model.addAttribute("user","check");
 
     }
@@ -226,14 +274,18 @@ public class ServiceCenterController {
     @GetMapping("/customerUpdateBoard")
     public void updateBoard(@RequestParam("cusNo") Long cusNo
             ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
+        CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(cusNo);
+        MemberDto memberDto = memberService.userIdCheck(customerBoardDTO.getCusWriter());
+        customerBoardDTO.setCusWriter(memberDto.getNickname());
 
-        model.addAttribute("board",customerBoardService.getBoardList(cusNo));
+        model.addAttribute("board",customerBoardDTO);
     }
 
 //게시글 수정
     @PostMapping("/update")
     public String update(CustomerBoardDTO dto){
-
+       MemberDto memberDto = memberService.userNickCheck(dto.getCusWriter());
+       dto.setCusWriter(memberDto.getId());
        customerBoardService.updateBoard(dto);
 
        return "redirect:/serviceCenter/customerBoard";
@@ -243,6 +295,7 @@ public class ServiceCenterController {
     @PostMapping("/delete")
     public String delete(CustomerBoardDTO dto){
         CustomerBoardDTO result = customerBoardService.getBoardList(dto.getCusNo());
+        log.info("삭제할 데이터 : "+result);
         customerBoardService.deleteBoard(result);
 
         return "redirect:/serviceCenter/customerBoard";
@@ -288,52 +341,146 @@ public class ServiceCenterController {
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }
 
-    // 댓글 수정
-    @ResponseBody
-    @DeleteMapping(value = "/modifyComment", produces = "application/json; charset=utf8")
-    public ResponseEntity<Long> modifyComment(@RequestBody Long aNo) {
-        log.info("넘어온 데이터 : " + aNo);
-        // blogCommentService.modifyComment(customerAnswerDTO);
-        return new ResponseEntity<>(1L, HttpStatus.OK);
-    }
 
-//사용자 신고 게시판으로 이동
+//--------  사용자 신고 --------------
+
+    //사용자 신고 게시판으로 이동
     @GetMapping("/badUserReport")
-    public void report(String userId){
-        //현재 신고 현황..??
-        //신고 내역이 있을 경우 신고 내역을 보여주고, 없을 경우에 신고 작성 페이지로..
-        //화면에는 아이디가 아닌 닉네임으로 출력
+    public void report(HttpSession session,PageRequestDTO pageRequestDTO,Model model){
 
+        MemberDto id = (MemberDto) session.getAttribute("user");
+        UserReportDTO dto = new UserReportDTO();
+        dto.setId(id.getId());
+        PageResultsDTO<UserReportDTO, UserReport> list = userReportService.getReportList(dto,pageRequestDTO);
+
+        log.info("신고 게시판 이동 시 뽑아내는 데이터 : "+list.getDtoList());
+
+        if(list != null){
+
+            ArrayList<UserReportDTO> userList = (ArrayList<UserReportDTO>) list.getDtoList();
+
+            for (int i=0;i<list.getDtoList().size();i++){
+                //해당 계정의 닉네임......
+                 String reportTarget = userList.get(i).getReportTarget();
+                 MemberDto memberDto = memberService.userIdCheck(reportTarget);
+
+                 String nick = memberDto.getNickname();
+                 list.getDtoList().get(i).setReportTarget(nick);
+
+                 if(list.getDtoList().get(i).getReportState().equals("1")){
+                     list.getDtoList().get(i).setReportState("신고 접수 완료");
+                 } else if(list.getDtoList().get(i).getReportState().equals("2")) {
+                     list.getDtoList().get(i).setReportState("처리 완료");
+                 }
+            }
+        }
+        model.addAttribute("reportList",list);
     }
 
     //신고 작성 폼으로 이동
     @GetMapping("/badUserReportForm")
-    public void reportForm(@RequestParam("member") String id,
+    public void reportForm(HttpSession session,
                            PageRequestDTO pageRequestDTO
-                           ,Model model){
+                           , Model model){
         //폼으로 이동할 때 세션 유저 값과 해당 신고 대상자의 아이디 필요..
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
-        log.info("신고하는 계정 : " + id);
+        MemberDto id = (MemberDto) session.getAttribute("user");
+        log.info("신고하는 계정 : " + id.getId());
         //거래했던 유저 목록 조회
         TradeHistoryDTO tradeList = new TradeHistoryDTO();
 
-        tradeList.setId(id);
-        PageResultsDTO<TradeHistoryDTO, TradeHistory> test = tradeService.allContents(tradeList, pageRequestDTO);
-        log.info("거래 내역 뽑아오기" + test);
-        if(test != null){
-            model.addAttribute("tradeList",test);
+        tradeList.setId(id.getId());
+        PageResultsDTO<TradeHistoryDTO, TradeHistory> list = tradeService.allContents(tradeList, pageRequestDTO);
+
+        if(list != null){
+            for(int i=0;i<list.getDtoList().size();i++){
+                //닉네임으로 변환
+                MemberDto memberDto = memberService.userIdCheck(list.getDtoList().get(i).getUserId());
+                log.info(memberDto.getNickname() + i);
+                list.getDtoList().get(i).setUserId(memberDto.getNickname());
+            }
+            model.addAttribute("tradeList",list);
         }
-        //
 
     }
 
     //신고 작성
     @PostMapping("/userReportWrite")
     public String writeReport(UserReportDTO reportDTO){
+        //넘어오는 신고 대상 아이디는 닉네임으로 되어있다. 다시 아이디로 변환...
+        String nick = reportDTO.getReportTarget();
+        log.info(nick + "신고 작성");
+        MemberDto memberDto = memberService.userNickCheck(nick);
+        log.info("신고 작성을 위해 가져온 정보 : "+memberDto);
+        reportDTO.setReportTarget(memberDto.getId());
 
         userReportService.insertReport(reportDTO);
 
         return "redirect:/serviceCenter/badUserReport";
+    }
+
+    //신고 내용 상세 보기
+    @GetMapping("/badUserReportDetail")
+    public void badUserReportDetail(UserReportDTO userReportDTO,Model model) {
+
+        UserReportDTO reportDetail = userReportService.badUserReportDetail(userReportDTO);
+        MemberDto memberDto = memberService.userIdCheck(reportDetail.getReportTarget());
+        //님네임으로 변환
+        reportDetail.setReportTarget(memberDto.getNickname());
+        // 남은 작업 : 상세보기시에 종류에 따라 해당 값 세팅, 신고 처리 상태에 따라 값 세팅
+        if(reportDetail.getReportKind().equals("1")){
+            reportDetail.setReportKind("광고");
+        }else if(reportDetail.getReportKind().equals("2")){
+            reportDetail.setReportKind("도배");
+        }else if(reportDetail.getReportKind().equals("3")){
+            reportDetail.setReportKind("불법 음란물 게시");
+        }else if(reportDetail.getReportKind().equals("4")){
+            reportDetail.setReportKind("욕설 및 폭언");
+        }else if(reportDetail.getReportKind().equals("5")){
+            reportDetail.setReportKind("저작권 침해");
+        }else if(reportDetail.getReportKind().equals("6")){
+            reportDetail.setReportKind("개인정보 침해");
+        } else {
+            reportDetail.setReportKind("기타");
+        }
+
+
+        model.addAttribute("reportDetail",reportDetail);
+    }
+    //신고 삭제
+    @PostMapping("/reportDelete")
+    public String reportDelete(UserReportDTO userReportDTO){
+
+        MemberDto memberDto = memberService.userNickCheck(userReportDTO.getReportTarget());
+
+        String id = memberDto.getId();
+        userReportDTO.setReportTarget(id);
+
+        userReportService.reportDelete(userReportDTO);
+
+        return "redirect:/serviceCenter/badUserReport";
+    }
+
+    //관리자로 접속시에 신고 상황 업데이트
+    @GetMapping("/reportBoardMgr")
+    public String reportBoardMgr(PageRequestDTO pageRequestDTO,Model model){
+
+        PageResultsDTO<UserReportDTO, UserReport> reportList =  userReportService.getAllReport(pageRequestDTO);
+
+        model.addAttribute("reportList",reportList);
+
+        return "/serviceCenter/badUserReportMgr";
+    }
+
+    @GetMapping("/reportStateUpdate")
+    public String reportStateUpdate(Long reportNo,UserReportDTO userReportDTO){
+        log.info("관리자 : 신고 버튼");
+        userReportDTO.setReportNo(reportNo);
+        userReportDTO.setReportState("2");
+
+        userReportService.updateReportState(userReportDTO);
+
+        return "redirect:/serviceCenter/reportBoardMgr";
     }
 
 

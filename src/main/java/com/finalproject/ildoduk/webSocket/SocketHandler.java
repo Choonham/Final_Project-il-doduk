@@ -38,7 +38,7 @@ public class SocketHandler extends TextWebSocketHandler {
             String date =object.get("date").toString();
             System.out.println(date);
             System.out.println(object.get("date").getClass());
-            ChatDTO dto = ChatDTO.builder().message(mess).to(to).from(from_).time(date).build();
+            ChatDTO dto = ChatDTO.builder().message(mess).recive(to).send(from_).time(date).build();
 
             System.out.println(date);
             System.out.println(from_);

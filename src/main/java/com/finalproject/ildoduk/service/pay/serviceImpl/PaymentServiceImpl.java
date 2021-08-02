@@ -1,10 +1,11 @@
-package com.finalproject.ildoduk.service.pay;
+package com.finalproject.ildoduk.service.pay.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.pay.Payment;
 import com.finalproject.ildoduk.repository.pay.PaymentRepository;
+import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
 

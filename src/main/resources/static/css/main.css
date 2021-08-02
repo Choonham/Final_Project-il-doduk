@@ -2,3 +2,10 @@ button {
     background: none;
     border: none;
 }
+
+#cash_status{
+    position: absolute;
+    left: 82%;
+    z-index: 10;
+    color: black;
+}

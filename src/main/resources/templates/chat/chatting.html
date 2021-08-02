@@ -1,76 +1,188 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: #1c1e22;
 
-  <meta charset="UTF-8">
-  <title>Chating</title>
-  <style>
-    *{
-      margin:0;
-      padding:0;
-    }
-    .container{
-      width: 500px;
-      margin: 0 auto;
-      padding: 25px
-    }
-    .container h1{
-      text-align: left;
-      padding: 5px 5px 5px 15px;
-      color: #FFBB00;
-      border-left: 3px solid #FFBB00;
-      margin-bottom: 20px;
-    }
-    .chating{
-      background-color: #000;
-      width: 500px;
-      height: 500px;
-      overflow: auto;
-    }
-    .chating p{
-      color: #fff;
-      text-align: left;
-    }
-    input{
-      width: 330px;
-      height: 25px;
-    }
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #4c4c6a;
+            border-radius: 2px;
+        }
+        .chatbox {
+            width: 300px;
+            height: 400px;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            padding-top: 0px;
 
-  </style>
+        }
+        .chat-window {
+            flex: auto;
+            max-height: calc(100% - 60px);
+            background: #7f7f7f;
+            overflow: auto;
+        }
+        .chat-input {
+            flex: 0 0 auto;
+            height: 60px;
+            background: #40434e;
+            border-top: 1px solid #2671ff;
+            box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+        }
+        .chat-input input {
+            height: 59px;
+            line-height: 60px;
+            outline: 0 none;
+            border: none;
+            width: calc(100% - 60px);
+            color: white;
+            text-indent: 10px;
+            font-size: 12pt;
+            padding: 0;
+            background: #40434e;
+        }
+        .chat-input button {
+            float: right;
+            outline: 0 none;
+            border: none;
+            background: rgba(255,255,255,.25);
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            padding: 2px 0 0 0;
+            margin: 10px;
+            transition: all 0.15s ease-in-out;
+        }
+        .chat-input input[good] + button {
+            box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
+            background: #2671ff;
+        }
+        .chat-input input[good] + button:hover {
+            box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        .chat-input input[good] + button path {
+            fill: white;
+        }
+        .msg-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+        .msg-box {
+            display: flex;
+            background: white;
+            padding: 10px 10px 0 10px;
+            border-radius: 0 6px 6px 0;
+            max-width: 80%;
+            width: auto;
+            float: left;
+            box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
+            color: black;
+        }
+        .user-img {
+            display: inline-block;
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            background: #2671ff;
+            margin: 0 10px 10px 0;
+        }
+        .flr {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 50px);
+        }
+        .messages {
+            flex: 1 0 auto;
+        }
+        .msg {
+            display: inline-block;
+            font-size: 11pt;
+            line-height: 13pt;
+            color: rgba(255,255,255,.7);
+            margin: 0 0 4px 0;
+            color: black;
+        }
+        .msg:first-of-type {
+            margin-top: 8px;
+        }
+        .timestamp {
+            color: rgba(0,0,0,.38);
+            font-size: 8pt;
+            margin-bottom: 10px;
+        }
+        .username {
+            margin-right: 3px;
+        }
+        .posttime {
+            margin-left: 3px;
+        }
+        .msg-self .msg-box {
+            border-radius: 6px 0 0 6px;
+            background: #89ba16;
+            float: right;
+        }
+        .msg-self .user-img {
+            margin: 0 0 10px 10px;
+        }
+        .msg-self .msg {
+            text-align: right;
+        }
+        .msg-self .timestamp {
+            text-align: right;
+        }
+
+
+    </style>
 </head>
+<body>
+<section class="chatbox">
+    <section class="chat-window" id="chatwindow">
 
-
-
-<body >
-<div id="container" class="container">
-  <h1>채팅</h1>
-  <div id="chating" class="chating">
-  </div>
-
-
-  <div id="yourMsg" >
-    <table class="inputTable">
-      <tr>
-        <th>메시지</th>
-        <th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
-        <th><button id="but">보내기</button></th>
-      </tr>
-    </table>
-  </div>
-</div>
+    </section>
+    <form class="chat-input" onsubmit="return false;">
+        <input type="text" autocomplete="on" placeholder="Type a message" id="message">
+        <button id="send">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="rgba(0,0,0,.38)" d="M17,12L12,17V14H8V10H12V7L17,12M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15Z"></path></svg>
+        </button>
+    </form>
+</section>
 
 <script th:inline="javascript">
-  var me=[[${user.id}]];
-  var you=[[${id}]];
-  var list =[[${list}]];
+    var me=[[${session.userID}]];
+    var other=[[${id}]];
+    var list =[[${list}]];
 
 </script>
-<script th:inline="javascript" th:src="@{/Chat/matching.js}"></script>
+<script th:inline="javascript" th:src="@{/Chat/chatUI.js}"></script>
 
-
-
-
-
-</body>
-</html>
+</body></html>

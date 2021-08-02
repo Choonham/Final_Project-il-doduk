@@ -10,15 +10,7 @@
 
 <div th:if = "${session.user != null}">
 
-  <div th:if="${session.user.state == 1}">
-    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
-  </div>
-
-  <div th:if="${session.user.state == 2}">
-    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
-  </div>
-
-  <div th:if="${session.user.state == 0}">
+   <div th:if="${session.user.state == 0}">
     <div th:replace="~{/fragments/navManager :: naviManager}"></div>
   </div>
 
@@ -58,13 +50,13 @@
     <td>[[${report.reportTarget}]]</td>
     <td th:text="${#temporals.format(report.regDate, 'yyyy-MM-dd')}"></td>
     <td>
-      [[${report.reportState}]]
+      <a th:href="@{/serviceCenter/reportStateUpdate(reportNo = ${report.reportNo})}">
+        <button th:if="${report.reportState == '1'}">신고 처리하기</button>
+      </a>
+      <b th:unless="${report.reportState == '1'}">처리 완료</b>
     </td>
   </tr>
 </table>
-<a href="#" th:href="@{/serviceCenter/badUserReportForm}">
-  <button>신고하기</button>
-</a>
 
 <!-- 페이징 -->
 
