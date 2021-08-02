@@ -8,6 +8,7 @@ import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
 import org.apache.commons.io.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +91,7 @@ public class AuctionController {
 
     //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
     @GetMapping("/getOnAuction")
-    public void getAuction1(Long aucSeq,Model model,PageRequestDTO pageRequestDTO){
+    public void getAuction1(Long aucSeq, Model model, PageRequestDTO pageRequestDTO){
         //옥션 정보
         model.addAttribute("auction",auctionService.getAuction(aucSeq));
 

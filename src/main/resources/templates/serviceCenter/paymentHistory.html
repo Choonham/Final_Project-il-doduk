@@ -5,7 +5,22 @@
     <title>Title</title>
 </head>
 <body id="top">
-<nav th:replace="~{/fragments/nav :: navi}"></nav>
+
+<div th:if = "${session.user != null}">
+
+  <div th:if="${session.user.state == 1}">
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 2}">
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 0}">
+    <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+  </div>
+
+</div>
 
 <style>
   #payHistory,#tradeHistory{
@@ -101,7 +116,7 @@
     </tr>
     <tr th:each="trade : ${trade.dtoList}">
       <td>[[${trade.tNo}]]</td>
-      <td><a href="">[[${trade.aucTitle}]]</a></td>
+      <td><a href="" th:href="@{/auction/getAuction(aucSeq = ${trade.aucNo})}">[[${trade.aucTitle}]]</a></td>
       <td>[[${trade.aucPrice}]]</td>
       <td>[[${trade.userId}]]</td>
       <td>[[${trade.aucState}]]</td>

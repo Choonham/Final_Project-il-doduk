@@ -17,7 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findAllByNickname(String nick);
 
     //결제 관련
-
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Member u SET u.point = u.point + ?1 WHERE u.id = ?2")

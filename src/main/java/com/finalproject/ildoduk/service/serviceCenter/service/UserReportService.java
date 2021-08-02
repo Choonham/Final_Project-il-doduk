@@ -8,6 +8,7 @@ import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
+import org.springframework.data.domain.Pageable;
 
 public interface UserReportService {
 
@@ -24,6 +25,11 @@ public interface UserReportService {
 
     //신고 삭제
     void reportDelete(UserReportDTO userReportDTO);
+
+    //관리자 : 신고 게시판 전체 조회
+    PageResultsDTO<UserReportDTO, UserReport> getAllReport(PageRequestDTO pageRequestDTO);
+    //신고 처리
+    void updateReportState(UserReportDTO userReportDTO);
 
 
 

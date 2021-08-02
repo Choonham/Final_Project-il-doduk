@@ -33,4 +33,5 @@ public class UserReport extends BaseEntity {
     private String reportKind;
     private String reportState;
 
+    public void changeReportState(String reportState){ this.reportState = reportState;}
 }

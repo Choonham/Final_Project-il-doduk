@@ -77,7 +77,7 @@ public class ServiceCenterController {
                 } else {
                     tradeDTO.get(i).setAucState("경매 취소");
                 }
-
+                log.info(tradeDTO+"결제 이력 체크~~~~~~");
                 pageResultsDTO_trade.setDtoList(tradeDTO);
             }
 
@@ -358,9 +358,6 @@ public class ServiceCenterController {
             }
         }
         model.addAttribute("reportList",list);
-
-
-
     }
 
     //신고 작성 폼으로 이동
@@ -446,8 +443,28 @@ public class ServiceCenterController {
 
         return "redirect:/serviceCenter/badUserReport";
     }
-    //관리자로 접속시에 신고 상황 업데이트
 
+    //관리자로 접속시에 신고 상황 업데이트
+    @GetMapping("/reportBoardMgr")
+    public String reportBoardMgr(PageRequestDTO pageRequestDTO,Model model){
+
+        PageResultsDTO<UserReportDTO, UserReport> reportList =  userReportService.getAllReport(pageRequestDTO);
+
+        model.addAttribute("reportList",reportList);
+
+        return "/serviceCenter/badUserReportMgr";
+    }
+
+    @GetMapping("/reportStateUpdate")
+    public String reportStateUpdate(Long reportNo,UserReportDTO userReportDTO){
+        log.info("관리자 : 신고 버튼");
+        userReportDTO.setReportNo(reportNo);
+        userReportDTO.setReportState("2");
+
+        userReportService.updateReportState(userReportDTO);
+
+        return "redirect:/serviceCenter/reportBoardMgr";
+    }
 
 
 }

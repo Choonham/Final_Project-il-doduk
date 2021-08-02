@@ -77,23 +77,23 @@ $(document).ready(function () {
     });
 
     //버튼 클릭시 신고글 게시 및 삭제 확인 창
-    $("#report").on("click",function(){
-       var insertCheck = confirm("신고 하시겠습니까???");
-       if(insertCheck){
-           $("form").submit();
-       } else {
-           return false;
-       }
-    });
+    $("#report").click(function(){
 
-    $("#reportDelete").on("click",function(){
-        var deleteCheck = confirm("삭제 하시겠습니까???");
-        if(deleteCheck){
-            $("form").submit();
-        } else {
-            return false;
+       if(!confirm("신고 하시겠습니까???")){
+           return;
+       }
+
+       $("form").submit();
+
+    });
+    //삭제
+    $("#reportDelete").click(function(){
+
+        if(!confirm("삭제 하시겠습니까???")){
+            return;
         }
 
+        $("form").submit();
     });
 
 
