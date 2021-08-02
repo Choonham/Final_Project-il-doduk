@@ -4,6 +4,7 @@ package com.finalproject.ildoduk.entity.serviceCenter;
 import com.finalproject.ildoduk.entity.BaseEntity;
 import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -31,6 +32,8 @@ public class UserReport extends BaseEntity {
     private String reportTitle;
     private String reportContent;
     private String reportKind;
+
+    @ColumnDefault("'1'")
     private String reportState;
 
     public void changeReportState(String reportState){ this.reportState = reportState;}
