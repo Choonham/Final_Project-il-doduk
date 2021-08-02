@@ -47,6 +47,7 @@ MemberService service;
         HttpSession session = request.getSession();
         model.addAttribute("user", session.getAttribute("user"));
         MemberDto dto =(MemberDto)session.getAttribute("user");
+        session.setAttribute("userID", dto.getId());
         model.addAttribute("list",chatService.get_chatList(dto.getId(),id));
     }
 

@@ -9,14 +9,18 @@ window.onload = function () {
 }
 //to ==recive from == id
 //||(list[i].recive==me&&list[i].send==you)
-for(var i=0; i<list.length; i++){
+for (var i = 0; i < list.length; i++) {
     //메세지 받을 떄
-    if(list[i].recive==me&&list[i].send==other) {
+    if (list[i].recive == me && list[i].send == other) {
 
-        $('.chats').append("<span class='u1 chat'>"  + list[i].message +"</span>");
+
+        var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/00034587632094500000000000000000?d=retro\" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ list[i].message +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
+        $('#chatwindow').append(newMessage);
     }//보낼 때
     else {
-        $('.chats').append("<span class='u2 chat'>" + list[i].message +"</span>");
+
+        var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" + list[i].message + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/56234674574535734573000000000001?d=retro\" /></div></article>";
+        $('#chatwindow').append(newMessage);
     }
 }
 
@@ -33,16 +37,17 @@ function wsEvt() {
     ws.onmessage = function (data) {
         var msg = JSON.parse(data.data);
         var time = msg.date;
-        if(msg.send==other&&msg.recive==me){
+        if (msg.send == other && msg.recive == me) {
+            var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/00034587632094500000000000000000?d=retro\" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ msg.text +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
+            $('#chatwindow').append(newMessage);
 
-            $('.chats').appendTo("<span class='u1 chat'>" + msg.text + "</span>");
         }
 
     }
 
     document.addEventListener("keypress", function (e) {
         if (e.keyCode == 13) { //enter press
-            send(me,other);
+            send(id, other);
         }
     });
 }
@@ -54,14 +59,14 @@ function send(id, recive) {
     var msg = msgreal;
     var time = msg.date;
     ws.send(JSON.stringify(msg));
-    $('.chats').append("<span class='u2 chat'>"+ $('#message').val()+"</span>");
+    var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" +$('#message').val() + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/56234674574535734573000000000001?d=retro\" /></div></article>";
+    $('#chatwindow').append(newMessage);
     $('#message').val("");
 }
 
 
 /*날짜 형식 지정*/
-function getCurrentDate()
-{
+function getCurrentDate() {
     var date = new Date();
     var year = date.getFullYear().toString();
 
@@ -80,7 +85,7 @@ function getCurrentDate()
     var seconds = date.getSeconds();
     seconds = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
 
-    return year +"/"+ month +"/"+ day +"/"+ hour +"/"+ minites +"/"+ seconds;
+    return year + "/" + month + "/" + day + "/" + hour + "/" + minites + "/" + seconds;
 }
 
 /*메세지 형태 json으로 만들기*/
@@ -96,120 +101,15 @@ function makeText(id, recive) {
     };
 }
 
-$('#send').click(function (){
+/*$('#send').click(function (){
 
 
+
+});*/
+
+$('#send').click(function () {
     send(me, other);
 });
-
-
-
-
-$(document).ready(function(){
-
-    var preloadbg = document.createElement("img");
-    preloadbg.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png";
-
-    $("#searchfield").focus(function(){
-        if($(this).val() == "Search contacts..."){
-            $(this).val("");
-        }
-    });
-    $("#searchfield").focusout(function(){
-        if($(this).val() == ""){
-            $(this).val("Search contacts...");
-
-        }
-    });
-
-    $("#sendmessage input").focus(function(){
-        if($(this).val() == "Send message..."){
-            $(this).val("");
-        }
-    });
-    $("#sendmessage input").focusout(function(){
-        if($(this).val() == ""){
-            $(this).val("Send message...");
-
-        }
-    });
-
-
-    $(".friend").each(function(){
-        $(this).click(function(){
-            var childOffset = $(this).offset();
-            var parentOffset = $(this).parent().parent().offset();
-            var childTop = childOffset.top - parentOffset.top;
-            var clone = $(this).find('img').eq(0).clone();
-            var top = childTop+12+"px";
-
-            $(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");
-
-            setTimeout(function(){$("#profile p").addClass("animate");$("#profile").addClass("animate");}, 100);
-            setTimeout(function(){
-                $("#chat-messages").addClass("animate");
-                $('.cx, .cy').addClass('s1');
-                setTimeout(function(){$('.cx, .cy').addClass('s2');}, 100);
-                setTimeout(function(){$('.cx, .cy').addClass('s3');}, 200);
-            }, 150);
-
-            $('.floatingImg').animate({
-                'width': "68px",
-                'left':'108px',
-                'top':'20px'
-            }, 200);
-
-            var name = $(this).find("p strong").html();
-            var email = $(this).find("p span").html();
-            $("#profile p").html(name);
-            $("#profile span").html(email);
-
-            $(".message").not(".right").find("img").attr("src", $(clone).attr("src"));
-            $('#friendslist').fadeOut();
-            $('#chatview').fadeIn();
-
-
-            $('#close').unbind("click").click(function(){
-                $("#chat-messages, #profile, #profile p").removeClass("animate");
-                $('.cx, .cy').removeClass("s1 s2 s3");
-                $('.floatingImg').animate({
-                    'width': "40px",
-                    'top':top,
-                    'left': '12px'
-                }, 200, function(){$('.floatingImg').remove()});
-
-                setTimeout(function(){
-                    $('#chatview').fadeOut();
-                    $('#friendslist').fadeIn();
-                }, 50);
-            });
-
-        });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
