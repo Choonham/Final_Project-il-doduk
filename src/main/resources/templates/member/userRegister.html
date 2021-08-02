@@ -90,7 +90,9 @@
     $(document).ready(function(){
         if(msg != null){
             alert(msg);
+
         }
+
     });
 
 </script>
@@ -122,43 +124,132 @@
         });
     }
 
-</script>
+    <!--비밀번호 일치여부 확인-->
+    function checkPwd(){
+        var pwd = $('#pwd').val();
+        console.log(pwd);
+        var pwdCheck = $('#pwdCheck').val();
+        console.log(pwdCheck);
 
+        if(pwd === pwdCheck){
+            console.log("checkPwd if true in");
+            $('.pwd_ok').show();
+            $('.pwd_already').hide();
+        }else{
+            console.log("checkPwd if false in");
+            $('.pwd_already').show();
+            $('.pwd_ok').hide();
+        }
+
+    }
+    <!--비밀번호를 다르게 입력하고 커서를 옮긴경우 alert 후 리셋-->
+    function pwdCheck2() {
+        var pwd = $('#pwd').val();
+        var pwdCheck = $('#pwdCheck').val();
+
+        if(pwd !== pwdCheck){
+            alert("비밀번호를 다시 입력해주세요");
+            $('.pwd_already').hide();
+            $('#pwdCheck').val("");
+            $('#pwd').val("").focus();
+        }
+    }
+
+    <!--회원가입 정규식 표현 유효성 검사-->
+    //패스워드 정규식 표현 - 영문 대문자와 소문자, 숫자, 특수문자를 하나 이상 포함하여 8~16자가 되는지 검사
+    var passwdCheck = RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^*()\-_=+\\\|\[\]{};:\'",.<>\/?]).{8,16}$/);
+
+    var pwdExp= $('#pwd').val();
+
+    function phoneExpEx (){
+        //핸드폰 정규식 표현 - 01로 시작하여 그 다음은 0,1,7,9 중 하나와 매칭되는지 체크한뒤 7~8자리인지 검사
+        var phoneCheck = RegExp(/^01[0179][0-9]{7,8}$/);
+        var phoneExp= $('#phone').val();
+
+        if(!phoneCheck.test(phoneExp)) {
+            alert("핸드폰 형식에 맞게 작성해주세요");
+            console.log("핸드폰 정규식 벗어남");
+            $('#phone').val("");
+            $('#photo').val("").blur();
+            $('#phone').val("").focus();
+        }
+    }
+    function birthExpEx(){
+        //생년월일 정규식 표현 -
+        // 19또는 20으로 시작하고 0~9까지의 수개 2개까지 하여 년도 그 뒤에 0이면1~9 1이면 1~2(1월부터 12월까지기 때문에)
+        var birthCheck = RegExp(/^(19|20)[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/);
+        var birthExp = $('#birth').val();
+
+        if(!birthCheck.test(birthExp)){
+            alert("생년월일 형식에 맞게 작성해주세요(19xx.xx.xx)");
+            $('#birth').val("");
+            $('#nickname').value("").blur();
+            $('#birth').focus("").focus();
+        }
+
+    }
+    function nameExpEx(){
+        //이름 정규식 표현 - 한글로 이루어진 문자만으로 2~6자 표현
+        var nameCheck = RegExp(/^[가-힣]{2,6}$/);
+        var nameExp = $('#name').val();
+
+        if(!nameCheck.test(nameExp)){
+            alert("이름 형식에 맞게 작성해주세요(한글 2~6자)");
+            $('#name').val("");
+            $("#gender").val().blur();
+            $('#name').val("").focus();
+        }
+    }
+    function nickExpEx(){
+        //닉네임 정규식 표현 - 한글과 영어, 숫자만으로 표현
+        var nickNameCheck = RegExp(/^[가-힣a-zA-Z0-9]{2,10}$/);
+        var nickExp = $('#nickname').val();
+
+        if(!nickNameCheck.test(nickExp)){
+            alert("닉네임 형식에 맞게 작성해주세요(한글,영어,숫자만으로 표현)");
+            $('#nickname').val("");
+            $('#sample4_postcode').val("").blur();
+            $('#nickname').val("").focus();
+        }
+    }
+
+
+
+</script>
 
 <body>
 <form method="post" action="/member/userRegister" >
      아이디 <input type="email" name="id" th:value="${session.user.id}" readonly /> <br />
-   비밀번호 <input type="password" name="pwd" /> <br />
-      이름 <input type="text" name="name" /> <br />
-   생년월일 <input type="text" name="birth" /> <br />
-      성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
-    닉네임 <input type="text" name="nickname" id="nickname" oninput="checkNick()"/>
-          <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
-          <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span>
-    <br />
-    <!-- 주소 -->
-    <input type="text" id="sample4_postcode" placeholder="우편번호">
-    <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
-    <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
-    <input type="text" id="sample4_jibunAddress" placeholder="지번주소">
-    <span id="guide1" style="color:#999;display:none"></span>
-    <input type="text" id="sample4_detailAddress" placeholder="상세주소">
-    <input type="text" id="sample4_extraAddress" placeholder="참고항목">
-    <span id="guide2" style="color:#999;display:none"></span>
-    <input type="hidden" name="sido" id="sido">
-    <input type="hidden" name="sigungu" id="sigungu">
-    <input type="hidden" name="address" id="address"> <br />
+   비밀번호 <input type="password" name="pwd" id="pwd" minlength="6" maxlength="12" required /> * 비밀번호는 6~12자 사이로 입력해주세요 <br />
+    비밀번호 확인 <input type="password" id="pwdCheck" oninput="checkPwd()" onblur="pwdCheck2()"/>
+            <span style="display:none; color:#0100FF;" class="pwd_ok" >비밀번호 일치 확인 </span>
+            <span style="display:none; color:#FF0000;" class="pwd_already"> 비밀번호 불일치 </span> <br />
 
-    연락처 <input type="tel" name="phone" /> <br />
-      사진 <input type="text" name="photo" />
-      소개 <input type="text" name="intro" />
+      이름 <input type="text" name="name" id="name" onblur="nameExpEx()"  required/> *<br />
+    성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
+   생년월일 <input type="text" name="birth" id="birth" onblur="birthExpEx()" required/> *<br />
+    닉네임 <input type="text" name="nickname" id="nickname" minlength="2" maxlength="10" oninput="checkNick()" required  /> * 닉네임은 2~10자 사이로 한글,영어,숫자를 이용하여 입력해주세요
+          <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
+          <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
+
+    <!-- 주소 -->
+    주소 <input type="text" id="sample4_postcode" placeholder="우편번호" onfocus="nickExpEx()" />
+    <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기" /> * <br>
+    <input type="text" id="sample4_roadAddress" placeholder="도로명주소" required />
+    <input type="text" id="sample4_jibunAddress" placeholder="지번주소" required />
+    <span id="guide1" style="color:#999;display:none"></span>
+    <input type="text" id="sample4_detailAddress" placeholder="상세주소" />
+    <input type="text" id="sample4_extraAddress"  />
+    <span id="guide2" style="color:#999;display:none"></span>
+    <input type="hidden" name="sido" id="sido" />
+    <input type="hidden" name="sigungu" id="sigungu" />
+    <input type="hidden" name="address" id="address" /> <br />
+
+    연락처 <input type="tel" name="phone" id="phone"  required/> * 핸드폰번호(01x-3,4자리-4자리)로 작성해주세요 <br />
+      사진 <input type="text" name="photo" id="photo" onfocus="phoneExpEx()" /> <br />
+      소개 <textarea name="intro" rows="5" maxlength="50"></textarea> <br />
     <input type = "hidden" name = "state" value = "1"/>
     <input type = "hidden" name = "point" value = "0"/>
-
-
-
-
-
 
     <button type="submit" >회원가입</button>
 </form>

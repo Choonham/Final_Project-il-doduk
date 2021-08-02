@@ -6,12 +6,16 @@
 </head>
 <body>
 
-<form action="/member/userDelete" method="post">
-    <input type="hidden" name="id" th:value=${session.id} />
-<button type="submit">회원탈퇴</button>
+    <form action="/member/userDelete" method="post">
+        <input type="hidden" name="id" th:value=${session.id} />
+    <button type="submit">회원탈퇴</button>
+
     <form action ="/member/userModify" method="post">
         <input type="hidden" name="id" th:value=${session.id} />
+        <button type="submit">개인정보 수정</button>
     </form>
+
+
 </form>
 </body>
 </html>

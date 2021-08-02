@@ -29,20 +29,35 @@ public class MemberController {
 
     }
 
+    //유저 마이페이지 이동
+    @GetMapping("/userMypage")
+    public void userMypage(){
+
+    }
+    //헬퍼 마이페이지 이동
+    @GetMapping("/helperMypage")
+    public void helperMypage(){
+
+    }
+
+
     //유저 회원가입
     @PostMapping("/userRegister")
     public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
 
-        log.info("userRegister 닉네임 받아옴 ::: " + nickname);
+        log.info("userRegister.html에서 닉네임 받아옴 ::: " + nickname);
+        log.info("userRegister.html에서 pwd 받아옴 ::: " + nickname);
+        log.info("userRegister.html에서 pwdCheck 받아옴 ::: " + nickname);
 
-        int cnt = service.nickNameCheck(nickname);
+        int cnt = service.nickNameCheck(nickname);  //DB에 같은 닉네임 있는지 확인  있으면 1 없으면 0
 
-        if(cnt == 0){
-            service.userRegister(dto);
+        if(cnt == 1 ){  //DB에 중복된 닉네임이 있을경우
 
-        }else{
             model.addAttribute("msg","닉네임이 중복되었습니다");
+
             return "/member/userRegister";
+        }else{  //닉네임 중복이 없을 경우
+            service.userRegister(dto);
         }
 
 
@@ -165,8 +180,6 @@ public class MemberController {
         }
 
         else{
-
-            session.setAttribute("user", dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
             return "../member/userRegister";
         }
