@@ -1,5 +1,6 @@
 package com.finalproject.ildoduk.controller.auction;
 
+
 import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.*;
@@ -9,6 +10,7 @@ import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
 import org.apache.commons.io.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,7 @@ public class AuctionController {
         auctionService.changeState2(pageRequestDTO); //일 수행시간 초과하고, 매칭이 안된 것 state=4로 변경
     }
 
+    //========================================== user list 출력 ======================================================//
     //리스트 출력 관련 컨트롤러 시작
     @GetMapping("/onAuctionList")
     public void list1(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
@@ -42,9 +45,19 @@ public class AuctionController {
 
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
-        System.out.println(user);
-        //경매진행 중 리스트
+        //System.out.println(user);
 
+        //page size 세팅
+        pageRequestDTO.setSize(5);
+
+        //result 가져오기
+        PageResultsDTO<AuctionListDTO, AuctionList> result =  auctionService.getList1(pageRequestDTO,user);
+        System.out.println(result.getStart());
+        System.out.println(result.getSize());
+        System.out.println(result.getEnd());
+        System.out.println(result.getDtoList().size());
+
+        //경매진행 중 리스트
         model.addAttribute("onAuctionList", auctionService.getList1(pageRequestDTO, user));
     }
 
@@ -55,7 +68,7 @@ public class AuctionController {
         log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
-        System.out.println(user);
+        //System.out.println(user);
 
         //경매 완료, 매칭 미완료
         model.addAttribute("auctionDoneList", auctionService.getList2(pageRequestDTO, user));
@@ -63,12 +76,17 @@ public class AuctionController {
     }
 
     @GetMapping("/matchedAuctionList")
-    public void list3(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
+    public void list3(PageRequestDTO pageRequestDTO, Model model, HttpSession session) {
+
         //메인에서 user 값 받아서 리스트 출력
         log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
-        System.out.println(user);
+        //System.out.println(user);
+
+        //page size 세팅
+        pageRequestDTO.setSize(5);
+
         //경매 완료, 매칭완료
         model.addAttribute("matchedAuctionList", auctionService.getList3(pageRequestDTO, user));
     }
@@ -79,11 +97,17 @@ public class AuctionController {
         log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
-        System.out.println(user);
+        //System.out.println(user);
+
+        //page size 세팅
+        pageRequestDTO.setSize(5);
+
         //경매 완료, 일 수행 완료
         model.addAttribute("allDoneList", auctionService.getList4(pageRequestDTO, user));
     }
+    //========================================== user list 출력 끝 ======================================================//
 
+    //========================================== helper list 출력 ======================================================//
     /** 경매 참여 가능한 옥션리스트 보기 **/
     @GetMapping("/availableAcutions")
     public void list5(PageRequestDTO pageRequestDTO, Model model,HttpServletRequest request){
@@ -98,6 +122,9 @@ public class AuctionController {
     }
 
     //리스트 출력 관련 컨트롤러 끝
+    //========================================== user list 출력 끝 ======================================================//
+
+    //========================================== 상세보기 ======================================================//
 
     //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
     @GetMapping("/getOnAuction")
@@ -131,6 +158,7 @@ public class AuctionController {
     }
 
     //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기
+ //========================================== 상세보기 끝 ======================================================//
 
     //경매 등록 시작
     @GetMapping("/register")
@@ -155,11 +183,11 @@ public class AuctionController {
         Long aucSeq = auctionService.register(dto);
         log.info(aucSeq);
 
-        return "redirect:/auction/main";
+        return "redirect:/auction/onAuctionList";
     }
 
 
-    //이미지 업로드 관련 시작
+    //==========================================  이미지 업로드 관련 ======================================================//
     // 파일 업로드
     @ResponseBody
     @PostMapping(value = "/fileUpload" ,produces = "application/json; charset=utf8")
@@ -223,6 +251,6 @@ public class AuctionController {
         return jsonObject.toString();
     }
 
-    //이미지 관련 컨트롤러 끝
+    //========================================== 이미지 업로드 끝 ======================================================//
 
 }

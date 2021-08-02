@@ -90,6 +90,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         //정렬방식 설정
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
+        //Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending(),5);
 
         Page<AuctionList> result = auctionListRepository.ChangeState1(pageable);
         Function<AuctionList, AuctionListDTO> fn = (en -> entityToDTO(en));
@@ -145,6 +146,7 @@ public class AuctionServiceImpl implements AuctionService {
     public Long register(AuctionListDTO dto) {
         System.out.println("======= register ========");
         log.info(dto);
+        System.out.println(dto.getUser());
         Member user = this.getMember(dto.getUser());
 
         AuctionList auctionList = dtoToEntity(dto, user);
@@ -203,9 +205,10 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public PageResultsDTO<AuctionListDTO, AuctionList> getList1(PageRequestDTO pageRequestDTO, String user) {
         //정렬방식 설정
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
+        Pageable pageable= pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
 
         Page<AuctionList> result = auctionListRepository.getAllWithState1(pageable, user);
+        System.out.println(result.getTotalElements());
         Function<AuctionList, AuctionListDTO> fn = (entity -> entityToDTO(entity));
         return new PageResultsDTO<>(result, fn);
     }
@@ -218,6 +221,7 @@ public class AuctionServiceImpl implements AuctionService {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
 
         Page<AuctionList> result = auctionListRepository.getAllWithState2(pageable, user);
+
         Function<AuctionList, AuctionListDTO> fn = (entity -> entityToDTO(entity));
         return new PageResultsDTO<>(result, fn);
     }

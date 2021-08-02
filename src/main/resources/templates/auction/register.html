@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <!-- 유저 아이디 히든값으로 보내기 -->
-                        <input th:type="hidden" name="user" value="${session.user.id}">
+                        <input th:type="hidden" name="user" th:value="${session.user.id}">
 
 
                         <!--실제 입력 시작-->
@@ -88,12 +88,12 @@
                         <div class="form-group">
                             <label for="job-title">미션 제목</label>
                             <input type="text" class="form-control" id="job-title" placeholder="미션 제목을 입력해주세요"
-                                   th:required="true">
+                                   th:required="true" th:name="title">
                         </div>
 
                         <!-- 콘텐츠 -->
                         <!-- summernote 에디터 사용 -->
-                        <textarea class="summernote" id="editordata" name="content" th:required="true"></textarea>
+                        <textarea class="summernote" id="editordata" th:name="content" th:required="true"></textarea>
 
 
                         <br>
@@ -109,9 +109,9 @@
                             <input type="text" id="sample4_detailAddress" placeholder="상세주소">
                             <input type="text" id="sample4_extraAddress" placeholder="참고항목">
                             <span id="guide2" style="color:#999;display:none"></span>
-                            <input type="hidden" name="sido" id="sido">
-                            <input type="hidden" name="sigungu" id="sigungu">
-                            <input type="hidden" name="address" id="address">
+                            <input type="hidden" th:name="sido" id="sido">
+                            <input type="hidden" th:name="sigungu" id="sigungu">
+                            <input type="hidden" th:name="address" id="address">
                         </div>
                         <br> <br>
                         <hr>
@@ -257,7 +257,7 @@
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 document.getElementById('sample4_postcode').value = data.zonecode;
                 document.getElementById("sample4_roadAddress").value = roadAddr;
-                document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                //document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
 
                 /*sido, sigungu 값 가져와서 hidden으로 보내기 */
                 var sido = data.sido;
