@@ -16,6 +16,7 @@ public class AuctionBiddingDTO {
 
     //Member(id)외래키
     private String user;
+    private String userNickName;
 
     private String address;
     private String sido;
@@ -24,6 +25,7 @@ public class AuctionBiddingDTO {
     //JOIN으로 처리할 Bidding 테이블 정보
     private Long bidSeq;
     private String helper;  //Member(id) 외래키
+    private String helperNickName;
     private int chosen;
     private int offerPrice;
 
