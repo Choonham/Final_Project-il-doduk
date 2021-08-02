@@ -369,7 +369,7 @@ public class ServiceCenterController {
 
                  if(list.getDtoList().get(i).getReportState().equals("1")){
                      list.getDtoList().get(i).setReportState("신고 접수 완료");
-                 } else {
+                 } else if(list.getDtoList().get(i).getReportState().equals("2")) {
                      list.getDtoList().get(i).setReportState("처리 완료");
                  }
             }

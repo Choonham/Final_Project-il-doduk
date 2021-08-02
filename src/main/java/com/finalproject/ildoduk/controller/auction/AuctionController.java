@@ -128,7 +128,10 @@ public class AuctionController {
         model.addAttribute("chosenBidding",auctionService.chosenBidding(aucSeq));
 
         //그외 정보
-        if (auction.getState() != 3){ boolean isAllDone = false;}
+        /*if (auction.getState() != 3){
+
+            boolean isAllDone = false;
+        }*/
     }
 
     //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기
