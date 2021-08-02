@@ -60,6 +60,7 @@ public class BlogController {
         log.info("blogMain");
     }
 
+
     //====================================== 메인 관련 끝 ================================//
 
 
@@ -70,15 +71,12 @@ public class BlogController {
         if(writer.equals("myBlog")){
             MemberDto memberDto = (MemberDto)session.getAttribute("user");
             String sessionId = memberDto.getId();
-            log.info("세션");
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
         }else {
-            log.info("안세션");
             model.addAttribute("result", blogService.getList(writer, pageRequestDTO));
             model.addAttribute("host", writer);
         }
-        
     }
 
     // 글 상세보기
@@ -103,9 +101,13 @@ public class BlogController {
 
         MemberDto memberDto = (MemberDto)session.getAttribute("user");
         String sessionId = memberDto.getId();
+
         List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
-        AuctionBiddingDTO doneJob = doneList.get(0);
-        log.info(doneJob.getHelper());
+
+        if(!doneList.isEmpty()){
+            AuctionBiddingDTO doneJob = doneList.get(0);
+            log.info(doneJob.getHelper());
+        }
 
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")

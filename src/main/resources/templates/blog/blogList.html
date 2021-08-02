@@ -1,142 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+  <head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+  </head>
 
-  <th:block th:fragment="content">
+  <body id="top">
 
-    <h1 class="mt-4">Blog List Page
-      <span>
-                <a th:href="@{/blog/basicForm}">
-                    <button type="button" class="btn btn-outline-primary">REGISTER
-                    </button>
-                </a>
-            </span>
-    </h1>
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+    
 
+<div class="site-wrap">
 
-    <form action="/blog/blogList" method="get" id="searchForm">
-      <div class="input-group">
-        <input type="hidden" name="page" value = "1">
-        <input type = "hidden" name = "writer" id = "searchWriter" th:value="${host}">
-        <div class="input-group-prepend">
-          <select class="custom-select" name="type">
-            <option th:selected="${pageRequestDTO.type == null}">-------</option>
-            <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
-            <option value="c" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
-            <option value="tc"  th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
-          </select>
-        </div>
-        <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
-        <div class="input-group-append" id="button-addon4">
-          <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
-          <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
         </div>
       </div>
-    </form>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
+
+    <!-- NAVBAR -->
+
+    <div th:if = "${session.user != null}">
 
 
+      <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+      </div>
 
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Writer</th>
-        <th scope="col">Regdate</th>
-      </tr>
-      </thead>
-      <tbody>
+      <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+      </div>
 
-      <tr th:each="dto : ${result.dtoList}" >
-        <th scope="row">
-            [[${dto.postNo}]]
-        </th>
-        <td>
-          <a th:href="@{/blog/detail(postNo = ${dto.postNo},
+    </div>
+
+    <div th:if = "${session.user == null}">
+      <div th:replace="~{/fragments/nav :: navi}"></div>
+    </div>
+
+    <!-- HOME -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-7">
+            <h1 class="text-white font-weight-bold">Blog List Page</h1>
+            <div class="custom-breadcrumbs">
+              <a href="#">Home</a> <span class="mx-2 slash">/</span>
+              <span class="text-white"><strong>About Us</strong></span>
+            </div>
+
+            <a th:href="@{/blog/basicForm}">
+              <button type="button" class="btn btn-outline-primary">
+                REGISTER
+              </button>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-6 col-lg-4 mb-5" th:each="dto : ${result.dtoList}">
+            <a th:href="@{/blog/detail(postNo = ${dto.postNo},
                     tempPage= ${result.page},
                     tempType=${pageRequestDTO.type} ,
                     tempKeyword = ${pageRequestDTO.keyword})}">
-            [[${dto.title}]]
-          </a>
-        </td>
-        <td>[[${dto.writer}]]</td>
-        <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
-      </tr>
-
-      </tbody>
-    </table>
-
-    <ul class="pagination h-100 justify-content-center align-items-center">
-
-      <li class="page-item " th:if="${result.prev}">
-        <a class="page-link" th:href="@{/blog/blogList(page= ${result.start -1},
+              <img th:if="${dto.thumbnail == ''}" th:src="@{/resources/fileupload/sub-thumbnail.jpg}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
+              <img th:if="${dto.thumbnail != ''}" th:src="@{/resources/fileupload/}+${dto.thumbnail}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
+            </a>
+            <h3>
+              <a th:href="@{/blog/detail(postNo = ${dto.postNo},
+                    tempPage= ${result.page},
+                    tempType=${pageRequestDTO.type} ,
+                    tempKeyword = ${pageRequestDTO.keyword})}" class="text-black">
+                [[${dto.title}]]
+              </a>
+            </h3>
+            <div>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]<span class="mx-2">|</span> <a>[[${dto.writer}]]</a></div>
+          </div>
+        </div>
+        <div class="row pagination-wrap mt-5">
+          
+          <div class="col-md-12 text-center ">
+            <div class="custom-pagination ml-auto">
+              <a th:if="${result.prev}"  th:href="@{/blog/blogList(page= ${result.start -1},
                     type=${pageRequestDTO.type},
                     keyword = ${pageRequestDTO.keyword},
                     writer = ${host}
-                     ) }" tabindex="-1">Previous</a>
-      </li>
+                     ) }" tabindex="-1" class="prev">Prev</a>
 
-      <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
-        <a class="page-link" th:href="@{/blog/blogList(page = ${page},
+              <div class="d-inline-block">
+                <a th:href="@{/blog/blogList(page = ${page},
                    type=${pageRequestDTO.type},
                    keyword = ${pageRequestDTO.keyword},
                    writer = ${host}
-                   )}">
-          [[${page}]]
-        </a>
-      </li>
-
-      <li class="page-item" th:if="${result.next}">
-        <a class="page-link" th:href="@{/blog/blogList(page= ${result.end + 1},
-                    type=${pageRequestDTO.type},
+                   )}" th:class="${result.page == page?'active':''}" th:each="page: ${result.pageList}">[[${page}]]</a>
+              </div>
+              <a th:if="${result.next}" th:href="@{/blog/blogList(page= ${result.end + 1},
+                    type=${pageRequestDTO.type},i
                     keyword = ${pageRequestDTO.keyword},
                     writer = ${host}
-                     )}">Next</a>
-      </li>
-
-    </ul>
-
-    <div class="modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Modal body text goes here.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+                     )}" class="next">Next</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <script th:inline="javascript">
-      var msg = [[${msg}]];
-      console.log(msg);
+      <form action="/blog/blogList" method="get" id="searchForm">
+        <div class="input-group" style="margin-top: 20px; margin-bottom: 20px; margin-left: 400px; margin-right: 150px; width: 1200px;">
+          <input type="hidden" name="page" value = "1">
+          <input type = "hidden" name = "writer" id = "searchWriter" th:value="${host}">
+          <div class="input-group-prepend">
+            <select class="custom-select" name="type">
+              <option th:selected="${pageRequestDTO.type == null}">-------</option>
+              <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
+              <option value="c" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
+              <option value="tc"  th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
+            </select>
+          </div>
+          <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
+          <div class="input-group-append" id="button-addon4">
+            <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+            <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+          </div>
+        </div>
+      </form>
 
-      if(msg){
-        $(".modal").modal();
-      }
-      var searchForm = $("#searchForm");
+    </section>
 
-      $('.btn-search').click(function(e){
-        searchForm.submit();
-      });
+</div>
 
-      $('.btn-clear').click(function(e){
-        searchForm.empty();
-        $("#searchWriter").val([[${host}]]);
-        searchForm.submit();
-      });
-    </script>
+  <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 
-  </th:block>
-
-</th:block>
+  </body>
+</html>

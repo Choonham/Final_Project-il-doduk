@@ -55,6 +55,7 @@
                                 <li><a  href="blog-single.html"  th:href="@{/serviceCenter/badUserReport(member = ${session.user.id})}">사용자 신고</a></li>
                             </ul>
                         </li>
+
                         <div th:if = "${session.user == null}">
                             <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> 헬퍼와 일반 사용자 구분해야합니다.</a></li>
                             <li class="d-lg-none"><a th:href="@{/member/kakao}">로그인</a></li>

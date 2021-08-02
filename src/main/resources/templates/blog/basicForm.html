@@ -3,10 +3,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
+
     <div class="container">
       <br style="clear: both">
       <h3 style="margin-bottom: 25px;">Post Form</h3>
       <form id = "postForm" action = "post" method="post">
+
         <div class="form-group">
           <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
         </div>
@@ -20,6 +22,7 @@
         <div class="form-group">
           <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.user.getId()}" required/>
         </div>
+
         <input type="text" class="form-control" id="thumbnail" name="thumbnail" readonly/>
 
         <select class = "custom-select" id="doneList" name = "doneList" onchange="selectDoneList()">
