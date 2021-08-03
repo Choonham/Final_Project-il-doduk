@@ -123,10 +123,8 @@ public class AuctionController {
         //옥션 정보
         AuctionList auction = auctionService.getAuction(aucSeq).get();
         model.addAttribute("auction",auction);
-
         //낙찰 비딩 정보
-        model.addAttribute("chosenBidding",auctionService.chosenBidding(aucSeq));
-
+        model.addAttribute("chosenBidding",auctionService.chosenBidding(aucSeq).get());
         //그외 정보
         /*if (auction.getState() != 3){
 

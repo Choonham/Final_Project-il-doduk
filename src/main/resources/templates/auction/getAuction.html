@@ -82,8 +82,12 @@
                     <!-- 카테고리 -->
                     <div class="form-group">
                         <label for="category">카테고리</label>
-                        <input type="text" th:value="${auction.category}" readonly />
+                        <input type="text" th:if="${auction.category == 1}" value="구매대행" readonly />
+                        <input type="text" th:if="${auction.category == 2}" value="홈케어" readonly />
+                        <input type="text" th:if="${auction.category == 3}" value="펫케어" readonly />
+                        <input type="text" th:if="${auction.category == 4}" value="퀵서비스" readonly />
                     </div>
+
                     <br>
                     <!-- 제목 -->
                     <div class="form-group">
@@ -121,7 +125,7 @@
 
                     <div class="form-group">
                         <label>낙찰가</label><br>
-                        <input th:type="text"  readonly />1000원
+                        <input th:type="text" th:value="${chosenBidding.offerPrice}" readonly />원
                     </div>
 
                     <hr>
@@ -154,19 +158,20 @@
                     <br><br>
                     <hr>
                     <div class="form-group">
+                        헬퍼명 : <b th:text="${chosenBidding.helper.id}"></b>
                         <a href="#">
-                            <button onclick="test()"> 헬퍼 카드 보러가기 </button>
+                            <button onclick="test()"> 헬퍼 정보 </button>
                         </a>
                     </div>
 
                     <div class="form-group" th:if="${auction.state == 3}">
                         <a th:href="@{/chat/chatList}">
-                            <button> 채팅하기 </button>
+                            채팅하기 // 해당 헬퍼 계정과 채팅하게???
                         </a>
                     </div>
                     <div class="form-group" th:unless="${auction.state == 3}">
                         <a>
-                           <button onclick="test()"> 리뷰하기 </button>
+                           <button> 리뷰하기 </button>
                         </a>
                     </div>
 
