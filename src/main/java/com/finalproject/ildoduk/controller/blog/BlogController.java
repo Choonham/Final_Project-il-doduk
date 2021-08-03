@@ -60,6 +60,10 @@ public class BlogController {
         log.info("blogMain");
     }
 
+    // 블로그 메인 Temp
+    @GetMapping("/mainTemp")
+    public void mainTemp() {
+    }
 
     //====================================== 메인 관련 끝 ================================//
 
