@@ -41,8 +41,7 @@
             <div class="col-md-7">
                 <h1 class="text-white font-weight-bold">경매 상세</h1>
                 <div class="custom-breadcrumbs">
-                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
-                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <a href="#" th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
                     <span class="text-white"><strong>경매</strong></span>
                 </div>
             </div>
@@ -74,9 +73,6 @@
                             <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 2}"><span class="icon-briefcase mr-2"></span>홈케어</span>
                             <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 3}"><span class="icon-briefcase mr-2"></span>펫케어</span>
                             <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 4}"><span class="icon-briefcase mr-2"></span>퀵서비스</span>
-                            <input id="category" class="form-control" type="text" th:if="${auction.category == 2}" value="홈케어" readonly />
-                            <input id="category" class="form-control" type="text" th:if="${auction.category == 3}" value="펫케어" readonly />
-                            <input id="category" class="form-control" type="text" th:if="${auction.category == 4}" value="퀵서비스" readonly />
                         </div>
                     </div>
                 </div>
@@ -86,7 +82,6 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="mb-5">
-                    <figure class="mb-5"><img src="images/job_single_img_1.jpg" alt="Image" class="img-fluid rounded"></figure>
                     <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span>미션 내용</h3>
                     <p th:utext="${auction.content}"></p>
                 </div>
@@ -95,7 +90,7 @@
                     <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-rocket mr-3"></span>필요 조건????</h3>
                     <ul class="list-unstyled m-0 p-0">
                         <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>뭐필요하나요</span></li>
-                        <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span></span></li>
+                        <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>안쓰면 빼요,..</span></li>
                     </ul>
                 </div>
 
