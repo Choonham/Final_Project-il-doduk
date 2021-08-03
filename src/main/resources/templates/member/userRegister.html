@@ -170,7 +170,7 @@
             alert("핸드폰 형식에 맞게 작성해주세요");
             console.log("핸드폰 정규식 벗어남");
             $('#phone').val("");
-            $('#photo').val("").blur();
+            /*$('#photo').val("").blur();*/
             $('#phone').val("").focus();
         }
     }
@@ -227,7 +227,7 @@
 
       이름 <input type="text" name="name" id="name" onblur="nameExpEx()"  required/> *<br />
     성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
-   생년월일 <input type="text" name="birth" id="birth" onblur="birthExpEx()" /> *<br />
+   생년월일 <input type="text" name="birth" id="birth" onblur="birthExpEx()" /> * YYYY.MM.DD 형식<br />
     닉네임 <input type="text" name="nickname" id="nickname" minlength="2" maxlength="10" oninput="checkNick()" required  /> * 닉네임은 2~10자 사이로 한글,영어,숫자를 이용하여 입력해주세요
           <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
           <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
@@ -246,7 +246,7 @@
     <input type="hidden" name="address" id="address" /> <br />
 
     연락처 <input type="tel" name="phone" id="phone"  required/> * 핸드폰번호(01x-3,4자리-4자리)로 작성해주세요 <br />
-      사진 <input type="text" name="photo" id="photo" onfocus="phoneExpEx()" /> <br />
+    <!--사진--><input type="hidden" name="photo" id="photo" th:value="${session.user.photo}" onfocus="phoneExpEx()" readonly /> <br />
       소개 <textarea name="intro" rows="5" maxlength="50"></textarea> <br />
     <input type = "hidden" name = "state" value = "1"/>
     <input type = "hidden" name = "point" value = "0"/>

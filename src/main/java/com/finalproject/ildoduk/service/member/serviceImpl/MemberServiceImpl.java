@@ -75,6 +75,16 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    @Override
+    public MemberDto userIdDtoInit(MemberDto dto) {
+        return null;
+    }
+
+    @Override
+    public MemberDto userIdPwdCheck(String id, String pwd) {
+        return null;
+    }
+
     //회원 수정 관련
     @Override
     public void userModify(MemberDto dto) {
@@ -122,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
             String profile = jsonObj.get("profile").toString(); //profile 은 값안에 키, 값이 또 있어서 한번 쪼개고
             jsonObj2 = (JSONObject)parser.parse(profile);//한번더 쪼개기
             String nickname = (String)jsonObj2.get("nickname"); //닉네임 추출
-            String img = (String)jsonObj2.get("image");//이미지 추출
+            String img = (String)jsonObj2.get("thumbnail_image_url");//이미지 추출
 
             dto.setId(email);
             dto.setNickname(nickname);
@@ -138,8 +148,8 @@ public class MemberServiceImpl implements MemberService {
             System.out.println(" kakaoLogin :: dto get id::::  " + dto.getId());
             System.out.println(" kakaoLogin :: dto get gender::::  " + dto.getGender());
             System.out.println(" kakaoLogin :: dto get nickname:::   " + dto.getNickname());
-            System.out.println(" kakaoLogin :: dto get birth:::   " + dto.getNickname());
-            System.out.println(" kakaoLogin :: dto get photo:::   " + dto.getNickname());
+            System.out.println(" kakaoLogin :: dto get birth:::   " + dto.getBirth());
+            System.out.println(" kakaoLogin :: dto get photo:::   " + dto.getPhoto());
 
 
         }catch(ParseException e){

@@ -18,6 +18,10 @@ public interface MemberService {
 
     MemberDto userIdPwdCheck(String id, String pwd);
 
+    int nickNameCheck(String nickname); //유저 닉네임 db확인
+
+    MemberDto userNickCheck(String nick);  //해당 닉네임에 관련된 정보 가져오기
+
     void userModify(MemberDto dto);
 
     void userDelete(String id);
