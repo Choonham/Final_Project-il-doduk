@@ -163,7 +163,7 @@ public class AuctionController {
     }
 
 
-    //이미지 업로드 관련 시작
+    //이미지 업로드 관련 시작 
     // 파일 업로드
     @ResponseBody
     @PostMapping(value = "/fileUpload" ,produces = "application/json; charset=utf8")

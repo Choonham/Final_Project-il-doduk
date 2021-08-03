@@ -4,18 +4,9 @@
   <head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
-
   </head>
 
   <body id="top">
-
-  <div id="overlayer"></div>
-  <div class="loader">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
-    
 
 <div class="site-wrap">
 
@@ -27,12 +18,9 @@
       </div>
       <div class="site-mobile-menu-body"></div>
     </div> <!-- .site-mobile-menu -->
-    
 
     <!-- NAVBAR -->
-
     <div th:if = "${session.user != null}">
-
 
       <div th:if="${session.user.state == 1}">
         <div th:replace="~{/fragments/navUser :: naviUser}"></div>
@@ -53,17 +41,10 @@
       <div class="container">
         <div class="row">
           <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Blog List Page</h1>
+            <h1 class="text-white font-weight-bold">Helper's Blog</h1>
             <div class="custom-breadcrumbs">
-              <a href="#">Home</a> <span class="mx-2 slash">/</span>
-              <span class="text-white"><strong>About Us</strong></span>
+              <a>일도둑들의 다양한 스토리들을 들어봐요!</a>
             </div>
-
-            <a th:href="@{/blog/basicForm}">
-              <button type="button" class="btn btn-outline-primary">
-                REGISTER
-              </button>
-            </a>
 
           </div>
         </div>
@@ -73,49 +54,10 @@
     <section class="site-section">
       <div class="container">
         <div class="row mb-5">
-          <div class="col-md-6 col-lg-4 mb-5" th:each="dto : ${result.dtoList}">
-            <a th:href="@{/blog/detail(postNo = ${dto.postNo},
-                    tempPage= ${result.page},
-                    tempType=${pageRequestDTO.type} ,
-                    tempKeyword = ${pageRequestDTO.keyword})}">
-              <img th:if="${dto.thumbnail == ''}" th:src="@{/resources/fileupload/sub-thumbnail.jpg}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
-              <img th:if="${dto.thumbnail != ''}" th:src="@{/resources/fileupload/}+${dto.thumbnail}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
-            </a>
-            <h3>
-              <a th:href="@{/blog/detail(postNo = ${dto.postNo},
-                    tempPage= ${result.page},
-                    tempType=${pageRequestDTO.type} ,
-                    tempKeyword = ${pageRequestDTO.keyword})}" class="text-black">
-                [[${dto.title}]]
-              </a>
-            </h3>
-            <div>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]<span class="mx-2">|</span> <a>[[${dto.writer}]]</a></div>
-          </div>
+
         </div>
         <div class="row pagination-wrap mt-5">
-          
-          <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-              <a th:if="${result.prev}"  th:href="@{/blog/blogList(page= ${result.start -1},
-                    type=${pageRequestDTO.type},
-                    keyword = ${pageRequestDTO.keyword},
-                    writer = ${host}
-                     ) }" tabindex="-1" class="prev">Prev</a>
 
-              <div class="d-inline-block">
-                <a th:href="@{/blog/blogList(page = ${page},
-                   type=${pageRequestDTO.type},
-                   keyword = ${pageRequestDTO.keyword},
-                   writer = ${host}
-                   )}" th:class="${result.page == page?'active':''}" th:each="page: ${result.pageList}">[[${page}]]</a>
-              </div>
-              <a th:if="${result.next}" th:href="@{/blog/blogList(page= ${result.end + 1},
-                    type=${pageRequestDTO.type},i
-                    keyword = ${pageRequestDTO.keyword},
-                    writer = ${host}
-                     )}" class="next">Next</a>
-            </div>
-          </div>
         </div>
       </div>
 
