@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:if = "${session.user != null}">
+
+  <div th:if="${session.user.state == 1}">
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 2}">
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 0}">
+    <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+  </div>
+
+</div>
+
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">사용자 신고</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <a href="#">Job</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>사용자 신고</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="site-section" id="next-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+
+
+        <form method="post" th:action="@{/serviceCenter/reportDelete}">
+          <input type="hidden" name="id" th:value="${session.user.id}" />
+          <input type="hidden" name="reportNo" th:value="${reportDetail.reportNo}">
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black" for="fname">신고 대상</label>
+              <input type="text" id="fname" name="reportTarget" th:value="${reportDetail.reportTarget}" class="form-control" readonly>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black"  for="fname">신고 유형</label>
+              <input type="text" th:value="${reportDetail.reportKind}" class="form-control" name="reportKind" readonly />
+            </div>
+          </div>
+
+          <div class="row form-group">
+
+            <div class="col-md-12">
+              <label class="text-black">신고제목</label>
+              <input type="text" name="reportTitle" th:value="${reportDetail.reportTitle}" class="form-control" readonly>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+              <label class="text-black" for="message">신고 상세 내용</label>
+              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control" th:text="${reportDetail.reportContent}" readonly>
+              </textarea>
+            </div>
+
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+              <input type="button" value="삭제" id="reportDelete" class="btn btn-primary btn-md text-white">
+              <a th:href="@{/serviceCenter/badUserReport}">
+                <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
+              </a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+<script th:src="@{/pay/serviceCenter.js}"></script>
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

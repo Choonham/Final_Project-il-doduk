@@ -1,12 +1,15 @@
-package com.finalproject.ildoduk.service.serviceCenter;
+package com.finalproject.ildoduk.service.serviceCenter.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.entity.member.QMember;
+import com.finalproject.ildoduk.entity.serviceCenter.CustomerAnswer;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.QCustomerBoard;
+import com.finalproject.ildoduk.repository.serviceCenter.CustomerAnswerRepository;
 import com.finalproject.ildoduk.repository.serviceCenter.CustomerBoardRepository;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,10 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class CustomerBoardServiceImpl implements CustomerBoardService{
+public class CustomerBoardServiceImpl implements CustomerBoardService {
 
     private final CustomerBoardRepository customerBoardRepository;
+    private final CustomerAnswerRepository customerAnswerRepository;
 
     //문의 게시판 조회(전체 데이터)
     @Override
@@ -39,6 +43,7 @@ public class CustomerBoardServiceImpl implements CustomerBoardService{
 
         return new PageResultsDTO<>(result, fn);
     }
+
     //검색 조건
     private BooleanBuilder getSearch(PageRequestDTO pageRequestDTO){
         String type = pageRequestDTO.getType();
@@ -62,7 +67,7 @@ public class CustomerBoardServiceImpl implements CustomerBoardService{
         }
         //연관관계를 한 이후부터 에러..500
         if(type.contains("w")){
-            conditionBuilder.or(qMember.id.contains(keyword));
+            conditionBuilder.or(qCustomerBoard.cusWriter.nickname.contains(keyword));
         }
         booleanBuilder.and(conditionBuilder);
         return booleanBuilder;
@@ -98,15 +103,19 @@ public class CustomerBoardServiceImpl implements CustomerBoardService{
             customerBoardRepository.save(entity);
         }
     }
-
+//문의글 삭제
     @Override
     public void deleteBoard(CustomerBoardDTO dto) {
-        Optional<CustomerBoard> result = customerBoardRepository.findById(dto.getCusNo());
+        //댓글을 먼저 삭제 한 후에 게시글 삭제
+        Optional<CustomerAnswer> comment = customerAnswerRepository.findByCusNoCusNo(dto.getCusNo());
+        CustomerAnswer comment_entity = comment.get();
+        customerAnswerRepository.delete(comment_entity);
 
+        Optional<CustomerBoard> result = customerBoardRepository.findById(dto.getCusNo());
+        log.info(result + "삭제 내부");
         if(result.isPresent()){
             CustomerBoard entity = result.get();
-
-           customerBoardRepository.delete(entity);
+            customerBoardRepository.delete(entity);
         }
     }
 

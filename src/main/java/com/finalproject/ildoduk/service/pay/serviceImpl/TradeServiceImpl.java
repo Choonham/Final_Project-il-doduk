@@ -1,10 +1,11 @@
-package com.finalproject.ildoduk.service.pay;
+package com.finalproject.ildoduk.service.pay.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.repository.pay.TradeRepository;
+import com.finalproject.ildoduk.service.pay.service.TradeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 @Service
 @Log4j2
-public class TradeServiceImpl implements TradeService{
+public class TradeServiceImpl implements TradeService {
 
     private final TradeRepository tradeRepository;
 

@@ -13,8 +13,8 @@ public class ChatDTO {
 
     private Long No;
     private String message;
-    private String to;
-    private String from;
+    private String recive;
+    private String send;
     private String time;
 
 

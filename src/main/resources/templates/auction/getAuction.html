@@ -1,22 +1,191 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<!-- 해당 옥션 정보 : auction -->
-<div th:utext="${auction.content}" >[[${auction.content}]]</div>
 
-<!-- 낙찰 비딩 정보 : chosenBidding -->
+<body id="top">
 
-<!-- 채팅하기 혹은 리뷰쓰기 버튼 -->
-<div th:if="isAllDone">
-    <button> 리뷰쓰기 </button>
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
 </div>
-<div th:unless="isAllDone">
-    <button> 채팅하기 </button>
+
+<div id="cash_status" th:if="${session.user != null}">
+    <span id="user" th:text="${session.user.nickname}"></span> 님
+    <span th:text="${session.user.point}"></span> point
+    <button type="button" id="btn_submit">충전하기</button>
+    <a href="/chat/chatList">채팅</a>
 </div>
+
+<div th:if = "${session.user == null}">
+    <div th:replace="~{/fragments/nav :: navi}"></div>
+</div>
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">경매 상세</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>경매</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 상세보기 시작 -->
+
+<section class="site-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-12">
+
+
+
+
+                <form class="p-4 p-md-5 border rounded">
+
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-8 mb-4 mb-lg-0">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h2>경매 상세보기</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 해당 옥션 정보 : auction -->
+
+
+                    <!-- 낙찰 비딩 정보 : chosenBidding -->
+
+
+                    <!-- 카테고리 -->
+                    <div class="form-group">
+                        <label for="category">카테고리</label>
+                        <input type="text" th:value="${auction.category}" readonly />
+                    </div>
+                    <br>
+                    <!-- 제목 -->
+                    <div class="form-group">
+                        <label for="job-title">미션 제목</label>
+                        <input type="text" class="form-control" id="job-title" th:value="${auction.title}" readonly />
+                    </div>
+                    <br>
+                    <!-- 콘텐츠 -->
+                    <div class="form-group">
+                        <label for="job-title">미션 내용</label>
+                        <div readonly="" th:utext="${auction.content}" ></div>
+                    </div>
+
+                    <br>
+                    <div class="form-group">
+                        <label>미션 주소</label><br>
+                        <input type="text" class="form-control" th:value="${auction.sido}" />
+                        <input type="text" class="form-control" th:value="${auction.sigungu}" /><br>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label>미션 날짜와 시간</label><br>
+                        <input type="text" th:value="${#temporals.format(auction.regDate, 'yyyy-MM-dd hh시 mm분')}" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="level">미션 난이도 </label>
+                        <input type="text" th:if="${auction.level == 1}" value="쉬움" name="level" readonly/>
+                        <input type="text" th:if="${auction.level == 2}" value="보통" name="level" readonly/>
+                        <input type="text" th:if="${auction.level == 3}" value="어려움" name="level" readonly/>
+                    </div>
+
+                    <br>
+
+                    <div class="form-group">
+                        <label>낙찰가</label><br>
+                        <input th:type="text"  readonly />1000원
+                    </div>
+
+                    <hr>
+
+                    <br><br>
+
+                    <!-- 해당 미션 우대사항 -->
+                    <div id="preference">
+                        <h3>미션 수행 시 우대사항 </h3>
+
+                        <div class="form-group">
+                            <label>운전면허증</label>
+                            &nbsp;<input th:type="text" name="driverlicense" th:if="${auction.driverLicense == 0}" value="상관없음" readonly />
+                            &nbsp;<input th:type="text" name="driverlicense" th:if="${auction.driverLicense == 1}" value="소지자 우대" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label>나이</label>
+                            <input type="text" th:value="${auction.age}" />세 이상
+                        </div>
+
+                        <div class="form-group">
+                            <label>성별</label>
+                            <input type="text" th:if="${auction.gender == 0}" value="상관없음" />
+                            <input type="text" th:if="${auction.gender == 1}" value="여성" />
+                            <input type="text" th:if="${auction.gender == 2}" value="남성" />
+                        </div>
+                    </div>
+
+                    <br><br>
+                    <hr>
+                    <div class="form-group">
+                        <a href="#">
+                            <button onclick="test()"> 헬퍼 카드 보러가기 </button>
+                        </a>
+                    </div>
+
+                    <div class="form-group" th:if="${auction.state == 3}">
+                        <a th:href="@{/chat/chatList}">
+                            <button> 채팅하기 </button>
+                        </a>
+                    </div>
+                    <div class="form-group" th:unless="${auction.state == 3}">
+                        <a>
+                           <button onclick="test()"> 리뷰하기 </button>
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<script>
+    function test(){
+        window.open("#","헬퍼카드","width=500, height=584, scrollbars=no, resizeable=no,toolbar=no, left=1000,top=150");
+    }
+</script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.finalproject.ildoduk.service.serviceCenter;
+package com.finalproject.ildoduk.service.serviceCenter.service;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;

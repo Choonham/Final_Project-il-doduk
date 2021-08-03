@@ -1,8 +1,9 @@
-package com.finalproject.ildoduk.service.serviceCenter;
+package com.finalproject.ildoduk.service.serviceCenter.serviceImpl;
 
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerAnswer;
 import com.finalproject.ildoduk.repository.serviceCenter.CustomerAnswerRepository;
+import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

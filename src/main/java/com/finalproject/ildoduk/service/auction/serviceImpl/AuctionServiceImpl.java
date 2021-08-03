@@ -180,6 +180,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Optional<AuctionList> getAuction(Long aucSeq) {
         System.out.println("======== getAuction =========");
+
         Optional<AuctionList> auction = auctionListRepository.findById(aucSeq);
         return auction;
     }
