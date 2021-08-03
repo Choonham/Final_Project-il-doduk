@@ -17,6 +17,7 @@ public class AuctionBiddingDTO {
     //Member(id)외래키
     private String user;
     private String userNickName;
+    private String userPhoto;
 
     private String address;
     private String sido;
@@ -28,6 +29,7 @@ public class AuctionBiddingDTO {
     private String helperNickName;
     private int chosen;
     private int offerPrice;
+    private String helperPhoto;
 
     private int category;
     private LocalDateTime doDateTime;

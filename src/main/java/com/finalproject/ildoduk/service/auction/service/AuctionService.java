@@ -120,7 +120,7 @@ public interface AuctionService {
         AuctionListDTO auctionListDTO = AuctionListDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).user(user.getId()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userNickName(user.getNickname())
+                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userNickName(user.getNickname()).userPhoto(user.getPhoto())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).build();
         return auctionListDTO;
     }
@@ -132,6 +132,7 @@ public interface AuctionService {
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
+                .userPhoto(auc.getUser().getPhoto()).helperPhoto(helper.getPhoto())
                 .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
@@ -141,8 +142,9 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(user.getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname()).
-                userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
+                .userPhoto(user.getPhoto()).helper(helper.getPhoto())
+                .userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 
@@ -151,15 +153,16 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).
-                        chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(bid.getHelper().getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
+                .userNickName(auc.getUser().getNickname()).userPhoto(auc.getUser().getPhoto()).helperPhoto(bid.getHelper().getPhoto()).helperNickName(bid.getHelper().getNickname())
+                .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(bid.getHelper().getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 
     //BiddingList
     default BiddingListDTO entityToDTO(BiddingList bid){
         BiddingListDTO biddingListDTO = BiddingListDTO.builder().aucSeq(bid.getAucSeq().getAucSeq()).helper(bid.getHelper().getId()).bidSeq(bid.getBidSeq()).chosen(bid.getChosen())
-                .offerPrice(bid.getOfferPrice()).build();
+                .offerPrice(bid.getOfferPrice()).helperNickName(bid.getHelper().getNickname()).helperPhoto(bid.getHelper().getPhoto()).build();
         return biddingListDTO;
     }
 }

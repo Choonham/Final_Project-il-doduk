@@ -13,6 +13,7 @@ public class BiddingListDTO {
 
     private String helper;
     private String helperNickName;
+    private String helperPhoto;
 
     private Long aucSeq;
 

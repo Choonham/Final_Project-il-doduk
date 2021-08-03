@@ -72,20 +72,22 @@
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
                             <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
-                                 class="img-fluid" width="80" height="80">
+                                 class="img-fluid" width="80" height="80"><br>
+                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
                             <!--대표 이미지 삽입 예정-->
                         </div>
-                        <!-----------------------------------------------헬퍼닉네임, 채팅버튼 넣어야 함 --------------------------------------------------------------------->
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                             <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <strong><b>카테고리</b></strong>
                                 <h2><b>미션 제목</b></h2>
                                 <strong><b>미션 수행 일시</b></strong>
                             </div>
                             <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                <span class="icon-room"></span> <b>미션 장소</b>
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                 <b>최종 가격</b>
                             </div>
                             <div class="job-listing-meta w-25">
-                                <span class=""><b>미션 시작가</b></span>
+                                <span class="btn btn-outline-primary active" th:href="@{#}"><b>채팅하기</b></span>
                             </div>
                         </div>
                     </li>
@@ -105,37 +107,31 @@
                         <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
                             th:each="dto : ${matchedAuctionList.dtoList}" th:cellpadding="10">
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
-                            <div class="job-listing-logo">
-                                <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 4}" th:align="center">
-                                    <img th:src="@{/img/QuickService.png}"
-                                         alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <!--카테고리별 이미지 설정-->
+                            <!--헬퍼 이미지 및 비즈니스 카드 -->
+                            <div class="job-listing-logo" th:align="center">
+                                <img th:src="@{dto.helperPhoto}" alt="Free Website Template by Free-Template.co"
+                                     class="img-fluid" width="80" height="80">
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
                             </div>
 
                             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                                 <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <!-- 카테고리 번호에 따른 출력 값 변화-->
+                                    <div th:if="${dto.category == 1}"><strong><b> 구매대행 </b></strong></div>
+                                    <div th:if="${dto.category == 2}"><strong><b> 홈 케어 </b></strong></div>
+                                    <div th:if="${dto.category == 3}"><strong><b> 펫 케어 </b></strong></div>
+                                    <div th:if="${dto.category == 4}"><strong><b> 퀵 서비스 </b></strong></div>
                                     <h2>[[${dto.title}]]</h2>
                                     <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                    <span class="icon-room"></span> [[${dto.address}]]
+                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
-                                <div class="job-listing-meta w-25">
-                                    <span class="">[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</span>
+                                <div class="job-listing-meta w-25" style = "z-index: 1" >
+                                    <button class="btn btn-outline-primary primary" th:href="@{#}"><b>채팅하기</b></button>
+<!-----------------------------------------------채팅하기 연결 예정------------------------------------------------------------>
                                 </div>
                             </div>
                         </li>
@@ -184,25 +180,27 @@
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
                             <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
-                                 class="img-fluid" width="80" height="80">
+                                 class="img-fluid" width="80" height="80"><br>
+                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
                             <!--대표 이미지 삽입 예정-->
                         </div>
-
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                             <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <strong><b>카테고리</b></strong>
                                 <h2><b>미션 제목</b></h2>
                                 <strong><b>미션 수행 일시</b></strong>
                             </div>
                             <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                <span class="icon-room"></span> <b>미션 장소</b>
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                <b>최종 가격</b>
                             </div>
-                            <div class="job-listing-meta w-25" th:align="center">
-                                <span class="" th:align="center"><b>미션 시작가</b></span>
+                            <div class="job-listing-meta w-25">
+                                <span class="btn btn-outline-primary active" th:href="@{#}"><b>리뷰쓰기</b></span>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <!-----------------------------------------------헬퍼닉네임, 채팅버튼 넣어야 함 --------------------------------------------------------------------->
+
                 <!-- 내역이 하나도 없을 경우 포스팅 -->
                 <div th:if="${allDoneList.getDtoList().size() == 0}">
                     <ul class="job-listings mb-5" th:align="center">
@@ -217,37 +215,31 @@
                         <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
                             th:each="dto : ${allDoneList.dtoList}" th:cellpadding="10">
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
-                            <div class="job-listing-logo">
-                                <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <div th:if="${dto.category == 4}" th:align="center">
-                                    <img th:src="@{/img/QuickService.png}"
-                                         alt="Free Website Template by Free-Template.co"
-                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
-                                </div>
-                                <!--카테고리별 이미지 설정-->
+                            <!--헬퍼 이미지 및 비즈니스 카드 -->
+                            <div class="job-listing-logo" th:align="center">
+                                <img th:src="@{dto.helperPhoto}" alt="Free Website Template by Free-Template.co"
+                                     class="img-fluid" width="80" height="80">
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
                             </div>
 
                             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                                 <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <!-- 카테고리 번호에 따른 출력 값 변화-->
+                                    <div th:if="dto.category == 1"><strong><b> 구매대행 </b></strong></div>
+                                    <div th:if="dto.category == 2"><strong><b> 홈 케어 </b></strong></div>
+                                    <div th:if="dto.category == 3"><strong><b> 펫 케어 </b></strong></div>
+                                    <div th:if="dto.category == 4"><strong><b> 퀵 서비스 </b></strong></div>
                                     <h2>[[${dto.title}]]</h2>
                                     <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                    <span class="icon-room"></span> [[${dto.address}]]
+                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
-                                <div class="job-listing-meta w-25 text-center">
-                                    <span class="text-center">[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</span>
+                                <div class="job-listing-meta w-25" style = "z-index: 1" >
+                                    <span class="btn btn-outline-primary" th:href="@{#}"><b>리뷰작성</b></span>
+<!----------------------------------------------- 리뷰쓰기 연결 예정 ------------------------------------------------------------>
                                 </div>
                             </div>
                         </li>
