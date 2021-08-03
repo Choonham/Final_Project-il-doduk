@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogCommentDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
@@ -12,7 +13,7 @@ import org.springframework.data.domain.Page;
 
 public interface HelperInfoService {
 
-    PageResultsDTO<HelperInfoDTO, HelperInfo> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO);
+    PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO);
 
 
     default HelperInfo dtoToEntity(HelperInfoDTO dto){
@@ -39,6 +40,23 @@ public interface HelperInfoService {
                 .goodAtThird(entity.getGoodAtThird())
                 .kindness(entity.getKindness())
                 .appeal(entity.getAppeal())
+                .build();
+        return dto;
+    }
+
+    default MemberHelperInfoDTO entityToDTO(HelperInfo helper, Member member){
+        MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .intro(member.getIntro())
+                .appeal(helper.getAppeal())
+                .gender(member.getGender())
+                .kindness(helper.getKindness())
+                .goodAtFirst(helper.getGoodAtFirst())
+                .goodAtSecond(helper.getGoodAtSecond())
+                .goodAtThird(helper.getGoodAtThird())
+                .photo(member.getPhoto())
                 .build();
         return dto;
     }
