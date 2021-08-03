@@ -12,6 +12,8 @@ public class BiddingListDTO {
     private Long bidSeq;
 
     private String helper;
+    private String helperNickName;
+
     private Long aucSeq;
 
     private int chosen;

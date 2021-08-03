@@ -24,11 +24,5 @@ public interface BiddingListRepository extends JpaRepository<BiddingList, Long> 
     //옥션 값에 따른 비딩 내역 중 낙찰 내역 불러오기
     @Query(value = "select b from BiddingList b where b.chosen=1 and b.aucSeq.aucSeq = :aucSeq")
     Optional<BiddingList> selectByAucSeq2(Long aucSeq);
-/*
-    //유저값에 따른 비딩 참여내역 출력
-    @Query(value = "select b from BiddingList b where b.helper.id=:helper")
-    Page<BiddingList> selectByHelper(String user);*/
-
-    //시간이 난다면 비딩 삭제
 
 }

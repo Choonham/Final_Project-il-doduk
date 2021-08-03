@@ -10,23 +10,33 @@ import java.util.*;
 
 public interface AuctionService {
 
+    //======================================== 공통메서드 ============================================//
+
     //멤버 얻기
     Member getMember(String id);
 
     //오늘 날짜 얻기
     String today();
 
+    //타이머 - 경매 남은 시간얻기
+    long timer(Long aucSeq);
+
+    //일 시작까지 남은 시간 구하기
+    long leftTime(Long aucSeq);
+
+    //경매시간 완료, 매칭 미완료 경매 state=1로 변경
+    void changeState1(PageRequestDTO pageRequestDTO);
+
+    //경매시간 완료, 매칭미완료, 일 시작시간 초과 경매 state=4로 변경
+    void changeState2(PageRequestDTO pageRequestDTO);
+
+    //======================================== user ============================================//
+
     //경매 등록
     Long register(AuctionListDTO dto);
 
-    //경매 참여
-    Long BiddingIn(BiddingListDTO dto);
-
     //경매삭제 - 관련 비딩내역 biddingList.chosen = 2로 변경 경매 auctionList.state=4 변경
     void deleteAuction(Long aucSeq);
-
-    //경매참여내역 - 비딩내역 biddingList.chosen = 2로 변경
-    void deleteBidding(Long bidSeq);
 
     //경매선택 - biddingList.chosen =1, aucitonList.state = 2
     void chooseBidding(Long bidSeq);
@@ -40,9 +50,6 @@ public interface AuctionService {
     //옥션값에 따른 낙찰 비딩 정보
     Optional<BiddingList> chosenBidding(Long aucSeq);
 
-    //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
-    PageResultsDTO<AuctionListDTO, AuctionList> getAvailableAuctions(String sido, String sigungu, int category, PageRequestDTO pageRequestDTO);
-
     //목록처리1 test :state = 0, Auction
     PageResultsDTO<AuctionListDTO, AuctionList> getList1(PageRequestDTO pageRequestDTO, String user);
 
@@ -55,23 +62,28 @@ public interface AuctionService {
     //목록처리4 매칭완료, 일 수행 후   state=3(일 수행완료), ischosen=1(낙찰값) , auctionList-Bidding 정보 출력
     PageResultsDTO<AuctionBiddingDTO, Object[]> getList4(PageRequestDTO pageRequestDTO, String user);
 
-    //타이머 - 경매 남은 시간얻기
-    long timer(Long aucSeq);
-
-    //타이머 셋팅 - 안 써도 됨
-    //void timerSet(PageResultDTO<AuctionListDTO, AuctionList> getList);
-
-    //일 시작까지 남은 시간 구하기
-    long leftTime(Long aucSeq);
-
-    //경매시간 완료, 매칭 미완료 경매 state=1로 변경
-    void changeState1(PageRequestDTO pageRequestDTO);
-
-    //경매시간 완료, 매칭미완료, 일 시작시간 초과 경매 state=4로 변경
-    void changeState2(PageRequestDTO pageRequestDTO);
-
     //일 수행 완료 후 state값 변경
     void jobDone(Long aucSeq);
+
+    //================================== helper =========================================//
+
+    //헬퍼 참여한 경매 목록
+    PageResultsDTO<AuctionBiddingDTO, Object[]> getMyBids(PageRequestDTO pageRequestDTO, String helper);
+
+    //경매 참여
+    Long BiddingIn(BiddingListDTO dto);
+
+    //경매 삭제
+    void deleteBidding(Long bidSeq);
+
+    //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
+    PageResultsDTO<AuctionListDTO, AuctionList> getAvailableAuctions(String sido, String sigungu, int category, PageRequestDTO pageRequestDTO);
+
+    //================================== blog =========================================//
+    //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
+    List<AuctionBiddingDTO> getAllWithState4ForHelper(String helper);
+
+    //================================== DTO <-> Entity =========================================//
 
     //**dtoToEntity : 입력 받은 값을 엔티티로 변환 후 DB전달 **//*
     //AuctionList
@@ -108,7 +120,7 @@ public interface AuctionService {
         AuctionListDTO auctionListDTO = AuctionListDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).user(user.getId()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
+                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userNickName(user.getNickname())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).build();
         return auctionListDTO;
     }
@@ -119,8 +131,8 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).
-                chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
+                .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 
@@ -129,8 +141,8 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(user.getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).
-                        chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname()).
+                userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 

@@ -14,7 +14,7 @@ public interface ChatService {
 
     default Chat dtoToEntity(ChatDTO dto){
 
-        Chat chat =Chat.builder().reciver(dto.getTo()).sender(dto.getFrom()).message(dto.getMessage()).time(dto.getTime()).build();
+        Chat chat =Chat.builder().reciver(dto.getSend()).sender(dto.getRecive()).message(dto.getMessage()).time(dto.getTime()).build();
 
         return chat;
     }
@@ -25,7 +25,7 @@ public interface ChatService {
     default ChatDTO entityToDto(Chat chat){
 
 
-        ChatDTO dto = ChatDTO.builder().to(chat.getReciver()).from(chat.getSender()).message(chat.getMessage()).time(chat.getTime()).build();
+        ChatDTO dto = ChatDTO.builder().recive(chat.getReciver()).send(chat.getSender()).message(chat.getMessage()).time(chat.getTime()).build();
 
         return dto;
     }

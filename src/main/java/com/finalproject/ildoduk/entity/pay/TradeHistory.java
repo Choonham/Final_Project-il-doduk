@@ -34,6 +34,6 @@ public class TradeHistory extends BaseEntity {
     private String aucTitle;
     private String aucContent;
     private int aucPrice;
-    private int aucState;
+    private String aucState;
 
 }

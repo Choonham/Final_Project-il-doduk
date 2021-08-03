@@ -4,14 +4,14 @@ var ws;
 window.onload = function () {
 
 
-    ws = new WebSocket("ws://localhost:9991/chating");
+    ws = new WebSocket("wss://localhost:9991/chating");
     wsEvt();
 }
 //to ==recive from == id
 
 for(var i=0; i<list.length; i++){
 
-    if((list[i].to==you&&list[i].from==me)||(list[i].to==me&&list[i].from==you)) {
+    if((list[i].to==other&&list[i].from==me)||(list[i].to==me&&list[i].from==other)) {
         $("#chating").append("<p>" + list[i].from + ": " + list[i].message + "_" + list[i].time + "</p>");
     }
 }
@@ -29,7 +29,7 @@ function wsEvt() {
     ws.onmessage = function (data) {
         var msg = JSON.parse(data.data);
         var time = msg.date;
-            if(msg.id==you&&msg.recive==me){
+            if(msg.id==other&&msg.recive==me){
             $("#chating").append("<p>" + msg.id + ": " + msg.text + "_" + time + "</p>");
             }
 
@@ -45,7 +45,7 @@ function wsEvt() {
 
 function send(id, recive) {
     makeText(id, recive);
-    var uN = $("#userName").val();
+
     var msg = msgreal;
     var time = msg.date;
     ws.send(JSON.stringify(msg));
@@ -53,6 +53,8 @@ function send(id, recive) {
     $('#chatting').val("");
 }
 
+
+/*날짜 형식 지정*/
 function getCurrentDate()
 {
     var date = new Date();
@@ -75,6 +77,8 @@ function getCurrentDate()
 
     return year +"/"+ month +"/"+ day +"/"+ hour +"/"+ minites +"/"+ seconds;
 }
+
+/*메세지 형태 json으로 만들기*/
 function makeText(id, recive) {
     // Construct a msg object containing the data the server needs to process the message from the chat client.
 

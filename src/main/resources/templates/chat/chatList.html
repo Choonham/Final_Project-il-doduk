@@ -1,18 +1,27 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <body>
+<script th:inline="javascript">
+    var me=[[${session.userID}]];
 
+
+</script>
     <table>
         <tr th:each="client : ${clientList}">
-            <td ><a th:href="@{/chat/chatting(id=${client})}"><span th:text="${client}"></span></a> </td>
+            <td ><a th:onclick="get_chat([[${client}]]);"><span th:text="${client}"></span></a> </td>
 
         </tr>
 
     </table>
+
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+
 </body>
 </html>

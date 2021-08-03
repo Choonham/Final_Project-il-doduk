@@ -36,4 +36,65 @@ $(document).ready(function () {
             .attr("method", "post")
             .submit();
     });
+
+
+    // 조회 게시판 버튼 클릭시 해당 내역 출력
+    $("#none").click(function(){
+        $("#notSelected").show();
+        $("#payHistory").hide();
+        $("#tradeHistory").hide();
+    });
+
+    $("#pay_btn").click(function(){
+        $("#payHistory").show();
+        $("#tradeHistory").hide();
+        $("#notSelected").hide();
+    });
+
+    $("#trade_btn").click(function(){
+        $("#payHistory").hide();
+        $("#tradeHistory").show();
+        $("#notSelected").hide();
+    });
+
+//-------  신고 게시판 ---------
+
+    //해당 유저 눌렀을때 신고 대상으로 나오게
+    $("#badUser tr").click(function(){
+        var str = ""
+        var tdArr = new Array();
+
+        var tr = $(this);
+        var td = tr.children();
+
+        td.each(function(i){
+            tdArr.push(td.eq(i).text());
+        });
+
+        var user = td.eq(0).text();
+        str += user;
+        $("#fname").val(str);
+    });
+
+    //버튼 클릭시 신고글 게시 및 삭제 확인 창
+    $("#report").click(function(){
+
+       if(!confirm("신고 하시겠습니까???")){
+           return;
+       }
+
+       $("form").submit();
+
+    });
+    //삭제
+    $("#reportDelete").click(function(){
+
+        if(!confirm("삭제 하시겠습니까???")){
+            return;
+        }
+
+        $("form").submit();
+    });
+
+
 });

@@ -3,10 +3,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
+
     <div class="container">
       <br style="clear: both">
       <h3 style="margin-bottom: 25px;">Post Form</h3>
       <form id = "postForm" action = "post" method="post">
+
         <div class="form-group">
           <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
         </div>
@@ -20,7 +22,15 @@
         <div class="form-group">
           <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.user.getId()}" required/>
         </div>
+
         <input type="text" class="form-control" id="thumbnail" name="thumbnail" readonly/>
+
+        <select class = "custom-select" id="doneList" name = "doneList" onchange="selectDoneList()">
+          <option>-------</option>
+          <option th:each = "done : ${doneList}">
+            [[${done.title}]] / [[${done.doDateTime}]]
+          </option>
+        </select>
 
         <button class = "arrow-button" id = "submit-btn">submit</button>
       </form>
@@ -140,6 +150,27 @@
       }
       // 끝
 
+      // ============== 수행했던 작업 목록 선택창 function 시작==========//
+      function selectDoneList() {
+
+        doneList = [[${doneList}]];
+
+        console.log(doneList);
+        selectedOne = $("#doneList option:selected");
+        contentArea = $(".note-editable");
+        originContent = contentArea.html();
+
+        selectedIndex = $("#doneList option").index(selectedOne); // 선택한 사항의 인덱스
+        sessionStorage.setItem("index", selectedIndex);
+        str = "<table><tr><td width='200px'>작업명</td><td align='center'>" + doneList[selectedIndex-1].title + "</td></tr>"
+          +"<tr><td>작업 내용</td><td align='center'>"+ doneList[selectedIndex-1].content + "</td></tr>"
+          + "<tr><td>작업 단가</td><td align='center'>"+ doneList[selectedIndex-1].offerPrice + "</td></tr>"
+          + "<tr><td>작업 지역</td><td align='center'>"+ doneList[selectedIndex-1].sido + "</td></tr>";
+
+        contentArea.html(originContent + "<p>" + str + "</p>");
+      }
+
+      // ============== 수행했던 작업 목록 선택창 function 끝 ==========//
     </script>
   </th:block>
 </th:block>.
