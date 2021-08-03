@@ -152,8 +152,8 @@
                             <span th:text="${chosenBidding.offerPrice}"></span>원
                         </li>
                         <li class="mb-2">
-                            <strong class="text-black">당담 헬퍼</strong>
-                            <a onclick="test()"><span th:text="${chosenBidding.helper.id}"></span></a> 님
+                            <strong class="text-black">담당 헬퍼</strong>
+                            <span th:text="${chosenBidding.helper.id}"></span> 님 <a onclick="test()">헬퍼 카드</a>
                         </li>
                         <li class="mb-2">
                             <strong class="text-black">미션장소</strong>
@@ -161,7 +161,7 @@
                         </li>
                         <li class="mb-2">
                             <strong class="text-black">미션 일시</strong>
-                            <span th:text="${#temporals.format(auction.regDate, 'yyyy-MM-dd hh시 mm분')}"></span>
+                            <span th:text="${#temporals.format(auction.regDate, 'yyyy/MM/dd hh시 mm분')}"></span>
                         </li>
 
                     </ul>

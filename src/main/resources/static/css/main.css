@@ -9,3 +9,10 @@ button {
     z-index: 10;
     color: black;
 }
+
+<!-- 문의 답변 영역 -->
+
+#comment_list{
+   border: 1px solid gray;
+   width: auto;
+}
