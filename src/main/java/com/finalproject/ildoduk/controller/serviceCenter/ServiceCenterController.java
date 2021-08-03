@@ -2,16 +2,21 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
+import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
+import com.finalproject.ildoduk.entity.auction.AuctionList;
+import com.finalproject.ildoduk.entity.auction.BiddingList;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import com.finalproject.ildoduk.service.pay.service.TradeService;
@@ -30,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @RequestMapping("/serviceCenter")
@@ -41,7 +47,7 @@ public class ServiceCenterController {
 
     private final MemberService memberService;
     private final PaymentService paymentService;
-    private final TradeService tradeService;
+    private final AuctionService auctionService;
     private final CustomerBoardService customerBoardService;
     private final CustomerAnswerService customerAnswerService;
     private final UserReportService userReportService;
@@ -356,25 +362,14 @@ public class ServiceCenterController {
                            , Model model){
         //폼으로 이동할 때 세션 유저 값과 해당 신고 대상자의 아이디 필요..
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
-        MemberDto id = (MemberDto) session.getAttribute("user");
-        log.info("신고하는 계정 : " + id.getId());
-        //거래했던 유저 목록 조회
-        TradeHistoryDTO tradeList = new TradeHistoryDTO();
+        MemberDto user = (MemberDto) session.getAttribute("user");
 
-        tradeList.setId(id.getId());
-        PageResultsDTO<TradeHistoryDTO, TradeHistory> list = tradeService.allContents(tradeList, pageRequestDTO);
+        model.addAttribute("tradeList", auctionService.getList4(pageRequestDTO, user.getId()));
 
-        if(list != null){
-            for(int i=0;i<list.getDtoList().size();i++){
-                //닉네임으로 변환
-                MemberDto memberDto = memberService.userIdCheck(list.getDtoList().get(i).getUserId());
-                log.info(memberDto.getNickname() + i);
-                list.getDtoList().get(i).setUserId(memberDto.getNickname());
-            }
-            model.addAttribute("tradeList",list);
-        }
 
     }
+
+
 
     //신고 작성
     @PostMapping("/userReportWrite")
@@ -382,7 +377,8 @@ public class ServiceCenterController {
         //넘어오는 신고 대상 아이디는 닉네임으로 되어있다. 다시 아이디로 변환...
         String nick = reportDTO.getReportTarget();
         log.info(nick + "신고 작성");
-        MemberDto memberDto = memberService.userNickCheck(nick);
+        //MemberDto memberDto = memberService.userNickCheck(nick);
+        MemberDto memberDto = memberService.userIdCheck(nick);
         log.info("신고 작성을 위해 가져온 정보 : "+memberDto);
         reportDTO.setReportTarget(memberDto.getId());
 

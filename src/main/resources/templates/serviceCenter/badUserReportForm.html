@@ -108,10 +108,10 @@
         <div class="p-4 mb-3 bg-white" >
           <p class="mb-0 font-weight-bold">최근 나와 거래한 헬퍼 목록</p>
           <div class="mb-4" th:if="${tradeList != null}">
-            <table id="badUser">
+            <table id="badUser" class="table table-hover">
               <tr th:each="tradeList : ${tradeList.dtoList}">
                 <td>
-                  <b>[[${tradeList.userId}]]</b>
+                  <b>[[${tradeList.helper}]]</b>
                 </td>
               </tr>
             </table>

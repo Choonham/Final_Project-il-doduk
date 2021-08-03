@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+
+<body id="top">
+
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+
+<div id="cash_status" th:if="${session.user != null}">
+    <span id="user" th:text="${session.user.nickname}"></span> 님
+    <span th:text="${session.user.point}"></span> point
+    <button type="button" id="btn_submit">충전하기</button>
+    <a href="/chat/chatList">채팅</a>
+</div>
+
+<div th:if = "${session.user == null}">
+    <div th:replace="~{/fragments/nav :: navi}"></div>
+</div>
+
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">경매 상세</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <a href="#">Job</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>경매</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- 경매 완료, 일 수행 완료 5  : 카테고리, 제목(클릭 시 상세페이지), 완료일, 매칭헬퍼, 후기버튼 -->
 <h1>경매완료, 일 수행완료</h1>

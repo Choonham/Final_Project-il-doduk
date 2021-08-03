@@ -90,7 +90,7 @@ public class UserReportServiceImpl implements UserReportService {
 
         return new PageResultsDTO<>(result, fn);
     }
-
+    //관리자 :  확인 시에 신고 상황 업데이트
     @Override
     public void updateReportState(UserReportDTO userReportDTO) {
 
