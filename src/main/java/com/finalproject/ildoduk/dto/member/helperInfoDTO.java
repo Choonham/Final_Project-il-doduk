@@ -1,42 +1,20 @@
 package com.finalproject.ildoduk.dto.member;
 
-import com.finalproject.ildoduk.entity.member.Member;
-import lombok.*;
-import lombok.extern.log4j.Log4j2;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
 @Data
 @Builder
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Log4j2
-public class helperInfoDTO {
-
-
-
+@AllArgsConstructor
+public class HelperInfoDTO {
     private long helperNo;
-
-
-    private Member memberId;
-
-
+    private String memberId;
     private String goodAtFirst;
-
-
     private String goodAtSecond;
-
-
     private String goodAtThird;
-
-
     private int kindness;
-
-
     private String appeal;
-
-
 }
