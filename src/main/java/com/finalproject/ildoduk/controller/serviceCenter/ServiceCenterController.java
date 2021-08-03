@@ -170,6 +170,7 @@ public class ServiceCenterController {
             } else if(board.get(i).getAnswerCheck().equals("y")){
                 board.get(i).setAnswerCheck("답변 완료");
             }
+
             //게시글 작성자를 닉네임으로 나오게
             String writer = board.get(i).getCusWriter();
             MemberDto memberDto = memberService.userIdCheck(writer);
@@ -215,10 +216,11 @@ public class ServiceCenterController {
         MemberDto memberDto = memberService.userIdCheck(dto.getCusWriter());
         //접속한 계정의 닉네임
         String nickName = memberDto.getNickname();
-        customerBoardDTO.setCusWriter(nickName);
 
+
+        //관리자일 경우 모든 글 확인
         if(memberDto.getState() == 0){
-
+            customerBoardDTO.setCusWriter(nickName);
             model.addAttribute("board",customerBoardDTO);
             model.addAttribute("user","check");
             return "/serviceCenter/customerGetBoard";
@@ -230,6 +232,9 @@ public class ServiceCenterController {
         model.addAttribute("board",customerBoardDTO);
 
         if(dto.getCusWriter().equals(boardWriter)){
+
+            customerBoardDTO.setCusWriter(nickName);
+
             if(customerBoardDTO.getSecretBoard().equals("y")){
                 redirectAttributes.addFlashAttribute("password",customerBoardDTO.getPasswordBoard());
                 redirectAttributes.addFlashAttribute("pwNo",customerBoardDTO.getCusNo());
@@ -254,8 +259,13 @@ public class ServiceCenterController {
  //문의글 (비공개글) 열기
     @PostMapping("/customerGetBoard")
     public void postGetBoard(CustomerBoardDTO dto,@ModelAttribute("requestDTO") PageRequestDTO requestDTO,Model model){
-        log.info("비밀번호 체크하기 위한 게시글 번호" + dto.getCusNo());
-        model.addAttribute("board",customerBoardService.getBoardList(dto.getCusNo()));
+
+
+        CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
+        MemberDto memberDto = memberService.userIdCheck(customerBoardDTO.getCusWriter());
+        customerBoardDTO.setCusWriter(memberDto.getNickname());
+
+        model.addAttribute("board",customerBoardDTO);
         model.addAttribute("user","check");
 
     }
@@ -337,6 +347,7 @@ public class ServiceCenterController {
     //사용자 신고 게시판으로 이동
     @GetMapping("/badUserReport")
     public void report(HttpSession session,PageRequestDTO pageRequestDTO,Model model){
+
         MemberDto id = (MemberDto) session.getAttribute("user");
         UserReportDTO dto = new UserReportDTO();
         dto.setId(id.getId());
@@ -355,6 +366,12 @@ public class ServiceCenterController {
 
                  String nick = memberDto.getNickname();
                  list.getDtoList().get(i).setReportTarget(nick);
+
+                 if(list.getDtoList().get(i).getReportState().equals("1")){
+                     list.getDtoList().get(i).setReportState("신고 접수 완료");
+                 } else if(list.getDtoList().get(i).getReportState().equals("2")) {
+                     list.getDtoList().get(i).setReportState("처리 완료");
+                 }
             }
         }
         model.addAttribute("reportList",list);

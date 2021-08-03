@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
+import org.springframework.data.domain.Page;
 
 import java.util.*;
 
@@ -120,7 +121,7 @@ public interface AuctionService {
         AuctionListDTO auctionListDTO = AuctionListDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).user(user.getId()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
+                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userNickName(user.getNickname())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).build();
         return auctionListDTO;
     }
@@ -131,8 +132,8 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).
-                chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
+                .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 
@@ -141,8 +142,8 @@ public interface AuctionService {
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(user.getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).
-                        chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
+                .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname()).
+                userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
 

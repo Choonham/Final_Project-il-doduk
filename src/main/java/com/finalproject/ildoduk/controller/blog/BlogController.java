@@ -60,6 +60,11 @@ public class BlogController {
         log.info("blogMain");
     }
 
+    // 블로그 메인 Temp
+    @GetMapping("/mainTemp")
+    public void mainTemp() {
+    }
+
     //====================================== 메인 관련 끝 ================================//
 
 
@@ -70,15 +75,12 @@ public class BlogController {
         if(writer.equals("myBlog")){
             MemberDto memberDto = (MemberDto)session.getAttribute("user");
             String sessionId = memberDto.getId();
-            log.info("세션");
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
         }else {
-            log.info("안세션");
             model.addAttribute("result", blogService.getList(writer, pageRequestDTO));
             model.addAttribute("host", writer);
         }
-        
     }
 
     // 글 상세보기
@@ -105,8 +107,11 @@ public class BlogController {
         String sessionId = memberDto.getId();
 
         List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
-        AuctionBiddingDTO doneJob = doneList.get(0);
-        log.info(doneJob.getHelper());
+
+        if(!doneList.isEmpty()){
+            AuctionBiddingDTO doneJob = doneList.get(0);
+            log.info(doneJob.getHelper());
+        }
 
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")
@@ -118,6 +123,7 @@ public class BlogController {
         Long tempPostNo = blogService.findMaxID();
         model.addAttribute("postNo", tempPostNo);
         model.addAttribute("doneList", doneList);
+        //model.addAttribute("index", 0);
     }
 
     // 글 쓰기 완료 후, 리다이렉트 기능
@@ -127,6 +133,7 @@ public class BlogController {
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
         return result;
     }
+
     //=================================== 포스트 관련 끝 ===================================//
 
 
@@ -235,6 +242,7 @@ public class BlogController {
         String url = "redirect:/blog/blogList?writer=" + writer + "&page=" + tempPageDTO.getTempPage();
         return url;
     }
+
 
     //================================== 글 수정/삭제 관련 끝 ====================================//
 

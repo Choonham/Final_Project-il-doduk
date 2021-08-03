@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.controller.auction;
 
 import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
+import com.finalproject.ildoduk.dto.member.*;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.google.gson.*;
@@ -36,19 +37,25 @@ public class AuctionController {
 
     //리스트 출력 관련 컨트롤러 시작
     @GetMapping("/onAuctionList")
-    public void list1(String user,PageRequestDTO pageRequestDTO, Model model) {
+    public void list1(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
         //메인에서 user 값 받아서 리스트 출력
         log.info("======= list ========");
+
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String user = member.getId();
         System.out.println(user);
         //경매진행 중 리스트
+
         model.addAttribute("onAuctionList", auctionService.getList1(pageRequestDTO, user));
     }
 
     @GetMapping("/auctionDoneList")
-    public void list2(String user,PageRequestDTO pageRequestDTO, Model model) {
+    public void list2(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
 
         //메인에서 user 값 받아서 리스트 출력
         log.info("======= list ========");
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String user = member.getId();
         System.out.println(user);
 
         //경매 완료, 매칭 미완료
@@ -57,18 +64,22 @@ public class AuctionController {
     }
 
     @GetMapping("/matchedAuctionList")
-    public void list3(String user,PageRequestDTO pageRequestDTO, Model model) {
+    public void list3(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
         //메인에서 user 값 받아서 리스트 출력
         log.info("======= list ========");
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String user = member.getId();
         System.out.println(user);
         //경매 완료, 매칭완료
         model.addAttribute("matchedAuctionList", auctionService.getList3(pageRequestDTO, user));
     }
 
     @GetMapping("/allDoneList")
-    public void list4(String user,PageRequestDTO pageRequestDTO, Model model) {
+    public void list4(PageRequestDTO pageRequestDTO, Model model,HttpSession session) {
         //메인에서 user 값 받아서 리스트 출력
         log.info("======= list ========");
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String user = member.getId();
         System.out.println(user);
         //경매 완료, 일 수행 완료
         model.addAttribute("allDoneList", auctionService.getList4(pageRequestDTO, user));
@@ -117,7 +128,10 @@ public class AuctionController {
         model.addAttribute("chosenBidding",auctionService.chosenBidding(aucSeq));
 
         //그외 정보
-        if (auction.getState() != 3){ boolean isAllDone = false;}
+        /*if (auction.getState() != 3){
+
+            boolean isAllDone = false;
+        }*/
     }
 
     //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기

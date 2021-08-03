@@ -57,7 +57,9 @@
     <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
     <td>[[${report.reportTarget}]]</td>
     <td th:text="${#temporals.format(report.regDate, 'yyyy-MM-dd')}"></td>
-    <td>[[${report.reportState}]]</td>
+    <td>
+      [[${report.reportState}]]
+    </td>
   </tr>
 </table>
 <a href="#" th:href="@{/serviceCenter/badUserReportForm}">

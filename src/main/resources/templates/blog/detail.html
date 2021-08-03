@@ -1,367 +1,424 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+  <head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+  </head>
 
-  <th:block th:fragment="content">
+  <body id="top">
 
-    <h1 class="mt-4">Blog Post</h1>
-      <div class="form-group">
-        <label>Post No.</label>
-        <input type="text" class="form-control" name="gno" th:value="${detail.postNo}" readonly>
-      </div>
+<div class="site-wrap">
 
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" class="form-control" name="title" th:value="${detail.title}" readonly>
-      </div>
-
-    <!-- 포스트 내용 불러오기 -->
-      <div class="form-group">
-        <label>Content</label>
-        <div style="border: 1px solid black" th:utext="${detail.content}">
-
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
         </div>
       </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
 
-      <div class="form-group">
-        <label>Writer</label>
-        <input type="text" class="form-control" name="writer" th:value="${detail.writer}" readonly>
+    <!-- NAVBAR -->
+    <div th:if = "${session.user != null}">
+
+
+      <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
       </div>
 
-      <div class="form-group">
-        <label>RegDate</label>
-        <input type="text" class="form-control" name="regDate"
-               th:value="${#temporals.format(detail.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+      <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
       </div>
 
-      <div class="form-group">
-        <label>ModDate</label>
-        <input type="text" class="form-control" name="modDate"
-               th:value="${#temporals.format(detail.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
-      </div>
-
-      <!-- 수정, 삭제, 목록 버튼(수정과 삭제가 끝나고나서 원래에 페이지로 가기 위한 tempPage 객체를 가지고 있음 -->
-      <a th:href="@{/blog/modify(postNo = ${detail.postNo}, tempPage=${listPageInfo.tempPage})}">
-        <button type="button" class="btn btn-primary">Modify</button>
-      </a>
-
-      <a th:href="@{/blog/delete(postNo = ${detail.postNo}, writer = ${detail.writer}, tempPage=${listPageInfo.tempPage})}">
-        <button type="button" class="btn btn-primary">delete</button>
-      </a>
-
-      <a th:href="@{/blog/list(page=${listPageInfo.tempPage})}">
-        <button type="button" class="btn btn-info">List</button>
-      </a>
-    <!-- 수정, 삭제, 목록 버튼 끝 -->
-
-    <!-- 좋아요 기능 관련 -->
-      <input class="text-input" type = "text" th:value = "${likes}" id="likeCounter" readonly/>
-
-      <button th:if = "!${#lists.contains(likerList, session.id)}" class = "btn btn-info" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천</button>
-      <button th:if = "${#lists.contains(likerList, session.id)}" class = "btn btn-info" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천 취소</button>
-
-      <div id="likerList" style = "height: 200px; width: 300px; border: #0f6674 solid 1px; position:absolute; display:none; background-color: white ">
-        <ul>
-          <li th:each="liker : ${likerList}">[[${liker}]]</li>
-        </ul>
-      </div>
-    <!-- 좋아요 기능 관련 끝 -->
-
-    <!-- 댓글 목록 관련 -->
-    <table id = "commentTable" class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col">no</th>
-        <th scope="col">writer</th>
-        <th scope="col">content</th>
-        <th scope="col">postNo</th>
-        <th scope="col">del</th>
-        <th scope="col">edit</th>
-      </tr>
-      </thead>
-      <tbody>
-
-      <tr th:each="comment : ${comments.dtoList}" >
-        <td>[[${comment.commentNo}]]</td>
-        <td>[[${comment.writer}]]</td>
-        <td th:utext="${comment.content}"></td>
-        <td>[[${comment.postNo}]]</td>
-        <td id = "delete">
-          <button class = "btn btn-block">삭제</button>
-        </td>
-        <td id = "modify">
-          <button class = "btn btn-block">수정</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <!-- 댓글 목록 관련 끝 -->
-
-    <!-- 댓글 쓰기 관련 -->
-    <div class="form-group">
-      <label>comments</label>
-      <form method = "post">
-        <textarea cols = "40" rows="5" class="form-control" name="comment" id = "comment"></textarea>
-        <input type = "text" name = "commentWriter" id = "commentWriter" th:value="${session.id}">
-      </form>
-      <button class = "btn btn-info" id = "commentRegister" type ="button">Register</button>
     </div>
-    <!-- 댓글 쓰기 관련 끝 -->
 
-    <!-- 페이지 관련 -->
-    <ul class="pagination h-100 justify-content-center align-items-center">
-      <li class="page-item " th:if="${comments.prev}">
-        <a class="page-link" th:href="@{/blog/detail(page= ${comments.start -1},
+    <div th:if = "${session.user == null}">
+      <div th:replace="~{/fragments/nav :: navi}"></div>
+    </div>
+
+    <!-- HOME -->
+<<<<<<< HEAD
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg');" id="home-section">
+=======
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+>>>>>>> 43973ace988e42d008ea6f731dd3f9af5f8cf146
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="custom-breadcrumbs mb-0">
+              <span class="slash" style="color: white">Posted by </span><a style="color: white">[[${detail.writer}]]</a>
+              <span class="mx-2 slash">&bullet;</span>
+              <span class="text-white"><strong th:text = "${#temporals.format(detail.regDate, 'yyyy/MM/dd HH:mm:ss')}"></strong></span>
+            </div>
+            <h1 class="text-white" style="margin-top: 10px">[[${detail.title}]]</h1>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section" id="next-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 blog-content">
+
+            <div th:utext="${detail.content}">
+            </div>
+
+            <hr color="green" size="2px">
+
+            <!-- 좋아요 기능 관련 -->
+            <div style="float: right; text-align: right">
+              <button th:if = "!${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천</button>
+              <button th:if = "${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천 취소</button>
+
+              <div id="likerList" style = "height: 200px; width: 300px; border: #0f6674 solid 1px; position:absolute; display:none; background-color: white ">
+                <ul>
+                  <li th:each="liker : ${likerList}">[[${liker}]]</li>
+                </ul>
+              </div>
+            </div>
+            <!-- 좋아요 기능 관련 끝 -->
+
+            <div class="pt-5">
+              <h3 class="mb-5">Comments</h3>
+              <ul class="comment-list">
+                <li class="comment" th:each="comment : ${comments.dtoList}">
+                  <div class="comment-body">
+                    <h3>[[${comment.writer}]]</h3>
+                    <input type = "hidden" id = "commentNo" th:value="${comment.commentNo}">
+                    <div class="meta">2021.08.05</div>
+                    <div th:utext="${comment.content}"></div>
+                    <div style="text-align: right;">
+                      <div id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
+                      <div id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
+                    </div>
+                    <p></p>
+                  </div>
+                </li>
+              </ul>
+              <!-- END comment-list -->
+              <div style="text-align: center">
+                <div class="custom-pagination ml-auto">
+                  <a th:if="${comments.prev}"  th:href="@{/blog/detail(page= ${comments.start -1},
                     type=${requestDTO.type},
                     keyword = ${requestDTO.keyword},
                     postNo = ${detail.postNo},
                     tempPage = ${listPageInfo.tempPage}
-                     ) }" tabindex="-1">Previous</a>
-      </li>
+                     ) }" tabindex="-1" class="prev">Prev</a>
 
-      <li th:class=" 'page-item ' + ${comments.page == page?'active':''} " th:each="page: ${comments.pageList}">
-        <a class="page-link" th:href="@{/blog/detail(page = ${page},
-                   type=${requestDTO.type},
-                   keyword = ${requestDTO.keyword},
-                   postNo = ${detail.postNo},
-                   tempPage = ${listPageInfo.tempPage}
-                   )}">
-          [[${page}]]
-        </a>
-      </li>
-
-      <li class="page-item" th:if="${comments.next}">
-        <a class="page-link" th:href="@{/blog/detail(page= ${comments.end + 1},
+                  <div class="d-inline-block">
+                    <a th:href="@{/blog/detail(page = ${page},
+                     type=${requestDTO.type},
+                     keyword = ${requestDTO.keyword},
+                     postNo = ${detail.postNo},
+                     tempPage = ${listPageInfo.tempPage}
+                   )}" th:class="${comments.page == page?'active':''}" th:each="page: ${comments.pageList}">[[${page}]]</a>
+                  </div>
+                  <a th:if="${comments.next}" th:href="@{/blog/detail(page= ${comments.end + 1},
                     type=${requestDTO.type},
                     keyword = ${requestDTO.keyword},
                     postNo = ${detail.postNo},
                     tempPage = ${listPageInfo.tempPage}
-                     )}">Next</a>
-      </li>
-    </ul>
-    <!-- 페이지 관련 끝 -->
+                     )}" class="next">Next</a>
+                </div>
+              </div>
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Leave a comment</h3>
+                <form method="post">
+                  <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" class="form-control" id="name" th:value="${session.user.nickname}">
+                  </div>
+                  <div class="form-group">
+                    <label for="commentWriter">Email *</label>
+                    <input type="email" class="form-control" name = "commentWriter" id = "commentWriter" th:value="${session.user.id}">
+                  </div>
 
-    <script th:inline="javascript">
+                  <div class="form-group">
+                    <label for="comment">Message</label>
+                    <textarea cols="30" rows="10" class="form-control" name="comment" id = "comment" required></textarea>
+                  </div>
+                  <div class="form-group">
+                    <button id = "commentRegister" class="btn btn-primary btn-md">Post Comment</button>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-      // 댓글 등록
-      $("#commentRegister").click(function () {
+          </div>
 
-        // 줄바꿈을 태그로 같이 저장하기 위한 로직 시작
-        txtBox = document.getElementById("comment");
-        var lines = txtBox.value.split("\n");
+          <div class="col-lg-4 sidebar pl-lg-5">
+            <div class="sidebar-box">
+              <form action="#" class="search-form">
+                <div class="form-group">
+                  <span class="icon fa fa-search"></span>
+                  <input type="text" class="form-control form-control-lg" placeholder="Type a keyword and hit enter">
+                </div>
+              </form>
+            </div>
+            <div class="sidebar-box">
+              <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+              <h3>About The Author</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+              <p><a href="#" class="btn btn-primary btn-sm">Read More</a></p>
+            </div>
 
-        var resultString = "<p>";
+            <div class="sidebar-box">
+              <div class="categories">
+                <h3>Categories</h3>
+                <li><a href="#">Creatives <span>(12)</span></a></li>
+                <li><a href="#">News <span>(22)</span></a></li>
+                <li><a href="#">Design <span>(37)</span></a></li>
+                <li><a href="#">HTML <span>(42)</span></a></li>
+                <li><a href="#">Web Development <span>(14)</span></a></li>
+              </div>
+            </div>
 
-        for (var i = 0; i < lines.length; i++) {
-          resultString += lines[i] + "<br />";
+
+            <div class="sidebar-box">
+              <h3>Paragraph</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+  <script th:inline="javascript">
+
+    // 댓글 등록
+    $("#commentRegister").click(function () {
+
+      // 줄바꿈을 태그로 같이 저장하기 위한 로직 시작
+      txtBox = document.getElementById("comment");
+      var lines = txtBox.value.split("\n");
+
+      var resultString = "<p>";
+
+      for (var i = 0; i < lines.length; i++) {
+        resultString += lines[i] + "<br />";
+      }
+      resultString += "</p>"; // textarea에 담긴 데이터를 저장할 변수
+      // 줄바꿈을 태그로 같이 저장하기 위한 로직 끝
+
+      writer = $("#commentWriter").val();
+
+      // json 형태의 댓글 데이터
+      var commentData = {
+        content: resultString,
+        writer: writer,
+        postNo: [[${detail.postNo}]]
+      }
+
+      $.ajax({
+        data: JSON.stringify(commentData), //json 데이터를 String으로
+        type: "post",
+        url: '/blog/registerComment',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        processData: false,
+        success: function (data) {
+          location.reload(); // 페이지 전체를 리로드(tempPage 변수 때문에 부분 리로드하기 복잡)
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
         }
-        resultString += "</p>"; // textarea에 담긴 데이터를 저장할 변수
-        // 줄바꿈을 태그로 같이 저장하기 위한 로직 끝
+      });
+    })
+    // 댓글 등록 끝
 
-        writer = $("#commentWriter").val();
+    // 댓글 삭제
+    $("#delete button").click(function() {
 
-        // json 형태의 댓글 데이터
-        var commentData = {
-          content: resultString,
-          writer: writer,
-          postNo: [[${detail.postNo}]]
+      var currentRow = $(this).closest("li").children("div"); // 댓글 삭제 버튼이 있는 Row를 찾음
+      var commentNo = currentRow.children("input").val(); // 해당 Row에 존재하는 댓글 번호를 추출
+
+      $.ajax({
+        data : commentNo,
+        type: "delete",
+        url: '/blog/deleteComment',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        processData: false,
+        success: function (data) {
+          (location).reload();
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
         }
-
-        $.ajax({
-          data: JSON.stringify(commentData), //json 데이터를 String으로
-          type: "post",
-          url: '/blog/registerComment',
-          cache: false,
-          contentType: 'application/json; charset=utf8',
-          dataType: 'json',
-          processData: false,
-          success: function (data) {
-            location.reload(); // 페이지 전체를 리로드(tempPage 변수 때문에 부분 리로드하기 복잡)
-          },
-          error: function(jqXHR, textStatus, errorThorwn){
-            alert("실패");
-          }
-        });
       })
-      // 댓글 등록 끝
-
-      // 댓글 삭제
-      $("#delete button").click(function() {
-
-        var currentRow = $(this).closest("tr"); // 댓글 삭제 버튼이 있는 Row를 찾음
-        var commentNo = currentRow.find("td:eq(0)").text(); // 해당 Row에 존재하는 댓글 번호를 추출
-
-        $.ajax({
-          data : commentNo,
-          type: "delete",
-          url: '/blog/deleteComment',
-          cache: false,
-          contentType: 'application/json; charset=utf8',
-          dataType: 'json',
-          processData: false,
-          success: function (data) {
-            (location).reload();
-          },
-          error: function(jqXHR, textStatus, errorThorwn){
-            alert("실패");
-          }
-        })
-      })
-      // 댓글 삭제 끝
+    })
+    // 댓글 삭제 끝
 
     // 댓글 수정
-      $("#modify button").click(function() {
-        var currentRow = $(this).closest("tr");
+    $("#modify button").click(function() {
+      var currentRow = $(this).closest("li").children("div");
+      var commentContent = currentRow.find("div:eq(1)").html();
 
-        var commentContent = currentRow.find("td:eq(2)").html();
-        currentRow.find("td:eq(2)").attr("contenteditable", "true");
+      currentRow.find("div:eq(1)").attr("contenteditable", "true");
 
-        // 수정 버튼을 눌렀을 때, 확인/취소 버튼을 출력하기 위한 로직
-        var newBtns = "<button class = 'btn-info' id = 'confirm' onclick='modifyConfirm(this)'>확인</button> &nbsp;" +
-                "<button class = 'btn-info' id = 'cancel' onclick = 'modifyCancel(this, \""+ commentContent +"\")'>취소</button>";
-        var modBtn = currentRow.find("td:eq(5)");
-        modBtn.empty();
-        modBtn.html(newBtns);
-        // 수정 버튼을 눌렀을 때, 확인/취소 버튼을 출력하기 위한 끝
-      })
-      // 댓글 수정 끝
+      // 수정 버튼을 눌렀을 때, 확인/취소 버튼을 출력하기 위한 로직
+      var newBtns = "<button class = 'btn-info' id = 'confirm' onclick='modifyConfirm(this)'>확인</button> &nbsp;" +
+              "<button class = 'btn-info' id = 'cancel' onclick = 'modifyCancel(this, \""+ commentContent +"\")'>취소</button>";
+      var modBtn = currentRow.find("div:eq(2)");
+      modBtn.empty();
+      modBtn.html(newBtns);
+      // 수정 버튼을 눌렀을 때, 확인/취소 버튼을 출력하기 위한 끝
+    })
+    // 댓글 수정 끝
 
-      // 댓글 수정 확정
-      function modifyConfirm(obj) {
+    // 댓글 수정 확정
+    function modifyConfirm(obj) {
 
-        var currentRow = $(obj).closest("tr");
+      var currentRow = $(obj).closest("li").children("div");
 
-        currentRow.find("td:eq(2)").attr("contenteditable", "false");
+      currentRow.find("div:eq(1)").attr("contenteditable", "false");
 
-        var commentNo = currentRow.find("td:eq(0)");
-        var commentWriter = currentRow.find("td:eq(1)");
-        var commentContent = currentRow.find("td:eq(2)");
-        var postNo = currentRow.find("td:eq(3)");
+      var commentNo = currentRow.children("input");
+      var commentWriter = currentRow.children("h3");
+      var commentContent = currentRow.find("div:eq(1)");
+      var postNo = [[${detail.postNo}]];
 
-        console.log(commentContent.html());
+      console.log(commentContent.html());
 
-        var jsonData = {
-          commentNo : commentNo.text(),
-          writer : commentWriter.text(),
-          content : commentContent.html(),
-          postNo : postNo.text()
+      var jsonData = {
+        commentNo : commentNo.val(),
+        writer : commentWriter.text(),
+        content : commentContent.html(),
+        postNo : postNo
+      }
+
+      $.ajax({
+        data : JSON.stringify(jsonData),
+        type: "post",
+        url: '/blog/modifyComment',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        processData: false,
+        success: function (data) {
+          (location).reload();
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
         }
-
-        $.ajax({
-          data : JSON.stringify(jsonData),
-          type: "post",
-          url: '/blog/modifyComment',
-          cache: false,
-          contentType: 'application/json; charset=utf8',
-          dataType: 'json',
-          processData: false,
-          success: function (data) {
-            (location).reload();
-          },
-          error: function(jqXHR, textStatus, errorThorwn){
-            alert("실패");
-          }
-        })
-      }
-      // 댓글 수정 확정 끝
-
-      // 댓글 수정 취소
-      function modifyCancel(obj, tempContent) {
-          var currentRow = $(obj).closest("tr");
-          var commentContent = currentRow.find("td:eq(2)");
-          currentRow.find("td:eq(2)").attr("contenteditable", "false");
-          commentContent.empty();
-          commentContent.html(tempContent);
-          var modBtn = "<button class = 'btn btn-block'>수정</button>"
-          var mod = currentRow.find("td:eq(5)");
-          mod.empty();
-          mod.html(modBtn);
-      }
-      // 댓글 수정 취소 끝끝
-
-      // 좋아요 누르기
-      $("#likeButton").click(function() {
-
-        var data = {
-          liker : sessionStorage.getItem("id"),
-          postNo : [[${detail.postNo}]]
-        }
-
-        $.ajax({
-          data : JSON.stringify(data),
-          type: "post",
-          url: '/blog/pushLike',
-          cache: false,
-          contentType: 'application/json; charset=utf8',
-          dataType: 'json',
-          processData: false,
-          success: function (data) {
-            location.reload();
-          },
-          error: function(jqXHR, textStatus, errorThorwn){
-            alert("실패");
-          }
-        })
       })
-      // 좋아요 누르기 끝
+    }
+    // 댓글 수정 확정 끝
 
-      // 좋아요 취소
-      $("#likeCancelButton").click(function() {
+    // 댓글 수정 취소
+    function modifyCancel(obj, tempContent) {
+      /**
+      var currentRow = $(obj).closest("li");
+      var commentContent = currentRow.find("div:eq(1)");
+      currentRow.find("div:eq(1)").attr("contenteditable", "false");
+      commentContent.empty();
+      commentContent.html(tempContent);
+      var modBtn = "<button class = 'btn btn-block'>수정</button>"
+      var mod = currentRow.find("div:eq(2)");
+      mod.empty();
+      mod.html(modBtn);
+       **/
+      location.reload();
+    }
+    // 댓글 수정 취소 끝끝
 
-        var data = {
-          liker : sessionStorage.getItem("id"),
-          postNo : [[${detail.postNo}]]
+    // 좋아요 누르기
+    $("#likeButton").click(function() {
+
+      var data = {
+        liker : [[${session.user.id}]],
+        postNo : [[${detail.postNo}]]
+      }
+
+      $.ajax({
+        data : JSON.stringify(data),
+        type: "post",
+        url: '/blog/pushLike',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        processData: false,
+        success: function (data) {
+          location.reload();
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
         }
-
-        $.ajax({
-          data : JSON.stringify(data),
-          type: "delete",
-          url: '/blog/pushLike',
-          cache: false,
-          contentType: 'application/json; charset=utf8',
-          dataType: 'json',
-          processData: false,
-          success: function (data) {
-            (location).reload();
-          },
-          error: function(jqXHR, textStatus, errorThorwn){
-            alert("실패");
-          }
-        })
       })
-      // 좋아요 취소 끝
+    })
+    // 좋아요 누르기 끝
 
-      // 좋아요 리스트 보기
-      function getLikerList(e){
+    // 좋아요 취소
+    $("#likeCancelButton").click(function() {
 
-        var sWidth = window.innerWidth;
-        var sHeight = window.innerHeight;
-
-        var oWidth = $("#likerList").width();
-        var oHeight = $("#likerList").height();
-
-        var divLeft = e.pageX + 10;
-        var divTop = e.pageY + 5;
-
-        if( divLeft < 0 ) divLeft = 0;
-        if( divTop < 0 ) divTop = 0;
-
-        $("#likerList").css({
-          "top": divTop,
-          "left": divLeft,
-          "position": "absolute"
-        }).show();
+      var data = {
+        liker : [[${session.user.id}]],
+        postNo : [[${detail.postNo}]]
       }
 
-      function closeLayer() {
-        $("#likerList").hide();
-      }
+      $.ajax({
+        data : JSON.stringify(data),
+        type: "delete",
+        url: '/blog/pushLike',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        processData: false,
+        success: function (data) {
+          (location).reload();
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
+        }
+      })
+    })
+    // 좋아요 취소 끝
 
-      // 좋아요 리스트 보기 끝
+    // 좋아요 리스트 보기
+    function getLikerList(e){
 
-    </script>
+      var sWidth = window.innerWidth;
+      var sHeight = window.innerHeight;
 
-  </th:block>
+      var oWidth = $("#likerList").width();
+      var oHeight = $("#likerList").height();
 
-</th:block>
+      var divLeft = e.pageX - 300;
+      var divTop = e.pageY - 300;
+
+      // 레이어가 화면 크기를 벗어나면 위치를 바꾸어 배치한다.
+      if( divLeft + oWidth > sWidth ) divLeft -= oWidth;
+      if( divTop + oHeight > sHeight ) divTop -= oHeight;
+
+      // 레이어 위치를 바꾸었더니 상단기준점(0,0) 밖으로 벗어난다면 상단기준점(0,0)에 배치하자.
+      if( divLeft < 0 ) divLeft = 0;
+      if( divTop < 0 ) divTop = 0;
+
+      $("#likerList").css({
+        "top": divTop,
+        "left": divLeft,
+        "position": "absolute",
+        "z-index" : 1
+      }).show();
+    }
+
+    function closeLayer() {
+      $("#likerList").hide();
+    }
+
+    // 좋아요 리스트 보기 끝
+
+  </script>
+
+  </body>
+
+</html>
