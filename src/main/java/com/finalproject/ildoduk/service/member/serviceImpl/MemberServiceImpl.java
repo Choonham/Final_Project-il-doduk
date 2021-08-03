@@ -77,11 +77,12 @@ public class MemberServiceImpl implements MemberService {
 
             Member entity = result.get();
 
-/*
+            entity.changePwd(dto.getPwd());
+            entity.changeNickname(dto.getNickname());
+            entity.changePhone(dto.getPhone());
             entity.changeAddress(dto.getAddress());
             entity.changePhoto(dto.getPhoto());
             entity.changeIntro(dto.getIntro());
-*/
 
             repo.save(entity);
         }
@@ -102,16 +103,19 @@ public class MemberServiceImpl implements MemberService {
         JSONObject jsonObj;
         JSONObject jsonObj2;
 
+
         MemberDto dto = new MemberDto();
 
         try{
             jsonObj =(JSONObject)parser.parse(json);
 
-            String email = (String)jsonObj.get("email");
-            String gender = (String)jsonObj.get("gender");
+            String email = (String)jsonObj.get("email");    //아이디
+            String gender = (String)jsonObj.get("gender");  //성별
+            String birth = (String)jsonObj.get("birthday"); // 생일
             String profile = jsonObj.get("profile").toString(); //profile 은 값안에 키, 값이 또 있어서 한번 쪼개고
             jsonObj2 = (JSONObject)parser.parse(profile);//한번더 쪼개기
-            String nickname = (String)jsonObj2.get("nickname");
+            String nickname = (String)jsonObj2.get("nickname"); //닉네임 추출
+            String img = (String)jsonObj2.get("image");//이미지 추출
 
             dto.setId(email);
             dto.setNickname(nickname);
@@ -120,9 +124,14 @@ public class MemberServiceImpl implements MemberService {
             }else{
                 dto.setGender("여");
             }
+            dto.setBirth(birth);
+            dto.setPhoto(img);
+
             System.out.println(" kakaoLogin :: dto get id::::  " + dto.getId());
             System.out.println(" kakaoLogin :: dto get gender::::  " + dto.getGender());
             System.out.println(" kakaoLogin :: dto get nickname:::   " + dto.getNickname());
+            System.out.println(" kakaoLogin :: dto get birth:::   " + dto.getNickname());
+            System.out.println(" kakaoLogin :: dto get photo:::   " + dto.getNickname());
 
 
         }catch(ParseException e){

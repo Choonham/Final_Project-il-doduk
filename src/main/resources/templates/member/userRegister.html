@@ -227,7 +227,7 @@
 
       이름 <input type="text" name="name" id="name" onblur="nameExpEx()"  required/> *<br />
     성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
-   생년월일 <input type="text" name="birth" id="birth" onblur="birthExpEx()" required/> *<br />
+   생년월일 <input type="text" name="birth" id="birth" onblur="birthExpEx()" /> *<br />
     닉네임 <input type="text" name="nickname" id="nickname" minlength="2" maxlength="10" oninput="checkNick()" required  /> * 닉네임은 2~10자 사이로 한글,영어,숫자를 이용하여 입력해주세요
           <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
           <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />

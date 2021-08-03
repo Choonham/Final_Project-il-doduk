@@ -46,8 +46,6 @@ public class MemberController {
     public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
 
         log.info("userRegister.html에서 닉네임 받아옴 ::: " + nickname);
-        log.info("userRegister.html에서 pwd 받아옴 ::: " + nickname);
-        log.info("userRegister.html에서 pwdCheck 받아옴 ::: " + nickname);
 
         int cnt = service.nickNameCheck(nickname);  //DB에 같은 닉네임 있는지 확인  있으면 1 없으면 0
 
@@ -112,6 +110,11 @@ public class MemberController {
 
     }
 
+    //유저 수정 페이지 이동
+    @GetMapping("/userModify")
+    public void userModifyPage(){
+
+    }
 
     //유저 수정
     @PostMapping("/userModify")
@@ -124,12 +127,12 @@ public class MemberController {
 
     //유저 삭제
     @PostMapping("/userDelete")
-    public String userDelete(String id , RedirectAttributes requestAttributes){
+    public String userDelete(String id , RedirectAttributes requestAttributes, HttpSession session){
 
-        log.info("id ::  " + id);
+        log.info("userDelete id ::  " + id);
 
         service.userDelete(id);
-
+        session.invalidate();
         requestAttributes.addFlashAttribute("msg","정상적으로 회원 탈퇴 되었습니다.");
 
         return "/index";
@@ -142,6 +145,19 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.invalidate();
         return "redirect:/index";
+
+    }
+
+    //헬퍼 가입신청 url
+    @GetMapping("/helperRegister")
+    public void helperRegisterPage(){
+
+    }
+
+    //헬퍼 가입신청
+    @PostMapping("/helperRegister")
+    public void helperRegister(){
+
     }
 
     @GetMapping("/index")
@@ -169,6 +185,8 @@ public class MemberController {
         log.info("dto Id:::::: " + dto.getId());
         log.info("dto gender:::: " + dto.getGender());
         log.info("dto nick:::: " + dto.getNickname());
+        log.info("dto photo::::" + dto.getPhoto());
+        log.info("dto birth::::" + dto.getBirth());
 
         MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
         HttpSession session = request.getSession();
@@ -180,6 +198,7 @@ public class MemberController {
         }
 
         else{
+            session.setAttribute("user",dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
             return "../member/userRegister";
         }
