@@ -48,7 +48,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
 
     //====================================== Blog =====================================//
 
-    //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
+    //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
 }
