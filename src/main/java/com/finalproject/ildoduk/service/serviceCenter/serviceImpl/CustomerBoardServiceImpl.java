@@ -38,7 +38,7 @@ public class CustomerBoardServiceImpl implements CustomerBoardService {
         BooleanBuilder booleanBuilder = getSearch(pageRequestDTO);
 
         Page<CustomerBoard> result = customerBoardRepository.findAll(booleanBuilder, pageable);
-
+        log.info(result + "문의 게시판 페이지 처리 ~~~~~~~~~~~~~ ");
         Function<CustomerBoard,CustomerBoardDTO> fn = (entity -> entityToDTO(entity));
 
         return new PageResultsDTO<>(result, fn);

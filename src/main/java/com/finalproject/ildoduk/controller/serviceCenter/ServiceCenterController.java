@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
@@ -364,7 +365,17 @@ public class ServiceCenterController {
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
         MemberDto user = (MemberDto) session.getAttribute("user");
 
-        model.addAttribute("tradeList", auctionService.getList4(pageRequestDTO, user.getId()));
+        PageResultsDTO<AuctionBiddingDTO, Object[]> list = auctionService.getList4(pageRequestDTO, user.getId());
+
+        for(int i=0;i<list.getDtoList().size();i++) {
+            String id = list.getDtoList().get(i).getHelper();
+
+            MemberDto memberDto = memberService.userIdCheck(id);
+            String nick = memberDto.getNickname();
+            list.getDtoList().get(i).setHelperNickName(nick);
+            
+        }
+        model.addAttribute("tradeList",list);
 
 
     }
@@ -376,10 +387,8 @@ public class ServiceCenterController {
     public String writeReport(UserReportDTO reportDTO){
         //넘어오는 신고 대상 아이디는 닉네임으로 되어있다. 다시 아이디로 변환...
         String nick = reportDTO.getReportTarget();
-        log.info(nick + "신고 작성");
-        //MemberDto memberDto = memberService.userNickCheck(nick);
-        MemberDto memberDto = memberService.userIdCheck(nick);
-        log.info("신고 작성을 위해 가져온 정보 : "+memberDto);
+
+        MemberDto memberDto = memberService.userNickCheck(nick);
         reportDTO.setReportTarget(memberDto.getId());
 
         userReportService.insertReport(reportDTO);

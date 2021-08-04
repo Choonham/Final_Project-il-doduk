@@ -29,7 +29,7 @@
 </style>
 
 
-<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+<section class="section-hero overlay inner-page bg-image" id="home-section">
   <div class="container">
     <div class="row">
       <div class="col-md-7">
@@ -100,7 +100,7 @@
 
   <ul>
     <li th:each="page: ${result.pageList}">
-      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page},userID=${session.user.id})}">
+      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page})}">
         [[${page}]]
       </a>
     </li>

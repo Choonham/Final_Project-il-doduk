@@ -21,7 +21,7 @@ a:hover{
     cursor: pointer;
 }
 #kakao_title{
-    padding: 30px;
+    padding: 35px;
 }
 #charge_kakao {
     border: none;
@@ -53,6 +53,7 @@ a:hover{
 
 #sub_title {
     padding-top: 5px;
+    padding-bottom: 15px;
     margin-bottom: 6px;
     border-bottom: 1px solid gray;
 }
