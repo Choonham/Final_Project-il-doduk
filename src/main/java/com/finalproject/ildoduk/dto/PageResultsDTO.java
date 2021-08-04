@@ -35,9 +35,13 @@ public class PageResultsDTO<DTO, EN> {
     // 페이지 번호 목록
     private List<Integer> pageList;
 
+    //총 엘리먼트 갯수
+    private Long totalElements;
+
     public PageResultsDTO(Page<EN> result, Function<EN, DTO> fn){ // 2.
         dtoList = result.stream().map(fn).collect(Collectors.toList()); // DTO 리스트
         totalPage = result.getTotalPages(); // 전체 페이지
+        totalElements=result.getTotalElements(); //전체 Elements
         makePageList(result.getPageable());
     }
 
