@@ -4,29 +4,30 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.blog.*;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
-import com.finalproject.ildoduk.entity.blog.Blog;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
-import com.finalproject.ildoduk.entity.blog.BlogLike;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.blog.service.BlogCommentService;
 import com.finalproject.ildoduk.service.blog.service.BlogFilesService;
 import com.finalproject.ildoduk.service.blog.service.BlogLikeService;
 import com.finalproject.ildoduk.service.blog.service.BlogService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
+import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,8 @@ public class BlogController {
     private final BlogLikeService blogLikeService;
     private final BlogFilesService blogFilesService;
     private final AuctionService auctionService;
+    private final HelperInfoService helperInfoService;
+    private final MemberService memberService;
 
     //=================================== 메인 관련 시작===================================//
 
@@ -56,13 +59,23 @@ public class BlogController {
 
     // 메인
     @GetMapping("/blogMain")
-    public void blogMain() {
-        log.info("blogMain");
-    }
+    public void blogMain(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, String sigungu, Model model) {
 
-    // 블로그 메인 Temp
-    @GetMapping("/mainTemp")
-    public void mainTemp() {
+        if(sigungu == null){
+            model.addAttribute("init", 0);
+
+        } else{
+            if(sigungu.contains("/")){
+                String[] sigunguSplit = sigungu.split("/");
+                sigungu = sigunguSplit[1];
+            }
+            model.addAttribute("init", 1);
+            PageResultsDTO<MemberHelperInfoDTO, Object[]> result = helperInfoService.getHelperInfoByLoc(sigungu, pageRequestDTO);
+            model.addAttribute("result", result);
+            model.addAttribute("sigungu", sigungu);
+            model.addAttribute("count", helperInfoService.countHelpersBySigungu(sigungu));
+        }
+
     }
 
     //====================================== 메인 관련 끝 ================================//
@@ -77,9 +90,11 @@ public class BlogController {
             String sessionId = memberDto.getId();
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
+            model.addAttribute("nick", memberService.userIdCheck(sessionId).getNickname());
         }else {
             model.addAttribute("result", blogService.getList(writer, pageRequestDTO));
             model.addAttribute("host", writer);
+            model.addAttribute("nick", memberService.userIdCheck(writer).getNickname());
         }
     }
 
@@ -88,7 +103,7 @@ public class BlogController {
     public void detail(long postNo, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, TempPageRequestDTO tempPageDTO, Model model, HttpSession session){
         BlogDTO blogDTO = blogService.getDetail(postNo);
         PageResultsDTO<BlogCommentDTO, BlogComment> blogCommentDTO = blogCommentService.getComments(postNo, requestDTO);
-        //log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
+        // log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
         List<String> likerList= blogLikeService.getLiker(postNo);
         int likes = blogLikeService.getLikes(postNo);
 
@@ -226,20 +241,27 @@ public class BlogController {
 
     // 글 수정(기능)
     @PostMapping(value = "/modify")
-    public String modifyPost(BlogDTO dto) {
+    public String modifyPost(BlogDTO dto, HttpSession session, Model model) {
         blogService.registerPost(dto);
+
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
+        String sessionId = memberDto.getId();
+
+        List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
+        model.addAttribute("doneList", doneList);
         return result;
     }
 
     // 글 삭제
     @GetMapping(value = "/delete")
     public String deletePost(Long postNo, String writer, TempPageRequestDTO tempPageDTO){
-        blogCommentService.deleteAllCommentOnThePost(postNo);
-        blogFilesService.deleteAllFileOnThePost(postNo);
+
         blogService.deletePost(postNo);
 
         String url = "redirect:/blog/blogList?writer=" + writer + "&page=" + tempPageDTO.getTempPage();
+
         return url;
     }
 
@@ -250,9 +272,8 @@ public class BlogController {
     //================================== 댓글 관련 시작 ====================================//
 
     // 댓글 작성
-    @ResponseBody
     @PostMapping(value = "/registerComment", produces = "application/json; charset=utf8")
-    public ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
+    public @ResponseBody ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
         blogCommentService.registerComment(blogCommentDTO);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }

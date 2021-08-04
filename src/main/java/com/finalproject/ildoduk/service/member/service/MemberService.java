@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface MemberService {
+
     public List<String> getList();
 
     void userRegister(MemberDto dto);

@@ -11,6 +11,7 @@ import java.time.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionBiddingDTO {
+
     //기본키
     private Long aucSeq;
 
