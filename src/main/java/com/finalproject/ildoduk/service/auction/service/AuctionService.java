@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
+import org.springframework.data.domain.Page;
 
 import java.util.*;
 
