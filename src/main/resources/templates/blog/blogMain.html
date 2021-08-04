@@ -50,10 +50,10 @@
         </div>
         <div class="row" style="padding-top: 1em; padding-bottom: 0">
             <div class="col-md-4">
-
+                <!-- 내 블로그 가기 -->
             </div>
             <div class="col-md-8">
-                <form th:action = "@{/blog/mainTemp}" method="get" class = "p-4 border rounded">
+                <form th:action = "@{/blog/blogMain}" method="get" class = "p-4 border rounded">
                     <div class="row form-group">
                         <div class = "col-md-12 mb-3 mb-md-0">
                             <label class = "text-white" for="roadAddress">도로명 주소 검색</label>
@@ -68,7 +68,7 @@
                         <div class = "col-md-12 mb-3 mb-md-0">
                             <label class = "text-white" for="sigungu">혹은 직접 입력</label>
                             &nbsp;
-                            <input id= "sigungu" name = "sigungu" placeholder="법정 구 명칭을 입력하세요." class="form-control"/>
+                            <input id= "sigungu" name = "sigungu" placeholder="법정 구 명칭을 입력하세요." class="form-control" required/>
                             <input type="submit" class="btn px-4 btn-primary text-white"
                                    style="float: right; margin-top: 15px;"
                                    value="지역 검색">
@@ -94,13 +94,14 @@
 
           <div class="row mb-5 justify-content-center">
               <div class="col-md-7 text-center">
-                  <h2 class="section-title mb-2">Job Listed</h2>
+                  <h2 th:if = "${count == 1}" class="section-title mb-2">There is <strong th:text="${count}"></strong> Helper in the Location!</h2>
+                  <h2 th:if = "${count > 1}" class="section-title mb-2">There are <strong th:text="${count}"></strong> Helpers in the Location!</h2>
               </div>
           </div>
 
           <ul class="job-listings mb-5">
               <li th:each = "dto: ${result.dtoList}" class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-                  <a th:href="@{/blog/blogList?writer=}+${dto.id}"></a>
+                  <a th:href="@{/blog/blogList?writer=}+${dto.memberDto.id}"></a>
 
                   <div class="job-listing-logo">
                       <img src="images/job_logo_1.jpg" alt="Image" class="img-fluid">
@@ -108,19 +109,32 @@
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                       <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                          <h2 th:text="${dto.name}"></h2>
-                          <strong th:text = "${dto.id}"></strong>
+                          <h2 th:text="${dto.memberDto.name}"></h2>
+                          <strong th:text = "${dto.memberDto.id}"></strong>
                       </div>
                       <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                          [[${dto.appeal}]]
+                          [[${dto.helperInfoDTO.appeal}]]
                       </div>
                       <div class="job-listing-meta">
-                          <span class="badge badge-danger">친절해요! : [[${dto.kindness}]]</span>
+                          <span class="badge badge-danger">친절해요! : [[${dto.helperInfoDTO.kindness}]]</span>
                       </div>
                   </div>
-
               </li>
           </ul>
+          <div class="col-md-12 text-center ">
+              <div class="custom-pagination ml-auto">
+                  <a th:if="${result.prev}"  th:href="@{/blog/blogMain(page= ${result.start -1},
+                    sigungu=${sigungu}
+                     )}" tabindex="-1" class="prev">Prev</a>
+
+                  <div class="d-inline-block">
+                      <a th:href="@{/blog/blogMain(page = ${page}, sigungu=${sigungu}
+                   )}" th:class="${result.page == page?'active':''}" th:each="page: ${result.pageList}">[[${page}]]</a>
+                  </div>
+                  <a th:if="${result.next}" th:href="@{/blog/blogMain(page= ${result.end + 1}, sigungu=${sigungu}
+                     )}" class="next">Next</a>
+              </div>
+          </div>
       </div>
 
 
