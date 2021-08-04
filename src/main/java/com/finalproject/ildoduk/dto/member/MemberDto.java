@@ -17,7 +17,9 @@ public class MemberDto {
     private String gender;      //성별
     private String birth;       //생일
     private String nickname;    //닉네임
-    private String address;     //주소
+    private String sido;        //주소 시도 포함
+    private String sigungu;     //주소 시군구 포함
+    private String address;     //지번 주소
     private String phone;       //연락처
     private int point;          //캐쉬포인트
     private String photo;       //사진

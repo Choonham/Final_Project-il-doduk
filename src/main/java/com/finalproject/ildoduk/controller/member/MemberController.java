@@ -29,20 +29,59 @@ public class MemberController {
 
     }
 
+    //유저 마이페이지 이동
+    @GetMapping("/userMypage")
+    public void userMypage(){
+
+    }
+    //헬퍼 마이페이지 이동
+    @GetMapping("/helperMypage")
+    public void helperMypage(){
+
+    }
+
+
     //유저 회원가입
     @PostMapping("/userRegister")
-    public String userRegister(MemberDto dto){
+    public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
 
-        service.userRegister(dto);
+        log.info("userRegister.html에서 닉네임 받아옴 ::: " + nickname);
+
+        int cnt = service.nickNameCheck(nickname);  //DB에 같은 닉네임 있는지 확인  있으면 1 없으면 0
+
+        if(cnt == 1 ){  //DB에 중복된 닉네임이 있을경우
+
+            model.addAttribute("msg","닉네임이 중복되었습니다");
+
+            return "/member/userRegister";
+        }else{  //닉네임 중복이 없을 경우
+            service.userRegister(dto);
+        }
+
+
         System.out.println(dto.getId());
         System.out.println(dto.getPwd());
 
         return "/member/kakao";
     }
 
+    //유저 회원가입 간 닉네임 중복 확인
+    @PostMapping(value = "/nicknameCheck" ,produces = "application/json; charset=utf8")
+    @ResponseBody
+    public int userNicknameCheck(@RequestBody String nickname, MemberDto memberDto){
+         log.info("nicknameCheck ::: " + nickname);
+         int cnt= service.nickNameCheck(nickname);
+
+        log.info("nickname 결과확인 ::: " +cnt);
+
+        return cnt;
+
+
+    }
+
     //유저 정보 조회
     @GetMapping("/userSearch")
-    public void userSearch(String id, @ModelAttribute("userDto") MemberDto userDto, Model model){
+    public void userSearch(String id, @ModelAttribute("userDto") MemberDto memberDto, Model model){
 
         log.info("userSearch id ::" + id);
 
@@ -52,7 +91,7 @@ public class MemberController {
 
     }
 
-    //유저 가입여부 확인
+    //유저 가입여부 확인 (더미 테스트용)
     @PostMapping("/userCheck")
     public String userCheck(String id, HttpServletRequest request){
 
@@ -66,11 +105,16 @@ public class MemberController {
             session.setAttribute("user",dto);
             return "index";
         }else{
-            return "/member/userRegister";
+            return "member/userRegister";
         }
 
     }
 
+    //유저 수정 페이지 이동
+    @GetMapping("/userModify")
+    public void userModifyPage(){
+
+    }
 
     //유저 수정
     @PostMapping("/userModify")
@@ -83,12 +127,12 @@ public class MemberController {
 
     //유저 삭제
     @PostMapping("/userDelete")
-    public String userDelete(String id , RedirectAttributes requestAttributes){
+    public String userDelete(String id , RedirectAttributes requestAttributes, HttpSession session){
 
-        log.info("id ::  " + id);
+        log.info("userDelete id ::  " + id);
 
         service.userDelete(id);
-
+        session.invalidate();
         requestAttributes.addFlashAttribute("msg","정상적으로 회원 탈퇴 되었습니다.");
 
         return "/index";
@@ -101,6 +145,19 @@ public class MemberController {
         HttpSession session = request.getSession();
         session.invalidate();
         return "redirect:/index";
+
+    }
+
+    //헬퍼 가입신청 url
+    @GetMapping("/helperRegister")
+    public void helperRegisterPage(){
+
+    }
+
+    //헬퍼 가입신청
+    @PostMapping("/helperRegister")
+    public void helperRegister(){
+
     }
 
     @GetMapping("/index")
@@ -123,22 +180,25 @@ public class MemberController {
         System.out.println(json); //js값 확인  json 문자열로 들어온 걸 parse로 쪼개야함
 
 
-        MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디 값
+        MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디, 성별, 닉네임 값
 
         log.info("dto Id:::::: " + dto.getId());
+        log.info("dto gender:::: " + dto.getGender());
+        log.info("dto nick:::: " + dto.getNickname());
+        log.info("dto photo::::" + dto.getPhoto());
+        log.info("dto birth::::" + dto.getBirth());
 
-        MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디값
-
+        MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
+        HttpSession session = request.getSession();
 
         if (dto1!=null) {
 
-            HttpSession session = request.getSession();
             session.setAttribute("user", dto1);
             return "../index";
         }
 
         else{
-
+            session.setAttribute("user",dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
             return "../member/userRegister";
         }
