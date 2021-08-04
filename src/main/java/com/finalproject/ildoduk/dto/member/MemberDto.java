@@ -24,6 +24,4 @@ public class MemberDto {
     private String intro;       //유저 소개
     private int state;       //구분
 
-
-
 }

@@ -4,16 +4,10 @@
   <head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
+
   </head>
 
   <body id="top">
-
-  <div id="overlayer"></div>
-  <div class="loader">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
     
 
 <div class="site-wrap">
@@ -44,22 +38,25 @@
     </div>
 
     <div th:if = "${session.user == null}">
-      <div th:replace="~{/fragments/nav :: navi}"></div>
+      <script th:inline="javascript">
+        alert("로그인해주세요!");
+        window.location.href = [[@{/}]];
+      </script>
     </div>
 
     <!-- HOME -->
-    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+    <section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
       <div class="container">
         <div class="row">
           <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Blog List Page</h1>
+            <h1 class="text-white font-weight-bold"><strong th:text="${nick}"></strong>'s blog</h1>
             <div class="custom-breadcrumbs">
               <a href="#">Home</a> <span class="mx-2 slash">/</span>
               <span class="text-white"><strong>About Us</strong></span>
             </div>
 
-            <a th:href="@{/blog/basicForm}">
-              <button type="button" class="btn btn-outline-primary">
+            <a th:if = "${session.user.id == host}" th:href="@{/blog/basicForm}">
+              <button type="button" class="btn btn-outline-primary" style="margin-top: 30px">
                 REGISTER
               </button>
             </a>
@@ -143,6 +140,28 @@
 </div>
 
   <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+  <script th:inline="javascript">
+
+    var msg = [[${msg}]];
+    console.log(msg);
+
+    if(msg){
+      $(".modal").modal();
+    }
+    var searchForm = $("#searchForm");
+
+    $('.btn-search').click(function(e){
+      searchForm.submit();
+    });
+
+    $('.btn-clear').click(function(e){
+      searchForm.empty();
+      $("#searchWriter").val([[${host}]]);
+      searchForm.submit();
+    });
+  </script>
+
 
   </body>
 </html>

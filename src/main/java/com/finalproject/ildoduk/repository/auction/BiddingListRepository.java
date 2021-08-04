@@ -25,4 +25,6 @@ public interface BiddingListRepository extends JpaRepository<BiddingList, Long> 
     @Query(value = "select b from BiddingList b where b.chosen=1 and b.aucSeq.aucSeq = :aucSeq")
     Optional<BiddingList> selectByAucSeq2(Long aucSeq);
 
+
+
 }
