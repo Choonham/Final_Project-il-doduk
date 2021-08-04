@@ -33,7 +33,7 @@ public class AuctionBiddingDTO {
 
     private int category;
     private LocalDateTime doDateTime;
-    private String predicHour;
+    private String predictHour;
     private int level;
     private int startPrice;
     private int auctionGap;

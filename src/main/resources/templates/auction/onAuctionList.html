@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/auction.css}">
 
 
-
 </head>
 
 <body id="top">
@@ -38,18 +37,18 @@
 
             <!--------------------------------------- 경매 진행 중 / 경매 완료 선택 버튼 ------------------------------------------------------->
             <div th:unless="${isAuctionDone}"
-                    class="row justify-content-center mb-5" data-aos="fade-up">
+                 class="row justify-content-center mb-5" data-aos="fade-up">
                 <div id="filters" class="filters text-center col-md-7">
-                    <button class="btn btn-primary active" id="onAuctionB" >미션 경매 중</button>
-                    <button class="btn btn-primary" id="auctionDoneB" >미션 경매 완료</button>
+                    <button class="btn btn-primary active" id="onAuctionB">미션 경매 중</button>
+                    <button class="btn btn-primary" id="auctionDoneB">미션 경매 완료</button>
                 </div>
             </div>
 
             <div th:if="${isAuctionDone == true}"
-                    class="row justify-content-center mb-5" data-aos="fade-up">
+                 class="row justify-content-center mb-5" data-aos="fade-up">
                 <div id="filters" class="filters text-center col-md-7">
-                    <button class="btn btn-primary" id="onAuctionB" >미션 경매 중</button>
-                    <button class="btn btn-primary active" id="auctionDoneB" >미션 경매 완료</button>
+                    <button class="btn btn-primary" id="onAuctionB">미션 경매 중</button>
+                    <button class="btn btn-primary active" id="auctionDoneB">미션 경매 완료</button>
                 </div>
             </div>
 
@@ -73,7 +72,7 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
+                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
                                  class="img-fluid" width="80" height="80">
                             <!--대표 이미지 삽입 예정-->
                         </div>
@@ -109,20 +108,20 @@
                             <a th:href="@{/auction/getOnAuction(aucSeq=${dto.aucSeq})}"></a>
                             <div class="job-listing-logo">
                                 <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="Free Website Template by Free-Template.co"
+                                    <img th:src="@{/img/Purchasing.png}" alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="Free Website Template by Free-Template.co"
+                                    <img th:src="@{/img/HomeCare.png}" alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="Free Website Template by Free-Template.co"
+                                    <img th:src="@{/img/PetCare.png}" alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 4}" th:align="center">
                                     <img th:src="@{/img/QuickService.png}"
-                                         alt="Free Website Template by Free-Template.co"
+                                         alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <!--카테고리별 이미지 설정-->
@@ -143,24 +142,24 @@
                         </li>
                         <!--한개씩 끝-->
                     </ul>
-                </div>
-                <!-- 리스트 끝 -->
+                    <!-- 리스트 끝 -->
 
-                <!-- 페이지 전환 처리 -->
-                <div style="text-align: center">
-                    <div class="custom-pagination ml-auto">
-                        <a th:if="${onAuctionList.prev}"
-                           th:href="@{/auction/onAuctionList(page= ${onAuctionList.start-1},isAuctionDone=false)}"
-                           tabindex="-1" class="prev">Prev</a>
+                    <!-- 페이지 전환 처리 -->
+                    <div style="text-align: center">
+                        <div class="custom-pagination ml-auto">
+                            <a th:if="${onAuctionList.prev}"
+                               th:href="@{/auction/onAuctionList(page= ${onAuctionList.start-1},isAuctionDone=false)}"
+                               tabindex="-1" class="prev">Prev</a>
 
-                        <div class="d-inline-block">
-                            <a th:href="@{/auction/onAuctionList(page = ${page},isAuctionDone=false)}"
-                               th:class="${onAuctionList.page == page?'active':''}"
-                               th:each="page: ${onAuctionList.pageList}">[[${page}]]</a>
+                            <div class="d-inline-block">
+                                <a th:href="@{/auction/onAuctionList(page = ${page},isAuctionDone=false)}"
+                                   th:class="${onAuctionList.page == page?'active':''}"
+                                   th:each="page: ${onAuctionList.pageList}">[[${page}]]</a>
+                            </div>
+                            <a th:if="${onAuctionList.next}"
+                               th:href="@{/auction/onAuctionList(page= ${onAuctionList.end + 1},isAuctionDone=false)}"
+                               class="next">Next</a>
                         </div>
-                        <a th:if="${onAuctionList.next}"
-                           th:href="@{/auction/onAuctionList(page= ${onAuctionList.end + 1},isAuctionDone=false)}"
-                           class="next">Next</a>
                     </div>
                 </div>
             </div>
@@ -186,7 +185,7 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
+                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
                                  class="img-fluid" width="80" height="80">
                             <!--대표 이미지 삽입 예정-->
                         </div>
@@ -222,20 +221,20 @@
                             <a th:href="@{/auction/getOnAuction(aucSeq=${dto.aucSeq})}"></a>
                             <div class="job-listing-logo">
                                 <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="Free Website Template by Free-Template.co"
+                                    <img th:src="@{/img/Purchasing.png}" alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="Free Website Template by Free-Template.co"
+                                    <img th:src="@{/img/HomeCare.png}" alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="Free Website Template by Free-Template.co"
-                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                    <img th:src="@{/img/PetCare.png}" alt="ildoduk"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 4}" th:align="center">
                                     <img th:src="@{/img/QuickService.png}"
-                                         alt="Free Website Template by Free-Template.co"
+                                         alt="ildoduk"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <!--카테고리별 이미지 설정-->
@@ -256,24 +255,24 @@
                         </li>
                         <!--한개씩 끝-->
                     </ul>
-                </div>
-                <!-- 리스트 끝 -->
+                    <!-- 리스트 끝 -->
 
-                <!-- 페이지 전환 처리 -->
-                <div style="text-align: center">
-                    <div class="custom-pagination ml-auto">
-                        <a th:if="${auctionDoneList.prev}"
-                           th:href="@{/auction/onAuctionList(page= ${auctionDoneList.start-1},isAuctionDone=true)}"
-                           tabindex="-1" class="prev">Prev</a>
+                    <!-- 페이지 전환 처리 -->
+                    <div style="text-align: center">
+                        <div class="custom-pagination ml-auto">
+                            <a th:if="${auctionDoneList.prev}"
+                               th:href="@{/auction/onAuctionList(page= ${auctionDoneList.start-1},isAuctionDone=true)}"
+                               tabindex="-1" class="prev">Prev</a>
 
-                        <div class="d-inline-block">
-                            <a th:href="@{/auction/onAuctionList(page = ${page},isAuctionDone=true)}"
-                               th:class="${auctionDoneList.page == page?'active':''}"
-                               th:each="page: ${auctionDoneList.pageList}">[[${page}]]</a>
+                            <div class="d-inline-block">
+                                <a th:href="@{/auction/onAuctionList(page = ${page},isAuctionDone=true)}"
+                                   th:class="${auctionDoneList.page == page?'active':''}"
+                                   th:each="page: ${auctionDoneList.pageList}">[[${page}]]</a>
+                            </div>
+                            <a th:if="${auctionDoneList.next}"
+                               th:href="@{/auction/onAuctionList(page= ${auctionDoneList.end + 1},isAuctionDone=true)}"
+                               class="next">Next</a>
                         </div>
-                        <a th:if="${auctionDoneList.next}"
-                           th:href="@{/auction/onAuctionList(page= ${auctionDoneList.end + 1},isAuctionDone=true)}"
-                           class="next">Next</a>
                     </div>
                 </div>
             </div>
@@ -282,7 +281,6 @@
 </div>
 <!-- 공통 footer -->
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
-
 
 
 <!-- 공통 스크립트 -->
@@ -307,25 +305,24 @@
 
 <script th:inline="javascript">
     /* 출력 내용 변화 */
-    $(document).ready(function (){
+    $(document).ready(function () {
         //alert("제이쿼리 먹히고 있는걸까?");
         var isAuctionDone = [[${isAuctionDone}]]
 
-        if(isAuctionDone === true){
+        if (isAuctionDone === true) {
             $('#onAuction').hide();
             $('#auctionDone').show();
-        }
-        else {
+        } else {
             $('#onAuction').show();
             $('#auctionDone').hide();
         }
 
-        $('#onAuctionB').click(function (){
+        $('#onAuctionB').click(function () {
             $('#onAuction').show();
             $('#auctionDone').hide();
         });
 
-        $('#auctionDoneB').click(function (){
+        $('#auctionDoneB').click(function () {
             $('#onAuction').hide();
             $('#auctionDone').show();
         });
