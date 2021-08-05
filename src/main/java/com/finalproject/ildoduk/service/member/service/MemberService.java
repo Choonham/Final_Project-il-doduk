@@ -13,12 +13,14 @@ public interface MemberService {
     void userRegister(MemberDto dto);
 
     MemberDto userIdCheck(String id);
-    //닉네임으로 정보 뽑아오기
-    MemberDto userNickCheck(String nick);
 
     MemberDto userIdDtoInit(MemberDto dto);
 
     MemberDto userIdPwdCheck(String id, String pwd);
+
+    int nickNameCheck(String nickname); //유저 닉네임 db확인
+
+    MemberDto userNickCheck(String nick);  //해당 닉네임에 관련된 정보 가져오기
 
     void userModify(MemberDto dto);
 
@@ -63,7 +65,6 @@ public interface MemberService {
                 .birth(entity.getBirth())
                 .nickname(entity.getNickname())
                 .address(entity.getAddress())
-                .point(entity.getPoint())
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())
                 .state(entity.getState())

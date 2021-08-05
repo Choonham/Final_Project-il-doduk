@@ -53,7 +53,7 @@
 
             </div>
             <div class="col-md-8">
-                <form method="get" class = "p-4 border rounded">
+                <form th:action = "@{/blog/mainTemp}" method="get" class = "p-4 border rounded">
                     <div class="row form-group">
                         <div class = "col-md-12 mb-3 mb-md-0">
                             <label class = "text-white" for="roadAddress">도로명 주소 검색</label>
@@ -68,18 +68,24 @@
                         <div class = "col-md-12 mb-3 mb-md-0">
                             <label class = "text-white" for="sigungu">혹은 직접 입력</label>
                             &nbsp;
-                            <input id= "sigungu" placeholder="법정 구 명칭을 입력하세요." class="form-control"/>
+                            <input id= "sigungu" name = "sigungu" placeholder="법정 구 명칭을 입력하세요." class="form-control"/>
+                            <input type="submit" class="btn px-4 btn-primary text-white"
+                                   style="float: right; margin-top: 15px;"
+                                   value="지역 검색">
                         </div>
                     </div>
                 </form>
             </div>
-            <hr color="green"/>
+            <hr/>
         </div>
       </div>
     </section>
 
     <section class="site-section">
-      <div class="container">
+      <div th:if = "${init == 0}" class="container">
+      </div>
+      <div th:if = "${init == 1}" class="container">
+
           <div class="row mb-5 justify-content-center">
               <div class="col-md-7 text-center">
                   <h2 class="section-title mb-2">43,167 Job Listed</h2>
@@ -87,7 +93,7 @@
           </div>
 
           <ul class="job-listings mb-5">
-              <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+              <li th:each = "dto: ${result.dtoList}" class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                   <a href="job-single.html"></a>
 
                   <div class="job-listing-logo">
@@ -96,14 +102,14 @@
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                       <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                          <h2>Product Designer</h2>
-                          <strong>Adidas</strong>
+                          <h2 th:text="${dto.id}"></h2>
+                          <strong th:text = "${dto.name}"></strong>
                       </div>
                       <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                          <span class="icon-room"></span> New York, New York
+                          [[${dto.appeal}]]
                       </div>
                       <div class="job-listing-meta">
-                          <span class="badge badge-danger">Part Time</span>
+                          <span class="badge badge-danger">친절해요!: [[${dto.kindness}]]</span>
                       </div>
                   </div>
 

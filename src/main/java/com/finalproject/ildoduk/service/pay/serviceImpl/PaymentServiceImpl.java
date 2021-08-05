@@ -40,7 +40,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PageResultsDTO<PaymentDTO, Payment> getHistory(String test, PageRequestDTO pageRequestDTO) {
 
-        log.info("결제 이력 조회하는 로직 내부 중" + test);
 
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("pointNo").descending());
 

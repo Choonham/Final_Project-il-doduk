@@ -61,7 +61,7 @@ $(document).ready(function () {
 
     //해당 유저 눌렀을때 신고 대상으로 나오게
     $("#badUser tr").click(function(){
-        var str = ""
+        var str= "";
         var tdArr = new Array();
 
         var tr = $(this);
@@ -73,17 +73,19 @@ $(document).ready(function () {
 
         var user = td.eq(0).text();
         str += user;
-        $("#fname").val(str);
+        $("#fname").val(str.trim());
     });
 
     //버튼 클릭시 신고글 게시 및 삭제 확인 창
     $("#report").click(function(){
-
-       if(!confirm("신고 하시겠습니까???")){
-           return;
+      alert("신고글 작성 되었습니다.")
+       if(test){
+           $("form").submit();
+       } else {
+           return false;
        }
 
-       $("form").submit();
+
 
     });
     //삭제

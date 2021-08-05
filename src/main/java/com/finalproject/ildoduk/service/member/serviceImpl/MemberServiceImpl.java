@@ -24,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository repo;
 
+
     @Override
     public List<String> getList() {
 
@@ -37,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
         return list_st;
     }
 
+    //회원가입
     @Override
     public void userRegister(MemberDto dto) {
 
@@ -44,14 +46,14 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    public MemberDto userIdCheck(String id) {
+    //유저 닉네임 db확인
+    @Override
+    public int nickNameCheck(String nickname) {
 
-        Optional<Member> result = repo.findById(id);
+       int cnt = repo.countByNickname(nickname);
+       log.info("nicknameCheck result ::: " + cnt);
 
-        log.info(" userIdDtoInit result ::::::" + result);
-
-        return result.isPresent() ? EntityToDto(result.get()) : null;
-
+        return cnt;
     }
     //해당 닉네임에 관련된 정보 가져오기
     @Override
@@ -61,25 +63,29 @@ public class MemberServiceImpl implements MemberService {
         return member.isPresent() ? EntityToDto(member.get()) : null;
     }
 
-    @Override
-    public MemberDto userIdDtoInit(MemberDto dto) {
-        Optional<Member> result = repo.findById(dto.getId());
 
-        log.info(" userIdDtoInit result ::::::" + result.get());
+    //유저 아이디 DB에서 확인
+    public MemberDto userIdCheck(String id) {
+
+        Optional<Member> result = repo.findById(id);
+
+        log.info(" userIdCheck result ::::::" + result);
 
         return result.isPresent() ? EntityToDto(result.get()) : null;
+
+    }
+
+    @Override
+    public MemberDto userIdDtoInit(MemberDto dto) {
+        return null;
     }
 
     @Override
     public MemberDto userIdPwdCheck(String id, String pwd) {
-
-        Optional<Member> result = repo.findByIdAndPwd(id,pwd);
-
-        return result.isPresent()? EntityToDto(result.get()) : null;
-
+        return null;
     }
 
-
+    //회원 수정 관련
     @Override
     public void userModify(MemberDto dto) {
         Optional<Member> result = repo.findById(dto.getId());
@@ -88,22 +94,25 @@ public class MemberServiceImpl implements MemberService {
 
             Member entity = result.get();
 
-/*
+            entity.changePwd(dto.getPwd());
+            entity.changeNickname(dto.getNickname());
+            entity.changePhone(dto.getPhone());
             entity.changeAddress(dto.getAddress());
             entity.changePhoto(dto.getPhoto());
             entity.changeIntro(dto.getIntro());
-*/
 
             repo.save(entity);
         }
     }
 
+    //회원 탈퇴
     @Override
     public void userDelete(String id) {
         repo.deleteById(id);
 
     }
 
+    //카카오 로그인 관련 JSON parser -> return dto;
     @Override
     public MemberDto kakaoLogin(String json)  {
         MemberDto ud = new MemberDto();
@@ -111,16 +120,19 @@ public class MemberServiceImpl implements MemberService {
         JSONObject jsonObj;
         JSONObject jsonObj2;
 
+
         MemberDto dto = new MemberDto();
 
         try{
             jsonObj =(JSONObject)parser.parse(json);
 
-            String email = (String)jsonObj.get("email");
-            String gender = (String)jsonObj.get("gender");
+            String email = (String)jsonObj.get("email");    //아이디
+            String gender = (String)jsonObj.get("gender");  //성별
+            String birth = (String)jsonObj.get("birthday"); // 생일
             String profile = jsonObj.get("profile").toString(); //profile 은 값안에 키, 값이 또 있어서 한번 쪼개고
             jsonObj2 = (JSONObject)parser.parse(profile);//한번더 쪼개기
-            String nickname = (String)jsonObj2.get("nickname");
+            String nickname = (String)jsonObj2.get("nickname"); //닉네임 추출
+            String img = (String)jsonObj2.get("thumbnail_image_url");//이미지 추출
 
             dto.setId(email);
             dto.setNickname(nickname);
@@ -130,9 +142,14 @@ public class MemberServiceImpl implements MemberService {
             }else{
                 dto.setGender("여");
             }
+            dto.setBirth(birth);
+            dto.setPhoto(img);
+
             System.out.println(" kakaoLogin :: dto get id::::  " + dto.getId());
             System.out.println(" kakaoLogin :: dto get gender::::  " + dto.getGender());
             System.out.println(" kakaoLogin :: dto get nickname:::   " + dto.getNickname());
+            System.out.println(" kakaoLogin :: dto get birth:::   " + dto.getBirth());
+            System.out.println(" kakaoLogin :: dto get photo:::   " + dto.getPhoto());
 
 
         }catch(ParseException e){

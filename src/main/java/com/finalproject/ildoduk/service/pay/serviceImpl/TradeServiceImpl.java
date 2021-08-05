@@ -27,11 +27,11 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public PageResultsDTO<TradeHistoryDTO, TradeHistory> allContents(TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("tNo").descending());
-
+        log.info("거래 내역 조회 내부 로직1 : " + pageable);
         Page<TradeHistory> result = tradeRepository.findAllByIdId(tradeHistoryDTO.getId(), pageable);
-
+        log.info("거래 내역 조회 내부 로직2 : " + result);
         Function<TradeHistory, TradeHistoryDTO> fn = (entity -> entityToDto(entity));
-
+        log.info("거래 내역 조회 내부 로직 : " + fn);
        return new PageResultsDTO<>(result, fn);
     }
 

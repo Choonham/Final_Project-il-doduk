@@ -17,7 +17,7 @@
 </div>
 
 
-<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+<section class="section-hero overlay inner-page bg-image" id="home-section">
   <div class="container">
     <div class="row">
       <div class="col-md-7">
@@ -48,11 +48,9 @@
     <td>[[${report.reportNo}]]</td>
     <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
     <td>[[${report.reportTarget}]]</td>
-    <td th:text="${#temporals.format(report.regDate, 'yyyy-MM-dd')}"></td>
+    <td th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}"></td>
     <td>
-      <a th:href="@{/serviceCenter/reportStateUpdate(reportNo = ${report.reportNo})}">
-        <button th:if="${report.reportState == '1'}">신고 처리하기</button>
-      </a>
+      <b th:if="${report.reportState == '1'}">신고 처리하기</b>
       <b th:unless="${report.reportState == '1'}">처리 완료</b>
     </td>
   </tr>

@@ -4,29 +4,28 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.blog.*;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
-import com.finalproject.ildoduk.entity.blog.Blog;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
-import com.finalproject.ildoduk.entity.blog.BlogLike;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.blog.service.BlogCommentService;
 import com.finalproject.ildoduk.service.blog.service.BlogFilesService;
 import com.finalproject.ildoduk.service.blog.service.BlogLikeService;
 import com.finalproject.ildoduk.service.blog.service.BlogService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +44,7 @@ public class BlogController {
     private final BlogLikeService blogLikeService;
     private final BlogFilesService blogFilesService;
     private final AuctionService auctionService;
+    private final HelperInfoService helperInfoService;
 
     //=================================== 메인 관련 시작===================================//
 
@@ -62,7 +62,14 @@ public class BlogController {
 
     // 블로그 메인 Temp
     @GetMapping("/mainTemp")
-    public void mainTemp() {
+    public void mainTemp(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, String sigungu, Model model) {
+        if(sigungu == null){
+            model.addAttribute("init", 0);
+        } else{
+            model.addAttribute("init", 1);
+            PageResultsDTO<MemberHelperInfoDTO, Object[]> result = helperInfoService.getHelperInfoByLoc(sigungu, pageRequestDTO);
+            model.addAttribute("result", result);
+        }
     }
 
     //====================================== 메인 관련 끝 ================================//
