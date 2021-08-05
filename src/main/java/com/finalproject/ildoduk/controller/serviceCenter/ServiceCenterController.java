@@ -3,24 +3,18 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
-import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
-import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
-import com.finalproject.ildoduk.entity.auction.AuctionList;
-import com.finalproject.ildoduk.entity.auction.BiddingList;
 import com.finalproject.ildoduk.entity.member.Member;
-import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
-import com.finalproject.ildoduk.service.pay.service.TradeService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
 import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
@@ -36,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 @RequestMapping("/serviceCenter")
@@ -446,7 +439,7 @@ public class ServiceCenterController {
 
         model.addAttribute("reportList",reportList);
 
-        return "/serviceCenter/badUserReportMgr";
+        return "/manager/badUserReportMgr";
     }
 
     @GetMapping("/reportStateUpdate")
