@@ -99,10 +99,10 @@ public class AuctionServiceImpl implements AuctionService {
 
         for (AuctionListDTO dto : sResult.getDtoList()) {
             Long aucSeq = dto.getAucSeq();
-            long getTimer = this.timer(aucSeq);
-            long getLeftTime = this.leftTime(aucSeq);
+            long getTimer = this.timer(aucSeq); //경매 완료까지 남은 시간 (초)
+            long getLeftTime = this.leftTime(aucSeq); //일 시작까지 남은 시간 (초)
 
-            if (getTimer < 0 && getLeftTime > 0) {
+            if (getTimer < 0 && getLeftTime >= 1800) {
                 Member user = userRepository.findById(dto.getUser()).get();
                 AuctionList auctionList = dtoToEntity(dto,user);
                 auctionList.changeState(1);
@@ -111,7 +111,7 @@ public class AuctionServiceImpl implements AuctionService {
         }
     }
 
-    //경매시간 완료, 매칭미완료, 일 시작시간 초과 경매 state=4로 변경
+    //경매시간 완료, 매칭미완료, 일 시작시간(-30분) 초과 경매 state=4로 변경
     @Override
     public void changeState2(PageRequestDTO pageRequestDTO) {
         log.info(pageRequestDTO);
@@ -126,10 +126,10 @@ public class AuctionServiceImpl implements AuctionService {
 
         for (AuctionListDTO dto : sResult.getDtoList()) {
             Long aucSeq = dto.getAucSeq();
-            long getTimer = this.timer(aucSeq);
-            long getLeftTime = this.leftTime(aucSeq);
+            long getTimer = this.timer(aucSeq); //경매 완료까지 남은 시간(초)
+            long getLeftTime = this.leftTime(aucSeq); //일 시작까지 남은 시간(초)
 
-            if (getTimer < 0 && getLeftTime < 0) {
+            if (getTimer < 0 && getLeftTime < 1800) {
                 Member user = userRepository.findById(dto.getUser()).get();
                 AuctionList auctionList = dtoToEntity(dto,user);
                 auctionList.changeState(4);
@@ -140,6 +140,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     //======================================== user ============================================//
+    //auc.state=0 경매 진행 중 / auc.state=1 경매완료, 매칭미완료 / auc.state=2 매칭완료 / auc.state=3 일 수행 완료 / auc.state=4 삭제
 
     //경매 등록
     @Override
@@ -259,16 +260,49 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     //================================== helper =========================================//
-
+    //auc.state=0 경매 진행 중 / auc.state=1 경매완료, 매칭미완료 / auc.state=2 매칭완료 / auc.state=3 일 수행 완료 / auc.state=4 삭제
+    //bid.state=0 미 낙찰 / bid.state =1 낙찰
 
     //헬퍼가 참여한 경매 목록
     @Override
-    public PageResultsDTO<AuctionBiddingDTO, Object[]> getMyBids(PageRequestDTO pageRequestDTO, String helper){
+    public PageResultsDTO<AuctionBiddingDTO, Object[]> getMyBids(PageRequestDTO pageRequestDTO, String helper, boolean onAuction){
         //정렬방식 설정
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
-        Page<Object[]> result = auctionListRepository.getMyBids(pageable, helper);
-        Function<Object[], AuctionBiddingDTO> fn = (en -> entityToDTO((AuctionList) en[0], (BiddingList) en[1]));
-        return new PageResultsDTO<>(result, fn);
+
+        //경매 진행 중(onAuction=true) auc.state=0 or auc.state=1
+        if(onAuction) {
+            Page<Object[]> result = auctionListRepository.getMyBids1(pageable, helper);
+            Function<Object[], AuctionBiddingDTO> fn = (en -> entityToDTO((AuctionList) en[0], (BiddingList) en[1]));
+            return new PageResultsDTO<>(result, fn);
+        }
+        //경매 완료(onAuction=false) auc.state=2 or auc.state=3
+        else{
+            Page<Object[]> result = auctionListRepository.getMyBids2(pageable, helper);
+            Function<Object[], AuctionBiddingDTO> fn = (en -> entityToDTO((AuctionList) en[0], (BiddingList) en[1]));
+            return new PageResultsDTO<>(result, fn);
+        }
+
+    }
+
+    //헬퍼 낙찰 내역
+    @Override
+    public PageResultsDTO<AuctionBiddingDTO, Object[]> getMyChosenBids(PageRequestDTO pageRequestDTO, String helper, boolean AllDone){
+
+        //정렬방식 설정
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
+
+        //미션 대기 중(isAllDone=0) auc.state=2
+        if(!AllDone) {
+            Page<Object[]> result = auctionListRepository.getMyChosenBids1(pageable, helper);
+            Function<Object[], AuctionBiddingDTO> fn = (en -> entityToDTO((AuctionList) en[0], (BiddingList) en[1]));
+            return new PageResultsDTO<>(result, fn);
+        }
+        //미션 완료(isAllDone=1) auc.state=3
+        else{
+            Page<Object[]> result = auctionListRepository.getMyChosenBids2(pageable, helper);
+            Function<Object[], AuctionBiddingDTO> fn = (en -> entityToDTO((AuctionList) en[0], (BiddingList) en[1]));
+            return new PageResultsDTO<>(result, fn);
+        }
     }
 
     //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
@@ -298,11 +332,11 @@ public class AuctionServiceImpl implements AuctionService {
         return new PageResultsDTO<>(result, fn);
     }
 
-    //경매참여철회
-    @Override
+    //경매참여철회 - 불가! 안쓰는 메소드
+   /* @Override
     public void deleteBidding(Long bidSeq){
         biddingListRepository.deleteById(bidSeq);
-    }
+    }*/
 
     //옥션에 경매 참여하기
     @Override
