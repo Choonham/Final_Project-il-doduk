@@ -20,21 +20,17 @@ public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long no;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aucSeq")
-    private AuctionList aucSeq;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="id" )
-    private Member client;
-
+    //비딩 리스트에 포함된 친구들
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="bidSeq" )
     private BiddingList biddingList;
 
+
+    //글쓴이 부분
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="helperNo")
-    private HelperInfo helperInfo;
+    @JoinColumn(name ="id")
+    private Member member;
 
     private String title;
 

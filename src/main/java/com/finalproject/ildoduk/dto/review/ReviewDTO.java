@@ -21,11 +21,14 @@ public class ReviewDTO {
 
 
     private long no;
-    private AuctionList aucSeq;
-    private Member client;
-    private String title;
-    private String content;
+
     private BiddingList biddingList;
-    private HelperInfo helperInfo;
-    private LocalDateTime regDate, modDate;
+
+    private Member member;
+
+    private String title;
+
+    private String content;
+
+
 }

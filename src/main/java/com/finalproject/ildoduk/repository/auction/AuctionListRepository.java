@@ -14,6 +14,7 @@ import java.util.*;
 @Repository
 public interface AuctionListRepository extends JpaRepository<AuctionList, Long>, QuerydslPredicateExecutor<AuctionList> {
 
+
     //aucSeq 값으로 옥션 하나만 불러오기
     @Query(value = "select a from AuctionList a where a.aucSeq=:aucSeq")
     Object[] getAuctionWithId(@Param("aucSeq") Long aucSeq);
