@@ -11,9 +11,7 @@ public interface ReviewService {
 
     default Review dtoToEntity(ReviewDTO dto){
 
-        Review review=Review.builder().aucSeq(dto.getAucSeq()).content(dto.getContent())
-                .biddingList(dto.getBiddingList()).helperInfo(dto.getHelperInfo())
-                .client(dto.getClient()).title(dto.getTitle()).build();
+        Review review=Review.builder().content(dto.getContent()).member(dto.getMember()).biddingList(dto.getBiddingList()).title(dto.getTitle()).build();
 
         return review;
     }
@@ -21,10 +19,7 @@ public interface ReviewService {
 
     default ReviewDTO entityToDTO(Review review){
 
-        ReviewDTO dto=ReviewDTO.builder().aucSeq(review.getAucSeq()).content(review.getContent())
-                .biddingList(review.getBiddingList()).helperInfo(review.getHelperInfo())
-                .client(review.getClient()).title(review.getTitle()).build();
-
+        ReviewDTO dto=ReviewDTO.builder().content(review.getContent()).member(review.getMember()).biddingList(review.getBiddingList()).title(review.getTitle()).build();
         return dto;
     }
 }
