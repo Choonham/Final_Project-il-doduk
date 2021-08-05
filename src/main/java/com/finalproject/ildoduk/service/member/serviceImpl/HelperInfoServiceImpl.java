@@ -37,4 +37,9 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         return new PageResultsDTO<>(result, fn);
     }
+
+    @Override
+    public int countHelpersBySigungu(String sigungu) {
+        return repository.countDistinctBySigungu(sigungu);
+    }
 }
