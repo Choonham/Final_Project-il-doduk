@@ -81,7 +81,7 @@
               <div class="d-inline-block">
                 <ul>
                   <li th:class=" 'page-item ' + ${reportList.page == page?'active':''} " th:each="page: ${reportList.pageList}">
-                    <a th:href="@{/serviceCenter/badUserReport(page = ${page},member = ${session.user.id})}">
+                    <a th:href="@{/serviceCenter/badUserReport(page = ${page})}">
                       [[${page}]]
                     </a>
                   </li>

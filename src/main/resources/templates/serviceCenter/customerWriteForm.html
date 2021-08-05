@@ -125,8 +125,7 @@
             ['para', ['ul', 'ol', 'paragraph']],
             // 줄간격
             ['height', ['height']],
-            // 그림첨부, 링크만들기, 동영상첨부
-            ['insert', ['picture', 'link', 'video']],
+
             // 코드보기, 확대해서보기, 도움말
             ['view', ['codeview', 'fullscreen', 'help']]
         ],
@@ -151,63 +150,7 @@
         }
     });
     // summernote 에디터 설정 끝
-
-    // 양식에서 파일을 삭제했을 때, 서버의 파일과 DB에 파일을 삭제하기 위한 ajax
-    function deleteFile(filePathName, el) {
-        var form_data = new FormData();
-        form_data.append('filePathName', filePathName);
-        $.ajax({
-            data: form_data,
-            type: "POST",
-            url: '/auction/fileDelete',
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                if (thumbnail.attr("value") != null) {
-                    thumbnail.attr(
-                        "value", null
-                    )
-                }
-                console.log(data.removedFileName)
-                const itemToFind = tempFileList.find(function (item) {
-                    return item.savedFileName === data.removedFileName
-                });
-                const idx = tempFileList.indexOf(itemToFind);
-                if (idx > -1) tempFileList.splice(idx, 1);
-                console.log(tempFileList);
-            }
-        });
-    }
-
-    // 끝
-
-    // 양식에 파일을 올렸을 때, 서버와 DB에 파일을 저장할 ajax
-    function sendFile(file, el) {
-        var form_data = new FormData();
-        form_data.append('file', file);
-        form_data.append('postNo', $("#postNo").val());
-        $.ajax({
-            data: form_data,
-            type: "POST",
-            url: '/auction/fileUpload',
-            cache: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-            processData: false,
-            success: function (data) {
-                if (thumbnail.attr("value") == null) {
-                    thumbnail.attr("value", data.savedFileName);
-                }
-                $(el).summernote('editor.insertImage', data.url);
-                tempFileList.push({
-                    savedFileName: data.savedFileName,
-                    originalFileName: data.originalFileName
-                });
-            }
-        });
-    }
-
+    
 </script>
 </body>
 </html>
