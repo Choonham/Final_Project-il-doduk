@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.repository.auction;
 
 import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
@@ -11,6 +12,8 @@ import java.util.*;
 @Repository
 @Transactional
 public interface BiddingListRepository extends JpaRepository<BiddingList, Long> {
+
+
 
     //옥션이 삭제된 경우 관련 경매내역은 chosen이 2으로 변경
     @Modifying

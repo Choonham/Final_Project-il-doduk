@@ -9,6 +9,7 @@ import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
 import org.apache.commons.io.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ import java.util.*;
 @Log4j2
 @RequiredArgsConstructor
 public class AuctionController {
-
+    @Autowired
     private final AuctionService auctionService;
 
     @GetMapping("/main")
