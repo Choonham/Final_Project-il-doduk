@@ -2,17 +2,15 @@ package com.finalproject.ildoduk.service.member.service;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
-import com.finalproject.ildoduk.dto.blog.BlogCommentDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
-import com.finalproject.ildoduk.entity.blog.Blog;
-import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
-import org.springframework.data.domain.Page;
 
 public interface HelperInfoService {
+
+    HelperInfoDTO helperFindById(String memberId);
 
     PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO);
     int countHelpersBySigungu(String sigungu);
@@ -32,9 +30,24 @@ public interface HelperInfoService {
         return entity;
     }
 
-    default HelperInfoDTO entityToDTO(HelperInfo entity){
+    default HelperInfoDTO EntityToDTO(HelperInfo entity){
+        HelperInfo member = HelperInfo.builder().memberId(entity.getMemberId()).build();
 
         HelperInfoDTO dto = HelperInfoDTO.builder()
+                .helperNo(entity.getHelperNo())
+                .memberId(member.getMemberId().getId())
+                .goodAtFirst(entity.getGoodAtFirst())
+                .goodAtSecond(entity.getGoodAtSecond())
+                .goodAtThird(entity.getGoodAtThird())
+                .kindness(entity.getKindness())
+                .appeal(entity.getAppeal())
+                .build();
+        return dto;
+    }
+
+    default MemberHelperInfoDTO entityToDTO(HelperInfo entity){
+
+        MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
                 .helperNo(entity.getHelperNo())
                 .memberId(entity.getMemberId().getId())
                 .goodAtFirst(entity.getGoodAtFirst())

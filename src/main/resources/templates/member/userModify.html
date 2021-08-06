@@ -81,15 +81,95 @@
         $("#postForm").submit();
     });
     // 끝
+
+    <!--비밀번호 일치여부 확인-->
+    function checkPwd(){
+        var pwd = $('#pwd').val();
+        console.log(pwd);
+        var pwdCheck = $('#pwdCheck').val();
+        console.log(pwdCheck);
+
+        if(pwd === pwdCheck){
+            console.log("checkPwd if true in");
+            $('.pwd_ok').show();
+            $('.pwd_already').hide();
+        }else{
+            console.log("checkPwd if false in");
+            $('.pwd_already').show();
+            $('.pwd_ok').hide();
+        }
+
+    }
+    <!--비밀번호를 다르게 입력하고 커서를 옮긴경우 alert 후 리셋-->
+    function pwdCheck2() {
+        var pwd = $('#pwd').val();
+        var pwdCheck = $('#pwdCheck').val();
+
+        if(pwd !== pwdCheck){
+            alert("비밀번호를 다시 입력해주세요");
+            $('.pwd_already').hide();
+            $('#pwdCheck').val("");
+            $('#pwd').val("").focus();
+        }
+    }
+
+
+    function phoneExpEx (){
+        //핸드폰 정규식 표현 - 01로 시작하여 그 다음은 0,1,7,9 중 하나와 매칭되는지 체크한뒤 7~8자리인지 검사
+        var phoneCheck = RegExp(/^01[0179][0-9]{7,8}$/);
+        var phoneExp= $('#phone').val();
+
+        if(!phoneCheck.test(phoneExp)) {
+            alert("핸드폰 형식에 맞게 작성해주세요");
+            console.log("핸드폰 정규식 벗어남");
+            $('#phone').val("");
+            $('#phone').val("").focus();
+        }
+    }
+</script>
+
+<!--Ajax를 이용한 실시간 닉네임 중복 여부 체크-->
+<script th:inline="javascript">
+    function checkNick(){
+        var nickname = $('#nickname').val(); //id값이 "nickname"인 입력란의 값을 저장
+        console.log(nickname);
+        $.ajax({
+            url:'/member/nicknameCheck', //Controller에서 인식할 주소
+            contentType: 'application/json; charset=utf8',
+            type:'post', //POST 방식으로 전달
+            data:nickname,
+            dataType: 'json',
+            success:function(cnt){
+                console.log("닉네임 중복처리 성공" + cnt);
+                if(cnt != 1){//cnt 0: 사용 가능한 닉네임
+                    console.log(cnt);
+                    $('.nick_ok').show();
+                    $('.nick_already').hide();
+                }else{ //cnt 1: 이미 존재하는 닉네임
+                    $('.nick_already').show();
+                    $('.nick_ok').hide();
+                }
+            },
+            error:function(){
+                console.log("닉네임 중복 체크 에러입니다");
+            }
+        });
+    }
 </script>
 <body>
     <form action="/member/userModify" method="post">
         아이디 <input type="email" name="id" th:value="${session.user.id}" readonly /> <br />
-        비밀번호 <input type="password" name="pwd" /> <br />
-        이름 <input type="text" name="name" /> <br />
-        생년월일 <input type="text" name="birth" /> <br />
+        비밀번호 <input type="password" name="pwd" id="pwd" minlength="6" maxlength="12" required /> * 비밀번호는 6~12자 사이로 입력해주세요 <br />
+        비밀번호 확인 <input type="password" id="pwdCheck" oninput="checkPwd()" onblur="pwdCheck2()"/>
+        <span style="display:none; color:#0100FF;" class="pwd_ok" >비밀번호 일치 확인 </span>
+        <span style="display:none; color:#FF0000;" class="pwd_already"> 비밀번호 불일치 </span> <br />
+
+        이름 <input type="text" name="name" th:value="${session.user.name}"  readonly /> <br />
+        생년월일 <input type="text" name="birth" th:value="${session.user.birth}" readonly /> <br />
         성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
         닉네임 <input type="text" name="nickname" /> <br />
+        <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
+        <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
 
         <!-- 주소 -->
         <input type="text" id="sample4_postcode" placeholder="우편번호">
@@ -104,9 +184,9 @@
         <input type="hidden" name="sigungu" id="sigungu">
         <input type="hidden" name="address" id="address"> <br />
 
-        연락처 <input type="tel" name="phone" /> <br />
-        사진 <input type="text" name="photo" />
-        소개 <input type="text" name="intro" />
+        연락처  <input type="tel" name="phone" id="phone" /> * 핸드폰번호(01x-3,4자리-4자리)로 작성해주세요 <br />
+        <input type="hidden" name="photo" id="photo" th:value="${session.user.photo}"  />
+        소개 <textarea name="intro" rows="5" maxlength="50" onfocus="phoneExpEx()" ></textarea> <br />
 
         <button type="submit" >개인정보수정</button>
     </form>
