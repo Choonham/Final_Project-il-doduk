@@ -8,6 +8,7 @@ import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.entity.member.QHelperInfo;
 import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -27,7 +29,16 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     private final HelperInfoRepository repository;
 
     @Override
+    public HelperInfoDTO helperFindById(String memberId) {
+
+        Optional<HelperInfo> helperInfo =  repository.findById(memberId);
+
+        return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
+    }
+
+    @Override
     public PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO) {
+
 
         // 정렬 방식 설정
         log.info(sigungu);

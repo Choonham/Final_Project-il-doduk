@@ -1,18 +1,34 @@
 package com.finalproject.ildoduk.controller.member;
 
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.UploadResultDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -22,6 +38,12 @@ public class MemberController {
 
     @Autowired
     private MemberService service;
+
+
+    private final HelperInfoService helperInfoService;
+
+
+    /**===========================유저===============================**/
 
     //유저 회원가입 이동
     @GetMapping("/userRegister")
@@ -55,14 +77,13 @@ public class MemberController {
 
             return "/member/userRegister";
         }else{  //닉네임 중복이 없을 경우
+            model.addAttribute("msg", "일도둑의 회원이 되신것을 축하합니다~");
             service.userRegister(dto);
+
+            return "/index";
         }
 
 
-        System.out.println(dto.getId());
-        System.out.println(dto.getPwd());
-
-        return "/member/kakao";
     }
 
     //유저 회원가입 간 닉네임 중복 확인
@@ -148,22 +169,10 @@ public class MemberController {
 
     }
 
-    //헬퍼 가입신청 url
-    @GetMapping("/helperRegister")
-    public void helperRegisterPage(){
-
-    }
-
-    //헬퍼 가입신청
-    @PostMapping("/helperRegister")
-    public void helperRegister(){
-
-    }
-
     @GetMapping("/index")
     public String totheindex(){
 
-        return "index";
+        return "../index";
     }
 
     //카카오 로그인 페이지
@@ -194,7 +203,7 @@ public class MemberController {
         if (dto1!=null) {
 
             session.setAttribute("user", dto1);
-            return "../index";
+            return "/index";
         }
 
         else{
@@ -204,6 +213,98 @@ public class MemberController {
         }
 
     }
+    /**===========================헬퍼===============================**/
+    //헬퍼 가입신청 url
+    @GetMapping("/helperRegister")
+    public void helperRegisterPage(){
 
+    }
+    //헬퍼 가입신청
+
+    //헬퍼 가입확인
+    @PostMapping("/helperIdCheck")
+    public void helperRegister(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
+        log.info(" helperRegister helperRegister memberId :: " + memberId);
+
+        MemberDto memberDto= service.userToHelperIdCheck(memberId);
+            log.info(" helperRegister userTOHelperIDCheck test :::: " + memberDto );
+        HelperInfoDTO helperInfoDto = helperInfoService.helperFindById(memberId);
+        log.info(" helperRegister helperFindById test :::: " + helperInfoDto );
+
+            //
+        if(memberDto.getId().equals(helperInfoDto.getMemberId())){
+
+            model.addAttribute("user",memberDto);
+            model.addAttribute("user1",helperInfoDto);
+
+            // return ??????
+        }else{
+            // return ??????
+        }
+
+    }
+
+    //헬퍼 가입신청 파일 업로드
+
+ /*   @Value("${com.finalproject.upload.path}")//application.properties의 변수
+    private String uploadPath;
+
+    @PostMapping("/member/helperUpload")
+    public void helperUploadsFacePhoto(MultipartFile[] uploadFiles) {
+        for(MultipartFile uploadFile:uploadFiles){
+            //실제 파일이름 IE나 Edge는 전체경로가 들어오므로
+            String originalName = uploadFile.getOriginalFilename();
+            String fileName = originalName.substring(originalName.lastIndexOf("\\"));
+
+            log.info("fileName : " + fileName);
+            //날짜 폴더 생성
+            String folderPath = makeFolder();
+
+            //UUID
+            String uuid = UUID.randomUUID().toString();
+
+            //저장할 파일 이름 중간에 "_"를 이용해서 구분
+            String saveName = uploadPath + File.separator + folderPath + File.separator +
+                    File.separator + uuid + "_" + fileName;
+                    Path savePath = Paths.get(saveName);
+
+            try {
+                uploadFile.transferTo(savePath);//실제 이미지 저장
+                resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
+
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
+    }
+
+    private String makeFolder() {
+        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/mm/dd"));
+
+        String folderPath = str.replace("/", File.separator);
+
+        //make folder -----------------
+        File uploadPathFolder = new File(uploadPath, folderPath);
+
+        if(uploadPathFolder.exists() == false){
+            uploadPathFolder.mkdirs();
+        }
+        return folderPath;
+    }
+
+    @GetMapping("/member/display")
+    public ResponseEntity<byte[]> getFile(String fileName){
+
+        ResponseEntity<byte[]> result = null;
+
+        try{
+        String srcFileName = URLDecoder.
+        }catch(Exception e){
+            log.info(e.getMessage());
+            return
+        }
+
+    }*/
 
 }

@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.service.member.serviceImpl;
 
 import com.finalproject.ildoduk.dto.member.MemberDto;
 
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
@@ -111,6 +112,16 @@ public class MemberServiceImpl implements MemberService {
         repo.deleteById(id);
 
     }
+
+    public MemberDto userToHelperIdCheck(String memberId){
+        Optional<Member> result = repo.findById(memberId);
+
+        log.info(" userIdCheck result ::::::" + result);
+
+        return result.isPresent() ?  EntityToDto(result.get()) : null;
+    }
+
+
 
     //카카오 로그인 관련 JSON parser -> return dto;
     @Override
