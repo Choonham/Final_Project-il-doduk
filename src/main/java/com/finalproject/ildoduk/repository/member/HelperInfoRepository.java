@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.repository.member;
 
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
@@ -15,7 +16,10 @@ import java.util.Optional;
 
 public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, QuerydslPredicateExecutor<HelperInfo> {
 
-    Optional<HelperInfo> findById(String memberId);
+    //helperInfo에서 아이디 확인
+    Optional<HelperInfo> findByMemberId(String memberId);
+
+    int countHelperInfoByMemberId(String memberId);
 
 
     // =====================BLOG==================//

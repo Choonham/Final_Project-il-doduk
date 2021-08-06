@@ -31,9 +31,26 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     private HelperInfoRepository repository;
 
     @Override
+    public void helperRegister(HelperInfoDTO helperInfoDTO) {
+
+        repository.save(dtoToEntity(helperInfoDTO));
+
+    }
+
+    @Override
+    public int helperRegisterIdCheck(String memberId) {
+
+        int cnt = repository.countHelperInfoByMemberId(memberId);
+
+        log.info("helperRegisterIdCheck :::: " + cnt);
+
+        return cnt;
+    }
+
+    @Override
     public HelperInfoDTO helperFindById(String memberId) {
 
-        Optional<HelperInfo> helperInfo =  repository.findById(memberId);
+        Optional<HelperInfo> helperInfo =  repository.findByMemberId(memberId);
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }

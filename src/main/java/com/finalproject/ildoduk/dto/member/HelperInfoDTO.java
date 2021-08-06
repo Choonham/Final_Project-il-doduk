@@ -19,5 +19,6 @@ public class HelperInfoDTO {
     private String appeal;
     private String facePhoto;
     private String idCard;
+    private int agreeHelper;
 
 }

@@ -220,19 +220,30 @@ public class MemberController {
 
     }
     //헬퍼 가입신청
+    @PostMapping("/helperRegister")
+    public void helperRegister(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, Model model){
+        log.info("helperRegister member id :::: " + memberId);
+
+        //agreeHelper 신청 내용 DB에 저장
+        helperInfoService.helperRegister(helperInfoDTO);
+
+        int cnt = helperInfoService.helperRegisterIdCheck(memberId);
+
+
+    }
 
     //헬퍼 가입확인
     @PostMapping("/helperIdCheck")
-    public void helperRegister(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
-        log.info(" helperRegister helperRegister memberId :: " + memberId);
+    public void helperIdCheck(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
+        log.info(" helperIdCheck memberId :: " + memberId);
 
         MemberDto memberDto= service.userToHelperIdCheck(memberId);
-            log.info(" helperRegister userTOHelperIDCheck test :::: " + memberDto );
-        HelperInfoDTO helperInfoDto = helperInfoService.helperFindById(memberId);
-        log.info(" helperRegister helperFindById test :::: " + helperInfoDto );
+            log.info(" helperIdCheck userTOHelperIDCheck test :::: " + memberDto );
 
-            //
-        if(memberDto.getId().equals(helperInfoDto.getMemberId())){
+        HelperInfoDTO helperInfoDto = helperInfoService.helperFindById(memberId);
+        log.info(" helperIdCheck helperFindById test :::: " + helperInfoDto );
+
+        if(helperInfoDto.getAgreeHelper()==2){
 
             model.addAttribute("user",memberDto);
             model.addAttribute("user1",helperInfoDto);
