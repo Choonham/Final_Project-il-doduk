@@ -186,6 +186,20 @@ public class AuctionServiceImpl implements AuctionService {
         return auction;
     }
 
+    @Override
+    public AuctionListDTO findAuction(Long aucSeq) {
+
+        Optional<AuctionList> result = auctionListRepository.findById(aucSeq);
+        if (result.isPresent())
+        {
+           return entityToDTO(result.get());
+        }
+        else{
+            return null;
+        }
+
+    }
+
     //옥션 값에 따른 비딩정보
     @Override
     public PageResultsDTO<BiddingListDTO, BiddingList> getBidding(PageRequestDTO pageRequestDTO,Long aucSeq){

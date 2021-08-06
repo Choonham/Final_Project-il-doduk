@@ -24,13 +24,13 @@ public class Review extends BaseEntity {
     //비딩 리스트에 포함된 친구들
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="bidSeq" )
-    private BiddingList biddingList;
+    private BiddingList bidSeq;
 
 
     //글쓴이 부분
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="id")
-    private Member member;
+    private Member id;
 
     private String title;
 

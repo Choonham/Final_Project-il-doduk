@@ -23,14 +23,9 @@ public class ReviewDTO {
 
 
     private long no;
-
-    private BidDTO dto;
-
-    private MemberDto member;
-    private HelperInfoDTO helper;
+    private long  bidSeq;
+    private String id;
     private String title;
-
     private String content;
-
 
 }

@@ -233,7 +233,7 @@ public class MemberController {
     }
 
     //헬퍼 가입확인
-    @PostMapping("/helperIdCheck")
+/*    @PostMapping("/helperIdCheck")
     public void helperIdCheck(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
         log.info(" helperIdCheck memberId :: " + memberId);
 
@@ -253,7 +253,7 @@ public class MemberController {
             // return ??????
         }
 
-    }
+    }*/
 
     //헬퍼 가입신청 파일 업로드
 

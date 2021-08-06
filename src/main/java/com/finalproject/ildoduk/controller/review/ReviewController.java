@@ -1,8 +1,15 @@
 package com.finalproject.ildoduk.controller.review;
 
 
-import com.finalproject.ildoduk.dto.review.BidDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
+import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.entity.auction.AuctionList;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.bidding.service.BiddingService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
+import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.review.ServiceInterface.ReviewService;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
@@ -13,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +32,12 @@ public class ReviewController {
     ReviewService service;
     @Autowired
     BiddingService bidservice;
-
-
+    @Autowired
+    AuctionService auctionService;
+    @Autowired
+    HelperInfoService infoService;
+    @Autowired
+    MemberService memberService;
     /*=======단순히 리스트만=====*/
     @GetMapping("/reviewList")
     public void reviewList(Model model){
@@ -39,16 +49,26 @@ public class ReviewController {
     }
     @GetMapping("/writeform")
     public void writeform(Model model , @RequestParam("bid") String bid){
-        BidDTO dto =bidservice.get_bidding(bid);
-        String helperID=dto.getHelper().getId();
+      BiddingListDTO dto =bidservice.get_bidding(bid);
+        String helperID=dto.getHelper();
+        Long aucSeq = dto.getAucSeq();
 
-
+        HelperInfoDTO infoDTO=infoService.helperFindById(dto.getHelper());
+        AuctionListDTO auctionListDTO=auctionService.findAuction(aucSeq);
+        System.out.println(auctionListDTO.getTitle());
+        if(dto!=null&&infoDTO!=null&&auctionListDTO!=null) {
+            model.addAttribute("helper",infoDTO );
+            model.addAttribute("bid", dto);
+            model.addAttribute("auction",auctionListDTO );
+        }
     }
+
+
     @PostMapping("/write")
-    public String write(@RequestParam("editordata") String content){
+    public void write(@RequestParam("editordata") String content,@RequestParam("title") String title){
 
         System.out.println(content);
-        return "/review/reviewList";
+
     }
 
 //responsebody로 받기가 가능해졌다.

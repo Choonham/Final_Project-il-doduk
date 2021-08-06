@@ -10,6 +10,7 @@ import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
 import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
+import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +30,8 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
     @Autowired
     private HelperInfoRepository repository;
-
+    @Autowired
+    private MemberRepository repo;
     @Override
     public void helperRegister(HelperInfoDTO helperInfoDTO) {
 
@@ -50,7 +52,8 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Override
     public HelperInfoDTO helperFindById(String memberId) {
 
-        Optional<HelperInfo> helperInfo =  repository.findByMemberId(memberId);
+               Optional<Member> member= repo.findById(memberId);
+        Optional<HelperInfo> helperInfo =  repository.findByMemberId(member.get());
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }

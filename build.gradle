@@ -38,7 +38,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time'
-
+    implementation 'org.modelmapper:modelmapper:2.4.0'
     implementation 'com.querydsl:querydsl-jpa'  //추가
 
     //gson

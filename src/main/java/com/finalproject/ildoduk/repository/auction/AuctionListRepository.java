@@ -10,6 +10,7 @@ import org.springframework.data.querydsl.*;
 import org.springframework.data.repository.query.*;
 import org.springframework.stereotype.*;
 
+import javax.jdo.annotations.Transactional;
 import java.util.*;
 
 
@@ -89,4 +90,5 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
 
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
+
 }
