@@ -179,13 +179,34 @@ public class AuctionController {
 
     //경매 참여 가능한 옥션리스트 보기
     @GetMapping("/availableAuctions")
-    public void list5(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+    public void list5(PageRequestDTO pageRequestDTO, Model model) {
 
         // 페이지에서 값 받아오기
         String sido = "";
         String sigungu = "";
         int category = 0;
 
+
+        model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
+    }
+
+    //경매 참여 가능한 옥션리스트 - 검색
+    @PostMapping("/availableAuctions")
+    public void list5(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+
+        // 페이지에서 값 받아오기
+        String sido = request.getParameter("sido");
+        String sigungu = request.getParameter("sigungu");
+        int category = Integer.parseInt(request.getParameter("category"));
+
+       /* if(sido == null){
+            sido="";
+        }
+        if(sigungu == null){
+            sigungu ="";
+        }*/
+
+        System.out.println("category  :  "+category+"   ||   sido :     "+sido+"     ||   sigungu  :"+sigungu);
 
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
