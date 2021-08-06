@@ -44,8 +44,7 @@
 
 
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement}">
-        <a href="" onclick="test()"></a>
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}">
         <div class="job-listing-logo">
           <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
@@ -61,14 +60,22 @@
               <div th:text="${helper.goodAtSecond}"></div>
               <div th:text="${helper.goodAtThird}"></div>
           </div>
-          <div class="job-listing-meta">
-            <button th:href="@{/manager/accept(helperNo = ${helper.helperNo})}"><span class="badge badge-success">승인</span></button>
-            <br/>
-            <button th:href="@{/manager/deny(helperNo = ${helper.helperNo})}"><span class="badge badge-success">반려</span></button>
-          </div>
+        </div>
+
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 1}">
+          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
+          <br/>
+          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
+        </div>
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 2}">
+          헬퍼 승인
+        </div>
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 3}">
+          반려
         </div>
       </li>
     </ul>
+
   </div>
 </section>
 

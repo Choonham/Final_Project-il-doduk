@@ -18,9 +18,7 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
 
     Optional<HelperInfo> findByMemberId(String memberId);
 
-    //헬퍼 가입 승인을 위한 전체 멤버 조회
-    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")
-    Optional<HelperInfo> checkState();
+    int countHelperInfoByMemberId(String memeberId);
 
 
     // =====================BLOG==================//

@@ -17,7 +17,7 @@ public class HelperInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long helperNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Member memberId;
 
     @Column(length = 30)
