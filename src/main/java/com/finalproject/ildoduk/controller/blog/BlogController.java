@@ -112,6 +112,8 @@ public class BlogController {
         model.addAttribute("detail", blogDTO);
         model.addAttribute("comments", blogCommentDTO);
         model.addAttribute("listPageInfo", tempPageDTO);
+
+        log.info("안녕");
     }
 
     // 글 쓰기
@@ -242,6 +244,7 @@ public class BlogController {
     // 글 수정(기능)
     @PostMapping(value = "/modify")
     public String modifyPost(BlogDTO dto, HttpSession session, Model model) {
+
         blogService.registerPost(dto);
 
         MemberDto memberDto = (MemberDto)session.getAttribute("user");

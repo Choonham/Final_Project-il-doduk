@@ -23,6 +23,6 @@ public class BlogFiles extends BaseEntity {
     @Column(length = 300, nullable = true)
     private String fileOrigin;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Blog blog;
 }
