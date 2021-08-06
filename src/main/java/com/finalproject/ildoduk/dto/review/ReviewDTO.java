@@ -1,5 +1,7 @@
 package com.finalproject.ildoduk.dto.review;
 
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
@@ -22,10 +24,10 @@ public class ReviewDTO {
 
     private long no;
 
-    private BiddingList biddingList;
+    private BidDTO dto;
 
-    private Member member;
-
+    private MemberDto member;
+    private HelperInfoDTO helper;
     private String title;
 
     private String content;

@@ -29,7 +29,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
 
     //경매 완료, 매칭미완료 값
     @Query(value = "SELECT a from AuctionList a WHERE a.state=1 and a.user.id=:user")
-    Page<AuctionList> getAllWithState2(Pageable pageable,String user);
+    Page<AuctionList> getAllWithState2(Pageable pageable, @Param("user") String  user);
 
     //매칭완료, 일 수행 전 값   state=2(매칭 완료), ischosen=1(낙찰값) , auctionList-Bidding 정보 출력
     @Query(value = "SELECT a,b from AuctionList a , BiddingList b WHERE a.state=2 and a.user.id=:user and a.aucSeq = b.aucSeq.aucSeq and b.chosen =1")
@@ -47,18 +47,18 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     @Query(value = "select a from AuctionList a where a.state=1")
     Page<AuctionList> ChangeState2(Pageable pageable);
 
-<<<<<<< HEAD
+
 
     // 유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
-=======
+
     //유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
->>>>>>> 117400cd4fc4631cd5f9552a3b144d615bdd405a
+
     @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
     Page<Object[]> getMyBids(Pageable pageable, String helper);
 
     //====================================== Blog =====================================//
 
-<<<<<<< HEAD
+
     // 헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
 
 
@@ -84,9 +84,9 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
 
     //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
 
-=======
+
     //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
->>>>>>> 117400cd4fc4631cd5f9552a3b144d615bdd405a
+
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
 }

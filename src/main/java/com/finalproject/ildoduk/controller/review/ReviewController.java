@@ -1,6 +1,8 @@
 package com.finalproject.ildoduk.controller.review;
 
 
+import com.finalproject.ildoduk.dto.review.BidDTO;
+import com.finalproject.ildoduk.service.bidding.service.BiddingService;
 import com.finalproject.ildoduk.service.review.ServiceInterface.ReviewService;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
@@ -22,7 +24,10 @@ import java.util.UUID;
 public class ReviewController {
     @Autowired
     ReviewService service;
-        
+    @Autowired
+    BiddingService bidservice;
+
+
     /*=======단순히 리스트만=====*/
     @GetMapping("/reviewList")
     public void reviewList(Model model){
@@ -33,8 +38,9 @@ public class ReviewController {
 
     }
     @GetMapping("/writeform")
-    public void writeform(){
-
+    public void writeform(Model model , @RequestParam("bid") String bid){
+        BidDTO dto =bidservice.get_bidding(bid);
+        String helperID=dto.getHelper().getId();
 
 
     }
