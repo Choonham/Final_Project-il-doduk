@@ -19,7 +19,7 @@
         //실제 업로드 부분
         //upload Ajax
         $.ajax({
-            url:'/member/helperUpload'
+            url:'/member/helperUpload',
             processData: false,
             contentType: false,
             data: formData,
@@ -46,13 +46,13 @@
         경력사항 1 <input type="text" name="goodAtFirst" /> <br />
         경력사항 2<input type="text" name="goodAtSecond" /> <br />
         경력사항 3<input type="text" name="goodAtThrid" /> <br />
-        <!--친절점수-->
-        <input type="hidden" name="kindness" />
-       각오 <input type="text" name="appeal" /> <br />
+        각오 <input type="text" name="appeal" /> <br />
+
+        <button type="submit">헬퍼가입신청</button>
      </form>
-        <h3> * 헬퍼인증 필수 사진</h3> <br />
+        <!--<h3> * 헬퍼인증 필수 사진</h3> <br />
         본인 얼굴 사진 <input type="file" name="uploadFiles" multiple /> <br />
-        <button class="uploadBtn" >업로드 </button>
+        <button class="uploadBtn" >업로드 </button>-->
         <!--본인 신분증 사진 <input type="file" name="idCard"  />-->
 
 

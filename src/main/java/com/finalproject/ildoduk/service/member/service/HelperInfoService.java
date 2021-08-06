@@ -10,6 +10,13 @@ import com.finalproject.ildoduk.entity.member.Member;
 
 public interface HelperInfoService {
 
+    //헬퍼 회원가입
+    void helperRegister(HelperInfoDTO helperInfoDTO);
+
+    //헬퍼 회원가입전 DB에 아이디 중복 체크
+    int helperRegisterIdCheck(String memberId);
+
+    //헬퍼 아이디체크 후 모든정보 반환(Member, HelperInfo)
     HelperInfoDTO helperFindById(String memberId);
 
     PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO);
@@ -55,6 +62,7 @@ public interface HelperInfoService {
         return dto;
     }
 
+    /**
     default MemberHelperInfoDTO entityToDTO(HelperInfo entity){
 
         MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
@@ -69,6 +77,7 @@ public interface HelperInfoService {
 
         return dto;
     }
+     **/
 
     default MemberHelperInfoDTO entityToDTO(HelperInfo helper, Member member){
 /*
