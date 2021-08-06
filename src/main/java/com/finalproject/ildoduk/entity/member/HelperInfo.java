@@ -34,5 +34,10 @@ public class HelperInfo {
     @Column(length = 30)
     private String appeal;
 
+    @Column
+    private String facePhoto;
+
+    @Column
+    private String idCard;
 
 }

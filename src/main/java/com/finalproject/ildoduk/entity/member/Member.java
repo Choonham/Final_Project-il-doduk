@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity{
 
     @Id
     @Column(name="id", nullable = false)
@@ -34,22 +34,30 @@ public class Member {
     @Column(name="nickname")
     private String nickname;    //닉네임
 
+    @Column(name="sido")
+    private String sido;        //주소 시도 포함
+
+    @Column(name="sigungu")
+    private String sigungu;     //주소 시군구 포함
+
     @Column(name="address")
-    private String address;     //주소
+    private String address;     //지번주소
 
     @Column(name="phone")
     private String phone;       //연락처
 
     @Column(name="point")
+    @ColumnDefault(value="0")
     private int point;          //캐쉬포인트
 
     @Column(name="photo")
     private String photo;       //사진
 
-    @Column(name="intro")
+    @Column(name="intro", length=1000)
     private String intro;       //유저 소개
 
     @Column(name = "state")
+    @ColumnDefault(value= "1")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
     /**정보수정**/
