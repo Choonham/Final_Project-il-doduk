@@ -54,7 +54,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     Page<Object[]> getMyBids1(Pageable pageable, String helper);
 
     //helper 비딩 참여내역 출력 2.경매 완료
-    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq and a.state in (2,3)")
+    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq and a.state in (2,3,4)")
     Page<Object[]> getMyBids2(Pageable pageable, String helper);
 
     //helper 낙찰 내역 1.미션 대기 중
@@ -70,4 +70,5 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
+
 }
