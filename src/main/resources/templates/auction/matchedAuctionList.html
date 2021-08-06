@@ -1,46 +1,326 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/auction.css}">
+
+
 </head>
-<body>
-<!-- 경매 완료, 매칭 완료3 : 카테고리, 제목, 시간, 지역, 헬퍼정보, 채팅버튼-->
-<h1>경매완료, 매칭완료</h1>
-<br />
-<table th:border="1" >
-    <thead>
-    <tr>
-        <th scope="col">경매제목</th>
-        <th scope="col">카테고리</th>
-        <th scope="col">시간</th>
-        <th scope="col">지역</th>
-        <th scope="col">헬퍼정보</th>
-        <th scope="col">채팅</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="dto : ${matchedAuctionList.dtoList}">
-        <th scope="row">
-            <a th:href="@{@{/auction/getAuction(aucSeq=${dto.aucSeq})}}">[[${dto.title}]]</a>
-        </th>
-        <td>
-            [[${dto.category}]]
-        </td>
-        <td>
-            [[${dto.doDateTime}]]
-        </td>
-        <td>
-            [[${dto.address}]]
-        </td>
-        <td>
-            [[${dto.helper}]]
-        </td>
-        <td>
-            <button th:href="@{#}">채팅</button>
-        </td>
-    </tr>
-    </tbody>
-</table>
+
+<body id="top">
+
+<div>
+    <!-- 헤드 네비게이션 -->
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+
+    <!-- HOME : 위에 회색 그거 -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');"
+             id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">My Matched Auctions</h1>
+                    <div class="custom-breadcrumbs">
+                        <a href="#">미션</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>낙찰 된 미션</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section">
+        <div class="container">
+
+            <!--------------------------------------- 낙찰 완료 / 미션 완료 버튼 ------------------------------------------------------->
+            <div th:unless="${isAllDone}"
+                 class="row justify-content-center mb-5" data-aos="fade-up">
+                <div id="filters" class="filters text-center col-md-7">
+                    <button class="btn btn-primary active" id="matchedB">낙찰 완료</button>
+                    <button class="btn btn-primary" id="allDoneB">미션 수행 완료</button>
+                </div>
+            </div>
+
+            <div th:if="${isAllDone == true}"
+                 class="row justify-content-center mb-5" data-aos="fade-up">
+                <div id="filters" class="filters text-center col-md-7">
+                    <button class="btn btn-primary" id="matchedB">낙찰 완료</button>
+                    <button class="btn btn-primary active" id="allDoneB">미션 수행 완료</button>
+                </div>
+            </div>
+
+            <!--------------------------------------- 낙찰완료 미션 시작------------------------------------------------------->
+            <div id="matched">
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-7 text-center">
+
+                        <h2 class="section-title mb-2" th:if="${matchedAuctionList.getDtoList().size() == 0}">
+                            미션 대기 중인 내역이 없습니다.
+                        </h2>
+
+                        <h2 class="section-title mb-2" th:if="${matchedAuctionList.getDtoList().size() != 0}">
+                            [[${matchedAuctionList.getTotalElements()}]]개의 미션이 대기 중입니다.
+                        </h2>
+
+                    </div>
+                </div>
+                <!--예시 포스팅-->
+                <ul class="job-listings mb-5">
+                    <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+                        <div class="job-listing-logo" th:align="center">
+                            <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
+                                 class="img-fluid" width="80" height="80"><br>
+                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
+                            <!--대표 이미지 삽입 예정-->
+                        </div>
+                        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                            <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <strong><b>카테고리</b></strong>
+                                <h2><b>미션 제목</b></h2>
+                                <strong><b>미션 수행 일시</b></strong>
+                            </div>
+                            <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                 <b>최종 가격</b>
+                            </div>
+                            <div class="job-listing-meta w-25">
+                                <span class="btn btn-outline-primary active" th:href="@{#}"><b>채팅하기</b></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- 내역이 하나도 없을 경우 포스팅 -->
+                <div th:if="${matchedAuctionList.getDtoList().size() == 0}">
+                    <ul class="job-listings mb-5" th:align="center">
+                        <b> 낙찰이 완료 된 내역이 없습니다! 간편하게 일도둑을 이용해 보세요.</b>
+                    </ul>
+                </div>
+
+                <!-- 내역이 있을 경우 리스트 포스팅 -->
+                <div th:if="${matchedAuctionList.getDtoList().size() != 0}">
+                    <ul class="job-listings mb-5">
+                        <!--한개씩 포스팅-->
+                        <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
+                            th:each="dto : ${matchedAuctionList.dtoList}" th:cellpadding="10">
+                            <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
+                            <!--헬퍼 이미지 및 비즈니스 카드 -->
+                            <div class="job-listing-logo" th:align="center">
+                                <img th:src="@{dto.helperPhoto}" alt="Free Website Template by Free-Template.co"
+                                     class="img-fluid" width="80" height="80">
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
+                            </div>
+
+                            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <!-- 카테고리 번호에 따른 출력 값 변화-->
+                                    <div th:if="${dto.category == 1}"><strong><b> 구매대행 </b></strong></div>
+                                    <div th:if="${dto.category == 2}"><strong><b> 홈 케어 </b></strong></div>
+                                    <div th:if="${dto.category == 3}"><strong><b> 펫 케어 </b></strong></div>
+                                    <div th:if="${dto.category == 4}"><strong><b> 퀵 서비스 </b></strong></div>
+                                    <h2>[[${dto.title}]]</h2>
+                                    <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
+                                </div>
+                                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
+                                </div>
+                                <div class="job-listing-meta w-25" style = "z-index: 1" >
+                                    <button class="btn btn-outline-primary primary" th:href="@{#}"><b>채팅하기</b></button>
+<!-----------------------------------------------채팅하기 연결 예정------------------------------------------------------------>
+                                </div>
+                            </div>
+                        </li>
+                        <!--한개씩 끝-->
+                    </ul>
+                </div>
+                <!-- 리스트 끝 -->
+
+                <!-- 페이지 전환 처리 -->
+                <div style="text-align: center">
+                    <div class="custom-pagination ml-auto">
+                        <a th:if="${matchedAuctionList.prev}"
+                           th:href="@{/auction/matchedAuctionList(page= ${matchedAuctionList.start-1},isAllDone=false)}"
+                           tabindex="-1" class="prev">Prev</a>
+
+                        <div class="d-inline-block">
+                            <a th:href="@{/auction/matchedAuctionList(page = ${page},isAllDone=false)}"
+                               th:class="${matchedAuctionList.page == page?'active':''}"
+                               th:each="page: ${matchedAuctionList.pageList}">[[${page}]]</a>
+                        </div>
+                        <a th:if="${matchedAuctionList.next}"
+                           th:href="@{/auction/matchedAuctionList(page= ${matchedAuctionList.end + 1},isAllDone=false)}"
+                           class="next">Next</a>
+                    </div>
+                </div>
+            </div>
+            <!--------------------------------------- 낙찰 완료 미션 끝 ------------------------------------------------------->
+
+            <!--------------------------------------- 일 수행 완료 미션 시작 ------------------------------------------------------->
+            <div id="allDone">
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-7 text-center">
+
+                        <h2 class="section-title mb-2" th:if="${allDoneList.getDtoList().size() == 0}">
+                            미션 완료 내역이 없습니다.
+                        </h2>
+
+                        <h2 class="section-title mb-2" th:if="${allDoneList.getDtoList().size() != 0}">
+                            [[${allDoneList.getTotalElements()}]]개의 미션 완료 내역이 있습니다.
+                        </h2>
+
+                    </div>
+                </div>
+                <!--예시 포스팅-->
+                <ul class="job-listings mb-5">
+                    <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+                        <div class="job-listing-logo" th:align="center">
+                            <img th:src="@{/img/ildoduk_temp.png}" alt="Free Website Template by Free-Template.co"
+                                 class="img-fluid" width="80" height="80"><br>
+                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
+                            <!--대표 이미지 삽입 예정-->
+                        </div>
+                        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                            <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <strong><b>카테고리</b></strong>
+                                <h2><b>미션 제목</b></h2>
+                                <strong><b>미션 수행 일시</b></strong>
+                            </div>
+                            <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                <b>최종 가격</b>
+                            </div>
+                            <div class="job-listing-meta w-25">
+                                <span class="btn btn-outline-primary active" th:href="@{#}"><b>리뷰쓰기</b></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- 내역이 하나도 없을 경우 포스팅 -->
+                <div th:if="${allDoneList.getDtoList().size() == 0}">
+                    <ul class="job-listings mb-5" th:align="center">
+                        <b> 미션 완료 내역이 없습니다.</b>
+                    </ul>
+                </div>
+
+                <!-- 내역이 있을 경우 리스트 포스팅 -->
+                <div th:if="${allDoneList.getDtoList().size() != 0}">
+                    <ul class="job-listings mb-5">
+                        <!--한개씩 포스팅-->
+                        <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
+                            th:each="dto : ${allDoneList.dtoList}" th:cellpadding="10">
+                            <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
+                            <!--헬퍼 이미지 및 비즈니스 카드 -->
+                            <div class="job-listing-logo" th:align="center">
+                                <img th:src="@{dto.helperPhoto}" alt="Free Website Template by Free-Template.co"
+                                     class="img-fluid" width="80" height="80">
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
+                            </div>
+
+                            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <!-- 카테고리 번호에 따른 출력 값 변화-->
+                                    <div th:if="dto.category == 1"><strong><b> 구매대행 </b></strong></div>
+                                    <div th:if="dto.category == 2"><strong><b> 홈 케어 </b></strong></div>
+                                    <div th:if="dto.category == 3"><strong><b> 펫 케어 </b></strong></div>
+                                    <div th:if="dto.category == 4"><strong><b> 퀵 서비스 </b></strong></div>
+                                    <h2>[[${dto.title}]]</h2>
+                                    <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
+                                </div>
+                                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
+                                </div>
+                                <div class="job-listing-meta w-25" style = "z-index: 1" >
+                                    <span class="btn btn-outline-primary" th:href="@{#}"><b>리뷰작성</b></span>
+<!----------------------------------------------- 리뷰쓰기 연결 예정 ------------------------------------------------------------>
+                                </div>
+                            </div>
+                        </li>
+                        <!--한개씩 끝-->
+                    </ul>
+                </div>
+                <!-- 리스트 끝 -->
+
+                <!-- 페이지 전환 처리 -->
+                <div style="text-align: center">
+                    <div class="custom-pagination ml-auto">
+                        <a th:if="${allDoneList.prev}"
+                           th:href="@{/auction/matchedAuctionList(page= ${allDoneList.start-1},isAllDone=true)}"
+                           tabindex="-1" class="prev">Prev</a>
+
+                        <div class="d-inline-block">
+                            <a th:href="@{/auction/matchedAuctionList(page = ${page},isAllDone=true)}"
+                               th:class="${allDoneList.page == page?'active':''}"
+                               th:each="page: ${allDoneList.pageList}">[[${page}]]</a>
+                        </div>
+                        <a th:if="${allDoneList.next}"
+                           th:href="@{/auction/matchedAuctionList(page= ${allDoneList.end + 1},isAllDone=true)}"
+                           class="next">Next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- 공통 footer -->
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+
+<!-- 공통 스크립트 -->
+<!-- SCRIPTS -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/stickyfill.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/quill.min.js}"></script>
+
+<script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+<!--jquery-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script th:inline="javascript">
+    /* 출력 내용 변화 */
+    $(document).ready(function () {
+        //alert("제이쿼리 먹히고 있는걸까?");
+        var isAllDone = [[${isAllDone}]]
+
+        if (isAllDone === true) {
+            $('#matched').hide();
+            $('#allDone').show();
+        } else {
+            $('#matched').show();
+            $('#allDone').hide();
+        }
+
+        $('#matchedB').click(function () {
+            $('#matched').show();
+            $('#allDone').hide();
+        });
+
+        $('#allDoneB').click(function () {
+            $('#matched').hide();
+            $('#allDone').show();
+        });
+
+    });
+
+</script>
+
+
 </body>
 </html>

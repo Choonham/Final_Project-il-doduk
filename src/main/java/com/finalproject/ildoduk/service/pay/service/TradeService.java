@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
+import com.finalproject.ildoduk.entity.auction.BiddingList;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 
@@ -15,18 +16,18 @@ public interface TradeService {
     //DTO -> Entity
     default TradeHistory dtoToEntity(TradeHistoryDTO dto){
         Member id = Member.builder().id(dto.getId()).build();
-        Member userId = Member.builder().id(dto.getUserId()).build();
-        AuctionList tradeHistory = AuctionList.builder().aucSeq(dto.getAucNo()).build();
+        Member helper = Member.builder().id(dto.getUserId()).build();
+
+        AuctionList tradeHistory = AuctionList.builder().aucSeq(dto.getAucNo()).title(dto.getAucTitle())
+                .content(dto.getAucContent()).build();
+
+        BiddingList biddingList = BiddingList.builder().bidSeq(dto.getAucNo()).offerPrice(dto.getAucPrice()).helper(helper).build();
 
         TradeHistory entity = TradeHistory.builder()
                 .tNo(dto.getTNo())
                 .aucNo(tradeHistory)
                 .id(id)
-                .userId(userId)
-                .aucTitle(dto.getAucTitle())
-                .aucContent(dto.getAucContent())
-                .aucPrice(dto.getAucPrice())
-                .aucState(dto.getAucState())
+                .bidSeq(biddingList)
                 .build();
 
         return entity;
@@ -38,11 +39,11 @@ public interface TradeService {
                 .tNo(entity.getTNo())
                 .aucNo(entity.getAucNo().getAucSeq())
                 .id(entity.getId().getId())
-                .userId(entity.getUserId().getId())
-                .aucTitle(entity.getAucTitle())
-                .aucContent(entity.getAucContent())
-                .aucPrice(entity.getAucPrice())
-                .aucState(entity.getAucState())
+                .userId(entity.getBidSeq().getHelper().getId())
+                .aucTitle(entity.getAucNo().getTitle())
+                .aucContent(entity.getAucNo().getContent())
+                .aucPrice(entity.getBidSeq().getOfferPrice())
+                .aucState(entity.getAucNo().getState())
                 .regDate(entity.getRegDate())
                 .build();
         return dto;

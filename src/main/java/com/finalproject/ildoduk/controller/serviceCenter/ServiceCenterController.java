@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
@@ -9,12 +10,11 @@ import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.Member;
-import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
-import com.finalproject.ildoduk.service.pay.service.TradeService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerBoardService;
 import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
@@ -41,7 +41,7 @@ public class ServiceCenterController {
 
     private final MemberService memberService;
     private final PaymentService paymentService;
-    private final TradeService tradeService;
+    private final AuctionService auctionService;
     private final CustomerBoardService customerBoardService;
     private final CustomerAnswerService customerAnswerService;
     private final UserReportService userReportService;
@@ -51,37 +51,9 @@ public class ServiceCenterController {
     @GetMapping("/paymentHistory")
     public void getPaymentHistroy(HttpSession session, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
         MemberDto id = (MemberDto)session.getAttribute("user");
+        log.info(id.getId()+"결제 조회 아이디");
         //해당 계정을 통하여 결제이력 불러오기
         PageResultsDTO pageResultsDTO = paymentService.getHistory(id.getId(),pageRequestDTO);
-
-        //거래 내역 조회
-        tradeHistoryDTO.setId(id.getId());
-        PageResultsDTO pageResultsDTO_trade = tradeService.allContents(tradeHistoryDTO,pageRequestDTO);
-
-        if(pageResultsDTO_trade != null){
-
-            ArrayList<TradeHistoryDTO> tradeDTO = (ArrayList<TradeHistoryDTO>) pageResultsDTO_trade.getDtoList();
-
-            for(int i=0;i<pageResultsDTO_trade.getDtoList().size();i++){
-
-                String userId = tradeDTO.get(i).getUserId();
-                //닉네임 꺼내기 위함
-                MemberDto memberDto = memberService.userIdCheck(userId);
-                tradeDTO.get(i).setUserId(memberDto.getNickname());
-
-                //거래 상황 업데이트
-                if(tradeDTO.get(i).getAucState().equals("1")){
-                    tradeDTO.get(i).setAucState("경매 완료");
-                } else if(tradeDTO.get(i).getAucState().equals("2")){
-                    tradeDTO.get(i).setAucState("경매 진행중");
-                } else {
-                    tradeDTO.get(i).setAucState("경매 취소");
-                }
-                log.info(tradeDTO+"결제 이력 체크~~~~~~");
-                pageResultsDTO_trade.setDtoList(tradeDTO);
-            }
-
-        }
 
         //값이 존재한다면 payCheck : y -> 결제 완료로 수정
         if(pageResultsDTO != null) {
@@ -100,7 +72,7 @@ public class ServiceCenterController {
         }
 
         model.addAttribute("result",pageResultsDTO); //결제
-        model.addAttribute("trade",pageResultsDTO_trade);//거래
+
     }
 
 //------------------------  환불 관련 ---------------------------
@@ -384,34 +356,32 @@ public class ServiceCenterController {
                            , Model model){
         //폼으로 이동할 때 세션 유저 값과 해당 신고 대상자의 아이디 필요..
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
-        MemberDto id = (MemberDto) session.getAttribute("user");
-        log.info("신고하는 계정 : " + id.getId());
-        //거래했던 유저 목록 조회
-        TradeHistoryDTO tradeList = new TradeHistoryDTO();
+        MemberDto user = (MemberDto) session.getAttribute("user");
 
-        tradeList.setId(id.getId());
-        PageResultsDTO<TradeHistoryDTO, TradeHistory> list = tradeService.allContents(tradeList, pageRequestDTO);
+        PageResultsDTO<AuctionBiddingDTO, Object[]> list = auctionService.getList4(pageRequestDTO, user.getId());
 
-        if(list != null){
-            for(int i=0;i<list.getDtoList().size();i++){
-                //닉네임으로 변환
-                MemberDto memberDto = memberService.userIdCheck(list.getDtoList().get(i).getUserId());
-                log.info(memberDto.getNickname() + i);
-                list.getDtoList().get(i).setUserId(memberDto.getNickname());
-            }
-            model.addAttribute("tradeList",list);
+        for(int i=0;i<list.getDtoList().size();i++) {
+            String id = list.getDtoList().get(i).getHelper();
+
+            MemberDto memberDto = memberService.userIdCheck(id);
+            String nick = memberDto.getNickname();
+            list.getDtoList().get(i).setHelperNickName(nick);
+            
         }
+        model.addAttribute("tradeList",list);
+
 
     }
+
+
 
     //신고 작성
     @PostMapping("/userReportWrite")
     public String writeReport(UserReportDTO reportDTO){
         //넘어오는 신고 대상 아이디는 닉네임으로 되어있다. 다시 아이디로 변환...
         String nick = reportDTO.getReportTarget();
-        log.info(nick + "신고 작성");
+
         MemberDto memberDto = memberService.userNickCheck(nick);
-        log.info("신고 작성을 위해 가져온 정보 : "+memberDto);
         reportDTO.setReportTarget(memberDto.getId());
 
         userReportService.insertReport(reportDTO);
@@ -469,7 +439,7 @@ public class ServiceCenterController {
 
         model.addAttribute("reportList",reportList);
 
-        return "/serviceCenter/badUserReportMgr";
+        return "/manager/badUserReportMgr";
     }
 
     @GetMapping("/reportStateUpdate")

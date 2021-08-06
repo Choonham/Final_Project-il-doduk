@@ -58,7 +58,7 @@
         $('#refund_checkBtn').click(function (e) {
 
             if($("input:checkbox[name=refund_check]").is(":checked") == true){
-                if(userPoint > point){
+                if(userPoint >= point){
                 e.preventDefault();
                 var check = confirm("정말 환불하시겠습니까???");
 

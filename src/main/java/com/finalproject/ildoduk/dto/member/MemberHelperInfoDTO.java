@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemberHelperInfoDTO {
 
-    private HelperInfoDTO helperInfoDTO;
-    private MemberDto memberDto;
 
     /*MemberDto*/
     private String id;          //아이디(이메일)
