@@ -88,28 +88,24 @@
                             <a href="index.html" class="nav-link active" th:href="@{/}">메인</a>
                         </li>
                         <li class="has-children">
-                            <a href="job-listings.html" th:href = "@{/auction/main}">미션</a>
+                            <a>회원관리</a>
                             <ul class="dropdown">
-                                <li><a th:href = "@{/auction/main}">경매 메인</a></li>
-                                <li><a th:href = "@{/auction/register}">작업 등록</a></li>
-                                <li><a th:href = "@{/auction/onAuctionList}">경매 진행 목록</a></li>
-                                <li><a th:href = "@{/auction/auctionDoneList}">경매 완료 목록</a></li>
-                                <li><a th:href = "@{/auction/matchedAuctionList}">매칭 완료 목록</a></li>
-                                <li><a th:href = "@{/auction/allDoneList}">작업 수행 완료 목록</a></li>
+                                <li><a th:href="@{/manager/helperManagement}">헬퍼 가입 승인</a></li>
+                                <li><a th:href="@{/serviceCenter/reportBoardMgr}">회원 신고 처리</a></li>
                             </ul>
                         </li>
                         <li class="has-children">
-                            <a href="services.html" th:href = "@{/blog/}">블로그</a>
+                            <a>경매 관리</a>
                             <ul class="dropdown">
-                                <li><a th:href = "@{/blog/}">블로그 메인</a></li>
+                                <li><a>결제 내역 처리</a></li>
+                                <li><a>경매 거래 상황</a></li>
                             </ul>
                         </li>
                         <li class="has-children">
                             <a href="" >고객센터</a>
                             <ul class="dropdown">
+                                <li><a>FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
-                                <li><a th:href="@{/serviceCenter/paymentHistory}">조회</a></li>
-                                <li><a th:href="@{/serviceCenter/reportBoardMgr}">사용자 신고</a></li>
                             </ul>
                         </li>
 

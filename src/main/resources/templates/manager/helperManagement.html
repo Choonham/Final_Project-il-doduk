@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:if = "${session.user != null}">
+
+   <div th:if="${session.user.state == 0}">
+    <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+  </div>
+
+</div>
+
+
+<section class="section-hero overlay inner-page bg-image" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">관리자 전용</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>헬퍼 승인 요청</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="site-section">
+  <div class="container">
+
+
+    <ul class="job-listings mb-5">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+        <a href="job-single.html"></a>
+        <div class="job-listing-logo">
+          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2>헬퍼아이디</h2>
+            <strong>각오~~~~~~~~~~~~~~</strong>
+          </div>
+          <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+            <span class="icon-room"></span> 경력사항
+          </div>
+          <div class="job-listing-meta">
+            <span class="badge badge-success">승인</span>
+            <br/>
+            <span class="badge badge-success">반려</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

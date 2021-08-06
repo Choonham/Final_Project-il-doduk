@@ -89,21 +89,14 @@
                 <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
               </a>
             </div>
-
-            <div th:if="${session.user.state == 0}">
-              <a th:href="@{/serviceCenter/reportStateUpdate(reportNo = ${report.reportNo})}">
-                <button>신고 처리하기</button>
-              </a>
-            </div>
-
           </div>
+
 
         </form>
       </div>
     </div>
   </div>
 </section>
-
 
 
 이쪽에 해당 헬퍼 비즈니스 카드를 불러올 것!!!!

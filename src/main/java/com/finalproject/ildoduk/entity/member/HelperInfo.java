@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.member;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -29,10 +30,19 @@ public class HelperInfo {
     private String goodAtThird;
 
     @Column(length = 3)
+    @ColumnDefault(value="0")
     private int kindness;
 
     @Column(length = 30)
     private String appeal;
 
+    @Column
+    private String facePhoto;
 
+    @Column
+    private String idCard;
+
+    @Column
+    @ColumnDefault(value="1")
+    private int agreeHelper;
 }

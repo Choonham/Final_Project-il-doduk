@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -25,5 +28,6 @@ public class MemberDto {
     private String photo;       //사진
     private String intro;       //유저 소개
     private int state;       //구분
+    private LocalDateTime regDate;  //가입일
 
 }

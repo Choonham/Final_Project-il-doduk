@@ -17,7 +17,7 @@ public class BlogComment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Blog blog;
 
     @Column(nullable = false)

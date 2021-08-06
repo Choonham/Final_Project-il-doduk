@@ -39,11 +39,7 @@
     </div>
 
     <!-- HOME -->
-<<<<<<< HEAD
-    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg');" id="home-section">
-=======
-    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
->>>>>>> 43973ace988e42d008ea6f731dd3f9af5f8cf146
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -79,6 +75,16 @@
                   <li th:each="liker : ${likerList}">[[${liker}]]</li>
                 </ul>
               </div>
+              <!-- 수정, 삭제, 목록 버튼(수정과 삭제가 끝나고나서 원래에 페이지로 가기 위한 tempPage 객체를 가지고 있음 -->
+              <span th:if = "${session.user.id == detail.writer}">
+                <a th:href="@{/blog/modify(postNo = ${detail.postNo}, tempPage=${listPageInfo.tempPage})}">
+                  <button type="button" class="btn btn-primary">Modify</button>
+                </a>
+
+                <a th:href="@{/blog/delete(postNo = ${detail.postNo}, writer = ${detail.writer}, tempPage=${listPageInfo.tempPage})}">
+                  <button type="button" class="btn btn-primary">delete</button>
+                </a>
+              </span>
             </div>
             <!-- 좋아요 기능 관련 끝 -->
 
