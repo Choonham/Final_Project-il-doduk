@@ -16,8 +16,9 @@ public class auctionServieceTest {
     @Test
     public void testGetMyBids(){
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        PageResultsDTO<AuctionBiddingDTO, Object[]> result = auctionService.getMyBids(pageRequestDTO,"user5");
+        PageResultsDTO<AuctionBiddingDTO, Object[]> result = auctionService.getMyBids(pageRequestDTO,"godnjs729417@naver.com",true);
         System.out.println(result.getDtoList().size());
+
         for(AuctionBiddingDTO DTO: result.getDtoList()){
             System.out.println(DTO);
         }
