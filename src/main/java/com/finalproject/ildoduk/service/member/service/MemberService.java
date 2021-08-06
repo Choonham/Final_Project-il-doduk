@@ -30,8 +30,9 @@ public interface MemberService {
 
     void userDelete(String id);
 
-
     MemberDto userToHelperIdCheck(String memberId);
+
+
 
 // 유저 포인트 관련
 

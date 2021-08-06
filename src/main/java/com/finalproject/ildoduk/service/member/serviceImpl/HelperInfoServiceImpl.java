@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
@@ -31,7 +32,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Override
     public HelperInfoDTO helperFindById(String memberId) {
 
-        Optional<HelperInfo> helperInfo =  repository.findById(memberId);
+        Optional<HelperInfo> helperInfo =  repository.findByMemberId(memberId);
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }
@@ -52,5 +53,28 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Override
     public int countHelpersBySigungu(String sigungu) {
         return repository.countDistinctBySigungu(sigungu);
+    }
+
+    //헬퍼 가입을 위한 state 체크
+    @Override
+    public HelperInfoDTO checkState() {
+        log.info("헬퍼 가입 신청 1");
+        Optional<HelperInfo> result = repository.checkState();
+        log.info("헬퍼 가입 신청 2" + result.get());
+        return result.isPresent() ? EntityToDTO(result.get()) : null;
+    }
+    //승인
+    @Override
+    public void accept(HelperInfoDTO helperInfoDTO) {
+       HelperInfo entity = dtoToEntity(helperInfoDTO);
+
+       repository.save(entity);
+    }
+    //반려
+    @Override
+    public void deny(HelperInfoDTO helperInfoDTO) {
+        HelperInfo entity = dtoToEntity(helperInfoDTO);
+
+        repository.save(entity);
     }
 }

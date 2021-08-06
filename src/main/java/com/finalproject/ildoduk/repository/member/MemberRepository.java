@@ -22,7 +22,6 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
 
 
-
     //결제 관련
     @Transactional
     @Modifying(clearAutomatically = true)

@@ -3,6 +3,7 @@ package com.finalproject.ildoduk.repository.member;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,11 @@ import java.util.Optional;
 
 public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, QuerydslPredicateExecutor<HelperInfo> {
 
-    Optional<HelperInfo> findById(String memberId);
+    Optional<HelperInfo> findByMemberId(String memberId);
+
+    //헬퍼 가입 승인을 위한 전체 멤버 조회
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")
+    Optional<HelperInfo> checkState();
 
 
     // =====================BLOG==================//

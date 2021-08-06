@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.member;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -40,4 +41,10 @@ public class HelperInfo {
     @Column
     private String idCard;
 
+    @Column
+    @ColumnDefault("1")
+    private int agreeHelper;
+
+
+    public void changeAgreeHelper(int agreeHelper){ this.agreeHelper = agreeHelper;}
 }
