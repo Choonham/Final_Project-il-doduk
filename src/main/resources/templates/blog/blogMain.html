@@ -30,6 +30,10 @@
         <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
       </div>
 
+      <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+      </div>
+
     </div>
 
     <div th:if = "${session.user == null}">
@@ -49,8 +53,10 @@
           </div>
         </div>
         <div class="row" style="padding-top: 1em; padding-bottom: 0">
-            <div class="col-md-4">
-                <!-- 내 블로그 가기 -->
+            <div class="col-md-4" style="position: relative">
+                <a th:if = "${session.user.state == 2}" th:href="@{/blog/blogList?writer=myBlog}" class="btn px-4 btn-primary text-white" style="float: left; position: absolute; bottom: 0;">
+                    My Blog
+                </a>
             </div>
             <div class="col-md-8">
                 <form th:action = "@{/blog/blogMain}" method="get" class = "p-4 border rounded">

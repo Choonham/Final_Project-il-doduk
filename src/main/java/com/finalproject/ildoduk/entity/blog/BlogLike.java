@@ -16,7 +16,7 @@ public class BlogLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeNo;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Blog blog;
 
     @Column(length=30, nullable = false)

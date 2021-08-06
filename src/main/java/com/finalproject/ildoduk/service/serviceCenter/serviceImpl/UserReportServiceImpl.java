@@ -40,16 +40,12 @@ public class UserReportServiceImpl implements UserReportService {
 
     //나와 거래했던 유저 정보 검색
     @Override
-    public TradeHistoryDTO getUser(String id) {
-
+    public Optional<TradeHistory> getUser(String id) {
 
         //내 거래 목록 조회
         Optional<TradeHistory> trade = tradeRepository.findAllByIdId(id);
 
-        //조회된 결과가 있을 경우
-        TradeHistory trade_result = trade.get();
-
-        return trade.isPresent() ? entityToDtoTrade(trade_result) : null;
+        return trade;
     }
 
 
@@ -94,7 +90,7 @@ public class UserReportServiceImpl implements UserReportService {
 
         return new PageResultsDTO<>(result, fn);
     }
-
+    //관리자 :  확인 시에 신고 상황 업데이트
     @Override
     public void updateReportState(UserReportDTO userReportDTO) {
 

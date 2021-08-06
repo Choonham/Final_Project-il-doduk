@@ -35,7 +35,7 @@
     <div th:replace="~{/fragments/nav :: navi}"></div>
 </div>
 
-<section class="home-section section-hero overlay bg-image" id="home-section" style="background-image: url('images/hero_1.jpg');">
+<section class="home-section section-hero overlay bg-image" id="home-section">
 
     <div class="container">
         <div class="row align-items-center justify-content-center">
@@ -109,7 +109,7 @@
 </section>
 
 
-<section class="py-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
+<section class="py-5 bg-image overlay-primary fixed overlay">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8">
@@ -180,10 +180,18 @@
     </div>
 </section>
 
-<script>
-    $(document).ready(function(){
-        //결제 팝업창으로 띄우기
+<script th:inline="javascript">
+
+    var msg = [[${msg}]];
+
+        $(document).ready(function(){
+
+            if(msg != null) {
+                alert(msg);
+            }
+            //결제 팝업창으로 띄우기
         $("#btn_submit").on("click",function(){
+
             window.open("/kakaoPay/kakao","popup_cash","width=500, height=584, scrollbars=no, resizeable=no,toolbar=no, left=420,top=90");
         });
     });

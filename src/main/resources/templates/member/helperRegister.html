@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script >
+    $('.uploadBtn').click(function() {
+        var formData = new formData();
+        var inputFile = $("input[type='file']");
+        var files = inputFile[0].files;
+
+        for(var i = 0; i <files.length; i++){
+            console.log(files[i]);
+            formData.append("uploadFiles",files[i]);
+        }
+
+        //실제 업로드 부분
+        //upload Ajax
+        $.ajax({
+            url:'/member/helperUpload',
+            processData: false,
+            contentType: false,
+            data: formData,
+            type:'POST',
+            dataType:'json',
+            success: function(result){
+                console.log(result);
+                //나중에 화면 처리
+            },
+            error:function(jqXHR, textStatus, errorThrown){
+                console.log(textStatus);
+            }
+
+
+        });// $.ajax
+
+    });
+</script>
+<body>
+
+    <form method="post" action="/member/helperRegister">
+        <!--회원아이디-->
+        <input type="hidden" name="memberId" th:value="${session.user.id}" />
+        경력사항 1 <input type="text" name="goodAtFirst" /> <br />
+        경력사항 2<input type="text" name="goodAtSecond" /> <br />
+        경력사항 3<input type="text" name="goodAtThrid" /> <br />
+        각오 <input type="text" name="appeal" /> <br />
+
+        <button type="submit">헬퍼가입신청</button>
+     </form>
+        <!--<h3> * 헬퍼인증 필수 사진</h3> <br />
+        본인 얼굴 사진 <input type="file" name="uploadFiles" multiple /> <br />
+        <button class="uploadBtn" >업로드 </button>-->
+        <!--본인 신분증 사진 <input type="file" name="idCard"  />-->
+
+
+</body>
+</html>

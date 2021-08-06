@@ -70,11 +70,6 @@
               <button th:if = "!${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천</button>
               <button th:if = "${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천 취소</button>
 
-              <div id="likerList" style = "height: 200px; width: 300px; border: #0f6674 solid 1px; position:absolute; display:none; background-color: white ">
-                <ul>
-                  <li th:each="liker : ${likerList}">[[${liker}]]</li>
-                </ul>
-              </div>
               <!-- 수정, 삭제, 목록 버튼(수정과 삭제가 끝나고나서 원래에 페이지로 가기 위한 tempPage 객체를 가지고 있음 -->
               <span th:if = "${session.user.id == detail.writer}">
                 <a th:href="@{/blog/modify(postNo = ${detail.postNo}, tempPage=${listPageInfo.tempPage})}">
@@ -85,6 +80,12 @@
                   <button type="button" class="btn btn-primary">delete</button>
                 </a>
               </span>
+            </div>
+
+            <div id="likerList" style = "display:none;">
+              <ul>
+                <li th:each="liker : ${likerList}">[[${liker}]]</li>
+              </ul>
             </div>
             <!-- 좋아요 기능 관련 끝 -->
 
@@ -391,7 +392,7 @@
 
     // 좋아요 리스트 보기
     function getLikerList(e){
-
+    /**
       var sWidth = window.innerWidth;
       var sHeight = window.innerHeight;
 
@@ -415,6 +416,8 @@
         "position": "absolute",
         "z-index" : 1
       }).show();
+     **/
+      $("#likerList").show();
     }
 
     function closeLayer() {

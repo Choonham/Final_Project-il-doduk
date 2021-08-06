@@ -29,7 +29,7 @@
 </style>
 
 
-<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+<section class="section-hero overlay inner-page bg-image" id="home-section">
   <div class="container">
     <div class="row">
       <div class="col-md-7">
@@ -54,6 +54,9 @@
       <a id="trade_btn">
         <button>거래내역조회</button>
       </a>
+
+경매 완료 내역과 겹쳐서 거래내역 삭제 하겠습니다.
+
 
 <div id="notSelected">
   <table >
@@ -97,36 +100,7 @@
 
   <ul>
     <li th:each="page: ${result.pageList}">
-      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page},userID=${session.user.id})}">
-        [[${page}]]
-      </a>
-    </li>
-  </ul>
-</div>
-
-<div id="tradeHistory">
-  <table>
-    <tr>
-      <td>#</td>
-      <td>제목</td>
-      <td>가격</td>
-      <td>거래대상</td>
-      <td>거래상태</td>
-      <td>거래일</td>
-    </tr>
-    <tr th:each="trade : ${trade.dtoList}">
-      <td>[[${trade.tNo}]]</td>
-      <td><a href="" th:href="@{/auction/getAuction(aucSeq = ${trade.aucNo})}">[[${trade.aucTitle}]]</a></td>
-      <td>[[${trade.aucPrice}]]</td>
-      <td>[[${trade.userId}]]</td>
-      <td>[[${trade.aucState}]]</td>
-      <td th:text="${#temporals.format(trade.regDate, 'yyyy-MM-dd')}"></td>
-    </tr>
-  </table>
-
-  <ul>
-    <li th:each="page: ${trade.pageList}">
-      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page},userID=${session.user.id})}">
+      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page})}">
         [[${page}]]
       </a>
     </li>

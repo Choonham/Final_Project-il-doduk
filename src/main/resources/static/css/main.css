@@ -4,8 +4,33 @@ button {
 }
 
 #cash_status{
-    position: absolute;
-    left: 82%;
+    position: relative;
+    left: 81%;
     z-index: 10;
     color: black;
+    display: block;
+    background: #ffffff;
+}
+
+<!-- 문의 답변 영역 -->
+
+#comment_list{
+   border: 1px solid gray;
+   width: auto;
+}
+
+<!-- 신고게시판 최근 거래 내역 -->
+
+#badUser{
+    cursor: pointer;
+    line-height: 10px;
+}
+
+#trade_user{
+    cursor: pointer;
+    line-height: 15px;
+}
+
+#trade_user:hover{
+   color: #7f848c;
 }
