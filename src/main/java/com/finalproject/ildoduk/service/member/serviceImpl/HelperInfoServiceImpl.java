@@ -13,6 +13,7 @@ import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,8 @@ import java.util.function.Function;
 @RequiredArgsConstructor // 의존성 자동 주입
 public class HelperInfoServiceImpl implements HelperInfoService {
 
-    private final HelperInfoRepository repository;
+    @Autowired
+    private HelperInfoRepository repository;
 
     @Override
     public HelperInfoDTO helperFindById(String memberId) {

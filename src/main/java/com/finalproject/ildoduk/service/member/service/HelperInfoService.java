@@ -45,6 +45,7 @@ public interface HelperInfoService {
         return dto;
     }
 
+    /**
     default MemberHelperInfoDTO entityToDTO(HelperInfo entity){
 
         MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
@@ -59,6 +60,7 @@ public interface HelperInfoService {
 
         return dto;
     }
+     **/
 
     default MemberHelperInfoDTO entityToDTO(HelperInfo helper, Member member){
 
