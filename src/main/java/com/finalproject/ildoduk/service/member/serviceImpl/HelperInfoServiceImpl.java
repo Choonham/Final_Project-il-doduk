@@ -57,12 +57,18 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         //String member -> member member 로 로드하고 밑에 findByMemberId로 넣어야함
 
+        // memo by 노영준 : repo에서 Optional<HelperInfo> findByMemberId_Id(String memberId); 로 사용하면 쿼리 두번 안불러도 되지 않을까요...?
+
         Optional<Member> member= repo.findById(memberId);
+
         Optional<HelperInfo> helperInfo =  repository.findByMemberId(member.get());
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }
 
+    // =========================Blog======================= //
+
+    // 활동 지역으로 헬퍼 찾기
     @Override
     public PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO) {
 
@@ -76,11 +82,13 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return new PageResultsDTO<>(result, fn);
     }
 
+    // 활동 지역별 헬퍼 수
     @Override
     public int countHelpersBySigungu(String sigungu) {
         return repository.countDistinctBySigungu(sigungu);
     }
 
+    // =========================Blog======================= //
 
 
 //--------- 관리자 : 헬퍼 리스트 ---------------

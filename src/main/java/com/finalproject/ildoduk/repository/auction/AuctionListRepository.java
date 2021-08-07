@@ -52,14 +52,6 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
     Page<Object[]> getMyBids(Pageable pageable, String helper);
 
-
-    // 유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
-
-    //유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
-
-    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
-    Page<Object[]> getMyBids(Pageable pageable, String helper);
-
     //====================================== Blog =====================================//
 
 

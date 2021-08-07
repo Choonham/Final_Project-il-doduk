@@ -107,7 +107,7 @@
 
           <ul class="job-listings mb-5">
               <li th:each = "dto: ${result.dtoList}" class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-                  <a th:href="@{/blog/blogList?writer=}+${dto.memberDto.id}"></a>
+                  <a th:href="@{/blog/blogList?writer=}+${dto.id}"></a>
 
                   <div class="job-listing-logo">
                       <img src="images/job_logo_1.jpg" alt="Image" class="img-fluid">
@@ -115,14 +115,14 @@
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                       <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                          <h2 th:text="${dto.memberDto.name}"></h2>
-                          <strong th:text = "${dto.memberDto.id}"></strong>
+                          <h2 th:text="${dto.name}"></h2>
+                          <strong th:text = "${dto.id}"></strong>
                       </div>
                       <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                          [[${dto.helperInfoDTO.appeal}]]
+                          [[${dto.appeal}]]
                       </div>
                       <div class="job-listing-meta">
-                          <span class="badge badge-danger">친절해요! : [[${dto.helperInfoDTO.kindness}]]</span>
+                          <span class="badge badge-danger">친절해요! : [[${dto.kindness}]]</span>
                       </div>
                   </div>
               </li>

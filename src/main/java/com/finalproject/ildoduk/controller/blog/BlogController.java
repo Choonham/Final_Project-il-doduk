@@ -106,6 +106,11 @@ public class BlogController {
         // log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
         List<String> likerList= blogLikeService.getLiker(postNo);
         int likes = blogLikeService.getLikes(postNo);
+        String writer = blogDTO.getWriter();
+
+        MemberDto writerInfoMember = memberService.userIdCheck(writer);
+        HelperInfoDTO writerInfoHelper = helperInfoService.helperFindById(writer);
+
 
         model.addAttribute("likerList", likerList);
         model.addAttribute("likes", likes);
@@ -113,7 +118,9 @@ public class BlogController {
         model.addAttribute("comments", blogCommentDTO);
         model.addAttribute("listPageInfo", tempPageDTO);
 
-        log.info("안녕");
+        model.addAttribute("writerInfoMember", writerInfoMember);
+        model.addAttribute("writerInfoHelper", writerInfoHelper);
+
     }
 
     // 글 쓰기
