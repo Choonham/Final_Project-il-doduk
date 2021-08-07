@@ -31,10 +31,11 @@ public class AuctionController {
     public void main(PageRequestDTO pageRequestDTO) {
         //경매 리스트 시간에 따라 상태값 변화 하기
         auctionService.changeState1(pageRequestDTO); //경매 시간 끝난 것 state=1로 변경
-        auctionService.changeState2(pageRequestDTO); //일 수행시간 초과하고, 매칭이 안된 것 state=4로 변경
+        auctionService.changeState2(pageRequestDTO); //미션 시작 시간(-30분) 초과하고, 매칭이 안된 것 state=4로 변경
     }
 
     //=================================================== User 리스트 ==================================================//
+    //auc.state=0 경매 진행 중 / auc.state=1 경매완료, 매칭미완료 / auc.state=2 매칭완료 / auc.state=3 일 수행 완료 / auc.state=4 삭제
 
     //경매 진행 중 미션, 경매 완료된 미매칭 미션 페이지
     @GetMapping("/onAuctionList")
@@ -112,9 +113,73 @@ public class AuctionController {
 
     //=================================================== Helper 리스트 ==================================================//
 
+    /*낙찰 된 미션, 내가 참여한 미션 보기*/
+
+    //내가 참여한 미션
+    @GetMapping("/myBidsHelper")
+    public void MyBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean onAuction) {
+
+        //메인에서 user 값 받아서 리스트 출력
+        log.info("======= list ========");
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String helper = member.getId();
+        System.out.println(helper);
+
+        //paging 설정
+        pageRequestDTO.setSize(3);
+
+        //페이지 설정 값 따로 만들어 주기
+        PageRequestDTO pageRequestDTO2 = PageRequestDTO.builder().page(1).size(3).build();
+        //경매 진행 중 onAuction=true
+        if (onAuction) {
+            model.addAttribute("onAuction", onAuction);
+            model.addAttribute("bidsOn", auctionService.getMyBids(pageRequestDTO, helper, onAuction)); //경매 진행 중 목록
+            model.addAttribute("bidsDone", auctionService.getMyBids(pageRequestDTO2, helper,false)); //경매 완료 목록
+        }
+
+        //미션 완료 리스트 onAuction=false
+        else {
+            model.addAttribute("onAuction", onAuction);
+            model.addAttribute("matchedAuctionList", auctionService.getMyBids(pageRequestDTO2, helper,true)); //경매 진행 중 목록
+            model.addAttribute("allDoneList", auctionService.getMyBids(pageRequestDTO, helper, onAuction)); //경매 완료 목록
+        }
+
+    }
+
+    //경매 낙찰 미션 보기
+    @GetMapping("/myChosenBidsHelper")
+    public void MyChosenBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean allDone) {
+
+        //메인에서 user 값 받아서 리스트 출력
+        log.info("======= list ========");
+        MemberDto member = (MemberDto) session.getAttribute("user");
+        String helper = member.getId();
+        System.out.println(helper);
+
+        //paging 설정
+        pageRequestDTO.setSize(3);
+
+        //페이지 설정 값 따로 만들어 주기
+        PageRequestDTO pageRequestDTO2 = PageRequestDTO.builder().page(1).size(3).build();
+        //미션 대기 중 allDone=false
+        if (!allDone) {
+            model.addAttribute("allDone", allDone);
+            model.addAttribute("missionWait", auctionService.getMyChosenBids(pageRequestDTO, helper, false)); //미션 대기 중 목록
+            model.addAttribute("missionDone", auctionService.getMyChosenBids(pageRequestDTO2, helper,true)); //미션 완료 목록
+        }
+
+        //미션 완료 리스트 onAuction=false
+        else {
+            model.addAttribute("allDone", allDone);
+            model.addAttribute("missionWait", auctionService.getMyBids(pageRequestDTO2, helper,false)); //미션 대기 중 목록
+            model.addAttribute("missionDone", auctionService.getMyBids(pageRequestDTO, helper, true)); //미션 완료 목록
+        }
+
+    }
+
     //경매 참여 가능한 옥션리스트 보기
-    @GetMapping("/availableAcutions")
-    public void list5(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+    @GetMapping("/availableAuctions")
+    public void list5(PageRequestDTO pageRequestDTO, Model model) {
 
         // 페이지에서 값 받아오기
         String sido = "";
@@ -125,7 +190,26 @@ public class AuctionController {
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
-    //리스트 출력 관련 컨트롤러 끝
+    //경매 참여 가능한 옥션리스트 - 검색
+    @PostMapping("/availableAuctions")
+    public void list5(PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request) {
+
+        // 페이지에서 값 받아오기
+        String sido = request.getParameter("sido");
+        String sigungu = request.getParameter("sigungu");
+        int category = Integer.parseInt(request.getParameter("category"));
+
+       /* if(sido == null){
+            sido="";
+        }
+        if(sigungu == null){
+            sigungu ="";
+        }*/
+
+        System.out.println("category  :  "+category+"   ||   sido :     "+sido+"     ||   sigungu  :"+sigungu);
+
+        model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
+    }
 
     //=================================================== 상세보기 시작 ==================================================//
     //경매상세보기 - 진행 중 경매 혹은 매칭 미완료

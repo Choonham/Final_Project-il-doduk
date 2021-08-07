@@ -6,14 +6,16 @@
 </head>
 <body>
 
-<h3> 환영합니다. user1님 </h3>
+<h3> 환영합니다. </h3>
 <br><br><br>
-<a th:href="@{/auction/onAuctionList(user='user1')}">진행 중인 경매</a><br><br>
-<a th:href="@{/auction/auctionDoneList(user='user1')}">경매 완료, 선택 미완료</a><br><br>
-<a th:href="@{/auction/matchedAuctionList(user='user1')}">경매완료, 매칭완료</a><br><br>
-<a th:href="@{/auction/allDoneList(user='user1')}">지난 일 목록</a><br><br>
 
-<a th:href="@{/auction/register(user='user1')}">일 요청 작성으로 이동하기</a>
+<a th:href="@{/auction/availableAuctions}">경매 참여하기</a><br><br>
+
+<a th:href="@{/auction/myBidsHelper(onAuction=true)}">내가 참여한 경매</a><br><br>
+<a th:href="@{/auction/myChosenBidsHelper(allDone=false)}">낙찰 된 경매</a><br><br>
+
+
+<a th:href="@{/auction/register}">일 요청 작성으로 이동하기</a>
 
 </body>
 </html>

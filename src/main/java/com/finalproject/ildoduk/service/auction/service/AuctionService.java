@@ -32,6 +32,7 @@ public interface AuctionService {
     void changeState2(PageRequestDTO pageRequestDTO);
 
     //======================================== user ============================================//
+    //auc.state=0 경매 진행 중 / auc.state=1 경매완료, 매칭미완료 / auc.state=2 매칭완료 / auc.state=3 일 수행 완료 / auc.state=4 삭제
 
     //경매 등록
     Long register(AuctionListDTO dto);
@@ -69,13 +70,16 @@ public interface AuctionService {
     //================================== helper =========================================//
 
     //헬퍼 참여한 경매 목록
-    PageResultsDTO<AuctionBiddingDTO, Object[]> getMyBids(PageRequestDTO pageRequestDTO, String helper);
+    PageResultsDTO<AuctionBiddingDTO, Object[]> getMyBids(PageRequestDTO pageRequestDTO, String helper, boolean onAuction);
+
+    //헬퍼 낙찰 내역
+    PageResultsDTO<AuctionBiddingDTO, Object[]> getMyChosenBids(PageRequestDTO pageRequestDTO, String helper, boolean isAllDone);
 
     //경매 참여
     Long BiddingIn(BiddingListDTO dto);
 
-    //경매 삭제
-    void deleteBidding(Long bidSeq);
+    //경매 삭제 - helper가 경매 삭제 불가
+    //void deleteBidding(Long bidSeq);
 
     //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
     PageResultsDTO<AuctionListDTO, AuctionList> getAvailableAuctions(String sido, String sigungu, int category, PageRequestDTO pageRequestDTO);
@@ -131,7 +135,7 @@ public interface AuctionService {
     default AuctionBiddingDTO entityToDTO(AuctionList auc, BiddingList bid, Member helper){
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
-                .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
+                .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
                 .userPhoto(auc.getUser().getPhoto()).helperPhoto(helper.getPhoto())
                 .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
@@ -142,7 +146,7 @@ public interface AuctionService {
     default AuctionBiddingDTO entityToDTO(AuctionList auc, Member user, BiddingList bid, Member helper){
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(user.getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
-                .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
+                .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
                 .userPhoto(user.getPhoto()).helper(helper.getPhoto())
                 .userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
@@ -153,7 +157,7 @@ public interface AuctionService {
     default AuctionBiddingDTO entityToDTO(AuctionList auc,BiddingList bid){
         AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
-                .gender(auc.getGender()).level(auc.getLevel()).predicHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
+                .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
                 .userNickName(auc.getUser().getNickname()).userPhoto(auc.getUser().getPhoto()).helperPhoto(bid.getHelper().getPhoto()).helperNickName(bid.getHelper().getNickname())
                 .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(bid.getHelper().getId()).offerPrice(bid.getOfferPrice()).build();
