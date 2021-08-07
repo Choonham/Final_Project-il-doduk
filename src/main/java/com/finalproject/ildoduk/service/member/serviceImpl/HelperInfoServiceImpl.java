@@ -50,6 +50,8 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Override
     public HelperInfoDTO helperFindById(String memberId) {
 
+        //String member -> member member 로 로드하고 밑에 findByMemberId로 넣어야함
+
         Optional<HelperInfo> helperInfo =  repository.findByMemberId(memberId);
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
