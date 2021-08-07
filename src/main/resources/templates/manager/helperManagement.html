@@ -24,27 +24,81 @@
         <h1 class="text-white font-weight-bold">관리자 전용</h1>
         <div class="custom-breadcrumbs">
           <a href="#">Home</a> <span class="mx-2 slash">/</span>
-          <span class="text-white"><strong>헬퍼 승인 요청</strong></span>
+          <span class="text-white"><strong>헬퍼 요청 리스트</strong></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div>
-  요청 리스트
-</div>
-<div>
-  반려 리스트
-</div>
-
-
 <section class="site-section">
+    <div class="row justify-content-center mb-5" data-aos="fade-up">
+      <div id="filters" class="filters text-center col-md-7">
+        <button class="btn btn-primary active" id="requestHelper">헬퍼 요청 목록</button>
+        <button class="btn btn-primary" id="denyHelper">반려된 헬퍼 목록</button>
+      </div>
+    </div>
+</section>
+
+
+<section class="site-section" id="request_helper">
   <div class="container">
 
 
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}" th:if="${helper.agreeHelper == 1}">
+        <div class="job-listing-logo">
+          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 th:text="${helper.memberId}">헬퍼아이디</h2>
+            <strong th:text="${helper.appeal}">각오</strong>
+          </div>
+          <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+            <span class="icon-contacts"></span>
+              <div th:text="${helper.goodAtFirst}"></div>
+              <div th:text="${helper.goodAtSecond}"></div>
+              <div th:text="${helper.goodAtThird}"></div>
+          </div>
+        </div>
+
+        <div class="job-listing-meta">
+          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
+          <br/>
+          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
+        </div>
+
+      </li>
+    </ul>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:href="@{/manager/helperManagement(page = ${page})}"
+               th:class="${helperManagement.page == page?'active':''}"
+               th:each="page: ${helperManagement.pageList}">[[${page}]]</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 승인 및 반려 목록 -->
+
+<section class="site-section" id="result_helper">
+  <div class="container">
+
+
+    <ul class="job-listings mb-5">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}" th:if="${helper.agreeHelper != 1}">
         <div class="job-listing-logo">
           <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
@@ -56,28 +110,40 @@
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
             <span class="icon-contacts"></span>
-              <div th:text="${helper.goodAtFirst}"></div>
-              <div th:text="${helper.goodAtSecond}"></div>
-              <div th:text="${helper.goodAtThird}"></div>
+            <div th:text="${helper.goodAtFirst}"></div>
+            <div th:text="${helper.goodAtSecond}"></div>
+            <div th:text="${helper.goodAtThird}"></div>
           </div>
         </div>
 
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 1}">
-          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
-          <br/>
-          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
-        </div>
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 2}">
+        <span class="job-listing-meta" th:if="${helper.agreeHelper == 2}">
           헬퍼 승인
-        </div>
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 3}">
+        </span>
+        <span class="job-listing-meta" th:if="${helper.agreeHelper == 3}">
           반려
-        </div>
+        </span>
       </li>
     </ul>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+            <div class="d-inline-block">
+              <a th:href="@{/manager/helperManagement(page = ${page})}"
+                 th:class="${helperManagement.page == page?'active':''}"
+                 th:each="page: ${helperManagement.pageList}">[[${page}]]</a>
+            </div>
+
+        </div>
+      </div>
+    </div>
 
   </div>
 </section>
+
+
 
 <script>
   function test(){
@@ -85,6 +151,7 @@
   }
 </script>
 
+<script th:src="@{/pay/serviceCenter.js}"></script>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 

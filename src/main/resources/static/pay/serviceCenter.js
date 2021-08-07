@@ -99,4 +99,16 @@ $(document).ready(function () {
     });
 
 
+    // 관리자 : 헬퍼 요청 리스트
+    $("#requestHelper").click(function(){
+        $("#request_helper").show();
+        $("#result_helper").hide();
+    });
+
+    $("#denyHelper").click(function(){
+        $("#request_helper").hide();
+        $("#result_helper").show();
+    });
+
+
 });

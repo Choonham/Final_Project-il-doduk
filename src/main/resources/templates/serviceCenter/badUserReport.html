@@ -77,17 +77,13 @@
           <div class="col-md-12 text-center ">
             <div class="custom-pagination ml-auto">
 
-
               <div class="d-inline-block">
-                <ul>
-                  <li th:class=" 'page-item ' + ${reportList.page == page?'active':''} " th:each="page: ${reportList.pageList}">
-                    <a th:href="@{/serviceCenter/badUserReport(page = ${page})}">
-                      [[${page}]]
-                    </a>
-                  </li>
-                </ul>
+                <a th:class=" 'page-item ' + ${reportList.page == page?'active':''} "
+                   th:each="page: ${reportList.pageList}"
+                   th:href="@{/serviceCenter/badUserReport(page = ${page})}">
+                  [[${page}]]
+                </a>
               </div>
-
 
             </div>
           </div>
