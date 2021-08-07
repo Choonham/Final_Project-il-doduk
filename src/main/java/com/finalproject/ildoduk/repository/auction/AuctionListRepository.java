@@ -10,6 +10,7 @@ import org.springframework.data.querydsl.*;
 import org.springframework.data.repository.query.*;
 import org.springframework.stereotype.*;
 
+import javax.jdo.annotations.Transactional;
 import java.util.*;
 
 
@@ -17,6 +18,7 @@ import java.util.*;
 public interface AuctionListRepository extends JpaRepository<AuctionList, Long>, QuerydslPredicateExecutor<AuctionList> {
 
     //auc.state=0 경매 진행 중 / auc.state=1 경매완료, 매칭미완료 / auc.state=2 매칭완료 / auc.state=3 일 수행 완료 / auc.state=4 삭제
+
 
     //aucSeq 값으로 옥션 하나만 불러오기
     @Query(value = "select a from AuctionList a where a.aucSeq=:aucSeq")
@@ -28,7 +30,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
 
     //경매 완료, 매칭미완료 값
     @Query(value = "SELECT a from AuctionList a WHERE a.state=1 and a.user.id=:user")
-    Page<AuctionList> getAllWithState2(Pageable pageable,String user);
+    Page<AuctionList> getAllWithState2(Pageable pageable, @Param("user") String  user);
 
     //매칭완료, 일 수행 전 값   state=2(매칭 완료), ischosen=1(낙찰값) , auctionList-Bidding 정보 출력
     @Query(value = "SELECT a,b from AuctionList a , BiddingList b WHERE a.state=2 and a.user.id=:user and a.aucSeq = b.aucSeq.aucSeq and b.chosen =1")
@@ -49,6 +51,20 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     //유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
     @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
     Page<Object[]> getMyBids(Pageable pageable, String helper);
+
+
+    // 유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
+
+    //유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
+
+    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
+    Page<Object[]> getMyBids(Pageable pageable, String helper);
+
+    //====================================== Blog =====================================//
+
+
+    // 헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
+
 
     //================================Helper=============================================//
 
@@ -71,6 +87,11 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     //====================================== Blog =====================================//
 
     //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
+
+
+    //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
+
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
+
 }

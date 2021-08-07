@@ -24,14 +24,17 @@
         function kakaoLogin(){ //로그인시 실제 실행될 function
 
             window.Kakao.Auth.login({
-                scope:'profile_nickname, account_email, gender', //카카오에서 받아올 정보 고유 id
+                scope:'profile_nickname , profile_image, account_email, gender, birthday', //카카오에서 받아올 정보 고유 id
                 success: function (authObj){      //authObj : 받아온 Obj data
                     console.log(authObj);
                     window.Kakao.API.request({
                         url:'/v2/user/me', //현재 로그인한 사용자의 정보 가져오는 url
                         success: res => {
                             const kakao_account = res.kakao_account;
-                            console.log(kakao_account);
+                            const properties = res.properties;
+
+                            console.log("properiti"+properties.profile_image);
+                            console.log(kakao_account.profile);
                             console.log(kakao_account.email);
                             var json=JSON.stringify(kakao_account); //문자열로 바꾸고
 
@@ -44,7 +47,7 @@
                                 success: function(data){
                                     console.log(data);  //컨트롤러에서 return 된 값
 
-                                    location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동
+                                    /*location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동*/
 
                                 },error : function(jqXHR, textStatus){
                                     alert(textStatus);

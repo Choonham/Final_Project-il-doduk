@@ -238,7 +238,7 @@
                                     <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
                                 <div class="job-listing-meta w-25" style = "z-index: 1" >
-                                    <span class="btn btn-outline-primary" th:href="@{#}"><b>리뷰작성</b></span>
+                                    <span class="btn btn-outline-primary" th:onclick="'location.href=\''+@{/review/writeform(bid=${dto.bidSeq})}+'\''" ><b>리뷰작성</b></span>
 <!----------------------------------------------- 리뷰쓰기 연결 예정 ------------------------------------------------------------>
                                 </div>
                             </div>

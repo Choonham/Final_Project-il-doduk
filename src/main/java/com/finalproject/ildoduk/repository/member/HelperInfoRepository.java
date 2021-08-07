@@ -16,7 +16,8 @@ import java.util.Optional;
 
 public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, QuerydslPredicateExecutor<HelperInfo> {
 
-    Optional<HelperInfo> findByMemberId(String memberId);
+
+    Optional<HelperInfo> findByMemberId(Member memberId);
 
     int countHelperInfoByMemberId(String memeberId);
 
