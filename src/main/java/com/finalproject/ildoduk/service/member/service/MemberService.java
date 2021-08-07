@@ -25,6 +25,8 @@ public interface MemberService {
 
     MemberDto userToHelperIdCheck(String memberId);
 
+
+
 // 유저 포인트 관련
 
     void updatePoint(PaymentDTO dto);

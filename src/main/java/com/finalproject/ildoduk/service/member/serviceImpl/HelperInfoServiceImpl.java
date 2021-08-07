@@ -4,11 +4,14 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
+import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
+import com.finalproject.ildoduk.entity.pay.Payment;
 import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +76,43 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Override
     public int countHelpersBySigungu(String sigungu) {
         return repository.countDistinctBySigungu(sigungu);
+    }
+
+
+
+//--------- 관리자 : 헬퍼 리스트 ---------------
+    //헬퍼 가입을 위한 state 체크
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> helperRequest(PageRequestDTO pageRequestDTO) {
+
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+
+        Page<HelperInfo> result = repository.findAll(pageable);
+
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
+    //승인
+    @Override
+    public void accept(HelperInfoDTO helperInfoDTO) {
+       Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+
+       HelperInfo entity = result.get();
+       log.info(entity+"저장될 값의 헬퍼 정보");
+
+       entity.changeAgreeHelper(2);
+       repository.save(entity);
+    }
+
+    //반려
+    @Override
+    public void deny(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+        HelperInfo entity = result.get();
+
+        entity.changeAgreeHelper(3);
+        repository.save(entity);
     }
 }
