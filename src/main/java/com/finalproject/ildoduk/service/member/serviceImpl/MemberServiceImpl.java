@@ -76,16 +76,6 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    @Override
-    public MemberDto userIdDtoInit(MemberDto dto) {
-        return null;
-    }
-
-    @Override
-    public MemberDto userIdPwdCheck(String id, String pwd) {
-        return null;
-    }
-
     //회원 수정 관련
     @Override
     public void userModify(MemberDto dto) {
@@ -95,7 +85,6 @@ public class MemberServiceImpl implements MemberService {
 
             Member entity = result.get();
 
-            entity.changePwd(dto.getPwd());
             entity.changeNickname(dto.getNickname());
             entity.changePhone(dto.getPhone());
             entity.changeAddress(dto.getAddress());

@@ -1,10 +1,7 @@
 package com.finalproject.ildoduk.service.member.service;
 
-import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
-import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
-import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -12,15 +9,11 @@ import java.util.List;
 
 public interface MemberService {
 
-    public List<String> getList();
+   List<String> getList();
 
     void userRegister(MemberDto dto);
 
     MemberDto userIdCheck(String id);
-
-    MemberDto userIdDtoInit(MemberDto dto);
-
-    MemberDto userIdPwdCheck(String id, String pwd);
 
     int nickNameCheck(String nickname); //유저 닉네임 db확인
 
@@ -50,7 +43,6 @@ public interface MemberService {
 
         Member entity = Member.builder()
                 .id(dto.getId())
-                .pwd(dto.getPwd())
                 .name(dto.getName())
                 .gender(dto.getGender())
                 .birth(dto.getBirth())
@@ -72,7 +64,6 @@ public interface MemberService {
 
         MemberDto dto = MemberDto.builder()
                 .id(entity.getId())
-                .pwd(entity.getPwd())
                 .name(entity.getName())
                 .gender(entity.getGender())
                 .birth(entity.getBirth())
@@ -88,6 +79,5 @@ public interface MemberService {
 
         return dto;
     }
-
 
 }

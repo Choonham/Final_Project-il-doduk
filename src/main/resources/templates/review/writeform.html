@@ -6,30 +6,62 @@
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <link rel="stylesheet" th:href="@{/review/css/summernote-lite.css}">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/isotope.pkgd.min.js}"></script>
+    <script th:src="@{/js/stickyfill.min.js}"></script>
+    <script th:src="@{/js/jquery.fancybox.min.js}"></script>
+    <script th:src="@{/js/jquery.easing.1.3.js}"></script>
 
-    <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/quill.min.js}"></script>
+
+    <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+    <script th:src="@{/js/custom.js}"></script>
+
+    <script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
+    <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
+    <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
 
 </head>
 <body>
 
 <!--form 안에서 사용한다.-->
 <form method="post" action="/review/write">
+    <input type="text" name="title" placeholder="제목을 입력해 주세요">
     <textarea id="summernote" name="editordata"></textarea>
     <input type="submit" value="글쓰기">
+    <button type="button">후기형식 작성</button>
 </form>
-<script>
 
 
-</script>
 
 
 <script  th:src="@{/review/js/summernote.js}"></script>
 <script  th:src="@{/review/js/summernote-lite.js}"></script>
 <script th:src="@{/review/js/summernote-ko-KR.js}"></script>
+<script  th:src="@{/review/js/writeform.js}"></script>
+<script th:inline="javascript">
+    var auction= [[${auction}]];
+    var bid= [[${bid}]];
+     var helper= [[${helper}]];
+    console.log(auction.content);
+    var str ="<h1>후기 작성</h1>";
+    str+="<table>";
+    str+="<tr><td>일 제목</td><td>"+auction.title+"</td></tr>";
+    str+="<tr><td>일 내용</td><td>"+auction.content+"</td></tr>";
+    str+="<tr><td>낙찰된 가격</td><td>"+bid.offerPrice+"</td></tr>";
+    str+="</table>";
+    str+="<h1>헬퍼 정보</h1>";
+    str+="<table>";
+    str+="<tr><td>헬퍼 id</td><td>"+bid.helper+"</td></tr>";
+    str+="<tr><td>헬퍼 닉네임</td><td>"+bid.helperNickName+"</td></tr>";
+    str+="<tr><td>헬퍼 photo</td><td><img src='+bid.helperPhoto+'></td></tr>";
+    str+="</table>";
+  $('#summernote').summernote('code',str);
+</script>
 </body>
 </html>

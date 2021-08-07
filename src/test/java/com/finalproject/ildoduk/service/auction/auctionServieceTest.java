@@ -2,13 +2,20 @@ package com.finalproject.ildoduk.service.auction;
 
 import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
+import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
+import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.repository.auction.AuctionListRepository;
 import com.finalproject.ildoduk.repository.auction.BiddingListRepository;
+import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.auction.service.*;
 import org.junit.jupiter.api.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
+import javax.jdo.annotations.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -19,6 +26,13 @@ public class auctionServieceTest {
     private AuctionService auctionService;
 @Autowired
     BiddingListRepository repository;
+
+@Autowired
+    MemberRepository mem_repo;
+@Autowired
+BiddingListRepository biddingListRepository;
+@Autowired
+    AuctionListRepository auc_repo;
     @Test
     public void testGetMyBids(){
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
@@ -50,6 +64,8 @@ public class auctionServieceTest {
 
 
     }
+
+
 
 
 

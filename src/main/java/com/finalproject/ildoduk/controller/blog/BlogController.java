@@ -106,12 +106,21 @@ public class BlogController {
         // log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
         List<String> likerList= blogLikeService.getLiker(postNo);
         int likes = blogLikeService.getLikes(postNo);
+        String writer = blogDTO.getWriter();
+
+        MemberDto writerInfoMember = memberService.userIdCheck(writer);
+        HelperInfoDTO writerInfoHelper = helperInfoService.helperFindById(writer);
+
 
         model.addAttribute("likerList", likerList);
         model.addAttribute("likes", likes);
         model.addAttribute("detail", blogDTO);
         model.addAttribute("comments", blogCommentDTO);
         model.addAttribute("listPageInfo", tempPageDTO);
+
+        model.addAttribute("writerInfoMember", writerInfoMember);
+        model.addAttribute("writerInfoHelper", writerInfoHelper);
+
     }
 
     // 글 쓰기
@@ -242,6 +251,7 @@ public class BlogController {
     // 글 수정(기능)
     @PostMapping(value = "/modify")
     public String modifyPost(BlogDTO dto, HttpSession session, Model model) {
+
         blogService.registerPost(dto);
 
         MemberDto memberDto = (MemberDto)session.getAttribute("user");
@@ -272,8 +282,10 @@ public class BlogController {
     //================================== 댓글 관련 시작 ====================================//
 
     // 댓글 작성
-    @PostMapping(value = "/registerComment", produces = "application/json; charset=utf8")
+    @RequestMapping(method = RequestMethod.POST, value = "/registerC", produces = "application/json; charset=utf8")
     public @ResponseBody ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
+
+        System.out.println("aaa");
         blogCommentService.registerComment(blogCommentDTO);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }

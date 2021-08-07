@@ -11,13 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class ReviewServiceImpl implements ReviewService {
+    @Override
+    public List<ReviewDTO> getList() {
+        return null;
+    }
 
-    @Autowired
+    /*@Autowired
     ReviewRepository repo;
 
 
-    /*======단순히 읽어오는 부분=====*/
-   /* public List<ReviewDTO> getList(){
+    *//*======단순히 읽어오는 부분=====*//*
+    public List<ReviewDTO> getList(){
         List<Review> list=repo.findAll();
 
         List<ReviewDTO> dtoList = new ArrayList<>();

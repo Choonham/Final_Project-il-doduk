@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
@@ -27,6 +28,15 @@ public class Blog extends BaseEntity {
 
     @Column(length = 2000, nullable = true)
     private String thumbnail;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private List<BlogComment> blogComment;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private List<BlogLike> blogLike;
+
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private List<BlogFiles> blogFiles;
 
     @Column
     private int workNo;
