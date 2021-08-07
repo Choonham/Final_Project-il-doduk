@@ -149,7 +149,7 @@
                     <textarea cols="30" rows="10" class="form-control" name="comment" id = "comment" required></textarea>
                   </div>
                   <div class="form-group">
-                    <button id = "commentRegister" class="btn btn-primary btn-md">Post Comment</button>
+                    <button type="button" id = "commentRegister" class="btn btn-primary btn-md">Post Comment</button>
                   </div>
                 </form>
               </div>
@@ -225,8 +225,8 @@
 
       $.ajax({
         data: JSON.stringify(commentData), //json 데이터를 String으로
-        type: "post",
-        url: '/blog/registerComment',
+        type: "POST",
+        url: '/blog/registerC',
         cache: false,
         contentType: 'application/json; charset=utf8',
         dataType: 'json',
