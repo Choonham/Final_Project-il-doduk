@@ -10,6 +10,8 @@ import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 
+import java.util.Optional;
+
 public interface HelperInfoService {
 
     //헬퍼 회원가입
@@ -30,6 +32,9 @@ public interface HelperInfoService {
     void accept(HelperInfoDTO helperInfoDTO);
     //헬퍼 가입 반려
     void deny(HelperInfoDTO helperInfoDTO);
+    //헬퍼 정보
+    HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO);
+
 
 
     default HelperInfo dtoToEntity(HelperInfoDTO dto){

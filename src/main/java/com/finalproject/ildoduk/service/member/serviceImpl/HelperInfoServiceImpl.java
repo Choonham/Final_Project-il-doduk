@@ -98,7 +98,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
 
        HelperInfo entity = result.get();
-       log.info(entity+"저장될 값의 헬퍼 정보");
+       log.info("저장된 헬퍼 정보 ~~~~~ "+entity);
 
        entity.changeAgreeHelper(2);
        repository.save(entity);
@@ -112,5 +112,13 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         entity.changeAgreeHelper(3);
         repository.save(entity);
+    }
+
+    @Override
+    public HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+        HelperInfo entity = result.get();
+
+        return EntityToDTO(entity);
     }
 }

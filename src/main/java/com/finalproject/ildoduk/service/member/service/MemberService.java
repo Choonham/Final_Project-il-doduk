@@ -34,6 +34,9 @@ public interface MemberService {
 
 
 
+    //헬퍼 승인 시에 state 2로 변경
+    void updateState(MemberDto memberDto);
+
 // 유저 포인트 관련
 
     void updatePoint(PaymentDTO dto);

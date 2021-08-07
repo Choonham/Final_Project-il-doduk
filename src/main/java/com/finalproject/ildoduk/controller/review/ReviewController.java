@@ -33,7 +33,7 @@ public class ReviewController {
     public void reviewList(Model model){
 
 
-    model.addAttribute("list",service.getList());
+    //model.addAttribute("list",service.getList());
 
 
     }

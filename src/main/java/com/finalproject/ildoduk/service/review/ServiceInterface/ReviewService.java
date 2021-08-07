@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ReviewService {
 
-    public List<ReviewDTO> getList();
-
+   // public List<ReviewDTO> getList();
+/*
     default Review dtoToEntity(ReviewDTO dto){
 
-        Review review=Review.builder().content(dto.getContent()).member(dto.getMember()).biddingList(dto.getBiddingList()).title(dto.getTitle()).build();
+       // Review review=Review.builder().content(dto.getContent()).member(dto.getMember()).biddingList(dto.getBiddingList()).title(dto.getTitle()).build();
 
         return review;
     }
@@ -21,5 +21,5 @@ public interface ReviewService {
 
         ReviewDTO dto=ReviewDTO.builder().content(review.getContent()).member(review.getMember()).biddingList(review.getBiddingList()).title(review.getTitle()).build();
         return dto;
-    }
+    }*/
 }

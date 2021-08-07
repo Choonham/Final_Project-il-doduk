@@ -106,6 +106,25 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+
+    //헬퍼 승인 시에 state 값 2로 변경
+    @Override
+    public void updateState(MemberDto memberDto) {
+
+        Optional<Member> result = repo.findById(memberDto.getId());
+
+        Member entity = result.get();
+
+        memberDto.setState(2);
+        entity.changeState(memberDto.getState());
+
+        repo.save(entity);
+
+
+
+    }
+
+
     //회원 탈퇴
     @Override
     public void userDelete(String id) {
