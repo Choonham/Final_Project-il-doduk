@@ -78,16 +78,16 @@ $(document).ready(function () {
 
     //버튼 클릭시 신고글 게시 및 삭제 확인 창
     $("#report").click(function(){
-      alert("신고글 작성 되었습니다.")
-       if(test){
+
+       const report = confirm("신고글 작성 하시겠습니까???");
+
+       if(report){
            $("form").submit();
        } else {
            return false;
        }
-
-
-
     });
+
     //삭제
     $("#reportDelete").click(function(){
 
@@ -98,16 +98,39 @@ $(document).ready(function () {
         $("form").submit();
     });
 
-
-    // 관리자 : 헬퍼 요청 리스트
-    $("#requestHelper").click(function(){
-        $("#request_helper").show();
-        $("#result_helper").hide();
+//-----------  관리자 ----------------------
+    // 관리자 : 신고 게시판
+    $("#report1").click(function(){
+        $("#reportStateOne").show();
+        $("#reportStateTwo").hide();
+        $("#noSelectList").hide();
     });
 
-    $("#denyHelper").click(function(){
-        $("#request_helper").hide();
-        $("#result_helper").show();
+    $("#report2").click(function(){
+        $("#reportStateTwo").show();
+        $("#reportStateOne").hide();
+        $("#noSelectList").hide();
+    });
+
+
+    // 관리자 : 헬퍼 요청 리스트
+    $("#requestList").click(function(){
+        $("#request_helper_list").show();
+        $("#accpet_helper_list").hide();
+        $("#deny_helper_list").hide();
+        $("#noSelectList").hide();
+    });
+    $("#acceptList").click(function(){
+        $("#request_helper_list").hide();
+        $("#accpet_helper_list").show();
+        $("#deny_helper_list").hide();
+        $("#noSelectList").hide();
+    });
+    $("#denyList").click(function(){
+        $("#request_helper_list").hide();
+        $("#accpet_helper_list").hide();
+        $("#deny_helper_list").show();
+        $("#noSelectList").hide();
     });
 
 

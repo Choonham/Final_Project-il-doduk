@@ -31,9 +31,13 @@ public class ManagerController {
     @GetMapping("/helperManagement")
     public void helperManagement(PageRequestDTO pageRequestDTO, Model model){
         //헬퍼 신청 목록 을 가져와야한다.
-        PageResultsDTO<HelperInfoDTO,HelperInfo> helperInfoDTO = helperInfoService.helperRequest(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateOne = helperInfoService.agreeHelperOne(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateTwo = helperInfoService.agreeHelperTwo(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateThree = helperInfoService.agreeHelperThree(pageRequestDTO);
 
-        model.addAttribute("helperManagement", helperInfoDTO);
+        model.addAttribute("stateOne", stateOne);
+        model.addAttribute("stateTwo", stateTwo);
+        model.addAttribute("stateThree", stateThree);
 
     }
 

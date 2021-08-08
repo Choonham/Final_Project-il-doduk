@@ -29,7 +29,11 @@ public interface UserReportService {
     void reportDelete(UserReportDTO userReportDTO);
 
     //관리자 : 신고 게시판 전체 조회
-    PageResultsDTO<UserReportDTO, UserReport> getAllReport(PageRequestDTO pageRequestDTO);
+    //reportState == 1
+    PageResultsDTO<UserReportDTO, UserReport> getStateOne(PageRequestDTO pageRequestDTO);
+    //reportState == 2
+    PageResultsDTO<UserReportDTO, UserReport> getStateTwo(PageRequestDTO pageRequestDTO);
+
     //신고 처리
     void updateReportState(UserReportDTO userReportDTO);
 

@@ -27,7 +27,9 @@ public interface HelperInfoService {
     int countHelpersBySigungu(String sigungu);
 
     //헬퍼 가입 승인을 위한 state 체크
-    PageResultsDTO<HelperInfoDTO, HelperInfo> helperRequest(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperOne(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperTwo(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperThree(PageRequestDTO pageRequestDTO);
     //헬퍼 가입 승인
     void accept(HelperInfoDTO helperInfoDTO);
     //헬퍼 가입 반려

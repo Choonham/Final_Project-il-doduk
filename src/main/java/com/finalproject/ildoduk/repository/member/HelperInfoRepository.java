@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
+import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,13 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     int countDistinctBySigungu(String sigungu);
 
 
+    //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")
+    Page<HelperInfo> findAllOne(Pageable pageable);
+    //헬퍼 신청 agreeHelper : 2(헬퍼 승인 완료)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 2")
+    Page<HelperInfo> findAllTwo(Pageable pageable);
+    //헬퍼 신청 agreeHelper : 3(헬퍼 신청 반려)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 3")
+    Page<HelperInfo> findAllThree(Pageable pageable);
 }

@@ -56,7 +56,7 @@
         </thead>
 
         <tbody>
-        <tr scope="row" th:each="dto : ${result.dtoList}" th:if="${result.totalPage} != 0">
+        <tr scope="row" th:each="dto : ${result.dtoList}" th:if="${result.totalPage != 0}">
           <td>[[${dto.pointNo}]]</td>
           <td>[[${dto.totalPoint}]]</td>
           <td>[[${dto.payCheck}]]</td>

@@ -434,10 +434,11 @@ public class ServiceCenterController {
     //관리자로 접속시에 신고 상황 업데이트
     @GetMapping("/reportBoardMgr")
     public String reportBoardMgr(PageRequestDTO pageRequestDTO,Model model){
+        PageResultsDTO<UserReportDTO, UserReport> reportStateOne = userReportService.getStateOne(pageRequestDTO);
+        PageResultsDTO<UserReportDTO, UserReport> reportStateTwo = userReportService.getStateTwo(pageRequestDTO);
 
-        PageResultsDTO<UserReportDTO, UserReport> reportList =  userReportService.getAllReport(pageRequestDTO);
-
-        model.addAttribute("reportList",reportList);
+        model.addAttribute("reportStateOne",reportStateOne);
+        model.addAttribute("reportStateTwo",reportStateTwo);
 
         return "/manager/badUserReportMgr";
     }
@@ -445,10 +446,13 @@ public class ServiceCenterController {
     @GetMapping("/reportStateUpdate")
     public String reportStateUpdate(Long reportNo,UserReportDTO userReportDTO){
         log.info("관리자 : 신고 버튼");
+        //신고 상황 처리
         userReportDTO.setReportNo(reportNo);
         userReportDTO.setReportState("2");
 
         userReportService.updateReportState(userReportDTO);
+
+        //신고 당한 유저 -> kindness를 깍아야하나..
 
         return "redirect:/serviceCenter/reportBoardMgr";
     }

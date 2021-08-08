@@ -1,8 +1,3 @@
-<!-- 관리자 헬퍼 관리 -->
-
-#request_helper, #result_helper{
-    display: none;
-}
 
 button {
     background: none;
