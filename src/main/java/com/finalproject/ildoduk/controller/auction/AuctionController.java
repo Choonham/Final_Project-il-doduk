@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.*;
 import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.entity.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.google.gson.*;
 import lombok.*;
@@ -187,7 +188,6 @@ public class AuctionController {
         String sigungu = "";
         int category = 0;
 
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
@@ -204,14 +204,15 @@ public class AuctionController {
     }
 
     //=================================================== 상세보기 시작 ==================================================//
-    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
+    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료 (그냥 출력이라 entity값으로 넘김)
     @GetMapping("/getOnAuction")
     public void getAuction1(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
 
-        String user = auctionService.getAuction(aucSeq).get().getUser().getId();
+        Member user = auctionService.getAuction(aucSeq).get().getUser();
 
         //옥션 정보
-        model.addAttribute("auction", auctionService.getAuction(aucSeq));
+        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+
         //옥션 유저 값
         model.addAttribute("user", user);
 
@@ -221,6 +222,8 @@ public class AuctionController {
         //비딩 정보
         PageResultsDTO<BiddingListDTO, BiddingList> bidding = auctionService.getBidding(pageRequestDTO, aucSeq);
         model.addAttribute("biddingList", bidding);
+
+        // 비딩 참여 내역이 있는지 확인
         boolean exist = false;
         if (bidding.getDtoList().size() > 0) {
             exist = true;
