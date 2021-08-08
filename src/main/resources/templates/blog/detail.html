@@ -99,8 +99,8 @@
                     <div class="meta">2021.08.05</div>
                     <div th:utext="${comment.content}"></div>
                     <div style="text-align: right;">
-                      <div id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
-                      <div id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
+                      <div th:if = "${session.user.id == comment.writer or session.user.id == detail.writer}" id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
+                      <div th:if = "${session.user.id == comment.writer }" id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
                     </div>
                     <p></p>
                   </div>
@@ -149,7 +149,7 @@
                     <textarea cols="30" rows="10" class="form-control" name="comment" id = "comment" required></textarea>
                   </div>
                   <div class="form-group">
-                    <button id = "commentRegister" class="btn btn-primary btn-md">Post Comment</button>
+                    <button type="button" id = "commentRegister" class="btn btn-primary btn-md">Post Comment</button>
                   </div>
                 </form>
               </div>
@@ -167,27 +167,29 @@
               </form>
             </div>
             <div class="sidebar-box">
-              <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
-              <h3>About The Author</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
-              <p><a href="#" class="btn btn-primary btn-sm">Read More</a></p>
+              <!-- 대충 헬퍼 프로필 사진
+                <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+              -->
+              <h3>[[${writerInfoMember.name}]] 헬퍼</h3>
+              <p th:text = "${writerInfoHelper.appeal}"></p>
             </div>
 
             <div class="sidebar-box">
               <div class="categories">
-                <h3>Categories</h3>
-                <li><a href="#">Creatives <span>(12)</span></a></li>
-                <li><a href="#">News <span>(22)</span></a></li>
-                <li><a href="#">Design <span>(37)</span></a></li>
-                <li><a href="#">HTML <span>(42)</span></a></li>
-                <li><a href="#">Web Development <span>(14)</span></a></li>
+                <h3>Information</h3>
+                <li><a>gender <span>[[${writerInfoMember.gender}]]</span></a></li>
+                <li><a>kindness <span>[[${writerInfoHelper.kindness}]]</span></a></li>
+                <li><a>birth <span>[[${writerInfoMember.birth}]]</span></a></li>
+                <li><a>good 1 <span>[[${writerInfoHelper.goodAtFirst}]]</span></a></li>
+                <li><a>good 2 <span>[[${writerInfoHelper.goodAtSecond}]]</span></a></li>
+                <li><a>good 3 <span>[[${writerInfoHelper.goodAtThird}]]</span></a></li>
               </div>
             </div>
 
 
             <div class="sidebar-box">
-              <h3>Paragraph</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+              <h3>I am...</h3>
+              <p>[[${writerInfoMember.intro}]]</p>
             </div>
           </div>
         </div>
@@ -225,8 +227,8 @@
 
       $.ajax({
         data: JSON.stringify(commentData), //json 데이터를 String으로
-        type: "post",
-        url: '/blog/registerComment',
+        type: "POST",
+        url: '/blog/registerC',
         cache: false,
         contentType: 'application/json; charset=utf8',
         dataType: 'json',

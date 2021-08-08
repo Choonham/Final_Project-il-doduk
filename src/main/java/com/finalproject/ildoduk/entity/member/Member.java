@@ -19,9 +19,6 @@ public class Member extends BaseEntity{
     @Column(name="id", nullable = false)
     private String id;          //아이디
 
-    @Column(name="pwd", nullable = false)
-    private String pwd;         //패스워드
-
     @Column(name="name")
     private String name;        //이름
 
@@ -47,7 +44,6 @@ public class Member extends BaseEntity{
     private String phone;       //연락처
 
     @Column(name="point")
-    @ColumnDefault(value="0")
     private int point;          //캐쉬포인트
 
     @Column(name="photo")
@@ -57,11 +53,9 @@ public class Member extends BaseEntity{
     private String intro;       //유저 소개
 
     @Column(name = "state")
-    @ColumnDefault(value= "1")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
     /**정보수정**/
-    public void changePwd(String pwd){this.pwd = pwd;}
 
     public void changeNickname(String nickname){this.nickname = nickname;}
 

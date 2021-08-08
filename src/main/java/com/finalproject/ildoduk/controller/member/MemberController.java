@@ -139,10 +139,10 @@ public class MemberController {
 
     //유저 수정
     @PostMapping("/userModify")
-    public String userModify(MemberDto dto){
+    public String userModify(MemberDto dto, Model model){
 
         service.userModify(dto);
-
+        model.addAttribute("msg","개인정보가 수정되었습니다!");
         return "index";
     }
 
@@ -209,7 +209,7 @@ public class MemberController {
         else{
             session.setAttribute("user",dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
-            return "../member/userRegister";
+            return "/member/userRegister";
         }
 
     }
@@ -233,7 +233,7 @@ public class MemberController {
     }
 
     //헬퍼 가입확인
-    @PostMapping("/helperIdCheck")
+/*    @PostMapping("/helperIdCheck")
     public void helperIdCheck(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
         log.info(" helperIdCheck memberId :: " + memberId);
 
@@ -253,7 +253,7 @@ public class MemberController {
             // return ??????
         }
 
-    }
+    }*/
 
     //헬퍼 가입신청 파일 업로드
 

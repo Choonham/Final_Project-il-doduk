@@ -21,6 +21,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     Optional<Member> findAllByNickname(String nick);
 
 
+
     //결제 관련
     @Transactional
     @Modifying(clearAutomatically = true)

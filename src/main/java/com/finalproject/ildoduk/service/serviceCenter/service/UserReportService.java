@@ -73,7 +73,6 @@ public interface UserReportService {
 
         MemberDto dto = MemberDto.builder()
                 .id(entity.getId())
-                .pwd(entity.getPwd())
                 .name(entity.getName())
                 .gender(entity.getGender())
                 .birth(entity.getBirth())
