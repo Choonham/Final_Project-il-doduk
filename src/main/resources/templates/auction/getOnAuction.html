@@ -1,22 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/auction.css}">
 </head>
 <body>
-<!-- 해당 옥션 정보 -->
-어쩌구 저쩌구 나중에 폼 만들고 해보자,,,<br><br>
-<!---------------------상세주소는 AUC.ID=SESSION.ID일 때만 확인 가능, 그 외는 시도/시군구 출력-------------->
+
+<!------------------------------ AUC.ID = SESSION.ID면 유저 / SESSION.ID.STATE=2 이면 헬퍼  ---------------------------->
+<!------------------------------ 로그인 값에 따라서 네비게이션 따로 출력   ---------------------------->
+<div th:if="${session.user.state == 2}">
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+</div>
+<div th:if="${session.user.state != 2 || session.user.id == user}">
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+</div>
+<div th:if="${session.user.state != 2 || session.user.id != user}">
+<!-- 메인 페이지로 보내는 코드 필요 -->
+</div>
+
+<!----------------------------------------- 해당 옥션 정보 -------------------------------------------------------------->
 
 <!-- 해당 옥션의 남은 시간 -->
 <h5>남은 시간</h5>
 <div id="timerDemo"></div>
 
+어쩌구 저쩌구 나중에 폼 만들고 해보자,,,<br><br>
+
+
+
+<!---------------------상세주소는 AUC.ID=SESSION.ID일 때만 확인 가능, 그 외는 시도/시군구 출력-------------->
+
+
+
 <br>
 <br>
 <br>
-<!-- 해당 옥션 비딩 목록 & 선택버튼-->
+<!----------------------------------- 해당 옥션 비딩 목록 ------------------------------------------------------->
 <span th:unless="${exist}">아직 경매 참여 내역이 없습니다.</span>
 <div th:if="${exist}">
 <table border="1">
@@ -27,13 +49,16 @@
     </tr>
 
     <tr th:each="dto : ${biddingList.dtoList}">
-        <td><a th:href="@{#}">[[${dto.helper}]]</a></td><!-- 비즈니스 카드로 연결 -->
+        <td><a th:href="@{#}">[[${dto.helper}]]</a></td>
+<!-------------------- 비즈니스 카드로 연결 --------------------------->
         <td>[[${dto.offerPrice}]]</td>
-        <td><button >선택</button></td> <!-- 선택하면 모달창으로 확인 -->
+<!-------------- auc.id = session.id일 경우 선택버튼, 아닐 경우 헬퍼 블로그 보기 ------------------->
+        <td><button>선택</button></td> <!-- 선택하면 모달창으로 확인 -->
     </tr>
 </table>
 </div>
 <br><br>
+
 <!-- AUC.ID = SESSION.ID면 삭제 버튼 / SESSION.ID.STATE=2 이면 참여 버튼  -->
 <button>경매 삭제하기</button>
 

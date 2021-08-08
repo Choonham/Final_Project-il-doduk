@@ -41,7 +41,7 @@ public class AuctionController {
     @GetMapping("/onAuctionList")
     public void list1(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean isAuctionDone) {
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
 
         //member 정보 얻기
         MemberDto member = (MemberDto) session.getAttribute("user");
@@ -78,7 +78,7 @@ public class AuctionController {
     public void list3(PageRequestDTO pageRequestDTO, Model model, HttpSession session,boolean isAllDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
         //System.out.println(user);
@@ -120,7 +120,7 @@ public class AuctionController {
     public void MyBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean onAuction) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -151,7 +151,7 @@ public class AuctionController {
     public void MyChosenBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean allDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -199,15 +199,6 @@ public class AuctionController {
         String sigungu = request.getParameter("sigungu");
         int category = Integer.parseInt(request.getParameter("category"));
 
-       /* if(sido == null){
-            sido="";
-        }
-        if(sigungu == null){
-            sigungu ="";
-        }*/
-
-        System.out.println("category  :  "+category+"   ||   sido :     "+sido+"     ||   sigungu  :"+sigungu);
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
@@ -215,8 +206,13 @@ public class AuctionController {
     //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
     @GetMapping("/getOnAuction")
     public void getAuction1(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
+
+        String user = auctionService.getAuction(aucSeq).get().getUser().getId();
+
         //옥션 정보
         model.addAttribute("auction", auctionService.getAuction(aucSeq));
+        //옥션 유저 값
+        model.addAttribute("user", user);
 
         //타이머 정보 보내기
         model.addAttribute("time", auctionService.timer(aucSeq));
