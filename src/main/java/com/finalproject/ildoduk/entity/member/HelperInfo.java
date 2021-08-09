@@ -17,7 +17,7 @@ public class HelperInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long helperNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Member memberId;
 
     @Column(length = 30)
@@ -30,7 +30,6 @@ public class HelperInfo {
     private String goodAtThird;
 
     @Column(length = 3)
-    @ColumnDefault(value="0")
     private int kindness;
 
     @Column(length = 30)
@@ -43,6 +42,9 @@ public class HelperInfo {
     private String idCard;
 
     @Column
-    @ColumnDefault(value="1")
+    @ColumnDefault("1")
     private int agreeHelper;
+
+
+    public void changeAgreeHelper(int agreeHelper){ this.agreeHelper = agreeHelper;}
 }

@@ -34,6 +34,11 @@
         <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
       </div>
 
+      <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+      </div>
+
+
     </div>
 
     <div th:if = "${session.user == null}">
@@ -82,15 +87,36 @@
               </option>
             </select>
 
-            <input type = "button" id="submit" class="btn px-4 btn-primary text-white"
+            <input type = "button" id="submit-btn" class="btn px-4 btn-primary text-white"
                    style="float: right; margin-top: 15px;"
                    value="MODIFY">
           </form>
         </div>
       </div>
     </section>
-
+   <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 </div>
+
+  <!-- SCRIPTS -->
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/isotope.pkgd.min.js}"></script>
+  <script th:src="@{/js/stickyfill.min.js}"></script>
+  <script th:src="@{/js/jquery.fancybox.min.js}"></script>
+  <script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+  <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+  <script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+  <script th:src="@{/js/owl.carousel.min.js}"></script>
+  <script th:src="@{/js/quill.min.js}"></script>
+
+  <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+  <script th:src="@{/js/custom.js}"></script>
+
+  <script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
+  <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
+  <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
 
   <script th:inline="javascript">
 
@@ -98,6 +124,7 @@
     var button = $("#submit-btn");  ``
 
     button.click(function (){
+      $("#content").val($(".note-editable").html());
       $("#postForm").submit();
     });
     // 끝

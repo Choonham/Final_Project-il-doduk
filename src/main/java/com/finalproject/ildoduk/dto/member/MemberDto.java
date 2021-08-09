@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 public class MemberDto {
 
     private String id;          //아이디(이메일)
-    private String pwd;         //패스워드
     private String name;        //이름
     private String gender;      //성별
     private String birth;       //생일

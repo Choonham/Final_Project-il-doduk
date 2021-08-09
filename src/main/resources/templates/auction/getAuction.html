@@ -56,6 +56,21 @@
                 <div class="d-flex align-items-center">
                     <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 1}">
                         <img th:src="@{/img/Purchasing.png}" width="70" alt="Image">
+        <div class="row mb-5">
+            <div class="col-lg-12">
+
+
+
+                <form class="p-4 p-md-5 border rounded">
+
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-8 mb-4 mb-lg-0">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <h2>경매 상세보기</h2>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 2}">
                         <img th:src="@{/img/HomeCare.png}" width="70" alt="Image">
@@ -158,6 +173,19 @@
                     </ul>
                 </div>
 
+                    <div class="form-group" th:if="${auction.state == 3}">
+                        <a th:href="@{/chat/chatList}">
+                            <button> 채팅하기 </button>
+                        </a>
+                    </div>
+                    <div class="form-group" th:unless="${auction.state == 3}">
+                        <a>
+                           <button onclick="test()"> 리뷰하기 </button>
+                        </a>
+                    </div>
+<!--------------------- 상세주소는 AUC.ID=SESSION.ID || BID.ID=SESSION.ID 일 때만 확인 가능, 그 외는 시도/시군구 출력 -------------->
+<!--------------------- AUC.STATE = 4 일 때는 취소 된 미션입니다 출력 -------------->
+                </form>
 
             </div>
         </div>

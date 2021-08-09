@@ -48,12 +48,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     @Query(value = "select a from AuctionList a where a.state=1")
     Page<AuctionList> ChangeState2(Pageable pageable);
 
-
-
-    // 유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
-
     //유저값에 따른 비딩 참여내역 출력 - auction 내역도 보여야 하지 않나,,,?
-
     @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq")
     Page<Object[]> getMyBids(Pageable pageable, String helper);
 
@@ -70,7 +65,7 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     Page<Object[]> getMyBids1(Pageable pageable, String helper);
 
     //helper 비딩 참여내역 출력 2.경매 완료
-    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq and a.state in (2,3)")
+    @Query(value = "select a,b from AuctionList a, BiddingList b where b.helper.id=:helper and a.aucSeq = b.aucSeq.aucSeq and a.state in (2,3,4)")
     Page<Object[]> getMyBids2(Pageable pageable, String helper);
 
     //helper 낙찰 내역 1.미션 대기 중

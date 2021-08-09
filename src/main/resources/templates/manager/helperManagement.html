@@ -31,36 +31,59 @@
   </div>
 </section>
 
+<div>
+  요청 리스트
+</div>
+<div>
+  반려 리스트
+</div>
+
+
 <section class="site-section">
   <div class="container">
 
 
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-        <a href="job-single.html"></a>
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}">
         <div class="job-listing-logo">
           <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2>헬퍼아이디</h2>
-            <strong>각오~~~~~~~~~~~~~~</strong>
+            <h2 th:text="${helper.memberId}">헬퍼아이디</h2>
+            <strong th:text="${helper.appeal}">각오~~~~~~~~~~~~~~</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-            <span class="icon-room"></span> 경력사항
+            <span class="icon-contacts"></span>
+              <div th:text="${helper.goodAtFirst}"></div>
+              <div th:text="${helper.goodAtSecond}"></div>
+              <div th:text="${helper.goodAtThird}"></div>
           </div>
-          <div class="job-listing-meta">
-            <span class="badge badge-success">승인</span>
-            <br/>
-            <span class="badge badge-success">반려</span>
-          </div>
+        </div>
+
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 1}">
+          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
+          <br/>
+          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
+        </div>
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 2}">
+          헬퍼 승인
+        </div>
+        <div class="job-listing-meta" th:if="${helper.agreeHelper == 3}">
+          반려
         </div>
       </li>
     </ul>
+
   </div>
 </section>
 
+<script>
+  function test(){
+    window.open("","민증","width=300,height=200");
+  }
+</script>
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
