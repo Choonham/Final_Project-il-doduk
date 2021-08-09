@@ -7,6 +7,7 @@ import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.review.ReviewDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
+import com.finalproject.ildoduk.entity.review.Review;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.bidding.service.BiddingService;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
@@ -15,6 +16,9 @@ import com.finalproject.ildoduk.service.review.ServiceInterface.ReviewService;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +55,8 @@ public class ReviewController {
 
 
     }
+
+    // wrtie form 으로 가는 메소드 이 model에 생각보다 많은 정보가 들어있는데 이는 후기작성의 틀을 마련 해 준다.
     @GetMapping("/writeform")
     public void writeform(Model model , @RequestParam("bid") String bid, HttpServletRequest request){
       Long long_bid = Long.parseLong(bid);
@@ -70,7 +76,7 @@ public class ReviewController {
         }
     }
 
-
+    //글쓰는 컨트롤러
     @PostMapping("/write")
     public String write(@RequestParam("editordata") String content, @RequestParam("title") String title, HttpServletRequest request, RedirectAttributes  redirect){
         HttpSession session = request.getSession();
@@ -86,6 +92,7 @@ public class ReviewController {
         return "redirect:/review/detail";
     }
 
+    //다테일 리스트에서 no로// 작성 후 상세 보기에서는 제목으로 검색한다.
 
     @GetMapping("/detail")
     public void detail(Model model,@RequestParam(value = "No",required = false)String No , @RequestParam(value = "title", required = false) String title){
@@ -106,7 +113,14 @@ public class ReviewController {
 
     }
 
+@GetMapping("/list")
+public void reviewList(@PageableDefault(size = 10 , sort = "no") Pageable pageable , Model model){
 
+
+    //Page<Review> reviews = service.getList(pageable)
+
+
+}
 
 
 

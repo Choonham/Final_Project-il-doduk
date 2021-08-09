@@ -10,6 +10,8 @@ import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.repository.review.ReviewRepository;
 import com.finalproject.ildoduk.service.review.ServiceInterface.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,5 +65,21 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     }
+
+    @Override
+    public List<ReviewDTO> get_LIst(Pageable pageable) {
+
+       Page<Review> pages=repository.findAll(pageable);
+       List<ReviewDTO> page_list = new ArrayList<>();
+       for (Review review : pages) {
+            ReviewDTO dto=entityToDto(review);
+            page_list.add(dto);
+
+        }
+
+
+        return page_list;
+    }
+
 
 }

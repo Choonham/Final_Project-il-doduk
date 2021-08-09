@@ -5,6 +5,8 @@ import com.finalproject.ildoduk.dto.review.ReviewDTO;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.review.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
@@ -20,7 +22,7 @@ public interface ReviewService {
 
     public ReviewDTO get_reviewbyNo(Long bidno);
 
-
+    public List<ReviewDTO> get_LIst(Pageable pageable);
 
 
     default Review dtoToEntity(ReviewDTO dto, Member member, BiddingList bid){

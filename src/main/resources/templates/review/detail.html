@@ -11,6 +11,9 @@
 
 
 
+<button th:if="${review.id == session.user.id}">편집하기</button>
+<button>삭제하기</button>
+
 <script th:inline="javascript">
 
 
