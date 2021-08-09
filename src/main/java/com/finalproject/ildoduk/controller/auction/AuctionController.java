@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.*;
 import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.entity.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.google.gson.*;
 import lombok.*;
@@ -42,7 +43,7 @@ public class AuctionController {
     @GetMapping("/onAuctionList")
     public void list1(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean isAuctionDone) {
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
 
         //member 정보 얻기
         MemberDto member = (MemberDto) session.getAttribute("user");
@@ -79,7 +80,7 @@ public class AuctionController {
     public void list3(PageRequestDTO pageRequestDTO, Model model, HttpSession session,boolean isAllDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
         //System.out.println(user);
@@ -121,7 +122,7 @@ public class AuctionController {
     public void MyBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean onAuction) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -152,7 +153,7 @@ public class AuctionController {
     public void MyChosenBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean allDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -187,7 +188,6 @@ public class AuctionController {
         String sigungu = "";
         int category = 0;
 
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
@@ -200,24 +200,21 @@ public class AuctionController {
         String sigungu = request.getParameter("sigungu");
         int category = Integer.parseInt(request.getParameter("category"));
 
-       /* if(sido == null){
-            sido="";
-        }
-        if(sigungu == null){
-            sigungu ="";
-        }*/
-
-        System.out.println("category  :  "+category+"   ||   sido :     "+sido+"     ||   sigungu  :"+sigungu);
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
     //=================================================== 상세보기 시작 ==================================================//
-    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
+    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료 (그냥 출력이라 entity값으로 넘김)
     @GetMapping("/getOnAuction")
     public void getAuction1(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
+
+        Member user = auctionService.getAuction(aucSeq).get().getUser();
+
         //옥션 정보
-        model.addAttribute("auction", auctionService.getAuction(aucSeq));
+        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+
+        //옥션 유저 값
+        model.addAttribute("user", user);
 
         //타이머 정보 보내기
         model.addAttribute("time", auctionService.timer(aucSeq));
@@ -225,6 +222,8 @@ public class AuctionController {
         //비딩 정보
         PageResultsDTO<BiddingListDTO, BiddingList> bidding = auctionService.getBidding(pageRequestDTO, aucSeq);
         model.addAttribute("biddingList", bidding);
+
+        // 비딩 참여 내역이 있는지 확인
         boolean exist = false;
         if (bidding.getDtoList().size() > 0) {
             exist = true;
