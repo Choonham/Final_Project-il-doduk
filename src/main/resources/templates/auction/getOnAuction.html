@@ -237,8 +237,11 @@
                     <td>
                         <!-- 해당 유저면 선택하기 버튼, 아니면 블로그보기-->
                         <div th:if="${session.user.id == u.id}">
-                        <a id="chooseBid" class="btn btn-outline-primary primary" th:href="@{/auction/chooseBid(bidSeq=${dto.bidSeq},aucSeq=${auction.aucSeq})}"><b>낙찰</b></a>
-<!------------------------------------------------ 선택하면 얼럿으로 확인 ------------------------------------------------------->
+                        <a id="chooseBid" class="btn btn-outline-primary primary">
+                            <input th:type="hidden" th:value="${dto.bidSeq}" id="bidSeq" name="bidSeq">
+                            <b>낙찰</b>
+                        </a>
+<!------------------------------------------------ 선택하면 컨펌으로 확인 ------------------------------------------------------->
                         </div>
                         <div th:if="${session.user.id != u.id && session.user.state==2}">
                             <button class="btn btn-outline-primary primary" th:href="@{#}"><b>블로그</b></button>
@@ -324,7 +327,15 @@
 	<!-- 낙찰 시 확인 얼럿 -->
 	$(document).ready(function (){
 		$('#chooseBid').click(function () {
-		    alert("경매 낙찰 시, 취소 하실 수 없습니다. 낙찰하시겠습니까?")
+		    var check = confirm("경매 낙찰은 취소 하실 수 없습니다. 낙찰하시겠습니까?");
+		    var bidSeq = $('#bidSeq').val();
+
+		    if(check === true){
+                location.href="/auction/chooseBid?bidSeq="+bidSeq+"&aucSeq="+[[${auction.aucSeq}]];
+            }else{
+                close();
+            }
+
 		});
     });
 

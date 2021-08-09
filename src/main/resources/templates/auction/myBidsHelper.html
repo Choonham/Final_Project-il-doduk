@@ -71,7 +71,7 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
                                  class="img-fluid" width="80" height="80"><br>
                         </div>
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -92,7 +92,7 @@
                 <!-- 내역이 하나도 없을 경우 포스팅 -->
                 <div th:if="${bidsOn.getDtoList().size() == 0}">
                     <ul class="job-listings mb-5" th:align="center">
-                        <b> 일도둑 미션 경매에 참여해 보세요!</b>
+                        <b> 헤르메스 미션 경매에 참여해 보세요!</b>
                     </ul>
                 </div>
 
@@ -105,20 +105,20 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <div class="job-listing-logo">
                                 <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="ildoduk"
+                                    <img th:src="@{/img/Purchasing.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="ildoduk"
+                                    <img th:src="@{/img/HomeCare.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="ildoduk"
+                                    <img th:src="@{/img/PetCare.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 4}" th:align="center">
                                     <img th:src="@{/img/QuickService.png}"
-                                         alt="ildoduk"
+                                         alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <!--카테고리별 이미지 설정-->
@@ -182,7 +182,7 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
                                  class="img-fluid" width="80" height="80"><br>
                             <!--대표 이미지 삽입 예정-->
                         </div>
@@ -206,7 +206,7 @@
                 <!-- 내역이 하나도 없을 경우 포스팅 -->
                 <div th:if="${bidsDone.getDtoList().size() == 0}">
                     <ul class="job-listings mb-5" th:align="center">
-                        <b>일도둑 미션 경매에 참여해 보세요!</b>
+                        <b>헤르메스 미션 경매에 참여해 보세요!</b>
                     </ul>
                 </div>
 
@@ -219,20 +219,20 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <div class="job-listing-logo">
                                 <div th:if="${dto.category == 1}" th:align="center">
-                                    <img th:src="@{/img/Purchasing.png}" alt="ildoduk"
+                                    <img th:src="@{/img/Purchasing.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 2}" th:align="center">
-                                    <img th:src="@{/img/HomeCare.png}" alt="ildoduk"
+                                    <img th:src="@{/img/HomeCare.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 3}" th:align="center">
-                                    <img th:src="@{/img/PetCare.png}" alt="ildoduk"
+                                    <img th:src="@{/img/PetCare.png}" alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <div th:if="${dto.category == 4}" th:align="center">
                                     <img th:src="@{/img/QuickService.png}"
-                                         alt="ildoduk"
+                                         alt="hermes"
                                          class="img-fluid" th:width="100" th:height="100" th:align="center">
                                 </div>
                                 <!--카테고리별 이미지 설정-->
