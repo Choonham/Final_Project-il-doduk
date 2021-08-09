@@ -77,18 +77,21 @@ public class PayController {
 
 //---------- 경매 결제 관련 ---------------------
 
-    // 경매글을 등록했을때 보증금 개념으로 등록한 금액이 빠져나간다.
-    public void regAuction(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto){
+//1. state = 0
+    // 경매글을 등록했을때 : 보증금 개념으로 등록한 금액이 빠져나간다.
+    public void regAuction(AuctionListDTO auctionListDTO, MemberDto memberDto){
         //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
-        int offerPrice = auctionBiddingDTO.getOfferPrice();
+        //유저가 올린 금액을 차감
+        int startPrice = auctionListDTO.getStartPrice();
         //경매 값과 그 작성자
-        memberDto.setPoint(offerPrice);
-        memberDto.setId(auctionBiddingDTO.getUser());
+        memberDto.setPoint(startPrice);
+        memberDto.setId(auctionListDTO.getUser());
 
         memberService.minusPonit(memberDto);
 
     }
-    // 경매가 취소 되었을 경우 다시 해당 금액 넣어야한다.
+    //   state = 0
+    // 경매가 취소 되었을 경우 : 다시 해당 금액 넣어야한다.
     public void refundAuctionPay(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto){
         //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
         int offerPrice = auctionBiddingDTO.getOfferPrice();
@@ -99,9 +102,31 @@ public class PayController {
         memberService.plusPoint(memberDto);
     }
 
-    // 경매가 낙찰되었을 경우 헬퍼 정보가 넘어와야한다.
+//2. state = 1
+    // 경매가 낙찰되었을 경우  :  유저가 처음 올렸을떄의 금액과 헬퍼가 제시한 금액의 차액을 다시 유저 쪽에 넣어 줘야한다.
+    public void biddingSuccess(AuctionListDTO auctionListDTO,AuctionBiddingDTO auctionBiddingDTO,MemberDto memberDto){
+        int userPrice = auctionListDTO.getStartPrice();
+        int helperPrice = auctionBiddingDTO.getOfferPrice();
 
-    //
+        int resultPrice = userPrice - helperPrice;
+        memberDto.setPoint(resultPrice);
+        memberDto.setId(auctionListDTO.getUser());
+
+        memberService.plusPoint(memberDto);
+    }
+
+//3. state = 3
+    //  유저가 일 끝내기 버튼을 눌렀을 경우 경매 가격을 헬퍼에게 넣어줘야한다.
+    //  이때 헬퍼의 점수에 따라 수수료 부과
+    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO,MemberDto memberDto){
+        int offerPrice = auctionBiddingDTO.getOfferPrice();
+        String helperId = auctionBiddingDTO.getHelper();
+
+        memberDto.setPoint(offerPrice);
+        memberDto.setId(helperId);
+
+        memberService.plusPoint(memberDto);
+    }
 
 
 

@@ -241,7 +241,6 @@ public void updatePoint(PaymentDTO dto) {
 
     // 중개 수수료 기본 : 10%  -> 0.9
     //    우대 수수료 : 7% -> 0.93
-    // 남은 금액 Admin계정으로
     @Override
     public void plusPoint(MemberDto dto) {
         log.info("헬퍼쪽 포인트 업데이트 시작");
