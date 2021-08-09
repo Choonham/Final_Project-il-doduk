@@ -85,13 +85,10 @@ public class ServiceCenterController {
     public void toRefund(@RequestParam("pointNo") Long pointNo, Model model){
 
         PaymentDTO dto = paymentService.toRefund(pointNo);
-        //해당 유저의 총포인트 값을 같이 넘겨준다
         MemberDto memberDto = memberService.userIdCheck(dto.getUserId());
 
-        int point = dto.getTotalPoint();
-
         model.addAttribute("result",dto);
-        model.addAttribute("userPoint", memberDto.getPoint());
+        model.addAttribute("user", memberDto);
     }
 
     //환불 시작(POST)
@@ -158,13 +155,13 @@ public class ServiceCenterController {
         model.addAttribute("cusBoard",result);
     }
 
-//문의작성 폼으로 이동
+    //문의작성 폼으로 이동
     @GetMapping("/customerWriteForm")
     public void cusWriteForm(){
     }
 
 
-//문의글 작성
+    //문의글 작성
     @PostMapping("/postCusWrite")
     public String postWriteForm(CustomerBoardDTO dto){
         //넘어오는 데이터 : 제목, 내용, 작성자, 비밀글 여부, (비밀글일시 비밀번호)
@@ -174,7 +171,7 @@ public class ServiceCenterController {
     }
 
 
-//문의글 상세 보기
+    //문의글 상세 보기
     @GetMapping("/customerGetBoard")
     public String getBoard(CustomerBoardDTO dto
                         ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model,RedirectAttributes redirectAttributes){
@@ -232,7 +229,7 @@ public class ServiceCenterController {
     }
 
 
- //문의글 (비공개글) 열기
+     //문의글 (비공개글) 열기
     @PostMapping("/customerGetBoard")
     public void postGetBoard(CustomerBoardDTO dto,@ModelAttribute("requestDTO") PageRequestDTO requestDTO,Model model){
 
@@ -246,7 +243,7 @@ public class ServiceCenterController {
 
     }
 
-//문의글 수정페이지 이동
+    //문의글 수정페이지 이동
     @GetMapping("/customerUpdateBoard")
     public void updateBoard(@RequestParam("cusNo") Long cusNo
             ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
@@ -257,7 +254,7 @@ public class ServiceCenterController {
         model.addAttribute("board",customerBoardDTO);
     }
 
-//게시글 수정
+    //게시글 수정
     @PostMapping("/update")
     public String update(CustomerBoardDTO dto){
        MemberDto memberDto = memberService.userNickCheck(dto.getCusWriter());

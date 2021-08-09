@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.service.member.service;
 
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public interface MemberService {
     void updatePoint(PaymentDTO dto);
     void minusPonit(MemberDto dto);
     void plusPoint(MemberDto dto);
+    void plusPoint(MemberHelperInfoDTO dto);
     void refundAuctionPay(MemberDto dto);
 
 
@@ -73,6 +75,7 @@ public interface MemberService {
                 .sigungu(entity.getSigungu())
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
+                .point(entity.getPoint())
                 .intro(entity.getIntro())
                 .state(entity.getState())
                 .regDate(entity.getRegDate())

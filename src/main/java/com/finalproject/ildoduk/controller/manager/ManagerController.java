@@ -57,7 +57,7 @@ public class ManagerController {
         return "redirect:/manager/helperManagement";
     }
 
-    //승인 반려
+    //반려
     @GetMapping("/deny")
     public String denyHelper(HelperInfoDTO helperInfoDTO){
         //반려시에 agreeHelper = 3으로 변경

@@ -5,8 +5,10 @@ import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -20,10 +22,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    private MemberRepository repo;
+
+    private final MemberRepository repo;
+    private final HelperInfoRepository helperInfoRepository;
 
 
     @Override
@@ -176,6 +180,7 @@ public class MemberServiceImpl implements MemberService {
         }
         return dto;
     }
+
 //---------   유저 포인트 관련  -----------
 //유저 포인트 증가
 @Override
@@ -219,6 +224,11 @@ public void updatePoint(PaymentDTO dto) {
         }
     }
 
+    @Override
+    public void plusPoint(MemberDto dto) {
+
+    }
+
     //경매 미매칭시에 다시 원래 금액 돌려줌
     @Override
     public void refundAuctionPay(MemberDto dto) {
@@ -242,34 +252,29 @@ public void updatePoint(PaymentDTO dto) {
     // 중개 수수료 기본 : 10%  -> 0.9
     //    우대 수수료 : 7% -> 0.93
     @Override
-    public void plusPoint(MemberDto dto) {
-        log.info("헬퍼쪽 포인트 업데이트 시작");
+    public void plusPoint(MemberHelperInfoDTO dto) {
+        log.info("헬퍼쪽 포인트 업데이트 시작 ~~~~~~~~ 거래 완료 1");
 
-        String userID = dto.getId();
+        MemberHelperInfoDTO memberHelperInfoDTO = helperInfoRepository.joinHelperInfo(dto.getId());
         //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
         // Member의 친절 점수로 : 5점 만점에 3.5이상일 경우 우대 수수료 적용??
-
         int point = dto.getPoint();
-        int total = 0;
+        int total = 0; // 총합금액 초기화
 
-        //친절 점수 들어갈 곳
-        String test = null;
-        if(test == null){
+        //친절점수 5 이상일 경우 우대 수수료 적용용
+       if(dto.getKindness() >= 3.5){
             //우대 수수료 적용
             total = (int)(Math.ceil(point * 0.93));
-
         } else {
             total = (int)(Math.ceil(point * 0.9));
         }
+        //위 계산된 포인트 적립
+        memberHelperInfoDTO.setPoint(total);
 
-        Optional<Member> result = repo.findById(userID);
+        log.info("헬퍼쪽 포인트 업데이트 진행중~~~~ 거래 완료 2");
 
-        if(result.isPresent()){
-            Member entity = result.get();
-            log.info("헬퍼쪽 포인트 업데이트 진행중");
+        repo.pointUpdate(total, memberHelperInfoDTO.getId());
 
-            repo.pointUpdate(total, entity.getId());
-        }
     }
 
 

@@ -54,7 +54,7 @@
           <th>처리상황</th>
         </tr>
         <tr th:if="${reportList.totalPage == 0}">
-          <td colspan="5">신고 내용이 없습니다.</td>
+          <td colspan="5" th:align="center">신고 내용이 없습니다.</td>
         </tr>
         <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
           <td>[[${report.reportNo}]]</td>

@@ -4,6 +4,7 @@ package com.finalproject.ildoduk.controller.pay;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.member.Member;
@@ -118,14 +119,14 @@ public class PayController {
 //3. state = 3
     //  유저가 일 끝내기 버튼을 눌렀을 경우 경매 가격을 헬퍼에게 넣어줘야한다.
     //  이때 헬퍼의 점수에 따라 수수료 부과
-    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO,MemberDto memberDto){
+    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO, MemberHelperInfoDTO memberHelperInfoDTO){
         int offerPrice = auctionBiddingDTO.getOfferPrice();
         String helperId = auctionBiddingDTO.getHelper();
 
-        memberDto.setPoint(offerPrice);
-        memberDto.setId(helperId);
+        memberHelperInfoDTO.setPoint(offerPrice);
+        memberHelperInfoDTO.setId(helperId);
 
-        memberService.plusPoint(memberDto);
+        memberService.plusPoint(memberHelperInfoDTO);
     }
 
 
