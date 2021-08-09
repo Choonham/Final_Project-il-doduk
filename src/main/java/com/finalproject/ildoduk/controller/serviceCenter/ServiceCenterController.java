@@ -3,16 +3,19 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
@@ -45,6 +48,7 @@ public class ServiceCenterController {
     private final CustomerBoardService customerBoardService;
     private final CustomerAnswerService customerAnswerService;
     private final UserReportService userReportService;
+    private final HelperInfoService helperInfoService;
 
 
     //결제 및 거래 조회 페이지로 이동
@@ -97,7 +101,7 @@ public class ServiceCenterController {
                            @RequestParam("totalPoint") int totalPoint){
         //여기서 해야할 일 1. 결제 이력 y -> n 으로 수정 (완료)
         //              2. 해당 사용자 넘어온 캐쉬만큼 포인트 뺴기 (완료)
-        //              3. 조건 검사 -> 보유 캐쉬보다 많을 경우에만 아래 로직 실행
+        //              3. 조건 검사 -> 보유 캐쉬보다 많을 경우에만 (완료) -> 스크립트에서 실행
 
         PaymentDTO dto = new PaymentDTO();
         //변경할 값의 번호
@@ -454,8 +458,36 @@ public class ServiceCenterController {
 
         //신고 당한 유저 -> kindness를 깍아야하나..
 
+
+
         return "redirect:/serviceCenter/reportBoardMgr";
     }
 
+//------ 유저  <-> 헬퍼 전환 버튼
+    @GetMapping("/changeState")
+    public String changeState(HttpSession session){
+        //먼저 helperInfo의 agreeHelper를 체크해서 2일 경우에만 해당 로직 실행?? 버튼
+        String id = (String)session.getAttribute("user");
+        HelperInfoDTO helperInfoDTO = new HelperInfoDTO();
+
+        helperInfoDTO.setMemberId(id);
+        HelperInfoDTO info = helperInfoService.helperInfo(helperInfoDTO);
+
+        MemberDto memberDto = memberService.userIdCheck(id);
+
+        if(info.getAgreeHelper() == 2){
+            //member state 가 1 일 경우 -> 2로
+            if(memberDto.getState() == 1){
+                memberDto.setState(2);
+                memberService.updateState(memberDto);
+            } else {
+                //2일 경우 -> 1로
+                memberDto.setState(1);
+                memberService.updateState(memberDto);
+            }
+        }
+
+        return "/index";
+    }
 
 }

@@ -196,9 +196,7 @@ public void updatePoint(PaymentDTO dto) {
     }
 }
 
-    //경매 성공시에 사용자 포인트 차감
-    //판매자가 글을 올리고, 헬퍼가 경매 참여 -> 일을 끝냈을 경우에만
-    //일을 끝냈다는 버튼을 눌렀을 경우에만 사용자 포인트 차감(그대로), 헬퍼의 경우 친절점수에 따라 수수료 부여해서 포인트 증가,
+    //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
     @Override
     public void minusPonit(MemberDto dto) {
 
@@ -218,6 +216,25 @@ public void updatePoint(PaymentDTO dto) {
             int totalPoint = (int)(Math.ceil((userPoint-point)*1.0));
 
             repo.pointMinus(totalPoint, entity.getId());
+        }
+    }
+
+    //경매 미매칭시에 다시 원래 금액 돌려줌
+    @Override
+    public void refundAuctionPay(MemberDto dto) {
+        int point = dto.getPoint();
+        String userID = dto.getId();
+
+        Optional<Member> result = repo.findById(userID);
+
+        if(result.isPresent()){
+
+            Member entity = result.get();
+
+            int userPoint = entity.getPoint();
+            int totalPoint = (int)(Math.ceil((userPoint-point)*1.0));
+
+            repo.pointUpdate(totalPoint, entity.getId());
         }
     }
 
@@ -255,5 +272,7 @@ public void updatePoint(PaymentDTO dto) {
             repo.pointUpdate(total, entity.getId());
         }
     }
+
+
 
 }

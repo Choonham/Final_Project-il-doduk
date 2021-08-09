@@ -35,6 +35,7 @@ public interface MemberService {
     void updatePoint(PaymentDTO dto);
     void minusPonit(MemberDto dto);
     void plusPoint(MemberDto dto);
+    void refundAuctionPay(MemberDto dto);
 
 
     MemberDto kakaoLogin(@RequestBody String json) ;

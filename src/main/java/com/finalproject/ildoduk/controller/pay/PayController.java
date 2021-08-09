@@ -1,15 +1,21 @@
 package com.finalproject.ildoduk.controller.pay;
 
 
+import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
+import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RequestMapping("/kakaoPay")
@@ -20,6 +26,7 @@ public class PayController {
 
     private final PaymentService paymentService;
     private final MemberService memberService;
+    private final AuctionService auctionService;
 
     //카카오 페이지 이동시에 조회한 사용자 데이터를 가지고 전환됩니다.
     @GetMapping("/kakao")
@@ -64,9 +71,38 @@ public class PayController {
         //헬퍼 포인트 증가
         memberService.plusPoint(dtoOfHelper);
 
-        //거래 완료후 이동할 url로 변경 필요!!!
         return "redirect:/login";
     }
+
+
+//---------- 경매 결제 관련 ---------------------
+
+    // 경매글을 등록했을때 보증금 개념으로 등록한 금액이 빠져나간다.
+    public void regAuction(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto){
+        //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
+        int offerPrice = auctionBiddingDTO.getOfferPrice();
+        //경매 값과 그 작성자
+        memberDto.setPoint(offerPrice);
+        memberDto.setId(auctionBiddingDTO.getUser());
+
+        memberService.minusPonit(memberDto);
+
+    }
+    // 경매가 취소 되었을 경우 다시 해당 금액 넣어야한다.
+    public void refundAuctionPay(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto){
+        //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
+        int offerPrice = auctionBiddingDTO.getOfferPrice();
+        //경매 값과 그 작성자
+        memberDto.setPoint(offerPrice);
+        memberDto.setId(auctionBiddingDTO.getUser());
+
+        memberService.plusPoint(memberDto);
+    }
+
+    // 경매가 낙찰되었을 경우 헬퍼 정보가 넘어와야한다.
+
+    //
+
 
 
 
