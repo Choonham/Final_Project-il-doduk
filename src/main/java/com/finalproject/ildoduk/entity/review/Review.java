@@ -18,7 +18,7 @@ import javax.persistence.*;
 
 public class Review extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long no;
 
     //비딩 리스트에 포함된 친구들
@@ -34,6 +34,7 @@ public class Review extends BaseEntity {
 
     private String title;
 
+    @Column(length = 10000, nullable = false)
     private String content;
 
 
