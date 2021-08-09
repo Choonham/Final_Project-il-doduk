@@ -153,6 +153,7 @@ public class BlogController {
     // 글 쓰기 완료 후, 리다이렉트 기능
     @PostMapping(value = "/post")
     public String temp(BlogDTO dto, Model model) {
+        log.info(dto.getContent());
         blogService.registerPost(dto);
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
         return result;

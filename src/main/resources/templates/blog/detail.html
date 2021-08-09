@@ -39,8 +39,8 @@
     </div>
 
     <!-- HOME -->
-    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
-      <div class="container">
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 0px" id="home-section">
+      <div class="container" style="padding-bottom: 1em">
         <div class="row">
           <div class="col-md-12">
             <div class="custom-breadcrumbs mb-0">
@@ -55,11 +55,10 @@
       </div>
     </section>
 
-    <section class="site-section" id="next-section">
+    <section class="site-section" id="next-section" style="padding-top: 3rem">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 blog-content">
-
             <div th:utext="${detail.content}">
             </div>
 
@@ -67,8 +66,8 @@
 
             <!-- 좋아요 기능 관련 -->
             <div style="float: right; text-align: right">
-              <button th:if = "!${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천</button>
-              <button th:if = "${#lists.contains(likerList, session.user.id)}" class = "btn btn-info" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">추천 취소</button>
+              <img src="https://img.icons8.com/plasticine/100/000000/like--v2.png" th:if = "!${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
+              <img src="https://img.icons8.com/plasticine/100/000000/like--v1.png" th:if = "${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
 
               <!-- 수정, 삭제, 목록 버튼(수정과 삭제가 끝나고나서 원래에 페이지로 가기 위한 tempPage 객체를 가지고 있음 -->
               <span th:if = "${session.user.id == detail.writer}">
@@ -162,7 +161,6 @@
               <form action="#" class="search-form">
                 <div class="form-group">
                   <span class="icon fa fa-search"></span>
-                  <input type="text" class="form-control form-control-lg" placeholder="Type a keyword and hit enter">
                 </div>
               </form>
             </div>
@@ -170,7 +168,7 @@
               <!-- 대충 헬퍼 프로필 사진
                 <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
               -->
-              <h3>[[${writerInfoMember.name}]] 헬퍼</h3>
+              <h3>[[${writerInfoMember.name}]]</h3>
               <p th:text = "${writerInfoHelper.appeal}"></p>
             </div>
 
