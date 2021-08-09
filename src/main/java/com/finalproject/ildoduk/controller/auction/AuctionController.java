@@ -4,7 +4,9 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.*;
 import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.entity.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
+import com.finalproject.ildoduk.service.member.service.*;
 import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
@@ -28,6 +30,9 @@ public class AuctionController {
     @Autowired
     private final AuctionService auctionService;
 
+    @Autowired
+    private final HelperInfoService helperInfoService;
+
     @GetMapping("/main")
     public void main(PageRequestDTO pageRequestDTO) {
         //경매 리스트 시간에 따라 상태값 변화 하기
@@ -42,7 +47,7 @@ public class AuctionController {
     @GetMapping("/onAuctionList")
     public void list1(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean isAuctionDone) {
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
 
         //member 정보 얻기
         MemberDto member = (MemberDto) session.getAttribute("user");
@@ -79,7 +84,7 @@ public class AuctionController {
     public void list3(PageRequestDTO pageRequestDTO, Model model, HttpSession session,boolean isAllDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String user = member.getId();
         //System.out.println(user);
@@ -121,7 +126,7 @@ public class AuctionController {
     public void MyBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean onAuction) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -152,7 +157,7 @@ public class AuctionController {
     public void MyChosenBidsHelper(PageRequestDTO pageRequestDTO, Model model, HttpSession session, boolean allDone) {
 
         //메인에서 user 값 받아서 리스트 출력
-        log.info("======= list ========");
+        //log.info("======= list ========");
         MemberDto member = (MemberDto) session.getAttribute("user");
         String helper = member.getId();
         System.out.println(helper);
@@ -187,7 +192,6 @@ public class AuctionController {
         String sigungu = "";
         int category = 0;
 
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
@@ -200,24 +204,21 @@ public class AuctionController {
         String sigungu = request.getParameter("sigungu");
         int category = Integer.parseInt(request.getParameter("category"));
 
-       /* if(sido == null){
-            sido="";
-        }
-        if(sigungu == null){
-            sigungu ="";
-        }*/
-
-        System.out.println("category  :  "+category+"   ||   sido :     "+sido+"     ||   sigungu  :"+sigungu);
-
         model.addAttribute("availableAuctions", auctionService.getAvailableAuctions(sido, sigungu, category, pageRequestDTO));
     }
 
     //=================================================== 상세보기 시작 ==================================================//
-    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료
+    //경매상세보기 - 진행 중 경매 혹은 매칭 미완료 (그냥 출력이라 entity값으로 넘김)
     @GetMapping("/getOnAuction")
     public void getAuction1(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
+
+        Member user = auctionService.getAuction(aucSeq).get().getUser();
+
         //옥션 정보
-        model.addAttribute("auction", auctionService.getAuction(aucSeq));
+        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+
+        //옥션 유저 값
+        model.addAttribute("u", user);
 
         //타이머 정보 보내기
         model.addAttribute("time", auctionService.timer(aucSeq));
@@ -225,6 +226,8 @@ public class AuctionController {
         //비딩 정보
         PageResultsDTO<BiddingListDTO, BiddingList> bidding = auctionService.getBidding(pageRequestDTO, aucSeq);
         model.addAttribute("biddingList", bidding);
+
+        // 비딩 참여 내역이 있는지 확인
         boolean exist = false;
         if (bidding.getDtoList().size() > 0) {
             exist = true;
@@ -235,21 +238,39 @@ public class AuctionController {
     //경매상세보기 - 매칭 완료 또는 일 수행 완료
     @GetMapping("/getAuction")
     public void getAuction2(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
+
+        Member user = auctionService.getAuction(aucSeq).get().getUser();
+
         //옥션 정보
         AuctionList auction = auctionService.getAuction(aucSeq).get();
         model.addAttribute("auction", auction);
 
+        //옥션 유저 값
+        model.addAttribute("u", user);
+
         //낙찰 비딩 정보
-        model.addAttribute("chosenBidding", auctionService.chosenBidding(aucSeq));
+        Optional<BiddingList> chosenBidding  = auctionService.chosenBidding(aucSeq);
+        model.addAttribute("chosenBidding", chosenBidding.get());
 
-        //그외 정보
-        /*if (auction.getState() != 3){
-
-            boolean isAllDone = false;
-        }*/
+        //낙찰 된 헬퍼 정보 - 수정 필요
+        model.addAttribute("helper",helperInfoService.helperFindById(chosenBidding.get().getHelper().getId()));
     }
 
     //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기
+
+    //낙찰
+    @GetMapping("/chooseBid")
+    public String chooseBid(Long bidSeq, Long aucSeq){
+
+        auctionService.chooseBidding(bidSeq);
+
+        //getAuction으로 반환
+        return "redirect:/auction/getAuction?aucSeq="+aucSeq;
+    }
+
+    //경매 참여
+
+    //경매삭제
 
     //=================================================== 경매 등록 ==================================================//
     //경매 등록 시작
@@ -266,14 +287,14 @@ public class AuctionController {
     @PostMapping("/register")
     public String registerPost(AuctionListDTO dto, HttpServletRequest request) {
 
-        log.info("register " + dto.toString());
+        //log.info("register " + dto.toString());
         String date = request.getParameter("doDateT");
         System.out.println(date);
         LocalDateTime dodateTime = LocalDateTime.parse(date);
         dto.setDoDateTime(dodateTime);
         //새로 추가된 엔티티번호 받아서 출력하고 싶으면 하던가,,,,
         Long aucSeq = auctionService.register(dto);
-        log.info(aucSeq);
+        //log.info(aucSeq);
 
         return "redirect:/auction/onAuctionList";
     }

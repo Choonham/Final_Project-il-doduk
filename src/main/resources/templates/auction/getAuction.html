@@ -24,6 +24,7 @@
 
 </div>
 
+<!-- 결제/포인트 관련 -->
 <div id="cash_status" th:if="${session.user != null}">
     <span id="user" th:text="${session.user.nickname}"></span> 님
     <span th:text="${session.user.point}"></span> point
@@ -35,14 +36,16 @@
     <div th:replace="~{/fragments/nav :: navi}"></div>
 </div>
 
-<section class="section-hero overlay inner-page bg-image" id="home-section">
+<!-- HOME : 위에 회색 그거 -->
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');"
+         id="home-section">
     <div class="container">
         <div class="row">
             <div class="col-md-7">
-                <h1 class="text-white font-weight-bold">경매 상세</h1>
+                <h1 class="text-white font-weight-bold">Auctions</h1>
                 <div class="custom-breadcrumbs">
-                    <a href="#" th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
-                    <span class="text-white"><strong>경매</strong></span>
+                    <a href="#">미션</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>미션 상세보기</strong></span>
                 </div>
             </div>
         </div>
@@ -50,147 +53,179 @@
 </section>
 
 <section class="site-section">
+    <div>
+        <!--------------------- AUC.STATE = 4 일 때는 취소 된 미션입니다 출력 -------------->
+    </div>
     <div class="container">
-        <div class="row align-items-center mb-5">
-            <div class="col-lg-8 mb-4 mb-lg-0">
-                <div class="d-flex align-items-center">
-                    <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 1}">
-                        <img th:src="@{/img/Purchasing.png}" width="70" alt="Image">
-        <div class="row mb-5">
-            <div class="col-lg-12">
-
-
-
-                <form class="p-4 p-md-5 border rounded">
-
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-8 mb-4 mb-lg-0">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <h2>경매 상세보기</h2>
-                                </div>
+        <div>
+            <!----------------------------------------- 유저 정보 : 닉네임 & INTRO-------------------------------------------------------------->
+            <table class="table">
+                <tr>
+                    <td th:rowspan="2" width="30%"><img th:src="@{u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                    <td width="50%"><h3>[[${u.nickname}]]</h3></td>
+                    <td th:rowspan="2" width="20%">
+                        <div th:if="${session.user.id != auction.user}" th:align="center">
+                            <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+<!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
+                        </div>
+                    </td>
+                </tr>
+                <tr><td><p>[[${u.intro}]]</p></td></tr>
+            </table>
+            <p></p>
+            <!----------------------------------------- 해당 옥션 정보 -------------------------------------------------------------->
+            <h2 class="h2 d-flex align-items-center mb-4 text-primary">
+                <span class="icon-align-left mr-3"></span>
+                <b>[[${auction.title}]]</b>
+            </h2>
+            <!-- 기본 정보 -->
+            <div class="bg-light p-3 border rounded mb-4 text-center">
+                <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>미션 내용</b></h3>
+                <!--<ul class="list-unstyled pl-3 mb-0 text-center">-->
+                <table class="table">
+                    <tr>
+                        <!--카테고리 조건문 출력-->
+                        <td><strong class="text-black">카테고리</strong></td>
+                        <td>
+                            <div th:if="${auction.category == 1}">
+                                <span class="mb-2">구매대행</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 2}">
-                        <img th:src="@{/img/HomeCare.png}" width="70" alt="Image">
-                    </div>
-                    <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 3}">
-                        <img th:src="@{/img/PetCare.png}" width="70" alt="Image">
-                    </div>
-                    <div class="border p-2 d-inline-block mr-3 rounded" th:if="${auction.category == 4}">
-                        <img th:src="@{/img/QuickService.png}" width="70" alt="Image">
-                    </div>
-                    <div>
-                        <h2 th:text="${auction.title}"></h2>
-                        <div>
-                            <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 1}"><span class="icon-briefcase mr-2"></span>구매대행</span>
-                            <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 2}"><span class="icon-briefcase mr-2"></span>홈케어</span>
-                            <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 3}"><span class="icon-briefcase mr-2"></span>펫케어</span>
-                            <span class="ml-0 mr-2 mb-2" th:if="${auction.category == 4}"><span class="icon-briefcase mr-2"></span>퀵서비스</span>
-                        </div>
-                    </div>
-                </div>
+                            <div th:if="${auction.category == 2}">
+                                <span class="mb-2">홈케어</span>
+                            </div>
+                            <div th:if="${auction.category == 3}">
+                                <span class="mb-2">펫 케어</span>
+                            </div>
+                            <div th:if="${auction.category == 4}">
+                                <span class="mb-2">퀵 서비스</span>
+                            </div>
+                        </td>
+                        <td><strong class="text-black">날짜-시간</strong></td>
+                        <td>
+                                <span class="mb-2">[[${#temporals.format(auction.doDateTime,'yyyy/MM/dd
+                                    - hh:mm')}]]
+                                </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><strong class="text-black">장소</strong></td>
+                        <td th:colspan="3" th:align="left">
+                            <span class="mb-2">[[${auction.address}]]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">낙찰가</strong></td>
+                        <td th:colspan="3">
+                            <span class="mb-2">[[${#numbers.formatInteger(chosenBidding.offerPrice,3,'COMMA')}]]원
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">예상소요시간</strong></td>
+                        <td>
+                            <span class="mb-2">[[${auction.predictHour}]]분
+                            </span>
+                        </td>
+                        <td><strong class="text-black">미션난이도</strong></td>
+                        <td>
+                            <!-- 난이도 -->
+                            <div th:if="${auction.level == 1}">
+                                <span class="mb-2">쉬움</span>
+                            </div>
+                            <div th:if="${auction.level == 2}">
+                                <span class="mb-2">보통</span>
+                            </div>
+                            <div th:if="${auction.level == 3}">
+                                <span class="mb-2">어려움</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--우대사항-->
+                    <tr>
+                        <td th:colspan="4">
+                            <br>
+                            <strong class="text-primary"><span class="icon-turned_in mr-3"></span>우대사항</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">운전면허여부</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.driverLicense == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.driverLicense == 1}">
+                                <span class="mb-2">소지자 선호</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">성별</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.gender == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.gender == 1}">
+                                <span class="mb-2">여성</span>
+                            </div>
+                            <div th:if="${auction.gender == 2}">
+                                <span class="mb-2">남성</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">성별</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.age == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.age == 1}">
+                                <span class="mb-2">청년층</span>
+                            </div>
+                            <div th:if="${auction.age == 2}">
+                                <span class="mb-2">중년층</span>
+                            </div>
+                            <div th:if="${auction.age == 3}">
+                                <span class="mb-2">장년층</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!--</ul>-->
+            </div>
+            <!--콘텐츠 내용-->
+            <h5 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span><b>미션 내용</b></h5>
+            <div class="mb-5 block__16443">
+                <p th:utext="${auction.content}"></p>
             </div>
         </div>
+        <!--옥션정보 끝-->
 
-        <br/><br/>
-
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="mb-5">
-                    <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span>미션 내용</h3>
-                    <p th:utext="${auction.content}"></p>
-                </div>
-
-                <br/><br/>
-
-                <div class="mb-5">
-                    <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-turned_in mr-3"></span>우대 사항</h3>
-                    <ul class="list-unstyled m-0 p-0">
-                        <li class="d-flex align-items-start mb-2">
-                            <span class="icon-check_circle mr-2 text-muted">운전면허증</span>
-                            <span th:if="${auction.driverLicense == 0}">상관없음</span>
-                            <span th:if="${auction.driverLicense == 1}">소지자 우대</span>
-                        </li>
-                        <li class="d-flex align-items-start mb-2">
-                            <span class="icon-check_circle mr-2 text-muted">나이</span>
-                            <span th:if="${auction.age == 0}">무관</span>
-                            <span th:if="${auction.age == 1}">청년층</span>
-                            <span th:if="${auction.age == 2}">중년층</span>
-                            <span th:if="${auction.age == 3}">노년층</span>
-                        </li>
-                        <li class="d-flex align-items-start mb-2">
-                            <span class="icon-check_circle mr-2 text-muted">성별</span>
-                            <span th:if="${auction.driverLicense == 0}">무관</span>
-                            <span th:if="${auction.gender == 1}">여성</span>
-                            <span th:if="${auction.gender == 2}">남성</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="row mb-5">
-                    <div class="col-6" th:if="${auction.state == 3}">
-                        <a th:href="@{/chat/chatList}" class="btn btn-block btn-light btn-md">채팅하기</a>
+        <!-- 낙찰 헬퍼 정보 - 메소드 만들어서 반환 받아야 함 -->
+        <table class="table">
+            <tr>
+                <td th:rowspan="2" width="30%"><img th:src="@{#}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td width="50%"><h3>헬퍼인포 - 닉네임(카드연결)</h3></td>
+                <td th:rowspan="2" width="20%">
+                    <div th:if="${session.user.id == auction.user}" th:align="center">
+                        <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+<!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
                     </div>
-                    <div class="col-6"  th:unless="${auction.state == 3}">
-                        <a href="#" class="btn btn-block btn-primary btn-md">리뷰하기</a>
-                    </div>
-                    <div class="col-6">
-                        <a class="btn btn-block btn-primary btn-md" th:href="@{/auction/allDoneList}">목록으로</a>
-                    </div>
-                </div>
+                </td>
+            </tr>
+            <tr><td><p>헬퍼인포 - 어필</p></td></tr>
+        </table>
 
-            </div>
+        <!-- 유저일 경우 -->
+        <!-- 미션 수행 전 - 미션 수행 확인 버튼 -->
+        <!-- 미션 완료 후 - 리뷰쓰기 버튼 -->
 
-            <div class="col-lg-4">
-                <div class="bg-light p-3 border rounded mb-4">
-                    <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">미션 부가정보</h3>
-                    <ul class="list-unstyled pl-3 mb-0">
-                        <li class="mb-2">
-                            <strong class="text-black">미션 난이도</strong>
-                            <span th:if="${auction.level == 1}">쉬움</span>
-                            <span th:if="${auction.level == 2}">보통</span>
-                            <span th:if="${auction.level == 3}">어려움</span>
-                        </li>
-                        <li class="mb-2">
-                            <strong class="text-black">낙찰가</strong>
-                            <span th:text="${chosenBidding.offerPrice}"></span>원
-                        </li>
-                        <li class="mb-2">
-                            <strong class="text-black">담당 헬퍼</strong>
-                            <span th:text="${chosenBidding.helper.id}"></span> 님 <a onclick="test()">헬퍼 카드</a>
-                        </li>
-                        <li class="mb-2">
-                            <strong class="text-black">미션장소</strong>
-                            <span th:text="${auction.sido}"></span> , <span th:text="${auction.sigungu}"></span>
-                        </li>
-                        <li class="mb-2">
-                            <strong class="text-black">미션 일시</strong>
-                            <span th:text="${#temporals.format(auction.regDate, 'yyyy/MM/dd hh시 mm분')}"></span>
-                        </li>
+        <!-- 헬퍼일 경우 -->
+        <!-- 미션 수행 전 - 미션 수행 확인 요청 버튼(시간이 된다면 문자/카톡으로 구현) -->
 
-                    </ul>
-                </div>
-
-                    <div class="form-group" th:if="${auction.state == 3}">
-                        <a th:href="@{/chat/chatList}">
-                            <button> 채팅하기 </button>
-                        </a>
-                    </div>
-                    <div class="form-group" th:unless="${auction.state == 3}">
-                        <a>
-                           <button onclick="test()"> 리뷰하기 </button>
-                        </a>
-                    </div>
-<!--------------------- 상세주소는 AUC.ID=SESSION.ID || BID.ID=SESSION.ID 일 때만 확인 가능, 그 외는 시도/시군구 출력 -------------->
-<!--------------------- AUC.STATE = 4 일 때는 취소 된 미션입니다 출력 -------------->
-                </form>
-
-            </div>
-        </div>
     </div>
 </section>
+
 
 <script>
     function test(){
