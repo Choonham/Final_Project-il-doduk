@@ -214,7 +214,7 @@ public class AuctionController {
         model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
 
         //옥션 유저 값
-        model.addAttribute("user", user);
+        model.addAttribute("u", user);
 
         //타이머 정보 보내기
         model.addAttribute("time", auctionService.timer(aucSeq));
