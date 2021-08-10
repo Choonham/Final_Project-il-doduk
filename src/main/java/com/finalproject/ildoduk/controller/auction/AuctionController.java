@@ -7,6 +7,7 @@ import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.finalproject.ildoduk.service.member.service.*;
+import com.finalproject.ildoduk.service.pay.service.*;
 import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
@@ -32,6 +33,9 @@ public class AuctionController {
 
     @Autowired
     private final HelperInfoService helperInfoService;
+
+    @Autowired
+    private final PaymentService paymentService;
 
     @GetMapping("/main")
     public void main(PageRequestDTO pageRequestDTO) {
@@ -252,8 +256,8 @@ public class AuctionController {
         Optional<BiddingList> chosenBidding  = auctionService.chosenBidding(aucSeq);
         model.addAttribute("chosenBidding", chosenBidding.get());
 
-        //낙찰 된 헬퍼 정보 - 수정 필요
-        model.addAttribute("helper",helperInfoService.helperFindById(chosenBidding.get().getHelper().getId()));
+        //낙찰 된 헬퍼 정보 (멤버+헬퍼인포)
+        model.addAttribute("helper",helperInfoService.helperFindById2(chosenBidding.get().getHelper().getId()));
     }
 
     //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기
@@ -264,13 +268,36 @@ public class AuctionController {
 
         auctionService.chooseBidding(bidSeq);
 
+        /*결제관련*/
+        //낙찰 후 차액 반환
+        paymentService.biddingSuccess(bidSeq);
+
         //getAuction으로 반환
         return "redirect:/auction/getAuction?aucSeq="+aucSeq;
     }
 
-    //경매 참여
+    //경매참여
 
     //경매삭제
+    @GetMapping("/deleteAuction")
+    public String deleteAuction(Long aucSeq){
+
+        //경매와 해당 경매 비딩 내역 state값 변경
+        //auction.state=4 / bids.state=2 (삭제)
+        auctionService.deleteAuction(aucSeq);
+
+        return "redirect:/auction/onAuctionList";
+    }
+
+    //미션 수행 확인 (미션종료 상태로 state 변환)
+    @GetMapping("/jobDone")
+    public String jobDone(Long aucSeq){
+
+        //경매와 해당 경매 비딩 내역 state값 변경
+        //auction.state=3(일 완료)
+        auctionService.jobDone(aucSeq);
+        return "redirect:/auction/getAuction?aucSeq="+aucSeq;
+    }
 
     //=================================================== 경매 등록 ==================================================//
     //경매 등록 시작
@@ -287,14 +314,16 @@ public class AuctionController {
     @PostMapping("/register")
     public String registerPost(AuctionListDTO dto, HttpServletRequest request) {
 
-        //log.info("register " + dto.toString());
         String date = request.getParameter("doDateT");
-        System.out.println(date);
         LocalDateTime dodateTime = LocalDateTime.parse(date);
         dto.setDoDateTime(dodateTime);
+
         //새로 추가된 엔티티번호 받아서 출력하고 싶으면 하던가,,,,
         Long aucSeq = auctionService.register(dto);
         //log.info(aucSeq);
+
+        /*결제 관련*/
+        paymentService.regAuction(aucSeq);
 
         return "redirect:/auction/onAuctionList";
     }

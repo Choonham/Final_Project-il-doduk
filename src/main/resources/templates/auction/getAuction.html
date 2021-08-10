@@ -204,8 +204,8 @@
         <!-- 낙찰 헬퍼 정보 - 메소드 만들어서 반환 받아야 함 -->
         <table class="table">
             <tr>
-                <td th:rowspan="2" width="30%"><img th:src="@{#}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
-                <td width="50%"><h3>헬퍼인포 - 닉네임(카드연결)</h3></td>
+                <td th:rowspan="2" width="30%"><img th:src="@{helper.facePhoto}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td width="50%"><h3>[[${helper.nickname}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id == auction.user}" th:align="center">
                         <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
@@ -213,15 +213,23 @@
                     </div>
                 </td>
             </tr>
-            <tr><td><p>헬퍼인포 - 어필</p></td></tr>
+            <tr><td><p>[[${helper.appeal}]]</p></td></tr>
         </table>
 
         <!-- 유저일 경우 -->
-        <!-- 미션 수행 전 - 미션 수행 확인 버튼 -->
-        <!-- 미션 완료 후 - 리뷰쓰기 버튼 -->
+        <div th:if="${session.user.id == u.id}" class="row mb-5">
+            <!-- 미션 수행 전 - 미션 수행 확인 버튼 -->
+            <div class="col-6" th:if="${auction.state != 3}">
+                <span id="doneCheck" class="btn btn-block btn-primary btn-md"> 미션 수행 확인 </span><!-- 초록버튼 -->
+            </div>
+            <!-- 미션 완료 후 - 리뷰쓰기 버튼 -->
+            <div class="col-6"th:if="${auction.state == 3}" >
+                <a th:href="@{#}" class="btn btn-block btn-primary btn-md"> 리뷰쓰기 </a><!-- 초록버튼 -->
+<!------------------------------------------ 리뷰쓰기 연결예정 ----------------------------------------------->
+            </div>
+        </div>
 
-        <!-- 헬퍼일 경우 -->
-        <!-- 미션 수행 전 - 미션 수행 확인 요청 버튼(시간이 된다면 문자/카톡으로 구현) -->
+        <!-- 헬퍼일 경우 --><!-- 미션 수행 전 - 미션 수행 확인 요청 버튼(시간이 된다면 문자/카톡으로 구현) -->
 
     </div>
 </section>
@@ -231,6 +239,21 @@
     function test(){
         window.open("#","헬퍼카드","width=500, height=584, scrollbars=no, resizeable=no,toolbar=no, left=1000,top=150");
     }
+
+    $(document).ready(function (){
+
+	    /* 미션 수행 완료로 변경*/
+	    $('#doneCheck').click(function () {
+		    var check = confirm("미션이 끝났습니까?");
+
+		    if(check === true){
+			    location.href="/auction/jobDone?aucSeq="+[[${auction.aucSeq}]];
+		    }else{
+			    this.close();
+		    }
+
+	    });
+    });
 </script>
 
 

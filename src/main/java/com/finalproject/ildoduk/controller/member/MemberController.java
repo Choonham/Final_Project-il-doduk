@@ -190,7 +190,6 @@ public class MemberController {
 
 
         MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디, 성별, 닉네임 값
-
         log.info("dto Id:::::: " + dto.getId());
         log.info("dto gender:::: " + dto.getGender());
         log.info("dto nick:::: " + dto.getNickname());

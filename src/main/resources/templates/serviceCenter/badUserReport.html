@@ -54,7 +54,7 @@
           <th>처리상황</th>
         </tr>
         <tr th:if="${reportList.totalPage == 0}">
-          <td colspan="5">신고 내용이 없습니다.</td>
+          <td colspan="5" th:align="center">신고 내용이 없습니다.</td>
         </tr>
         <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
           <td>[[${report.reportNo}]]</td>
@@ -77,17 +77,13 @@
           <div class="col-md-12 text-center ">
             <div class="custom-pagination ml-auto">
 
-
               <div class="d-inline-block">
-                <ul>
-                  <li th:class=" 'page-item ' + ${reportList.page == page?'active':''} " th:each="page: ${reportList.pageList}">
-                    <a th:href="@{/serviceCenter/badUserReport(page = ${page})}">
-                      [[${page}]]
-                    </a>
-                  </li>
-                </ul>
+                <a th:class=" 'page-item ' + ${reportList.page == page?'active':''} "
+                   th:each="page: ${reportList.pageList}"
+                   th:href="@{/serviceCenter/badUserReport(page = ${page})}">
+                  [[${page}]]
+                </a>
               </div>
-
 
             </div>
           </div>

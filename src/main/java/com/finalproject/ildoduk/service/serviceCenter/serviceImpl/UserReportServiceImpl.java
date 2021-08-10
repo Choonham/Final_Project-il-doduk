@@ -79,17 +79,28 @@ public class UserReportServiceImpl implements UserReportService {
         userReportRepository.delete(result.get());
     }
 
-    //관리자  :  신고글 전체 보기
+//-------     관리자  :  신고글 전체 보기
+//reportState = 1
     @Override
-    public PageResultsDTO<UserReportDTO, UserReport> getAllReport(PageRequestDTO pageRequestDTO) {
-
+    public PageResultsDTO<UserReportDTO, UserReport> getStateOne(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("reportNo").descending());
-        Page<UserReport> result = userReportRepository.findAll(pageable);
+        Page<UserReport> result = userReportRepository.findAllOne(pageable);
 
         Function<UserReport, UserReportDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultsDTO<>(result, fn);
     }
+//reportState = 2
+    @Override
+    public PageResultsDTO<UserReportDTO, UserReport> getStateTwo(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("reportNo").descending());
+        Page<UserReport> result = userReportRepository.findAllTwo(pageable);
+
+        Function<UserReport, UserReportDTO> fn = (entity -> entityToDto(entity));
+
+        return new PageResultsDTO<>(result, fn);
+    }
+
     //관리자 :  확인 시에 신고 상황 업데이트
     @Override
     public void updateReportState(UserReportDTO userReportDTO) {

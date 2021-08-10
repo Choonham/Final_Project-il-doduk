@@ -9,6 +9,9 @@ import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
+import com.finalproject.ildoduk.service.member.serviceImpl.*;
+
+import java.util.Optional;
 
 public interface HelperInfoService {
 
@@ -18,18 +21,27 @@ public interface HelperInfoService {
     //헬퍼 회원가입전 DB에 아이디 중복 체크
     int helperRegisterIdCheck(String memberId);
 
-    //헬퍼 아이디체크 후 모든정보 반환(Member, HelperInfo)
+    //헬퍼 아이디체크 후 헬퍼인포 반환(HelperInfo)
     HelperInfoDTO helperFindById(String memberId);
+
+    /*옥션에서 사용*/
+    //헬퍼 아이디체크 후 헬퍼인포 반환(HelperInfo)
+    MemberHelperInfoDTO helperFindById2(String memberId);
 
     PageResultsDTO<MemberHelperInfoDTO, Object[]> getHelperInfoByLoc(String sigungu, PageRequestDTO requestDTO);
     int countHelpersBySigungu(String sigungu);
 
     //헬퍼 가입 승인을 위한 state 체크
-    PageResultsDTO<HelperInfoDTO, HelperInfo> helperRequest(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperOne(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperTwo(PageRequestDTO pageRequestDTO);
+    PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperThree(PageRequestDTO pageRequestDTO);
     //헬퍼 가입 승인
     void accept(HelperInfoDTO helperInfoDTO);
     //헬퍼 가입 반려
     void deny(HelperInfoDTO helperInfoDTO);
+    //헬퍼 정보
+    HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO);
+
 
 
     default HelperInfo dtoToEntity(HelperInfoDTO dto){
@@ -119,6 +131,31 @@ public interface HelperInfoService {
                 .goodAtSecond(helper.getGoodAtSecond())
                 .goodAtFirst(helper.getGoodAtFirst())
                 .agreeHelper(helper.getAgreeHelper())
+                .build();
+
+        return dto;
+    }
+
+    default MemberHelperInfoDTO entityToDTO(HelperInfo helper){
+
+        MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
+
+                .id(helper.getMemberId().getId())
+                .name(helper.getMemberId().getName())
+                .address(helper.getMemberId().getAddress())
+                .intro(helper.getMemberId().getIntro())
+                .nickname(helper.getMemberId().getNickname())
+                .gender(helper.getMemberId().getGender())
+                .photo(helper.getMemberId().getPhoto())
+
+                .appeal(helper.getAppeal())
+                .helperNo(helper.getHelperNo())
+                .kindness(helper.getKindness())
+                .goodAtThird(helper.getGoodAtThird())
+                .goodAtSecond(helper.getGoodAtSecond())
+                .goodAtFirst(helper.getGoodAtFirst())
+                .agreeHelper(helper.getAgreeHelper())
+                .facePhoto(helper.getFacePhoto())
                 .build();
 
         return dto;

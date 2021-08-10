@@ -9,13 +9,10 @@
 <body id="top">
 
 <div th:if = "${session.user != null}">
-
    <div th:if="${session.user.state == 0}">
     <div th:replace="~{/fragments/navManager :: naviManager}"></div>
   </div>
-
 </div>
-
 
 <section class="section-hero overlay inner-page bg-image" id="home-section">
   <div class="container">
@@ -24,67 +21,189 @@
         <h1 class="text-white font-weight-bold">관리자 전용</h1>
         <div class="custom-breadcrumbs">
           <a href="#">Home</a> <span class="mx-2 slash">/</span>
-          <span class="text-white"><strong>헬퍼 승인 요청</strong></span>
+          <span class="text-white"><strong>헬퍼 요청 리스트</strong></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div>
-  요청 리스트
-</div>
-<div>
-  반려 리스트
-</div>
-
-
 <section class="site-section">
+    <div class="row justify-content-center mb-5" data-aos="fade-up">
+      <div id="filters" class="filters text-center col-md-7">
+        <button class="btn btn-primary active" id="requestList">헬퍼 요청 목록</button>
+        <button class="btn btn-primary" id="acceptList">헬퍼 승인 목록</button>
+        <button class="btn btn-primary" id="denyList">반려된 헬퍼 목록</button>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-5" data-aos="fade-up" id="noSelectList">
+      선택된 리스트가 없습니다.
+    </div>
+
+</section>
+
+
+<!-- 헬퍼 승인 요청 리스트 -->
+
+<section class="site-section" id="request_helper_list" style="display:none;">
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" th:if="${stateOne.totalPage == 0}">
+    접수된 내역이 없습니다.
+  </div>
+
   <div class="container">
-
-
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="helper : ${helperManagement.dtoList}">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}">
         <div class="job-listing-logo">
           <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${helper.memberId}">헬퍼아이디</h2>
-            <strong th:text="${helper.appeal}">각오~~~~~~~~~~~~~~</strong>
+            <h2 th:text="${stateOne.memberId}">헬퍼아이디</h2>
+            <strong th:text="${stateOne.appeal}">각오</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
             <span class="icon-contacts"></span>
-              <div th:text="${helper.goodAtFirst}"></div>
-              <div th:text="${helper.goodAtSecond}"></div>
-              <div th:text="${helper.goodAtThird}"></div>
+              <div th:text="${stateOne.goodAtFirst}"></div>
+              <div th:text="${stateOne.goodAtSecond}"></div>
+              <div th:text="${stateOne.goodAtThird}"></div>
           </div>
         </div>
 
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 1}">
-          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
+        <div class="job-listing-meta">
+          <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
           <br/>
-          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${helper.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
+          <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>
         </div>
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 2}">
-          헬퍼 승인
-        </div>
-        <div class="job-listing-meta" th:if="${helper.agreeHelper == 3}">
-          반려
-        </div>
+
       </li>
     </ul>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:href="@{/manager/helperManagement(page = ${page})}"
+               th:class="${stateOne.page == page?'active':''}"
+               th:each="page: ${stateOne.pageList}">[[${page}]]</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
   </div>
 </section>
 
-<script>
-  function test(){
-    window.open("","민증","width=300,height=200");
-  }
-</script>
+<!-- 승인 목록 -->
 
+<section class="site-section" id="accpet_helper_list" style="display:none;">
+
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" th:if="${stateTwo.totalPage == 0}">
+    접수된 내역이 없습니다.
+  </div>
+
+  <div class="container">
+    <ul class="job-listings mb-5">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}">
+        <div class="job-listing-logo">
+          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 th:text="${stateTwo.memberId}">헬퍼아이디</h2>
+            <strong th:text="${stateTwo.appeal}">각오~~~~~~~~~~~~~~</strong>
+          </div>
+          <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+            <span class="icon-contacts"></span>
+            <div th:text="${stateTwo.goodAtFirst}"></div>
+            <div th:text="${stateTwo.goodAtSecond}"></div>
+            <div th:text="${stateTwo.goodAtThird}"></div>
+          </div>
+        </div>
+
+        <span class="job-listing-meta">
+          승인
+        </span>
+      </li>
+    </ul>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+            <div class="d-inline-block">
+              <a th:href="@{/manager/helperManagement(page = ${page})}"
+                 th:class="${stateTwo.page == page?'active':''}"
+                 th:each="page: ${stateTwo.pageList}">[[${page}]]</a>
+            </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- 승인 반려 -->
+
+<section class="site-section" id="deny_helper_list" style="display:none;">
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" th:if="${stateThree.totalPage == 0}">
+    접수된 내역이 없습니다.
+  </div>
+
+  <div class="container">
+    <ul class="job-listings mb-5">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
+        <div class="job-listing-logo">
+          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 th:text="${stateThree.memberId}">헬퍼아이디</h2>
+            <strong th:text="${stateThree.appeal}">각오~~~~~~~~~~~~~~</strong>
+          </div>
+          <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+            <span class="icon-contacts"></span>
+            <div th:text="${stateThree.goodAtFirst}"></div>
+            <div th:text="${stateThree.goodAtSecond}"></div>
+            <div th:text="${stateThree.goodAtThird}"></div>
+          </div>
+        </div>
+
+        <span class="job-listing-meta">
+          반려
+        </span>
+      </li>
+    </ul>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:href="@{/manager/helperManagement(page = ${page})}"
+               th:class="${stateThree.page == page?'active':''}"
+               th:each="page: ${stateThree.pageList}">[[${page}]]</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 

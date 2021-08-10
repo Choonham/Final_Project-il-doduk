@@ -40,11 +40,11 @@
                     <div>
                         <h2 class="h2 text-primary"><b>경매 미션 등록</b></h2>
                     </div>
-                    <!-- 유저 아이디 히든값으로 보내기 -->
-                    <input th:type="hidden" name="user" th:value="${session.user.id}">
 
                     <!-- 입력창 시작 : 우선 간단하게 -->
-                    <form class="p-4 p-md-5 border rounded" th:action="@{/auction/register}" th:method="post">
+                    <form class="p-4 p-md-5 border rounded" id="registerForm" th:action="@{/auction/register}" th:method="post">
+                        <!-- 유저 아이디 히든값으로 보내기 -->
+                        <input th:type="hidden" name="user" id="user" th:value="${session.user.id}">
                         <!-------------------------------------------------경고문 삽입------------------------------------------------------->
                         <div class="text-center">
                             미션 시작 시간 30분 전까지 낙찰을 하지 않을 경우, 자동으로 경매가 파기 됩니다.<br>
@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label for="dd">미션 날짜와 시간</label><br>
                             <input th:type="datetime-local" th:name="doDateT" id="dd" th:min="${td}"
-                                   th:required="true"/>
+                                   th:required="required"/>
                         </div>
 
                         <!-- 카테고리 -->
@@ -64,7 +64,7 @@
                             <label for="category">카테고리</label>
                             <select class="form-control" name="category" id="category" data-style="btn-black"
                                     data-width="100%"
-                                    data-live-search="true" th:required="true">
+                                    data-live-search="true" th:required="required">
                                 <option disabled selected>미션 유형을 선택해주세요.</option>
                                 <option th:value="1"> 구매대행</option>
                                 <option th:value="2"> 홈케어</option>
@@ -77,19 +77,19 @@
                         <div class="form-group">
                             <label for="job-title">미션 제목</label>
                             <input type="text" class="form-control" id="job-title" placeholder="미션 제목을 입력해주세요"
-                                   th:required="true" th:name="title">
+                                   required="true" th:name="title">
                         </div>
 
                         <!-- 콘텐츠 -->
                         <!-- summernote 에디터 사용 -->
-                        <textarea class="summernote" id="editordata" th:name="content" th:required="true"></textarea>
+                        <textarea class="summernote" id="editordata" th:name="content" th:required="required"></textarea>
 
 
                         <br>
                         <div class="form-group">
                             <label>미션 주소</label><br>
                             <!-- 주소 API -->
-                            <input type="text" id="sample4_postcode" placeholder="우편번호" th:required="true">
+                            <input type="text" id="sample4_postcode" placeholder="우편번호" th:required="required">
                             <input type="button" class="btn btn-md btn-light" th:align="right"
                                    onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
                             <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <label>미션 소요 시간</label><br>
                             * 최소 시간은 30분 입니다.<br>
-                            <input th:type="number" name="predictHour" th:min="30" th:max="480" th:required="true">분
+                            <input th:type="number" name="predictHour" th:min="30" th:max="480" th:required="required">분
                         </div>
 
                         <br>
@@ -119,7 +119,7 @@
                         <div class="form-group">
                             <label for="level">미션 난이도 </label>
                             <select class="form-control" name="level" id="level" data-style="btn-black"
-                                    data-width="100%" data-live-search="true" th:required="true">
+                                    data-width="100%" data-live-search="true" th:required="required">
                                 <option disabled selected>미션의 난이도를 선택해주세요.</option>
                                 <option th:value="1"> 쉬움</option>
                                 <option th:value="2"> 보통</option>
@@ -132,7 +132,7 @@
                         <div class="form-group">
                             <label>경매 시작가</label><br>
                             * 최소 경매 금액은 5000원 입니다.<br>
-                            <input th:type="number" name="startPrice" th:min="5000" th:required="true">원
+                            <input th:type="number" name="startPrice" th:min="5000" th:required="required">원
                         </div>
 
                         <br><br>
@@ -140,7 +140,7 @@
                         <div class="form-group">
                             <label for="auctionGap">미션 경매 단위</label>
                             <select class="form-control" name="auctionGap" id="auctionGap" data-style="btn-black"
-                                    data-width="100%" data-live-search="true" th:required="true">
+                                    data-width="100%" data-live-search="true" th:required="required">
                                 <option disabled selected>* 설정하신 단위 기준으로 경매가 진행됩니다.</option>
                                 <option th:value="500"> 500원</option>
                                 <option th:value="1000"> 1000원</option>
@@ -184,7 +184,8 @@
                         </div>
                         <br>
                         <div class="col-6">
-                            <button id="submit-btn" class="btn btn-block btn-primary btn-md">저장하기</button>
+                            <span id="save" class="btn btn-block btn-primary btn-md">저장하기</span>
+                            <button id="sub" type="submit" class="hide"></button>
                         </div>
                     </form>
 
@@ -223,6 +224,29 @@
 <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
 <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
 <script th:inline="javascript">
+
+
+	<!-- 글 등록 시 확인 얼럿 -->
+	$(document).ready(function (){
+
+		$('#save').click(function () {
+			var check = confirm("미션 경매는 등록 후 수정하실 수 없습니다. 경매를 등록하시겠습니까?");
+
+			if(check === true){
+				/*$("#registerForm").attr("method", "POST");
+				$("#registerForm").attr("action", "/auction/register");*/
+				//$("#registerForm").submit();
+				$("#sub").trigger('click');
+                alert("경매가 등록 되었습니다. 미션 시작 30분 전까지 입찰을 해주세요.")
+
+			}else{
+				this.close();
+			}
+
+		});
+	});
+
+
 	function sample4_execDaumPostcode() {
 		new daum.Postcode({
 			oncomplete: function (data) {

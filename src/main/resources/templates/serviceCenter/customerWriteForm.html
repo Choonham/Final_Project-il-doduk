@@ -24,17 +24,16 @@
 
 </div>
 
-<form th:action="@{/serviceCenter/postCusWrite}" method="post">
+
 
     <section class="section-hero overlay inner-page bg-image" id="home-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <h1 class="text-white font-weight-bold">문의 남깁니다.</h1>
+                    <h1 class="text-white font-weight-bold">고객센터</h1>
                     <div class="custom-breadcrumbs">
-                        <a href="#">Home</a> <span class="mx-2 slash">/</span>
-                        <a href="#">Job</a> <span class="mx-2 slash">/</span>
-                        <span class="text-white"><strong>Post a Job</strong></span>
+                        <a th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>문의</strong></span>
                     </div>
                 </div>
             </div>
@@ -44,14 +43,7 @@
 
     <section class="site-section">
         <div class="container">
-
-            <div class="row align-items-center mb-5">
-                <div class="col-lg-8 mb-4 mb-lg-0">
-                    <div class="d-flex align-items-center">
-                    </div>
-                </div>
-
-            </div>
+            <form th:action="@{/serviceCenter/postCusWrite}" method="post">
             <div class="row mb-5">
                 <div class="col-lg-12">
                     <form class="p-4 p-md-5 border rounded">
@@ -91,10 +83,10 @@
                     </div>
                 </div>
             </div>
-
+            </form>
         </div>
     </section>
-</form>
+
 
 
 

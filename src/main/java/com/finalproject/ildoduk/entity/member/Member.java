@@ -82,4 +82,6 @@ public class Member extends BaseEntity{
 
     public void changeIntro(String intro){ this.intro = intro; }
 
+    public void changeState(int state){ this.state = state;}
+
 }
