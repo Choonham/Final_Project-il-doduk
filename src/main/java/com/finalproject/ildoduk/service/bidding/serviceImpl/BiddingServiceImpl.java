@@ -17,10 +17,10 @@ public class BiddingServiceImpl implements BiddingService {
 
     /*널 체크 아직 안하긴 했는데*/
     @Override
-    public BiddingListDTO get_bidding(String no) {
+    public BiddingListDTO get_bidding(Long no) {
 
-    Long bid_no = Long.parseLong(no);
-    Optional<BiddingList> result =repo.findById(bid_no);
+
+    Optional<BiddingList> result =repo.findById(no);
         BiddingListDTO dto=entityToDTO(result.get());
      return dto;
 

@@ -5,7 +5,7 @@ import com.finalproject.ildoduk.entity.auction.BiddingList;
 
 public interface BiddingService {
 
-    BiddingListDTO get_bidding(String no);
+    BiddingListDTO get_bidding(Long no);
 
 
 
