@@ -22,11 +22,6 @@
 
 </div>
 
-<style>
-  #payHistory,#tradeHistory{
-    display: none;
-  }
-</style>
 
 
 <section class="section-hero overlay inner-page bg-image" id="home-section">
@@ -36,7 +31,6 @@
         <h1 class="text-white font-weight-bold">결제 내역 조회</h1>
         <div class="custom-breadcrumbs">
           <a href="#" th:href="@{/main}">Home</a> <span class="mx-2 slash">/</span>
-          <a href="#">Job</a> <span class="mx-2 slash">/</span>
           <span class="text-white"><strong>결제 내역 조회</strong></span>
         </div>
       </div>
@@ -44,69 +38,62 @@
   </div>
 </section>
 
-      <a id="none">
-        <button>~~~</button>
-      </a>
-      <a id="pay_btn">
-        <button>결제내역조회</button>
-      </a>
+<section class="site-section">
+  <div class="container">
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-8 mb-4 mb-lg-0">
+        <div class="d-flex align-items-center"></div>
+      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>결제금액</th>
+          <th>결제 여부</th>
+          <th>결제한 날짜</th>
+          <th>결제여부</th>
+        </tr>
+        </thead>
 
-      <a id="trade_btn">
-        <button>거래내역조회</button>
-      </a>
+        <tbody>
+        <tr scope="row" th:each="dto : ${result.dtoList}" th:if="${result.totalPage != 0}">
+          <td>[[${dto.pointNo}]]</td>
+          <td>[[${dto.totalPoint}]]</td>
+          <td>[[${dto.payCheck}]]</td>
+          <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
 
-경매 완료 내역과 겹쳐서 거래내역 삭제 하겠습니다.
+          <td th:if="${dto.payCheck == '결제완료'}">
+            <a href="" th:href="@{/serviceCenter/toRefund(pointNo = ${dto.pointNo})}"
+               onclick="window.open(this.href,'환불 진행중..','width=590, height=470, scrollbars=no, resizeable=no');return false;">환불신청</a>
+          </td>
 
+          <td th:if="${dto.payCheck == '환불완료'}">
+            <p>환불 완료</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
 
-<div id="notSelected">
-  <table >
-    <tr>
-      <td colspan="5">선택된 항목이 없습니다.</td>
-    </tr>
-  </table>
-</div>
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
 
+          <div class="d-inline-block">
+            <a th:class=" 'page-item ' + ${result.page == page?'active':''} "
+               th:each="page: ${result.pageList}"
+               th:href="@{/serviceCenter/paymentHistory(page = ${page})}">
+              [[${page}]]
+            </a>
+          </div>
 
-<div id="payHistory">
-  <table >
-    <tr>
-      <th>#</th>
-      <th>결제금액</th>
-      <th>결제 여부</th>
-      <th>결제한 날짜</th>
-      <th>.</th>
-    </tr>
+        </div>
+      </div>
+    </div>
 
-    <tr th:if="${result.totalPage} == 0">
-      <td colspan="5"> 결제 이력이 존재하지 않습니다.</td>
-    </tr>
-
-    <tr th:each="dto : ${result.dtoList}" th:if="${result.totalPage} != 0">
-      <td>[[${dto.pointNo}]]</td>
-      <td>[[${dto.totalPoint}]]</td>
-      <td>[[${dto.payCheck}]]</td>
-      <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
-
-      <td th:if="${dto.payCheck == '결제완료'}">
-        <a href="" th:href="@{/serviceCenter/toRefund(pointNo = ${dto.pointNo})}"
-           onclick="window.open(this.href,'환불 진행중..','width=460, height=380, scrollbars=no, resizeable=no');return false;">환불신청</a>
-      </td>
-
-      <td th:if="${dto.payCheck == '환불완료'}">
-        <a href="#"></a>
-      </td>
-    </tr>
-  </table>
-
-  <ul>
-    <li th:each="page: ${result.pageList}">
-      <a href="#" th:href="@{/serviceCenter/paymentHistory(page=${page})}">
-        [[${page}]]
-      </a>
-    </li>
-  </ul>
-</div>
-
+  </div>
+</section>
 
 <script th:src="@{/pay/serviceCenter.js}"></script>
 

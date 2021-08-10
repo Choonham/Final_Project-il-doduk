@@ -88,17 +88,37 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return repository.countDistinctBySigungu(sigungu);
     }
 
+
     // =========================Blog======================= //
 
 
 //--------- 관리자 : 헬퍼 리스트 ---------------
     //헬퍼 가입을 위한 state 체크
+
     @Override
-    public PageResultsDTO<HelperInfoDTO, HelperInfo> helperRequest(PageRequestDTO pageRequestDTO) {
-
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperOne(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllOne(pageable);
 
-        Page<HelperInfo> result = repository.findAll(pageable);
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperTwo(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllTwo(pageable);
+
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperThree(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllThree(pageable);
 
         Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
 
@@ -111,7 +131,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
 
        HelperInfo entity = result.get();
-       log.info(entity+"저장될 값의 헬퍼 정보");
+       log.info("저장된 헬퍼 정보 ~~~~~ "+entity);
 
        entity.changeAgreeHelper(2);
        repository.save(entity);
@@ -125,5 +145,13 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         entity.changeAgreeHelper(3);
         repository.save(entity);
+    }
+
+    @Override
+    public HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+        HelperInfo entity = result.get();
+
+        return EntityToDTO(entity);
     }
 }

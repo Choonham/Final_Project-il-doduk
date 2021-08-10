@@ -7,6 +7,7 @@ import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.finalproject.ildoduk.service.member.service.*;
+import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
@@ -32,6 +33,8 @@ public class AuctionController {
 
     @Autowired
     private final HelperInfoService helperInfoService;
+
+    private final PaymentService paymentService;
 
     @GetMapping("/main")
     public void main(PageRequestDTO pageRequestDTO) {
@@ -263,6 +266,9 @@ public class AuctionController {
     public String chooseBid(Long bidSeq, Long aucSeq){
 
         auctionService.chooseBidding(bidSeq);
+//-- 경매 : 결제
+        //낙찰 되었으니...차액을 반환
+        paymentService.biddingSuccess(bidSeq);
 
         //getAuction으로 반환
         return "redirect:/auction/getAuction?aucSeq="+aucSeq;
@@ -285,7 +291,10 @@ public class AuctionController {
     }
 
     @PostMapping("/register")
-    public String registerPost(AuctionListDTO dto, HttpServletRequest request) {
+    public String registerPost(AuctionListDTO dto, HttpServletRequest request,HttpSession session) {
+        // 다훈 :  추가한 코드 ( TEST ... 아이디가 null이여서 게시글이 작성이 안되는지..... )
+        MemberDto id = (MemberDto) session.getAttribute("user");
+        dto.setUser(id.getId());
 
         //log.info("register " + dto.toString());
         String date = request.getParameter("doDateT");
@@ -294,7 +303,11 @@ public class AuctionController {
         dto.setDoDateTime(dodateTime);
         //새로 추가된 엔티티번호 받아서 출력하고 싶으면 하던가,,,,
         Long aucSeq = auctionService.register(dto);
-        //log.info(aucSeq);
+        //log.info("추가된 게시 번호~~~~~~~~~~~~~"+aucSeq);
+
+//-- 경매 : 결제
+        // 게시글 등록시에 startPrice 만큼 포인트 차감
+        paymentService.regAuction(aucSeq);
 
         return "redirect:/auction/onAuctionList";
     }

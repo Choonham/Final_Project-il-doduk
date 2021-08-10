@@ -27,11 +27,14 @@ public interface MemberService {
 
 
 
-// 유저 포인트 관련
+    //헬퍼 승인 시에 state 2로 변경
+    void updateState(MemberDto memberDto);
 
+//-------------------- 유저 포인트 관련 ----------------------
+    //결제 성공시에 현재 가지고 있는 포인트에서 증가
     void updatePoint(PaymentDTO dto);
-    void minusPonit(MemberDto dto);
-    void plusPoint(MemberDto dto);
+    //환불 시에 현재 가지고 있는 포인트에서 차감
+    void minusPoint(MemberDto dto);
 
 
     MemberDto kakaoLogin(@RequestBody String json) ;

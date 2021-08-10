@@ -21,64 +21,120 @@
   <div class="container">
     <div class="row">
       <div class="col-md-7">
-        <h1 class="text-white font-weight-bold">사용자 신고</h1>
+        <h1 class="text-white font-weight-bold">관리자 전용</h1>
         <div class="custom-breadcrumbs">
-          <a href="#">Home</a> <span class="mx-2 slash">/</span>
-          <a href="#">Job</a> <span class="mx-2 slash">/</span>
-          <span class="text-white"><strong>사용자 신고</strong></span>
+          <a th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>사용자 신고 관리</strong></span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div>
-  신고 처리 전
-</div>
-  신고 처리 완료
-<div>
+<!-- reportState == 1 부분 -->
 
-</div>
-<section class="site-section" id="next-section">
+<section class="site-section">
+  <div class="row justify-content-center mb-5" data-aos="fade-up">
+    <div id="filters" class="filters text-center col-md-7">
+      <button class="btn btn-primary active" id="report1">처리중인 신고 리스트</button>
+      <button class="btn btn-primary" id="report2">신고 처리 완료 목록</button>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" id="noSelectList">
+    선택된 리스트가 없습니다.
+  </div>
+
+</section>
+
+
+
+<section class="site-section" id="reportStateOne" style="display: none;">
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" th:if="${reportStateOne.totalPage == 0}">
+    접수된 내역이 없습니다.
+  </div>
+
   <div class="container">
-
     <div class="row">
-      <div class="col-lg-6 mb-4"  th:each="report : ${reportList.dtoList}">
-        <div class="block__87154" th:if="${report.reportState == '1'}">
-          <div th:if="${report.reportKind == '1'}">광고</div>
-          <div th:if="${report.reportKind == '2'}">도배</div>
-          <div th:if="${report.reportKind == '3'}">불법 음란물 게시</div>
-          <div th:if="${report.reportKind == '4'}">욕설 및 폭언</div>
-          <div th:if="${report.reportKind == '5'}">저작권 침해</div>
-          <div th:if="${report.reportKind == '6'}">개인정보 침해</div>
-          <blockquote th:text="${report.reportContent}">
+      <div class="col-lg-6 mb-4"  th:each="stateOne : ${reportStateOne.dtoList}" th:if="${reportStateOne.totalPage > 0}">
+        <div class="block__87154" th:if="${stateOne.reportState == '1'}">
+          <div th:if="${stateOne.reportKind == '1'}">광고</div>
+          <div th:if="${stateOne.reportKind == '2'}">도배</div>
+          <div th:if="${stateOne.reportKind == '3'}">불법 음란물 게시</div>
+          <div th:if="${stateOne.reportKind == '4'}">욕설 및 폭언</div>
+          <div th:if="${stateOne.reportKind == '5'}">저작권 침해</div>
+          <div th:if="${stateOne.reportKind == '6'}">개인정보 침해</div>
+          <blockquote th:text="${stateOne.reportContent}">
             <p>&ldquo;
               신고 상세 내역이 들어갑니다.
               &rdquo;</p>
           </blockquote>
+
           <div class="block__91147 d-flex align-items-center">
             <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
-            <div>
-              <span class="position" th:text="${report.id}">신고하는 사람</span> ->
-              <span class="position" th:text="${report.reportTarget}"> 신고 대상</span>
-            </div>
-            <span class="position" th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}">&nbsp;2021/08/06</span>
+
+              <div>
+                <span class="position" th:text="${stateOne.id}">신고하는 사람</span> ->
+                <span class="position" th:text="${stateOne.reportTarget}"> 신고 대상</span>
+              </div>
+          </div>
+              <div th:align="right">
+                <span class="position" th:text="${#temporals.format(stateOne.regDate, 'yyyy/MM/dd')}">&nbsp;2021/08/06</span> 에 접수되었습니다.
+              </div>
+
+          <div th:align="right">
             <span class="badge badge-success">
-            <a th:href="@{/serviceCenter/reportStateUpdate(reportNo = ${report.reportNo})}">
-              <button>신고 처리 버튼</button>
-            </a>
+              <a th:href="@{/serviceCenter/reportStateUpdate(reportNo = ${stateOne.reportNo})}">
+                <button type="button" >신고 처리 버튼</button>
+              </a>
             </span>
+          </div>
+          </div>
+
+      </div>
+    </div>
+<!-- state : 1 페이지 처리 -->
+    <div class="row pagination-wrap mt-5">
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:class=" 'page-item ' + ${reportStateOne.page == page?'active':''} "
+               th:each="page: ${reportStateOne.pageList}"
+               th:href="@{/serviceCenter/reportBoardMgr(page = ${page})}">
+              [[${page}]]
+            </a>
           </div>
 
         </div>
-        <div class="block__87154" th:if="${report.reportState == '2'}">
-          <div th:if="${report.reportKind == '1'}">광고</div>
-          <div th:if="${report.reportKind == '2'}">도배</div>
-          <div th:if="${report.reportKind == '3'}">불법 음란물 게시</div>
-          <div th:if="${report.reportKind == '4'}">욕설 및 폭언</div>
-          <div th:if="${report.reportKind == '5'}">저작권 침해</div>
-          <div th:if="${report.reportKind == '6'}">개인정보 침해</div>
-          <blockquote th:text="${report.reportContent}">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- reportState == 2 부분 -->
+
+<section class="site-section" id="reportStateTwo" style="display: none;">
+
+  <div class="row justify-content-center mb-5" data-aos="fade-up" th:if="${reportStateTwo.totalPage == 0}">
+    접수된 내역이 없습니다.
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-4"  th:each="stateTwo : ${reportStateTwo.dtoList}" th:if="${reportStateTwo.totalPage > 0}">
+
+        <div class="block__87154" th:if="${stateTwo.reportState == '2'}">
+          <div th:if="${stateTwo.reportKind == '1'}">광고</div>
+          <div th:if="${stateTwo.reportKind == '2'}">도배</div>
+          <div th:if="${stateTwo.reportKind == '3'}">불법 음란물 게시</div>
+          <div th:if="${stateTwo.reportKind == '4'}">욕설 및 폭언</div>
+          <div th:if="${stateTwo.reportKind == '5'}">저작권 침해</div>
+          <div th:if="${stateTwo.reportKind == '6'}">개인정보 침해</div>
+          <blockquote th:text="${stateTwo.reportContent}">
             <p>&ldquo;
               신고 상세 내역이 들어갑니다.
               ~~~~~~~~~~~~ 때문에 신고합니다.
@@ -87,68 +143,39 @@
           <div class="block__91147 d-flex align-items-center">
             <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
             <div>
-              <span class="position" th:text="${report.id}">신고하는 사람</span> ->
-              <span class="position" th:text="${report.reportTarget}"> 신고 당하는 놈</span>
+              <span class="position" th:text="${stateTwo.id}">신고하는 사람</span> ->
+              <span class="position" th:text="${stateTwo.reportTarget}"> 신고 당하는 놈</span>
             </div>
-            <span class="position" th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}">&nbsp;2021/08/06</span>
-            <span>
-            처리 완료
-            </span>
+          </div>
+          <div th:align="right">
+            <span class="position" th:text="${#temporals.format(stateTwo.regDate, 'yyyy/MM/dd')}">&nbsp;2021/08/06</span>
+            <span class="position">처리 완료</span>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    <!-- state : 2 페이지 처리 -->
+
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:class=" 'page-item ' + ${reportStateTwo.page == page?'active':''} "
+               th:each="page: ${reportStateTwo.pageList}"
+               th:href="@{/serviceCenter/reportBoardMgr(page = ${page})}">
+              [[${page}]]
+            </a>
           </div>
 
         </div>
       </div>
-
     </div>
+
   </div>
 </section>
-<table>
-
-  <tr>
-    <th>#</th>
-    <th>신고</th>
-    <th>신고 대상</th>
-    <th>신고 일시</th>
-    <th>처리상황</th>
-  </tr>
-  <tr th:if="${reportList.totalPage == 0}">
-    <td colspan="5">신고 내용이 없습니다.</td>
-  </tr>
-  <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
-    <td>[[${report.reportNo}]]</td>
-    <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
-    <td>[[${report.reportTarget}]]</td>
-    <td th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}"></td>
-    <td>
-      <b th:if="${report.reportState == '1'}">신고 처리하기</b>
-      <b th:unless="${report.reportState == '1'}">처리 완료</b>
-    </td>
-  </tr>
-</table>
-
-<!-- 페이징 -->
-
-<div class="row pagination-wrap mt-5">
-
-  <div class="col-md-12 text-center ">
-    <div class="custom-pagination ml-auto">
-      <a href="#" class="prev">Prev</a>
-
-      <div class="d-inline-block">
-        <ul>
-          <li th:class=" 'page-item ' + ${reportList.page == page?'active':''} " th:each="page: ${reportList.pageList}">
-            <a th:href="@{/serviceCenter/badUserReport(page = ${page},member = ${session.user.id})}">
-              [[${page}]]
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <a href="#" class="next">Next</a>
-    </div>
-  </div>
-</div>
-
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>

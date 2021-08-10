@@ -78,7 +78,7 @@
             </tbody>
 
         </table>
-        <a href="" th:href="@{/serviceCenter/customerWriteForm}" >글작성</a>
+        <a href="" th:align="right" th:href="@{/serviceCenter/customerWriteForm}" >글작성</a>
 
     <!-- 페이징 -->
     <div class="row pagination-wrap mt-5">
@@ -86,16 +86,14 @@
         <div class="col-md-12 text-center ">
             <div class="custom-pagination ml-auto">
 
-                 <div class="d-inline-block">
-                    <ul>
-                        <li th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} " th:each="page: ${cusBoard.pageList}">
-                            <a th:href="@{/serviceCenter/customerBoard(page = ${page} ,
+                <div class="d-inline-block">
+                    <a th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} "
+                       th:each="page: ${cusBoard.pageList}"
+                       th:href="@{/serviceCenter/customerBoard(page = ${page} ,
                        type=${pageRequestDTO.type} ,
                        keyword = ${pageRequestDTO.keyword})}">
-                                [[${page}]]
-                            </a>
-                        </li>
-                    </ul>
+                        [[${page}]]
+                    </a>
                 </div>
 
             </div>
