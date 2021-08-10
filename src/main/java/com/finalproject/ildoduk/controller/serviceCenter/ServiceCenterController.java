@@ -113,7 +113,7 @@ public class ServiceCenterController {
         user.setId(member.getId());
         user.setPoint(totalPoint);
 
-        memberService.minusPonit(user);
+        memberService.minusPoint(user);
 
         return "/index";
     }

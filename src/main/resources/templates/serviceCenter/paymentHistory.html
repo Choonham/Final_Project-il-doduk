@@ -64,7 +64,7 @@
 
           <td th:if="${dto.payCheck == '결제완료'}">
             <a href="" th:href="@{/serviceCenter/toRefund(pointNo = ${dto.pointNo})}"
-               onclick="window.open(this.href,'환불 진행중..','width=590, height=460, scrollbars=no, resizeable=no');return false;">환불신청</a>
+               onclick="window.open(this.href,'환불 진행중..','width=590, height=470, scrollbars=no, resizeable=no');return false;">환불신청</a>
           </td>
 
           <td th:if="${dto.payCheck == '환불완료'}">

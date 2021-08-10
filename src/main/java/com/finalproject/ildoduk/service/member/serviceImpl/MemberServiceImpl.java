@@ -182,7 +182,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 //---------   유저 포인트 관련  -----------
-//유저 포인트 증가
+//결제시에 포인트 증가
 @Override
 public void updatePoint(PaymentDTO dto) {
     //전달 받은 데이터 : 결제금액, 해당 아이디
@@ -203,7 +203,7 @@ public void updatePoint(PaymentDTO dto) {
 
     //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
     @Override
-    public void minusPonit(MemberDto dto) {
+    public void minusPoint(MemberDto dto) {
 
         int point = dto.getPoint();
         String userID = dto.getId();
@@ -224,58 +224,6 @@ public void updatePoint(PaymentDTO dto) {
         }
     }
 
-    @Override
-    public void plusPoint(MemberDto dto) {
-
-    }
-
-    //경매 미매칭시에 다시 원래 금액 돌려줌
-    @Override
-    public void refundAuctionPay(MemberDto dto) {
-        int point = dto.getPoint();
-        String userID = dto.getId();
-
-        Optional<Member> result = repo.findById(userID);
-
-        if(result.isPresent()){
-
-            Member entity = result.get();
-
-            int userPoint = entity.getPoint();
-            int totalPoint = (int)(Math.ceil((userPoint-point)*1.0));
-
-            repo.pointUpdate(totalPoint, entity.getId());
-        }
-    }
-
-
-    // 중개 수수료 기본 : 10%  -> 0.9
-    //    우대 수수료 : 7% -> 0.93
-    @Override
-    public void plusPoint(MemberHelperInfoDTO dto) {
-        log.info("헬퍼쪽 포인트 업데이트 시작 ~~~~~~~~ 거래 완료 1");
-
-        MemberHelperInfoDTO memberHelperInfoDTO = helperInfoRepository.joinHelperInfo(dto.getId());
-        //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
-        // Member의 친절 점수로 : 5점 만점에 3.5이상일 경우 우대 수수료 적용??
-        int point = dto.getPoint();
-        int total = 0; // 총합금액 초기화
-
-        //친절점수 5 이상일 경우 우대 수수료 적용용
-       if(dto.getKindness() >= 3.5){
-            //우대 수수료 적용
-            total = (int)(Math.ceil(point * 0.93));
-        } else {
-            total = (int)(Math.ceil(point * 0.9));
-        }
-        //위 계산된 포인트 적립
-        memberHelperInfoDTO.setPoint(total);
-
-        log.info("헬퍼쪽 포인트 업데이트 진행중~~~~ 거래 완료 2");
-
-        repo.pointUpdate(total, memberHelperInfoDTO.getId());
-
-    }
 
 
 

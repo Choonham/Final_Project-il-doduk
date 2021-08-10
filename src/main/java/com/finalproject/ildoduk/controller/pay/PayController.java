@@ -4,7 +4,6 @@ package com.finalproject.ildoduk.controller.pay;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
-import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.member.Member;
@@ -49,89 +48,6 @@ public class PayController {
         //마찬가지로 기존 위에서 사용한 dto 데이터를 넘겨준다 ( 계정, 결제금액 )
         memberService.updatePoint(dto);
     }
-
-
-    //거래 시 해당 가격에 맞게 포인트 차감
-    @PostMapping("/trade")
-    public String trade(@RequestParam(value = "userID") String userID,
-                        @RequestParam(value = "pay") String pay,
-                        @RequestParam(value = "helper") String helperID , MemberDto dto){
-
-        int point = Integer.parseInt(pay);
-
-        dto.setId(userID);
-        dto.setPoint(point);
-        //사용자 포인트 차감감
-        memberService.minusPonit(dto);
-
-        //helper 정보를 조회하기 위해 다시 초기화
-        MemberDto dtoOfHelper = new MemberDto();
-
-        dtoOfHelper.setId(helperID);
-        dtoOfHelper.setPoint(point);
-        //헬퍼 포인트 증가
-        memberService.plusPoint(dtoOfHelper);
-
-        return "redirect:/login";
-    }
-
-
-//---------- 경매 결제 관련 ---------------------
-
-//1. state = 0
-    // 경매글을 등록했을때 : 보증금 개념으로 등록한 금액이 빠져나간다.
-    public void regAuction(AuctionListDTO auctionListDTO, MemberDto memberDto){
-        //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
-        //유저가 올린 금액을 차감
-        int startPrice = auctionListDTO.getStartPrice();
-        //경매 값과 그 작성자
-        memberDto.setPoint(startPrice);
-        memberDto.setId(auctionListDTO.getUser());
-
-        memberService.minusPonit(memberDto);
-
-    }
-    //   state = 0
-    // 경매가 취소 되었을 경우 : 다시 해당 금액 넣어야한다.
-    public void refundAuctionPay(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto){
-        //1. 유저가 경매를 올렸을 경우 금액 차감 => 멤버 pointMinus에 해당 금액 마이너스
-        int offerPrice = auctionBiddingDTO.getOfferPrice();
-        //경매 값과 그 작성자
-        memberDto.setPoint(offerPrice);
-        memberDto.setId(auctionBiddingDTO.getUser());
-
-        memberService.plusPoint(memberDto);
-    }
-
-//2. state = 1
-    // 경매가 낙찰되었을 경우  :  유저가 처음 올렸을떄의 금액과 헬퍼가 제시한 금액의 차액을 다시 유저 쪽에 넣어 줘야한다.
-    public void biddingSuccess(AuctionListDTO auctionListDTO,AuctionBiddingDTO auctionBiddingDTO,MemberDto memberDto){
-        int userPrice = auctionListDTO.getStartPrice();
-        int helperPrice = auctionBiddingDTO.getOfferPrice();
-
-        int resultPrice = userPrice - helperPrice;
-        memberDto.setPoint(resultPrice);
-        memberDto.setId(auctionListDTO.getUser());
-
-        memberService.plusPoint(memberDto);
-    }
-
-//3. state = 3
-    //  유저가 일 끝내기 버튼을 눌렀을 경우 경매 가격을 헬퍼에게 넣어줘야한다.
-    //  이때 헬퍼의 점수에 따라 수수료 부과
-    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO, MemberHelperInfoDTO memberHelperInfoDTO){
-        int offerPrice = auctionBiddingDTO.getOfferPrice();
-        String helperId = auctionBiddingDTO.getHelper();
-
-        memberHelperInfoDTO.setPoint(offerPrice);
-        memberHelperInfoDTO.setId(helperId);
-
-        memberService.plusPoint(memberHelperInfoDTO);
-    }
-
-
-
-
 
 
 }
