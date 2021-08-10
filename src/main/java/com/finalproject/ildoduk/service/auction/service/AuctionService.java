@@ -78,7 +78,7 @@ public interface AuctionService {
     PageResultsDTO<AuctionBiddingDTO, Object[]> getMyChosenBids(PageRequestDTO pageRequestDTO, String helper, boolean isAllDone);
 
     //경매 참여
-    Long BiddingIn(BiddingListDTO dto);
+    Long biddingIn(BiddingListDTO dto);
 
     //경매 삭제 - helper가 경매 삭제 불가
     //void deleteBidding(Long bidSeq);
@@ -103,8 +103,7 @@ public interface AuctionService {
     }
 
     //BiddingList
-    default BiddingList dtoToEntity(BiddingListDTO dto, Member helper){
-        AuctionList auctionList = AuctionList.builder().aucSeq(dto.getAucSeq()).build();
+    default BiddingList dtoToEntity(AuctionList auctionList,BiddingListDTO dto, Member helper){
         BiddingList biddingList = BiddingList.builder().bidSeq(dto.getBidSeq()).aucSeq(auctionList).helper(helper).chosen(dto.getChosen())
                 .offerPrice(dto.getOfferPrice()).build();
         return biddingList;

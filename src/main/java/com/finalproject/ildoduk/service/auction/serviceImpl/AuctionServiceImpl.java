@@ -354,12 +354,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     //옥션에 경매 참여하기
     @Override
-    public Long BiddingIn(BiddingListDTO dto) {
+    public Long biddingIn(BiddingListDTO dto) {
         System.out.println("======== bidding in =========");
         log.info(dto);
         Member helper = this.getMember(dto.getHelper());
-
-        BiddingList biddingList = dtoToEntity(dto, helper);
+        AuctionList auctionList = auctionListRepository.findById(dto.getAucSeq()).get();
+        BiddingList biddingList = dtoToEntity(auctionList, dto, helper);
         biddingListRepository.save(biddingList);
 
         return biddingList.getBidSeq();

@@ -216,6 +216,7 @@
         <br>
 
         <!----------------------------------- 해당 옥션 비딩 목록 ------------------------------------------------------->
+        <input type="hidden" th:value="${auction.aucSeq}" name="aucSeq" id="aucSeq">
         <div th:unless="${exist}" class="text-center">
             <h4 class="text-muted"><b>아직 경매 참여 내역이 없습니다.</b></h4>
         </div>
@@ -250,6 +251,24 @@
                     </td>
                 </tr>
             </table>
+            <!--리스트 끝-->
+            <!-- 페이징 처리 -->
+            <div style="text-align: center">
+                <div class="custom-pagination ml-auto">
+                    <a th:if="${biddingList.prev}"
+                       th:href="@{/auction/getOnAuction(page= ${biddingList.start-1},isAuctionDone=false)}"
+                       tabindex="-1" class="prev">Prev</a>
+
+                    <div class="d-inline-block">
+                        <a th:href="@{/auction/getOnAuction(page = ${page},isAuctionDone=false)}"
+                           th:class="${biddingList.page == page?'active':''}"
+                           th:each="page: ${biddingList.pageList}">[[${page}]]</a>
+                    </div>
+                    <a th:if="${biddingList.next}"
+                       th:href="@{/auction/getOnAuction(page= ${biddingList.end + 1},isAuctionDone=false)}"
+                       class="next">Next</a>
+                </div>
+            </div>
         </div>
 
         <br><br>
@@ -272,7 +291,8 @@
                 <!-- 회색버튼 -->
             </div>
             <div class="col-6">
-                <a th:href="@{#}" class="btn btn-block btn-primary btn-md"> 미션 경매 참여 </a><!-- 초록버튼 -->
+                <a th:href="@{/auction/biddingIn(aucSeq=${auction.aucSeq})}"
+                   onclick="window.open(this.href,'경매참여','width=590, height=470, scrollbars=yes, resizeable=yes');return false;" class="btn btn-block btn-primary btn-md"> 미션 경매 참여 </a><!-- 초록버튼 -->
 <!------------------------------------------ 경매참여 팝업 연결예정 ----------------------------------------------->
             </div>
         </div>

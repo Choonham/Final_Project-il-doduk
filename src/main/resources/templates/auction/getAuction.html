@@ -204,7 +204,7 @@
         <!-- 낙찰 헬퍼 정보 - 메소드 만들어서 반환 받아야 함 -->
         <table class="table">
             <tr>
-                <td th:rowspan="2" width="30%"><img th:src="@{helper.facePhoto}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td th:rowspan="2" width="30%"><img th:src="@{helper.photo}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
                 <td width="50%"><h3>[[${helper.nickname}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id == auction.user}" th:align="center">

@@ -278,6 +278,27 @@ public class AuctionController {
 
     //경매참여
 
+    @GetMapping("/biddingIn")
+    public void biddingIn(Long aucSeq, Model model){
+        //옥션 정보 보내기
+        AuctionList auction = auctionService.getAuction(aucSeq).get();
+        model.addAttribute("auction", auction);
+        model.addAttribute("aucSeq", auction.getAucSeq());
+        model.addAttribute("StartPrice", auction.getStartPrice());
+        model.addAttribute("auctionGap", auction.getAuctionGap());
+    }
+
+    @PostMapping("/biddingIn")
+    public void biddinIn2(BiddingListDTO dto){
+
+        //System.out.println(dto.getAucSeq());
+
+        auctionService.biddingIn(dto);
+
+        //return "redirect:/auction/getOnAuction?aucSeq="+dto.getAucSeq();
+        //return null;
+    }
+
     //경매삭제
     @GetMapping("/deleteAuction")
     public String deleteAuction(Long aucSeq){
