@@ -46,12 +46,12 @@
                     * 더 궁금하신 내용은 문의 게시판을 통하여 부탁드립니다.
                 </div>
                 <input type="hidden" name="pointNo" th:value="${result.pointNo}" />
-                <br/>
-                <div th:align="right">
+
+                <div th:align="right" id="checkTerms">
                     위의 내용을 확인 하였습니다.
                     <input type="checkbox" name="refund_check" />
-                    <button id="refund_checkBtn" class="btn btn-primary"> 진행 </button>
                 </div>
+                <button id="refund_checkBtn" class="btn btn-primary"> 진행 </button>
             </div>
             <input type="hidden" name="pointNo" th:value="${result.pointNo}"/>
             <input type="hidden" name="userID" th:value="${result.userId}"/>
