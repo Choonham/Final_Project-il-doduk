@@ -20,6 +20,8 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
 
     Optional<HelperInfo> findByMemberId(Member memberId);
 
+    Optional<HelperInfo> findByMemberId_Id(String memeberId);
+
     int countHelperInfoByMemberId(String memeberId);
 
 
