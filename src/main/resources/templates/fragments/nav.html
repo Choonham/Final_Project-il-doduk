@@ -46,8 +46,7 @@
                                 dataType: 'text',
                                 success: function(data){
                                     console.log(data);  //컨트롤러에서 return 된 값
-
-                                    /*location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동*/
+                                    location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동
 
                                 },error : function(jqXHR, textStatus){
                                     alert(textStatus);
