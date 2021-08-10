@@ -237,11 +237,11 @@
                     <td>
                         <!-- 해당 유저면 선택하기 버튼, 아니면 블로그보기-->
                         <div th:if="${session.user.id == u.id}">
-                        <a id="chooseBid" class="btn btn-outline-primary primary">
+                        <button th:id="chooseBid${dto.bidSeq}" class="btn btn-outline-primary primary">
                             <input th:type="hidden" th:value="${dto.bidSeq}" id="bidSeq" name="bidSeq">
                             <b>낙찰</b>
-                        </a>
-<!------------------------------------------------ 선택하면 컨펌으로 확인 ------------------------------------------------------->
+                        </button>
+<!------------------------------------------------ 선택하면 컨펌으로 확인 - 수정필요 ------------------------------------------------------->
                         </div>
                         <div th:if="${session.user.id != u.id && session.user.state==2}">
                             <button class="btn btn-outline-primary primary" th:href="@{#}"><b>블로그</b></button>
@@ -262,8 +262,7 @@
                 <!-- 회색버튼 -->
             </div>
             <div class="col-6">
-                <a th:href="@{#}" class="btn btn-block btn-primary btn-md">미션 경매 철회</a><!-- 초록버튼 -->
-<!------------------------------------------ 삭제하기 연결예정 ----------------------------------------------->
+                <span id="deleteAuction" class="btn btn-block btn-primary btn-md">미션 경매 철회</span><!-- 초록버튼 -->
             </div>
         </div>
 
@@ -324,20 +323,33 @@
 
 	}, 1000);
 
-	<!-- 낙찰 시 확인 얼럿 -->
+	<!-- 낙찰 시 확인 얼럿 : 수정예정  -->
 	$(document).ready(function (){
-		$('#chooseBid').click(function () {
-		    var check = confirm("경매 낙찰은 취소 하실 수 없습니다. 낙찰하시겠습니까?");
-		    var bidSeq = $('#bidSeq').val();
 
-		    if(check === true){
-                location.href="/auction/chooseBid?bidSeq="+bidSeq+"&aucSeq="+[[${auction.aucSeq}]];
-            }else{
-                close();
-            }
+		$('#chooseBid').click(function () {
+			var check = confirm("경매 낙찰은 취소 하실 수 없습니다. 낙찰하시겠습니까?");
+			var bidSeq = $('#bidSeq').val();
+
+			if(check === true){
+				location.href="/auction/chooseBid?bidSeq="+bidSeq+"&aucSeq="+[[${auction.aucSeq}]];
+			}else{
+				this.close();
+			}
+		});
+
+		/*경매 삭제 시 확인 얼럿*/
+		$('#deleteAuction').click(function () {
+			var check = confirm("미션 경매를 삭제 하시겠습니까?");
+
+			if(check === true){
+				location.href="/auction/deleteAuction?aucSeq="+[[${auction.aucSeq}]];
+			}else{
+				this.close();
+			}
 
 		});
-    });
+	});
+
 
 </script>
 
