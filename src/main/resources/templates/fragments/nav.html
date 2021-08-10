@@ -100,6 +100,7 @@
                         <li class="has-children">
                             <a href="" >고객센터</a>
                             <ul class="dropdown" th:if="${session.user != null}">
+                                <li><a th:href="@{/serviceCenter/faq}">FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
                                 <li><a th:href="@{/serviceCenter/paymentHistory}">조회</a></li>
                                 <li><a th:href="@{/serviceCenter/badUserReport}">사용자 신고</a></li>

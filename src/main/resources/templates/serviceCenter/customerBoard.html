@@ -79,27 +79,27 @@
 
         </table>
         <a href="" th:align="right" th:href="@{/serviceCenter/customerWriteForm}" >글작성</a>
+    </div>
 
-    <!-- 페이징 -->
-    <div class="row pagination-wrap mt-5">
+        <!-- 페이징 -->
+        <div class="row pagination-wrap mt-5">
+            <div class="col-md-12 text-center ">
+                <div class="custom-pagination ml-auto">
 
-        <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-
-                <div class="d-inline-block">
-                    <a th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} "
-                       th:each="page: ${cusBoard.pageList}"
-                       th:href="@{/serviceCenter/customerBoard(page = ${page} ,
+                    <div class="d-inline-block">
+                        <a th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} "
+                           th:each="page: ${cusBoard.pageList}"
+                           th:href="@{/serviceCenter/customerBoard(page = ${page} ,
                        type=${pageRequestDTO.type} ,
                        keyword = ${pageRequestDTO.keyword})}">
-                        [[${page}]]
-                    </a>
-                </div>
+                            [[${page}]]
+                        </a>
+                    </div>
 
+                </div>
             </div>
         </div>
-    </div>
-    </div>
+
         <!-- 검색 -->
         <form th:action="@{/serviceCenter/customerBoard}" method="get" id="searchForm">
             <div>
@@ -193,7 +193,6 @@
             });
         }
         //확인 버튼을 누르게 되면
-
     });
 
 

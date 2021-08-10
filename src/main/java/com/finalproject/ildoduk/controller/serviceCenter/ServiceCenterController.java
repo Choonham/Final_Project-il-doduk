@@ -487,4 +487,17 @@ public class ServiceCenterController {
         return "/index";
     }
 
+//-----------  FAQ ------------------------
+    //사용자 FAQ
+    @GetMapping("/faq")
+    public void faq(){
+
+    }
+
+    //관리자 FAQ
+    @GetMapping("/faqMgr")
+    public void faqMgr(){
+
+    }
+
 }

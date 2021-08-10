@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{/fragments/header :: mainHeader}">
   <meta charset="UTF-8">
   <title>Title</title>
@@ -9,7 +11,6 @@
 <body id="top">
 
 <div th:if = "${session.user != null}">
-
   <div th:if="${session.user.state == 1}">
     <div th:replace="~{/fragments/navUser :: naviUser}"></div>
   </div>
@@ -21,76 +22,73 @@
   <div th:if="${session.user.state == 0}">
     <div th:replace="~{/fragments/navManager :: naviManager}"></div>
   </div>
-
 </div>
 
-<section class="section-hero overlay inner-page bg-image" id="home-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7">
-        <h1 class="text-white font-weight-bold">사용자 신고</h1>
-        <div class="custom-breadcrumbs">
-          <a href="#" th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
-          <span class="text-white"><strong>사용자 신고</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="site-section">
-  <div class="container">
-    <div class="row align-items-center mb-5">
-      <div class="col-lg-8 mb-4 mb-lg-0">
-        <div class="d-flex align-items-center"></div>
-      </div>
-
-      <table class="table">
-        <tr>
-          <th>#</th>
-          <th>신고</th>
-          <th>신고 대상</th>
-          <th>신고 일시</th>
-          <th>처리상황</th>
-        </tr>
-        <tr th:if="${reportList.totalPage == 0}">
-          <td colspan="5" th:align="center">신고 내용이 없습니다.</td>
-        </tr>
-        <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
-          <td>[[${report.reportNo}]]</td>
-          <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
-          <td>[[${report.reportTarget}]]</td>
-          <td th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}"></td>
-          <td>
-            [[${report.reportState}]]
-          </td>
-        </tr>
-      </table>
-        <a href="#" th:href="@{/serviceCenter/badUserReportForm}">
-          <button>신고하기</button>
-        </a>
-
-        <!-- 페이징 -->
-
-        <div class="row pagination-wrap mt-5">
-
-          <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-
-              <div class="d-inline-block">
-                <a th:class=" 'page-item ' + ${reportList.page == page?'active':''} "
-                   th:each="page: ${reportList.pageList}"
-                   th:href="@{/serviceCenter/badUserReport(page = ${page})}">
-                  [[${page}]]
-                </a>
-              </div>
-
-            </div>
+  <section class="section-hero overlay inner-page bg-image" id="home-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <h1 class="text-white font-weight-bold">사용자 신고</h1>
+          <div class="custom-breadcrumbs">
+            <a href="#" th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
+            <span class="text-white"><strong>사용자 신고</strong></span>
           </div>
         </div>
       </div>
     </div>
-</section>
+  </section>
+
+  <section class="site-section">
+    <div class="container">
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <div class="d-flex align-items-center"></div>
+        </div>
+
+        <table class="table">
+          <tr>
+            <th>#</th>
+            <th>신고</th>
+            <th>신고 대상</th>
+            <th>신고 일시</th>
+            <th>처리상황</th>
+          </tr>
+          <tr th:if="${reportList.totalPage == 0}">
+            <td colspan="5" th:align="center">신고 내용이 없습니다.</td>
+          </tr>
+          <tr th:unless="${reportList.totalPage == 0}" th:each="report : ${reportList.dtoList}">
+            <td>[[${report.reportNo}]]</td>
+            <td><a th:href="@{/serviceCenter/badUserReportDetail(reportNo = ${report.reportNo})}">[[${report.reportTitle}]]</a></td>
+            <td>[[${report.reportTarget}]]</td>
+            <td th:text="${#temporals.format(report.regDate, 'yyyy/MM/dd')}"></td>
+            <td>
+              [[${report.reportState}]]
+            </td>
+          </tr>
+        </table>
+      </div>
+      <a href="#" th:href="@{/serviceCenter/badUserReportForm}">신고하기</a>
+    </div>
+
+    <!-- 페이징 -->
+
+    <div class="row pagination-wrap mt-5">
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:class=" 'page-item ' + ${reportList.page == page?'active':''} "
+               th:each="page: ${reportList.pageList}"
+               th:href="@{/serviceCenter/badUserReport(page = ${page})}">
+              [[${page}]]
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 

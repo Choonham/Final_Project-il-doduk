@@ -98,9 +98,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     //경매 매칭 실패시 다시 원래 금액을 반환
     @Override
-    public void refundAuctionPay(AuctionListDTO auctionListDTO) {
-
-        paymentRepository.plusPointNotMatching(auctionListDTO.getStartPrice(),auctionListDTO.getUser());
+    public void refundAuctionPay(Long aucSeq) {
+            AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
+            paymentRepository.plusPointNotMatching(auctionList.getStartPrice(),auctionList.getUser().getId());
     }
 
     //2.

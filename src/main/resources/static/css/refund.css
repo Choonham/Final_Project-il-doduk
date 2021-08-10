@@ -55,4 +55,13 @@
     line-height: 25px;
 
 }
+#refund_checkBtn{
+    position: relative;
+    left: 86%;
+}
+
+#checkTerms {
+    position: relative;
+    right: 15px;
+}
 
