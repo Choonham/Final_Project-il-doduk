@@ -55,9 +55,6 @@ dependencies {
     //파일업로드 관련
     implementation 'commons-io:commons-io:2.6'
 
-    // https://mvnrepository.com/artifact/net.coobird/thumbnailator 업로드 파일 썸네일 관련
-    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.12'
-
 
 }
 
