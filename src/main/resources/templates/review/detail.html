@@ -11,8 +11,8 @@
 
 
 
-<button th:if="${review.id == session.user.id}">편집하기</button>
-<button>삭제하기</button>
+<button th:if="${review.id == session.user.id}" id="modify">편집하기</button>
+<button th:if="${review.id == session.user.id}" id="delete">삭제하기</button>
 
 <script th:inline="javascript">
 
@@ -20,7 +20,16 @@
     $(document).ready(function(){
         $("#content").html([[${review.content}]]);
     });
+    $('#modify').click(function (){
+        var no=[[${review.no}]];
+        location.href="/review/updateform?no="+no;
 
+    });
+    $('#delete').click(function (){
+        var no=[[${review.no}]];
+        location.href="/review/delete?no="+no;
+
+    });
 
 
 

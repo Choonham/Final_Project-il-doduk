@@ -5,7 +5,10 @@ import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.review.RequestDto;
+import com.finalproject.ildoduk.dto.review.ResultDto;
 import com.finalproject.ildoduk.dto.review.ReviewDTO;
+import com.finalproject.ildoduk.dto.review.UpdateDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.review.Review;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
@@ -31,6 +34,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -48,10 +52,12 @@ public class ReviewController {
     MemberService memberService;
     /*=======단순히 리스트만=====*/
     @GetMapping("/reviewList")
-    public void reviewList(Model model){
+    public void reviewList(RequestDto dto, Model model){
 
-
-    model.addAttribute("list",service.getList());
+        ResultDto<ReviewDTO,Review> res = service.getList(dto);
+        List<ReviewDTO> list=res.getDtoList();
+        System.out.println(list.get(1).getContent());
+    model.addAttribute("result",service.getList(dto));
 
 
     }
@@ -95,10 +101,10 @@ public class ReviewController {
     //다테일 리스트에서 no로// 작성 후 상세 보기에서는 제목으로 검색한다.
 
     @GetMapping("/detail")
-    public void detail(Model model,@RequestParam(value = "No",required = false)String No , @RequestParam(value = "title", required = false) String title){
+    public void detail(Model model,@RequestParam(value = "no",required = false)String No , @RequestParam(value = "title", required = false) String title){
         System.out.println("타이틀  :" +title);
 
-        if(!title.isEmpty()){
+        if(title!=null){
             ReviewDTO dto=service.get_ReviewByTitle(title);
             System.out.println("뭐고"+dto.getBidSeq());
              model.addAttribute("review",dto);
@@ -113,16 +119,38 @@ public class ReviewController {
 
     }
 
-@GetMapping("/list")
-public void reviewList(@PageableDefault(size = 10 , sort = "no") Pageable pageable , Model model){
+@GetMapping("/updateform")
+public void updateform(Model model,@RequestParam("no") String no){
+
+    Long Lno = Long.parseLong(no);
+    ReviewDTO dto =service.get_reviewdtobyprimary(Lno);
+
+    model.addAttribute("review",dto);
 
 
-    //Page<Review> reviews = service.getList(pageable)
+    }
+    @PostMapping("/update")
+public String update(  UpdateDTO dto, RedirectAttributes redirect){
 
 
-}
+        ReviewDTO dto1=service.get_reviewdtobyprimary(Long.parseLong(dto.getNo()));
+            dto1.setContent(dto.getEditordata());
+            dto1.setTitle(dto.getTitle());
+        service.writeReview(dto1);
+        redirect.addAttribute("title",dto.getTitle());
+
+        return "redirect:/review/detail";
+
+    }
+
+    @GetMapping("/delete")
+public String delete(@RequestParam("no") String no){
 
 
+        service.delete(no);
+
+        return "redirect:/review/reviewList";
+    }
 
 
 
