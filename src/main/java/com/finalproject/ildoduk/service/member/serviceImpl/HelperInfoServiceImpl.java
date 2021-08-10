@@ -66,6 +66,18 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }
 
+    //=======================auction 시작==============================//
+
+    //헬퍼 아이디체크 후 헬퍼인포 반환(HelperInfo)
+    @Override
+    public MemberHelperInfoDTO helperFindById2(String memberId) {
+
+        Optional<HelperInfo> helperInfo =  repository.findByMemberId_Id(memberId);
+
+        return helperInfo.isPresent() ? entityToDTO(helperInfo.get()) : null;
+    }
+    //=======================auction 끝================================//
+
     // =========================Blog======================= //
 
     // 활동 지역으로 헬퍼 찾기

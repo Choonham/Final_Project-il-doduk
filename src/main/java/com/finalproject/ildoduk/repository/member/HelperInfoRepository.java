@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.repository.member;
 
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
@@ -19,6 +20,8 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
 
     Optional<HelperInfo> findByMemberId(Member memberId);
 
+    Optional<HelperInfo> findByMemberId_Id(String memeberId);
+
     int countHelperInfoByMemberId(String memeberId);
 
 
@@ -31,6 +34,9 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     @Query(value = "select count(h) from HelperInfo h where h.memberId.id in (select distinct b.helper.id from BiddingList b where b.aucSeq.aucSeq in (select a.aucSeq from AuctionList a where a.sigungu = :sigungu))")
     int countDistinctBySigungu(String sigungu);
 
+    //멤버, 헬퍼 정보 전체 조인인
+    @Query(value = "SELECT h, m FROM HelperInfo  h join Member m on h.memberId = m.id WHERE h.memberId = ?1")
+    MemberHelperInfoDTO joinHelperInfo(String memberId);
 
     //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")

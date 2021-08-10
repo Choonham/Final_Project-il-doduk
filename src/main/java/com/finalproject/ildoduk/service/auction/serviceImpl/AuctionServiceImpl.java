@@ -146,7 +146,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Long register(AuctionListDTO dto) {
         System.out.println("======= register ========");
-        log.info(dto);
+        log.info("게시글을 작성한 유저는??????????"+dto.getUser());
         System.out.println(dto.getUser());
         Member user = this.getMember(dto.getUser());
 

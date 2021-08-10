@@ -81,11 +81,11 @@ $(document).ready(function () {
 
        const report = confirm("신고글 작성 하시겠습니까???");
 
-       if(report){
-           $("form").submit();
-       } else {
-           return false;
+       if(!report){
+          return;
        }
+
+       $("form").submit();
     });
 
     //삭제
@@ -94,7 +94,6 @@ $(document).ready(function () {
         if(!confirm("삭제 하시겠습니까???")){
             return;
         }
-
         $("form").submit();
     });
 

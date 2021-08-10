@@ -7,7 +7,6 @@ import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -21,11 +20,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-
-    private final MemberRepository repo;
+    @Autowired
+    private MemberRepository repo;
 
 
     @Override
