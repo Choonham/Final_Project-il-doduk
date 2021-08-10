@@ -30,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final HelperInfoRepository helperInfoRepository;
 
 
+
     @Override
     public List<String> getList() {
 
