@@ -29,7 +29,7 @@ public class BlogLikeServiceImpl implements BlogLikeService {
     @Override
     @Transactional
     public void cancelLike(long postNo, String liker) {
-        repository.deleteByBlog_PostNoAndLiker(postNo, liker);
+        repository.deleteByBlog_PostNoAndLiker_Id(postNo, liker);
     }
 
     // 좋아요 누른 사람 리스트
@@ -39,7 +39,7 @@ public class BlogLikeServiceImpl implements BlogLikeService {
         List<String> resultList = new ArrayList<>();
 
         for(BlogLike entity : entityList){
-            resultList.add(entity.getLiker());
+            resultList.add(entity.getLiker().getId());
         }
 
         return resultList;

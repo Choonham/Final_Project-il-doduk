@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
+import com.finalproject.ildoduk.entity.member.Member;
 
 public interface BlogService {
 
@@ -22,13 +23,20 @@ public interface BlogService {
     // 포스트 삭제
     int deletePost(long postNo);
 
+    // 임시저장 포스트 삭제
+    void deleteTempPost(String content);
 
     default Blog dtoToEntity(BlogDTO dto) {
+
+        Member writer = Member.builder()
+                .id(dto.getWriter().getId())
+                .build();
+
         Blog entity = Blog.builder()
                 .postNo(dto.getPostNo())
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .writer(dto.getWriter())
+                .writer(writer)
                 .thumbnail(dto.getThumbnail())
                 .build();
         return entity;

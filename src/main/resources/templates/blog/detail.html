@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="~{/fragments/header :: mainHeader}">
+  <head th:replace="~{/blog/blogHeader :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
   </head>
@@ -44,7 +44,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="custom-breadcrumbs mb-0">
-              <span class="slash" style="color: white">Posted by </span><a style="color: white">[[${detail.writer}]]</a>
+              <span class="slash" style="color: white">Posted by </span><a style="color: white">[[${detail.writer.id}]]</a>
               <span class="mx-2 slash">&bullet;</span>
               <span class="text-white"><strong th:text = "${#temporals.format(detail.regDate, 'yyyy/MM/dd HH:mm:ss')}"></strong></span>
             </div>
@@ -65,12 +65,13 @@
             <hr color="green" size="2px">
 
             <!-- 좋아요 기능 관련 -->
-            <div style="float: right; text-align: right">
-              <img src="https://img.icons8.com/plasticine/100/000000/like--v2.png" th:if = "!${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
-              <img src="https://img.icons8.com/plasticine/100/000000/like--v1.png" th:if = "${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
+            <div>
 
+              <img style="float: left" src="https://img.icons8.com/plasticine/100/000000/like--v2.png" th:if = "!${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
+              <img style="float: left" src="https://img.icons8.com/plasticine/100/000000/like--v1.png" th:if = "${#lists.contains(likerList, session.user.id)}" width="30px" height="30px" id = "likeCancelButton" onmouseout = "closeLayer()" onmouseover="getLikerList(event)">
+              <h4 style="float: left" th:text="${likes}"></h4>
               <!-- 수정, 삭제, 목록 버튼(수정과 삭제가 끝나고나서 원래에 페이지로 가기 위한 tempPage 객체를 가지고 있음 -->
-              <span th:if = "${session.user.id == detail.writer}">
+              <span style="float: right" th:if = "${session.user.id == detail.writer.id}">
                 <a th:href="@{/blog/modify(postNo = ${detail.postNo}, tempPage=${listPageInfo.tempPage})}">
                   <button type="button" class="btn btn-primary">Modify</button>
                 </a>
@@ -79,27 +80,35 @@
                   <button type="button" class="btn btn-primary">delete</button>
                 </a>
               </span>
+              <span style="float: right; margin-right: 5px">
+                <a th:href="@{/blog/blogList(writer = ${detail.writer.id}, page=${listPageInfo.tempPage}, keyword=${listPageInfo.tempKeyword}, type=${listPageInfo.tempType})}">
+                  <button type="button" class="btn btn-primary">list</button>
+                </a>
+              </span>
             </div>
 
-            <div id="likerList" style = "display:none;">
-              <ul>
-                <li th:each="liker : ${likerList}">[[${liker}]]</li>
-              </ul>
-            </div>
             <!-- 좋아요 기능 관련 끝 -->
 
             <div class="pt-5">
+              <div id="likerList" style = "display:none;">
+                <ul>
+                  <li th:each="liker : ${likerList}">[[${liker}]]</li>
+                </ul>
+              </div>
               <h3 class="mb-5">Comments</h3>
               <ul class="comment-list">
                 <li class="comment" th:each="comment : ${comments.dtoList}">
+                  <div class = "photoCard" style="float: left; margin-right: 5px">
+                    <img th:src = "${comment.writer.photo}" style="height: 60px; width: 60px; border: 2px solid lawngreen; border-radius: 40px;">
+                  </div>
                   <div class="comment-body">
-                    <h3>[[${comment.writer}]]</h3>
+                    <h3>[[${comment.writer.nickname}]]</h3>
                     <input type = "hidden" id = "commentNo" th:value="${comment.commentNo}">
-                    <div class="meta">2021.08.05</div>
+                    <div class="meta">[[${#temporals.format(comment.regDate, 'yyyy/MM/dd')}]]</div>
                     <div th:utext="${comment.content}"></div>
                     <div style="text-align: right;">
-                      <div th:if = "${session.user.id == comment.writer or session.user.id == detail.writer}" id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
-                      <div th:if = "${session.user.id == comment.writer }" id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
+                      <div th:if = "${session.user.id == comment.writer.id or session.user.id == detail.writer.id}" id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
+                      <div th:if = "${session.user.id == comment.writer.id }" id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
                     </div>
                     <p></p>
                   </div>
@@ -165,19 +174,17 @@
               </form>
             </div>
             <div class="sidebar-box">
-              <!-- 대충 헬퍼 프로필 사진
-                <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
-              -->
-              <h3>[[${writerInfoMember.name}]]</h3>
+                <img th:src="${detail.writer.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+              <h3>[[${detail.writer.name}]]</h3>
               <p th:text = "${writerInfoHelper.appeal}"></p>
             </div>
 
             <div class="sidebar-box">
               <div class="categories">
                 <h3>Information</h3>
-                <li><a>gender <span>[[${writerInfoMember.gender}]]</span></a></li>
+                <li><a>gender <span>[[${detail.writer.gender}]]</span></a></li>
                 <li><a>kindness <span>[[${writerInfoHelper.kindness}]]</span></a></li>
-                <li><a>birth <span>[[${writerInfoMember.birth}]]</span></a></li>
+                <li><a>birth <span>[[${detail.writer.birth}]]</span></a></li>
                 <li><a>good 1 <span>[[${writerInfoHelper.goodAtFirst}]]</span></a></li>
                 <li><a>good 2 <span>[[${writerInfoHelper.goodAtSecond}]]</span></a></li>
                 <li><a>good 3 <span>[[${writerInfoHelper.goodAtThird}]]</span></a></li>
@@ -187,7 +194,7 @@
 
             <div class="sidebar-box">
               <h3>I am...</h3>
-              <p>[[${writerInfoMember.intro}]]</p>
+              <p>[[${detail.writer.intro}]]</p>
             </div>
           </div>
         </div>
@@ -254,7 +261,6 @@
         cache: false,
         contentType: 'application/json; charset=utf8',
         dataType: 'json',
-        processData: false,
         success: function (data) {
           (location).reload();
         },
@@ -310,7 +316,6 @@
         cache: false,
         contentType: 'application/json; charset=utf8',
         dataType: 'json',
-        processData: false,
         success: function (data) {
           (location).reload();
         },
@@ -323,17 +328,7 @@
 
     // 댓글 수정 취소
     function modifyCancel(obj, tempContent) {
-      /**
-      var currentRow = $(obj).closest("li");
-      var commentContent = currentRow.find("div:eq(1)");
-      currentRow.find("div:eq(1)").attr("contenteditable", "false");
-      commentContent.empty();
-      commentContent.html(tempContent);
-      var modBtn = "<button class = 'btn btn-block'>수정</button>"
-      var mod = currentRow.find("div:eq(2)");
-      mod.empty();
-      mod.html(modBtn);
-       **/
+
       location.reload();
     }
     // 댓글 수정 취소 끝끝
@@ -353,7 +348,6 @@
         cache: false,
         contentType: 'application/json; charset=utf8',
         dataType: 'json',
-        processData: false,
         success: function (data) {
           location.reload();
         },

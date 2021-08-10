@@ -71,6 +71,7 @@ public interface MemberService {
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())
                 .state(entity.getState())
+                .photo(entity.getPhoto())
                 .regDate(entity.getRegDate())
                 .build();
 

@@ -1,5 +1,8 @@
 package com.finalproject.ildoduk.entity.member;
 
+import com.finalproject.ildoduk.entity.blog.Blog;
+import com.finalproject.ildoduk.entity.blog.BlogComment;
+import com.finalproject.ildoduk.entity.blog.BlogLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
@@ -28,7 +32,7 @@ public class Member extends BaseEntity{
     @Column(name="birth")
     private String birth;       //생일
 
-    @Column(name="nickname")
+    @Column(name="nickname", unique = true)
     private String nickname;    //닉네임
 
     @Column(name="sido")
@@ -54,6 +58,17 @@ public class Member extends BaseEntity{
 
     @Column(name = "state")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
+
+    // ================ Blog Cascade 설정을 위한 연관관계 설정(member 테이블에 추가되는 칼럼 x) ======//
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    private List<Blog> blog;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    private List<BlogComment> blogComment;
+
+    @OneToMany(mappedBy = "liker", cascade = CascadeType.ALL)
+    private List<BlogLike> blogLike;
+    // ================ Blog Cascade 설정을 위한 연관관계 설정 끝 ======//
 
     /**정보수정**/
 

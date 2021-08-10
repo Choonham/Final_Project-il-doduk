@@ -9,4 +9,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, QuerydslPredi
 
     @Query(value = "SELECT max(postNo) FROM Blog")
     public Long max();
+
+    public void deleteAllByContent(String content);
 }

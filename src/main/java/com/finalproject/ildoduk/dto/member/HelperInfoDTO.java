@@ -20,5 +20,4 @@ public class HelperInfoDTO {
     private String facePhoto;
     private String idCard;
     private int agreeHelper;
-
 }

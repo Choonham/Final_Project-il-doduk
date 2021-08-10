@@ -3,6 +3,7 @@ package com.finalproject.ildoduk.service.blog.service;
 import com.finalproject.ildoduk.dto.blog.BlogLikeDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogLike;
+import com.finalproject.ildoduk.entity.member.Member;
 
 import java.util.List;
 
@@ -24,10 +25,14 @@ public interface BlogLikeService {
 
         Blog blog = Blog.builder().postNo(dto.getPostNo()).build();
 
+        Member writer = Member.builder()
+                .id(dto.getLiker())
+                .build();
+
         BlogLike entity = BlogLike.builder()
                 .likeNo(dto.getLikeNo())
                 .blog(blog)
-                .liker(dto.getLiker())
+                .liker(writer)
                 .build();
         return entity;
     }
@@ -36,7 +41,7 @@ public interface BlogLikeService {
         BlogLikeDTO dto = BlogLikeDTO.builder()
                 .likeNo(entity.getLikeNo())
                 .postNo(entity.getBlog().getPostNo())
-                .liker(entity.getLiker())
+                .liker(entity.getLiker().getId())
                 .build();
         return dto;
     }
