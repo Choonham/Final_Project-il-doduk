@@ -196,6 +196,11 @@ public void updatePoint(PaymentDTO dto) {
     }
 }
 
+    @Override
+    public void minusPoint(MemberDto dto) {
+
+    }
+
     //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
     @Override
     public void minusPonit(MemberDto dto) {
@@ -239,38 +244,7 @@ public void updatePoint(PaymentDTO dto) {
     }
 
 
-    // 중개 수수료 기본 : 10%  -> 0.9
-    //    우대 수수료 : 7% -> 0.93
-    @Override
-    public void plusPoint(MemberDto dto) {
-        log.info("헬퍼쪽 포인트 업데이트 시작");
 
-        String userID = dto.getId();
-        //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
-        // Member의 친절 점수로 : 5점 만점에 3.5이상일 경우 우대 수수료 적용??
-
-        int point = dto.getPoint();
-        int total = 0;
-
-        //친절 점수 들어갈 곳
-        String test = null;
-        if(test == null){
-            //우대 수수료 적용
-            total = (int)(Math.ceil(point * 0.93));
-
-        } else {
-            total = (int)(Math.ceil(point * 0.9));
-        }
-
-        Optional<Member> result = repo.findById(userID);
-
-        if(result.isPresent()){
-            Member entity = result.get();
-            log.info("헬퍼쪽 포인트 업데이트 진행중");
-
-            repo.pointUpdate(total, entity.getId());
-        }
-    }
 
 
 

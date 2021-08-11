@@ -66,12 +66,13 @@ public class UploadController {
                 //섬네일 생성
                 String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator
                         + "s_" + uuid + "_" + fileName; //섬네일 파일 이름은 중간에 s_로 시작하도록
+                System.out.println(thumbnailSaveName);
                 File thumbnailFile = new File(thumbnailSaveName);
                 //섬네일 생성
                 Thumbnailator.createThumbnail(savePath.toFile(),thumbnailFile,100,100);
                 resultDTOList.add(new UploadResultDTO(fileName,uuid,folderPath));
 
-                System.out.println("씨빨놈아");
+
             }catch(IOException e){
                 e.printStackTrace();
             }

@@ -17,7 +17,7 @@ public class UploadResultDTO implements Serializable {
 
     public String getImageURL(){
         try {
-            return URLEncoder.encode(folderPath+"/"+uuid+"_"+fileName,"utf-8");
+            return URLEncoder.encode(folderPath+"/"+uuid+"_"+fileName,"UTF-8");
         } catch(UnsupportedEncodingException e ){
             e.printStackTrace();
 

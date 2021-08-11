@@ -43,7 +43,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     }
 
     @Override
-    public int helperRegisterIdCheck(String memberId) {
+    public int helperRegisterIdCheck(Member memberId) {
 
         int cnt = repository.countHelperInfoByMemberId(memberId);
 
@@ -166,4 +166,6 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         return EntityToDTO(entity);
     }
+
+
 }

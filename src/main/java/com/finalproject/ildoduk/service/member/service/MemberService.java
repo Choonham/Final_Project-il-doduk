@@ -72,6 +72,8 @@ public interface MemberService {
                 .sigungu(entity.getSigungu())
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
+                .point(entity.getPoint())
+                .photo(entity.getPhone())
                 .intro(entity.getIntro())
                 .state(entity.getState())
                 .regDate(entity.getRegDate())
@@ -80,4 +82,9 @@ public interface MemberService {
         return dto;
     }
 
+    //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
+    void minusPonit(MemberDto dto);
+
+    //경매 미매칭시에 다시 원래 금액 돌려줌
+    void refundAuctionPay(MemberDto dto);
 }
