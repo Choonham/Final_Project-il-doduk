@@ -22,13 +22,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
+@RequiredArgsConstructor // 의존성 자동 주입
 public class MemberServiceImpl implements MemberService {
 
 
     private final MemberRepository repo;
     private final HelperInfoRepository helperInfoRepository;
-
 
 
     @Override
@@ -181,9 +180,8 @@ public class MemberServiceImpl implements MemberService {
         }
         return dto;
     }
-
 //---------   유저 포인트 관련  -----------
-//결제시에 포인트 증가
+//유저 포인트 증가
 @Override
 public void updatePoint(PaymentDTO dto) {
     //전달 받은 데이터 : 결제금액, 해당 아이디
@@ -202,9 +200,14 @@ public void updatePoint(PaymentDTO dto) {
     }
 }
 
-    //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
     @Override
     public void minusPoint(MemberDto dto) {
+
+    }
+
+    //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
+    @Override
+    public void minusPonit(MemberDto dto) {
 
         int point = dto.getPoint();
         String userID = dto.getId();
@@ -225,7 +228,23 @@ public void updatePoint(PaymentDTO dto) {
         }
     }
 
+    //경매 미매칭시에 다시 원래 금액 돌려줌
+    @Override
+    public void refundAuctionPay(MemberDto dto) {
+        int point = dto.getPoint();
+        String userID = dto.getId();
 
+        Optional<Member> result = repo.findById(userID);
 
+        if(result.isPresent()){
+
+            Member entity = result.get();
+
+            int userPoint = entity.getPoint();
+            int totalPoint = (int)(Math.ceil((userPoint-point)*1.0));
+
+            repo.pointUpdate(totalPoint, entity.getId());
+        }
+    }
 
 }
