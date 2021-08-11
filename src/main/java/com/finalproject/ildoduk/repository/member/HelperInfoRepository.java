@@ -35,8 +35,8 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     int countDistinctBySigungu(String sigungu);
 
     //멤버, 헬퍼 정보 전체 조인인
-    @Query(value = "SELECT h, m FROM HelperInfo  h join Member m on h.memberId = m.id WHERE h.memberId = ?1")
-    MemberHelperInfoDTO joinHelperInfo(String memberId);
+    @Query(value = "SELECT m,h FROM Member m join HelperInfo h on m.id = h.memberId.id WHERE h.memberId.id = ?1")
+    Optional<Object[]> joinHelperInfo(String memberId);
 
     //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")

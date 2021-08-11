@@ -5,7 +5,9 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.Payment;
 
@@ -56,4 +58,29 @@ public interface PaymentService {
                 .build();
          return dto;
     }
+
+
+    default MemberHelperInfoDTO entityToDTO(HelperInfo helper, Member member){
+
+        MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .address(member.getAddress())
+                .intro(member.getIntro())
+                .nickname(member.getNickname())
+                .gender(member.getGender())
+                .photo(member.getPhoto())
+
+                .appeal(helper.getAppeal())
+                .helperNo(helper.getHelperNo())
+                .kindness(helper.getKindness())
+                .goodAtThird(helper.getGoodAtThird())
+                .goodAtSecond(helper.getGoodAtSecond())
+                .goodAtFirst(helper.getGoodAtFirst())
+                .agreeHelper(helper.getAgreeHelper())
+                .build();
+
+        return dto;
+    }
+
 }
