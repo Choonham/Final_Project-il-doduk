@@ -2,37 +2,20 @@ package com.finalproject.ildoduk.controller.member;
 
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
-import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
-import com.finalproject.ildoduk.dto.member.UploadResultDTO;
-import com.finalproject.ildoduk.entity.member.HelperInfo;
-import com.finalproject.ildoduk.entity.member.Member;
-import com.finalproject.ildoduk.entity.member.QHelperInfo;
+
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -69,7 +52,7 @@ public class MemberController {
 
     //유저 회원가입
     @PostMapping("/userRegister")
-    public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
+    public String userRegister(MemberDto dto, @RequestParam("nickname") String nickname, Model model, HttpSession session){
 
         log.info("userRegister.html에서 닉네임 받아옴 ::: " + nickname);
 
@@ -81,10 +64,14 @@ public class MemberController {
 
             return "/member/userRegister";
         }else{  //닉네임 중복이 없을 경우
-            model.addAttribute("msg", "일도둑의 회원이 되신것을 축하합니다~");
+            session.removeAttribute("user12");
             service.userRegister(dto);
+            session.setAttribute("user",dto);
+            MemberDto user = (MemberDto) session.getAttribute("user");
+            System.out.println("::::::::::::::::::::::::::"+user.getState());
 
-            return "/index";
+
+            return "redirect:/member/index";
         }
 
 
@@ -143,24 +130,36 @@ public class MemberController {
 
     //유저 수정
     @PostMapping("/userModify")
-    public String userModify(MemberDto dto, Model model){
+    public String userModify(MemberDto dto, @RequestParam("nickname") String nickname, Model model){
+        log.info("userModify.html에서 닉네임 받아옴 ::: " + nickname);
+        int cnt= service.nickNameCheck(nickname);
+        
+        if(cnt == 1 ){  //DB에 중복된 닉네임이 있을경우
 
-        service.userModify(dto);
-        model.addAttribute("msg","개인정보가 수정되었습니다!");
-        return "index";
+            model.addAttribute("msg","닉네임이 중복되었습니다 다시 작성해주세요");
+
+            return "/member/userModify";
+
+        }else{  //닉네임 중복이 없을 경우
+            model.addAttribute("msg","개인정보가 수정되었습니다!");
+            service.userModify(dto);
+
+            return "/index";
+        }
+        
     }
 
     //유저 삭제
-    @PostMapping("/userDelete")
-    public String userDelete(String id , RedirectAttributes requestAttributes, HttpSession session){
+    @GetMapping("/userDelete")
+    public String userDelete(String id, Model model, HttpSession session){
 
         log.info("userDelete id ::  " + id);
 
         service.userDelete(id);
         session.invalidate();
-        requestAttributes.addFlashAttribute("msg","정상적으로 회원 탈퇴 되었습니다.");
 
-        return "/index";
+
+        return "redirect:/member/DeleteToIndex";
     }
 
     //유저 로그아웃
@@ -174,10 +173,19 @@ public class MemberController {
     }
 
     @GetMapping("/index")
-    public String totheindex(){
-
-        return "../index";
+    public String userRegitoTheIndex(Model model){
+        model.addAttribute("msg", "일도둑의 회원이 되신것을 축하합니다~");
+        System.out.println("userRegitoTheIndex 확인");
+        return "/index";
     }
+
+    @GetMapping("/DeleteToIndex")
+    public String userDeltoTheIndex(Model model){
+        model.addAttribute("msg", "정상적으로 회원탈퇴 되었습니다!");
+        System.out.println("userDeltoTheIndex 확인");
+        return "/index";
+    }
+
 
     //카카오 로그인 페이지
     @GetMapping("/kakao")
@@ -211,7 +219,8 @@ public class MemberController {
         }
 
         else{
-            session.setAttribute("user",dto);
+            dto.setState(1);
+            session.setAttribute("user12",dto);
             model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
             return "/member/userRegister";
         }
@@ -223,110 +232,88 @@ public class MemberController {
     public void helperRegisterPage(){
 
     }
+    //헬퍼 가입전 신청여부 확인
+    @GetMapping("/helperRegisterCheck")
+    public String helperRegisterCheck(@RequestParam("memberId")String memberId, Model model){
+        //helperRegister에서 받아온 아이디값으로 helperInfo와 member를 조회해야함.
+        HelperInfoDTO count = helperInfoService.helperFindById(memberId); //helperInfo에 값 있는지 확인
+
+        if(count == null) { //헬퍼의 agreehelper의 값이 없을 경우 (1: 신청대기중)
+            model.addAttribute("memberId",memberId);
+            return "redirect:/member/helperRegister";
+        }else if(count.getAgreeHelper() == 1){ //헬퍼의 agreehelper의 값이 1일 경우 (1: 신청대기중)
+
+            model.addAttribute("msg", "헬퍼 신청중인 상태입니다.");
+            return "/index";
+        }else if(count.getAgreeHelper() == 2) { //헬퍼의 agreehelper의 값이 2일 경우 (2: 헬퍼승인완료)
+            model.addAttribute("memberId",memberId);
+            return "redirect:/member/helperModify";
+        }else{
+            model.addAttribute("msg","헬퍼 승인이 반려되었습니다 다시 신청해주세요");
+
+            return "redirect:/member/helperRegister";
+        }
+    }
+
+
     //헬퍼 가입신청
-    @ResponseBody
-    @PostMapping(value="/helperRegister", produces = "application/json; charset=utf8")
-    public void helperRegister(@RequestParam("memberId") String memberId, @RequestParam("img") String img, HelperInfoDTO helperInfoDTO, Model model, HttpSession session){
+    @PostMapping(value="/helperRegister")
+    public String helperRegister(@RequestParam("memberId") String memberId, @RequestParam("img") String img, HelperInfoDTO helperInfoDTO, Model model, HttpSession session){
 
         log.info("helperRegister member id :::: " + memberId);
         log.info("helperRegister multipartFile ::: " + img);
 
-        //helperRegister에서 받아온 아이디값으로 helperInfo와 member를 조회해야함.
+            int cnt = helperInfoService.helperRegister(helperInfoDTO);
 
-        //agreeHelper 신청 내용 DB에 저장
-     /*   helperInfoService.helperRegister(helperInfoDTO);*/
+            System.out.println("helperRegister 처리 확인 !!!!!" + cnt);
+            if(cnt == 1) {
 
-        /*int cnt = helperInfoService.helperRegisterIdCheck(memberId);*/
+                model.addAttribute("msg", "정상적으로 헬퍼 신청이 완료되었습니다! ");
+                return "/index";
+            }else{
+                model.addAttribute("msg","헬퍼가입이 정상적으로 이루어지지 않았습니다");
 
-
-    }
-
-
-
-    //헬퍼 가입확인
-/*    @PostMapping("/helperIdCheck")
-    public void helperIdCheck(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, MemberDto memberdto, Model model){
-        log.info(" helperIdCheck memberId :: " + memberId);
-
-        MemberDto memberDto= service.userToHelperIdCheck(memberId);
-            log.info(" helperIdCheck userTOHelperIDCheck test :::: " + memberDto );
-
-        HelperInfoDTO helperInfoDto = helperInfoService.helperFindById(memberId);
-        log.info(" helperIdCheck helperFindById test :::: " + helperInfoDto );
-
-        if(helperInfoDto.getAgreeHelper()==2){
-
-            model.addAttribute("user",memberDto);
-            model.addAttribute("user1",helperInfoDto);
-
-            // return ??????
-        }else{
-            // return ??????
-        }
-
-    }*/
-
-    //헬퍼 가입신청 파일 업로드
-
- /*   @Value("${com.finalproject.upload.path}")//application.properties의 변수
-    private String uploadPath;
-
-    @PostMapping("/member/helperUpload")
-    public void helperUploadsFacePhoto(MultipartFile[] uploadFiles) {
-        for(MultipartFile uploadFile:uploadFiles){
-            //실제 파일이름 IE나 Edge는 전체경로가 들어오므로
-            String originalName = uploadFile.getOriginalFilename();
-            String fileName = originalName.substring(originalName.lastIndexOf("\\"));
-
-            log.info("fileName : " + fileName);
-            //날짜 폴더 생성
-            String folderPath = makeFolder();
-
-            //UUID
-            String uuid = UUID.randomUUID().toString();
-
-            //저장할 파일 이름 중간에 "_"를 이용해서 구분
-            String saveName = uploadPath + File.separator + folderPath + File.separator +
-                    File.separator + uuid + "_" + fileName;
-                    Path savePath = Paths.get(saveName);
-
-            try {
-                uploadFile.transferTo(savePath);//실제 이미지 저장
-                resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
-
-            }catch(IOException e){
-                e.printStackTrace();
+                return "/helperRegister";
             }
-        }
-        return new ResponseEntity<>(resultDTOList, HttpStatus.OK);
+
     }
 
-    private String makeFolder() {
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/mm/dd"));
+    //헬퍼 정보 수정페이지
+    @GetMapping("/helperModify")
+    public void helperModifyPage(){
 
-        String folderPath = str.replace("/", File.separator);
-
-        //make folder -----------------
-        File uploadPathFolder = new File(uploadPath, folderPath);
-
-        if(uploadPathFolder.exists() == false){
-            uploadPathFolder.mkdirs();
-        }
-        return folderPath;
     }
 
-    @GetMapping("/member/display")
-    public ResponseEntity<byte[]> getFile(String fileName){
 
-        ResponseEntity<byte[]> result = null;
+    //헬퍼 정보 수정 agreeHelper == 2 일 경우만 해당
+    @PostMapping("/helperModify")
+    public String helperModify(@RequestParam("memberId")String memberId, Model model, HelperInfoDTO helperInfoDTO){
+        log.info("helperModify memberID ::::::: " +  memberId);
+            HelperInfoDTO dto = helperInfoService.helperFindById(memberId); //헬퍼 memberId로 찾아서 dto반환
 
-        try{
-        String srcFileName = URLDecoder.
-        }catch(Exception e){
-            log.info(e.getMessage());
-            return
-        }
+            helperInfoService.helperModify(dto);// dto를 repository.save();
 
-    }*/
+            model.addAttribute("msg","헬퍼 정보가 수정되었습니다!");
+            helperInfoService.helperModify(helperInfoDTO);
+            return "/index";
+    }
+
+
+
+    //게시글 아이디(or 닉네임)누르면 해당 헬퍼 정보 가져오기
+    @PostMapping(value="/helperBizCard")
+    public void helperSearch(@RequestParam("memberId")String memberId, Model model){
+        log.info("helperSearch에 넘어온 아이디 확인" + memberId );
+
+        MemberDto memberDto = service.userIdCheck(memberId);
+        log.info("helperBizCard :::: member Dto ::  " + memberDto );
+
+        HelperInfoDTO helperInfoDTO = helperInfoService.helperFindById(memberId);
+        log.info("helperBizCard :::: helperInfoDTO :::: " + helperInfoDTO);
+
+
+        model.addAttribute("helperInfo", helperInfoDTO);
+
+    }
 
 }

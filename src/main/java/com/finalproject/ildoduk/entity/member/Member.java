@@ -78,10 +78,15 @@ public class Member extends BaseEntity{
 
     public void changeAddress(String address){ this.address = address; }
 
+    public void changeSido(String sido){this.sido= sido;}
+
+    public void changeSigungu(String sigungu){this.sigungu= sigungu;}
+
     public void changePhoto(String photo){ this.photo = photo; }
 
     public void changeIntro(String intro){ this.intro = intro; }
 
     public void changeState(int state){ this.state = state;}
+
 
 }

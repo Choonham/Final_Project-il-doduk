@@ -17,5 +17,6 @@ public class HelperInfoDTO {
     private String goodAtThird;
     private int kindness;
     private String appeal;
+    private String img;
     private int agreeHelper;
 }
