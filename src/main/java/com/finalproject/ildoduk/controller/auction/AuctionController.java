@@ -307,6 +307,9 @@ public class AuctionController {
         //auction.state=4 / bids.state=2 (삭제)
         auctionService.deleteAuction(aucSeq);
 
+        /*결제 관련*/
+        paymentService.refundAuctionPay(aucSeq);
+
         return "redirect:/auction/onAuctionList";
     }
 
@@ -317,6 +320,9 @@ public class AuctionController {
         //경매와 해당 경매 비딩 내역 state값 변경
         //auction.state=3(일 완료)
         auctionService.jobDone(aucSeq);
+
+        /*결제 관련*/
+        paymentService.doneAuction(aucSeq);
         return "redirect:/auction/getAuction?aucSeq="+aucSeq;
     }
 

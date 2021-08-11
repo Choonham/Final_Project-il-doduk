@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.blog;
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,8 +21,8 @@ public class BlogComment extends BaseEntity {
     @ManyToOne
     private Blog blog;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    private Member writer;
 
     @Column(nullable = false)
     private String content;

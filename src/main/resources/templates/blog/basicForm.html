@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="~{/fragments/header :: mainHeader}">
+  <head th:replace="~{/blog/blogHeader :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
   </head>
@@ -85,7 +85,7 @@
             <select class = "custom-select" id="doneList" name = "doneList" onchange="selectDoneList()">
               <option>-------</option>
               <option th:each = "done : ${doneList}">
-                [[${done.title}]] / [[${done.doDateTime}]]
+                [[${done.title}]] / [[${done.sido}]] [[${done.sigungu}]]
               </option>
             </select>
             <input type = "button" id="submit-btn" class="btn px-4 btn-primary text-white"
@@ -125,7 +125,9 @@
   var button = $("#submit-btn");
 
   button.click(function (){
+
     $("#postForm").submit();
+
   });
   // 끝
 
@@ -175,6 +177,7 @@
         for (var i = files.length - 1; i >= 0; i--) {
           sendFile(files[i], this);
         }
+
       }
     }
   });
@@ -197,11 +200,11 @@
                   "value", null
           )
         }
-        console.log(data.removedFileName)
-        const itemToFind = tempFileList.find(function(item) {return item.savedFileName === data.removedFileName});
-        const idx = tempFileList.indexOf(itemToFind);
-        if (idx > -1) tempFileList.splice(idx, 1);
-        console.log(tempFileList);
+        //console.log(data.removedFileName)
+        //const itemToFind = tempFileList.find(function(item) {return item.savedFileName === data.removedFileName});
+        //const idx = tempFileList.indexOf(itemToFind);
+        //if (idx > -1) tempFileList.splice(idx, 1);
+        //console.log(tempFileList);
       }
     });
   }
@@ -225,10 +228,12 @@
           thumbnail.attr("value", data.savedFileName);
         }
         $(el).summernote('editor.insertImage', data.url);
+        /**
         tempFileList.push({
           savedFileName : data.savedFileName,
           originalFileName : data.originalFileName
         });
+         **/
       }
     });
   }
@@ -253,7 +258,6 @@
     var year = doDateTime.substring(0,4);
     var month = doDateTime.substring(5,7);
     var day = doDateTime.substring(8,10);
-
 
 
     if(doneList[selectedIndex-1].category === 1){

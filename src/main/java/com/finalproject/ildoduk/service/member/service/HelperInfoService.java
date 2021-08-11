@@ -19,7 +19,7 @@ public interface HelperInfoService {
     void helperRegister(HelperInfoDTO helperInfoDTO);
 
     //헬퍼 회원가입전 DB에 아이디 중복 체크
-    int helperRegisterIdCheck(String memberId);
+    int helperRegisterIdCheck(Member memberId);
 
     //헬퍼 아이디체크 후 헬퍼인포 반환(HelperInfo)
     HelperInfoDTO helperFindById(String memberId);
@@ -41,8 +41,6 @@ public interface HelperInfoService {
     void deny(HelperInfoDTO helperInfoDTO);
     //헬퍼 정보
     HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO);
-
-
 
     default HelperInfo dtoToEntity(HelperInfoDTO dto){
         Member member = Member.builder().id(dto.getMemberId()).build();

@@ -25,12 +25,12 @@ public interface PaymentService {
     // 경매글을 등록했을때 : 보증금 개념으로 등록한 금액이 빠져나간다.
     void regAuction(Long aucSeq);
     // 경매가 취소 되었을 경우
-    void refundAuctionPay(AuctionListDTO auctionListDTO);
+    void refundAuctionPay(Long aucSeq);
     // 경매가 낙찰되었을 경우
     void biddingSuccess(Long bidSeq);
     //  유저가 일 끝내기 버튼을 눌렀을 경우 경매 가격을 헬퍼에게 넣어줘야한다.
     //  이때 헬퍼의 점수에 따라 수수료 부과
-    void doneAuction(AuctionBiddingDTO auctionBiddingDTO,MemberDto memberDto);
+    void doneAuction(Long aucSeq);
 
     //DTO -> Entity
     default Payment dtoToEntity(PaymentDTO dto){

@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.blog;
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +24,8 @@ public class Blog extends BaseEntity {
     @Column(length = 10000, nullable = false)
     private String content;
 
-    @Column(length = 30, nullable = false)
-    private String writer;
+    @ManyToOne
+    private Member writer;
 
     @Column(length = 2000, nullable = true)
     private String thumbnail;
@@ -38,8 +39,6 @@ public class Blog extends BaseEntity {
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     private List<BlogFiles> blogFiles;
 
-    @Column
-    private int workNo;
 
     public void changeTitle(String title){
         this.title = title;
@@ -47,9 +46,5 @@ public class Blog extends BaseEntity {
 
     public void changeContent(String content) {
         this.content = content;
-    }
-
-    public void changeWork(int workNo){
-        this.workNo = workNo;
     }
 }

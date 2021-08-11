@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head th:replace="~{/fragments/header :: mainHeader}">
+<head th:replace="~{/blog/blogHeader :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
 
@@ -72,7 +72,7 @@
 
     <section class="site-section">
       <div class="container">
-        <div class="row mb-5">
+        <div class="row mb-5" id = "listForm">
           <div class="col-md-6 col-lg-4 mb-5" th:each="dto : ${result.dtoList}">
             <a th:href="@{/blog/detail(postNo = ${dto.postNo},
                     tempPage= ${result.page},
@@ -89,7 +89,7 @@
                 [[${dto.title}]]
               </a>
             </h3>
-            <div>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]<span class="mx-2">|</span> <a>[[${dto.writer}]]</a></div>
+            <div>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]<span class="mx-2">|</span> <a>[[${dto.writer.name}]]</a></div>
           </div>
         </div>
         <div class="row pagination-wrap mt-5">
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <form action="/blog/blogList" method="get" id="searchForm">
+      <form method="get" id="searchForm">
         <div class="input-group" style="margin-top: 20px; margin-bottom: 20px; margin-left: 400px; margin-right: 150px; width: 1200px;">
           <input type="hidden" name="page" value = "1">
           <input type = "hidden" name = "writer" id = "searchWriter" th:value="${host}">
@@ -128,10 +128,10 @@
               <option th:selected="${pageRequestDTO.type == null}">-------</option>
               <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
               <option value="c" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
-              <option value="tc"  th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
+              <option value="tc" th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
             </select>
           </div>
-          <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
+          <input class="form-control" name="keyword" id = "searchKeyword" oninput="inputEvent()" th:value="${pageRequestDTO.keyword}">
           <div class="input-group-append" id="button-addon4">
             <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
             <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
@@ -164,8 +164,69 @@
       $("#searchWriter").val([[${host}]]);
       searchForm.submit();
     });
-  </script>
 
+
+    function inputEvent() {
+
+      var writer = [[${host}]];
+      var select = $(".custom-select").val();
+      var keyword = $("#searchKeyword").val();
+
+      $.ajax({
+        data: {
+          type : select,
+          keyword : keyword,
+          writer : writer
+        }, //json 데이터를 String으로
+        type: "get",
+        url: '/blog/blogSearch',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        success: function (result) {
+          console.log(result);
+          $("#listForm").empty();
+          if(result.dtoList.length > 0){
+            result.dtoList.forEach(function(item){
+              str = "<div class='col-md-6 col-lg-4 mb-5'>";
+              var link1 = [[@{/blog/detail}]];
+              str += "<a href = '" + link1 + "?postNo=" + item.postNo + "&tempPage=" + result.page + "&tempType=" + select + "&tempKeyword=" + keyword + "'>";
+
+              var srcLink = [[@{/resources/fileupload}]];
+
+              var dateTime = item.regDate;
+
+              var year = dateTime.substring(0,4);
+              var month = dateTime.substring(5,7);
+              var day = dateTime.substring(8,10);
+
+              var thumbSrc = srcLink;
+              var subThumbnail = "sub-thumbnail.jpg";
+
+              if(item.thumbnail === ""){
+                str += "<img src = '" + thumbSrc + "/" + subThumbnail + "' alt='Image' class='img-fluid rounded mb-4' style='margin-bottom: 24px; width: 350px; height: 350px;'>";
+              } else {
+                str += "<img src = '" + thumbSrc + "/" + item.thumbnail + "' alt='Image' class='img-fluid rounded mb-4' style='margin-bottom: 24px; width: 350px; height: 350px;'>";
+              }
+
+              str += "</a>";
+              str += "<h3><a href = '" + link1 + "?postNo=" + item.postNo + "&tempPage=" + result.page + "&tempType=" + select + "&tempKeyword=" + keyword + "' class = 'test-black'>";
+              str += item.title;
+              str += "</a></h3>";
+              str += "<div>" + year + "/" + month + "/" + day + "<span class='mx-2'>|</span><a>" + item.writer + "</a>";
+
+              $("#listForm").append(str);
+            })
+          }
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
+        }
+      })
+    }
+
+
+  </script>
 
   </body>
 </html>

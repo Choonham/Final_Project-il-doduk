@@ -79,7 +79,7 @@
     <div class="site-navbar mt-3">
         <div class="container-fluid">
             <div class="row align-items-center">
-                <div class="site-logo col-6"><a href="index.html">일도둑</a></div>
+                <div class="site-logo col-6"><a th:href="@{/}">일도둑</a></div>
 
                 <nav class="mx-auto site-navigation">
                     <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
@@ -95,15 +95,9 @@
                             </ul>
                         </li>
                         <li class="has-children">
-                            <a>경매 관리</a>
-                            <ul class="dropdown">
-                                <li><a>결제 내역 처리</a></li>
-                                <li><a>경매 거래 상황</a></li>
-                            </ul>
-                        </li>
-                        <li class="has-children">
                             <a href="" >고객센터</a>
                             <ul class="dropdown">
+                                <li><a th:href="@{/serviceCenter/faqMgr}">FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
                             </ul>
                         </li>

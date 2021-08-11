@@ -63,43 +63,42 @@
                 </td>
                 <td>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY2g5o5J8JUwnx0Ax-EopdjYPH_CzZufP0Ag&usqp=CAU" width="14" th:if="${dto.cusTitle == '비공개 게시글 입니다.'}">
-                    <a href=""  name="pw" th:href="@{/serviceCenter/customerGetBoard(cusNo = ${dto.cusNo},cusWriter = ${session.user.id},
-                    page= ${cusBoard.page},type=${pageRequestDTO.type},keyword = ${pageRequestDTO.keyword})}">
+                    <b><a th:onclick="|javascript:pwCheck(${dto.cusNo})|" th:if="${session.user.state != 0}">
                         [[${dto.cusTitle}]]
-                    </a>
+                    </a></b>
+                    <a th:if="${session.user.state == 0}" th:href="@{/serviceCenter/mgrBoard(cusNo = ${dto.cusNo})}">[[${dto.cusTitle}]]</a>
                 </td>
                 <td>[[${dto.cusWriter}]]</td>
                 <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}"></td>
                 <td>[[${dto.answerCheck}]]</td>
-                <form id="pwForm" th:action="@{/serviceCenter/customerGetBoard}" method="post">
-                    <input type="hidden" name="cusNo" id="cusNoPw" />
-                </form>
             </tr>
             </tbody>
-
         </table>
+            <form id="pwForm" th:action="@{/serviceCenter/customerGetBoard}" method="post">
+                <input type="hidden" name="cusNo" id="cusNoPw" />
+            </form>
         <a href="" th:align="right" th:href="@{/serviceCenter/customerWriteForm}" >글작성</a>
+    </div>
 
-    <!-- 페이징 -->
-    <div class="row pagination-wrap mt-5">
+        <!-- 페이징 -->
+        <div class="row pagination-wrap mt-5">
+            <div class="col-md-12 text-center ">
+                <div class="custom-pagination ml-auto">
 
-        <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-
-                <div class="d-inline-block">
-                    <a th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} "
-                       th:each="page: ${cusBoard.pageList}"
-                       th:href="@{/serviceCenter/customerBoard(page = ${page} ,
+                    <div class="d-inline-block">
+                        <a th:class=" 'page-item ' + ${cusBoard.page == page?'active':''} "
+                           th:each="page: ${cusBoard.pageList}"
+                           th:href="@{/serviceCenter/customerBoard(page = ${page} ,
                        type=${pageRequestDTO.type} ,
                        keyword = ${pageRequestDTO.keyword})}">
-                        [[${page}]]
-                    </a>
-                </div>
+                            [[${page}]]
+                        </a>
+                    </div>
 
+                </div>
             </div>
         </div>
-    </div>
-    </div>
+
         <!-- 검색 -->
         <form th:action="@{/serviceCenter/customerBoard}" method="get" id="searchForm">
             <div>
@@ -153,54 +152,82 @@
 </style>
 
 <script th:inline="javascript">
+    //접속중인 계정
+    const userId = [[${session.user.id}]];
 
-    var password = [[${password}]];
-    var noOpen = [[${noOpen}]]; //다른 사람 게시글을 누를 경우
-    var pwNo = [[${pwNo}]]; //비밀번호 입력 후에 넘겨줄 게시번호
+    function test(boardData){
+            const board = JSON.parse(boardData);
 
-    console.log("넘어온 비밀번호 : "+password);
+            //게시판 정보
+            const password = board.passwordBoard;
+            const pwNo = board.cusNo;
 
-    $(document).ready(function(){
+                if(board.secretBoard === 'y' && board.cusWriter !== userId){
+                    $(".noOpenBoard").text("비공개된 게시물 입니다.");
+                    $("#password_val").hide();
 
-        if(noOpen != null){
+                    $("#myModal").modal('show');
 
-            $(".noOpenBoard").text("비공개된 게시물 입니다.");
-            $("input").remove("#password_val");
-            $("#myModal").modal();
+                    $("#password_check").click(function(){
+                        self.close();
+                    });
 
-            $("#password_check").click(function(){
-               self.close();
-            });
-        }
+            } else if(board.secretBoard === 'y' && board.cusWriter === userId){
+                    const pw_input = "<input type=\"password\" name=\"passwordBoard\" id=\"password_val\" placeholder=\"password\" />";
 
-        //넘어온 패스워드가 있을 경우 모달창 뜨게
-        if(password != null){
-            $("#myModal").modal();
+                    $(".noOpenBoard").text("비밀번호 입력");
 
-            $("#password_check").click(function(){
-                //입력한 값을 받고
-                var input_password = $("#password_val").val();
+                    $("#password_val").show();
+                    $("#password_val").val("");
+                    $("#myModal").modal('show');
 
-                console.log("내가 입력한 비밀번호" + input_password);
+                    $("#password_check").click(function(){
+                        //입력한 값을 받고
+                        const input_password = $("#password_val").val();
 
-                if(password == input_password){
-                    //a태그 내부에 있는 정보와 함께 비밀번호 정보도 같이 보내야한다.
-                    $("#cusNoPw").val(pwNo);
-                    $("#pwForm").submit();
-                } else {
-                    alert("비밀번호가 틀립니다. 다시 확인해주세요.");
+                        if(password === input_password){
+                            $("#cusNoPw").val(pwNo);
+                            $("#pwForm").submit();
+                        } else {
+                        alert("비밀번호가 틀립니다. 다시 확인해주세요.");
+                        }
+
+                    });
+
+            } else {
+                    location.href="/serviceCenter/customerGetBoard?cusNo="+pwNo;
+            }
+    }
+
+    function pwCheck(cusNo){
+
+            $.ajax({
+                data:JSON.stringify({
+                    "cusNo":cusNo
+                }),
+                type: 'post',
+                url: '/serviceCenter/secretBoard',
+                contentType: 'application/json; charset=utf8',
+                dataType: 'json',
+                cache : false,
+                success: function (data) {
+
+                    const boardData = JSON.stringify(data);
+
+                    test(boardData);
+
+                },
+                error: function(jqXHR, textStatus, errorThorwn){
+                    alert("실패");
                 }
             });
-        }
-        //확인 버튼을 누르게 되면
 
-    });
-
-
+    }
 </script>
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
 
 </body>
 </html>

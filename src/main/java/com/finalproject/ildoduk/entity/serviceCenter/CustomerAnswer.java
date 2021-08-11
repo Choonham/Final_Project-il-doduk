@@ -21,7 +21,7 @@ public class CustomerAnswer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aNo;
 
-    @ManyToOne
+    @OneToOne
     private CustomerBoard cusNo;
 
     @Column(nullable = false)
