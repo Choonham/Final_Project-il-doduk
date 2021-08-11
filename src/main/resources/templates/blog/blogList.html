@@ -147,12 +147,13 @@
 
   <script th:inline="javascript">
 
-    var msg = [[${msg}]];
+    /*var msg = [[${msg}]];
     console.log(msg);
 
     if(msg){
       $(".modal").modal();
-    }
+    }*/
+
     var searchForm = $("#searchForm");
 
     $('.btn-search').click(function(e){
@@ -213,7 +214,7 @@
               str += "<h3><a href = '" + link1 + "?postNo=" + item.postNo + "&tempPage=" + result.page + "&tempType=" + select + "&tempKeyword=" + keyword + "' class = 'test-black'>";
               str += item.title;
               str += "</a></h3>";
-              str += "<div>" + year + "/" + month + "/" + day + "<span class='mx-2'>|</span><a>" + item.writer + "</a>";
+              str += "<div>" + year + "/" + month + "/" + day + "<span class='mx-2'>|</span><a>" + writer + "</a>";
 
               $("#listForm").append(str);
             })
