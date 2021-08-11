@@ -103,13 +103,16 @@ public class CustomerBoardServiceImpl implements CustomerBoardService {
             customerBoardRepository.save(entity);
         }
     }
-//문의글 삭제
+    //문의글 삭제
     @Override
     public void deleteBoard(CustomerBoardDTO dto) {
         //댓글을 먼저 삭제 한 후에 게시글 삭제
         Optional<CustomerAnswer> comment = customerAnswerRepository.findByCusNoCusNo(dto.getCusNo());
-        CustomerAnswer comment_entity = comment.get();
-        customerAnswerRepository.delete(comment_entity);
+
+        if(comment.isPresent()) {
+            CustomerAnswer comment_entity = comment.get();
+            customerAnswerRepository.delete(comment_entity);
+        }
 
         Optional<CustomerBoard> result = customerBoardRepository.findById(dto.getCusNo());
         log.info(result + "삭제 내부");
