@@ -30,6 +30,7 @@
     <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>자기소개</b></h3>
     <p>[[${helper.intro}]]</p>
 
+    <a class="btn btn-block btn-primary" th:href="@{/auction/sendSMS(bidSeq=${bid.bidSeq})}" > 낙찰 메시지 보내기 </a>
     <button id="get" class="btn btn-block btn-primary"> 낙찰</button>
     <button id="close" class="btn btn-block btn-muted"> 닫기</button>
 </div>

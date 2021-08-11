@@ -11,7 +11,11 @@ import com.finalproject.ildoduk.service.pay.service.*;
 import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
+import net.nurigo.java_sdk.*;
+import net.nurigo.java_sdk.api.*;
+import net.nurigo.java_sdk.exceptions.*;
 import org.apache.commons.io.*;
+import org.json.simple.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -451,4 +455,39 @@ public class AuctionController {
 
     //이미지 관련 컨트롤러 끝
 
+    //=================================================== SMS 서비스 controller ==================================================//
+
+    @ResponseBody
+    @GetMapping(value = "/sendSMS")
+    public void sendSMS(Long bidSeq){ // 휴대폰 문자보내기
+
+        BiddingList bid = auctionService.getOneBid(bidSeq).get();
+        String aucTitle = bid.getAucSeq().getTitle();
+        String user = bid.getAucSeq().getUser().getNickname();
+        MemberHelperInfoDTO helper = helperInfoService.helperFindById2(bid.getHelper().getId());
+        String userPhoneNumber = helper.getPhone();
+        System.out.println("핸드폰번호가 숫자가 아니니? "+userPhoneNumber);
+
+        String api_key = "NCSBSPNDEX3DOYNZ";
+        String api_secret = "UKRFUOWDXSFYKLLOFEE2J5I0BSDWLOCR";
+
+        Message coolsms = new Message(api_key, api_secret); // 메시지보내기 객체 생성
+
+        HashMap<String, String> set = new HashMap<String, String>();
+        set.put("to", userPhoneNumber); // 수신번호
+        set.put("from", "01099728740"); // 발신번호
+        set.put("text", "안녕하세요."+user+"님의 미션에 낙찰되었습니다!"); // 문자내용
+        set.put("type", "SMS"); // 문자 타입
+
+        try {
+            //send() 는 메시지를 보내는 함수
+            JSONObject obj = (JSONObject) coolsms.send(set);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println("메세지 전송 에러 ====== "+e.getMessage());
+            System.out.println("메세지 전송 에러 ====== "+e.getCode());
+        }
+
+
+    }
 }
