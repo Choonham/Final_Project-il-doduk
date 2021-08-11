@@ -35,6 +35,7 @@
     <textarea id="summernote" name="editordata"></textarea>
     <input type="submit" value="글쓰기">
     <button type="button">후기형식 작성</button>
+
 </form>
 
 
@@ -50,7 +51,7 @@
      var helper= [[${helper}]];
     console.log(auction.content);
     var str ="<h1>후기 작성</h1>";
-    str+="<table>";
+    str+="<table border='1'>";
     str+="<tr><td>일 제목</td><td>"+auction.title+"</td></tr>";
     str+="<tr><td>일 내용</td><td>"+auction.content+"</td></tr>";
     str+="<tr><td>낙찰된 가격</td><td>"+bid.offerPrice+"</td></tr>";

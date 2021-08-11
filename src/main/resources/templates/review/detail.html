@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <h1>[[${review.title}]]</h1>
+<div id ="content"></div>
+
+
+
+<button th:if="${review.id == session.user.id}" id="modify">편집하기</button>
+<button th:if="${review.id == session.user.id}" id="delete">삭제하기</button>
+
+<script th:inline="javascript">
+
+
+    $(document).ready(function(){
+        $("#content").html([[${review.content}]]);
+    });
+    $('#modify').click(function (){
+        var no=[[${review.no}]];
+        location.href="/review/updateform?no="+no;
+
+    });
+    $('#delete').click(function (){
+        var no=[[${review.no}]];
+        location.href="/review/delete?no="+no;
+
+    });
+
+
+
+</script>
+
+</body>
+</html>

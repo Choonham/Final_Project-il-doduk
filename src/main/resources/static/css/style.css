@@ -565,7 +565,7 @@ h1, h2, h3, h4 {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url("https://cdn.discordapp.com/attachments/861512084009385988/874219905480806490/cea0cdd1b1ace982321e6dde2d8c4ab8.png");
+  background-image: url("/images/123455.png");
 }
   .bg-image.fixed {
     background-attachment: fixed; }

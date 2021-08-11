@@ -276,9 +276,28 @@ public class AuctionController {
         return "redirect:/auction/getAuction?aucSeq="+aucSeq;
     }
 
-    //경매 참여
+    //경매참여
 
     //경매삭제
+    @GetMapping("/deleteAuction")
+    public String deleteAuction(Long aucSeq){
+
+        //경매와 해당 경매 비딩 내역 state값 변경
+        //auction.state=4 / bids.state=2 (삭제)
+        auctionService.deleteAuction(aucSeq);
+
+        return "redirect:/auction/onAuctionList";
+    }
+
+    //미션 수행 확인 (미션종료 상태로 state 변환)
+    @GetMapping("/jobDone")
+    public String jobDone(Long aucSeq){
+
+        //경매와 해당 경매 비딩 내역 state값 변경
+        //auction.state=3(일 완료)
+        auctionService.jobDone(aucSeq);
+        return "redirect:/auction/getAuction?aucSeq="+aucSeq;
+    }
 
     //=================================================== 경매 등록 ==================================================//
     //경매 등록 시작
@@ -295,11 +314,10 @@ public class AuctionController {
     @PostMapping("/register")
     public String registerPost(AuctionListDTO dto, HttpServletRequest request) {
 
-        //log.info("register " + dto.toString());
         String date = request.getParameter("doDateT");
-        System.out.println(date);
         LocalDateTime dodateTime = LocalDateTime.parse(date);
         dto.setDoDateTime(dodateTime);
+
         //새로 추가된 엔티티번호 받아서 출력하고 싶으면 하던가,,,,
         Long aucSeq = auctionService.register(dto);
         //log.info(aucSeq);

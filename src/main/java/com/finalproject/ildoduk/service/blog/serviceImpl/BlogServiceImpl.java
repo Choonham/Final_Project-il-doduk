@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.QBlog;
+import com.finalproject.ildoduk.entity.member.QMember;
 import com.finalproject.ildoduk.repository.blog.BlogRepository;
 import com.finalproject.ildoduk.service.blog.service.BlogService;
 import com.querydsl.core.BooleanBuilder;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -46,7 +48,8 @@ public class BlogServiceImpl implements BlogService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QBlog qBlog = QBlog.blog;
 
-        booleanBuilder.and(qBlog.writer.contains(writer));
+
+        booleanBuilder.and(qBlog.writer.id.contains(writer));
 
         BooleanBuilder searchBuilder = getSearch(requestDTO);
 
@@ -74,6 +77,12 @@ public class BlogServiceImpl implements BlogService {
     public int deletePost(long postNo) {
         repository.deleteById(postNo);
         return 1;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTempPost(String content) {
+        repository.deleteAllByContent(content);
     }
 
     private BooleanBuilder getSearch(PageRequestDTO requestDTO){

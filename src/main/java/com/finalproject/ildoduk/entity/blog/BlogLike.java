@@ -1,5 +1,6 @@
 package com.finalproject.ildoduk.entity.blog;
 
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class BlogLike {
     @ManyToOne
     private Blog blog;
 
-    @Column(length=30, nullable = false)
-    private String liker;
+    @ManyToOne
+    private Member liker;
 
 }

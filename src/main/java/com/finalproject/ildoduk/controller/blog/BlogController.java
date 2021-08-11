@@ -7,6 +7,7 @@ import com.finalproject.ildoduk.dto.blog.*;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
+import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
@@ -83,10 +84,13 @@ public class BlogController {
 
     //================================ 포스트 관련 시작======================================//
     // 글 목록(아이디별)
-    @GetMapping("/blogList")
-    public void list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, String writer, HttpSession session) {
+    @RequestMapping(value = "/blogList", method = RequestMethod.GET)
+    public void list(String writer, @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session) {
+        blogService.deleteTempPost("tempContent");
+
         if(writer.equals("myBlog")){
             MemberDto memberDto = (MemberDto)session.getAttribute("user");
+            log.info(pageRequestDTO.getKeyword());
             String sessionId = memberDto.getId();
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
@@ -98,6 +102,14 @@ public class BlogController {
         }
     }
 
+    // 글 검색
+    @ResponseBody
+    @RequestMapping(value = "/blogSearch", method = RequestMethod.GET)
+    public PageResultsDTO<BlogDTO, Blog> search(@RequestParam("writer") String writer, @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO) {
+        return blogService.getList(writer, pageRequestDTO);
+    }
+
+
     // 글 상세보기
     @GetMapping("/detail")
     public void detail(long postNo, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, TempPageRequestDTO tempPageDTO, Model model, HttpSession session){
@@ -106,11 +118,11 @@ public class BlogController {
         // log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
         List<String> likerList= blogLikeService.getLiker(postNo);
         int likes = blogLikeService.getLikes(postNo);
-        String writer = blogDTO.getWriter();
+        String writer = blogDTO.getWriter().getId();
 
-        MemberDto writerInfoMember = memberService.userIdCheck(writer);
+        //MemberDto writerInfoMember = memberService.userIdCheck(writer);
         HelperInfoDTO writerInfoHelper = helperInfoService.helperFindById(writer);
-
+        //log.info(writerInfoMember.getPhoto());
 
         model.addAttribute("likerList", likerList);
         model.addAttribute("likes", likes);
@@ -118,7 +130,7 @@ public class BlogController {
         model.addAttribute("comments", blogCommentDTO);
         model.addAttribute("listPageInfo", tempPageDTO);
 
-        model.addAttribute("writerInfoMember", writerInfoMember);
+        //model.addAttribute("writerInfoMember", writerInfoMember);
         model.addAttribute("writerInfoHelper", writerInfoHelper);
 
     }
@@ -131,6 +143,9 @@ public class BlogController {
         String sessionId = memberDto.getId();
 
         List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+        Member member = Member.builder()
+                .id(sessionId)
+                .build();
 
         if(!doneList.isEmpty()){
             AuctionBiddingDTO doneJob = doneList.get(0);
@@ -140,7 +155,7 @@ public class BlogController {
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")
                 .content("tempContent")
-                .writer("tempWriter")
+                .writer(member)
                 .build();
 
         blogService.registerPost(dto);
@@ -153,6 +168,7 @@ public class BlogController {
     // 글 쓰기 완료 후, 리다이렉트 기능
     @PostMapping(value = "/post")
     public String temp(BlogDTO dto, Model model) {
+        log.info(dto.getContent());
         blogService.registerPost(dto);
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
         return result;

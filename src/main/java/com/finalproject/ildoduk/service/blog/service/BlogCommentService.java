@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.blog.BlogCommentDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
+import com.finalproject.ildoduk.entity.member.Member;
 
 public interface BlogCommentService {
 
@@ -24,13 +25,18 @@ public interface BlogCommentService {
     String modifyComment(BlogCommentDTO dto);
 
     default BlogComment dtoToEntity(BlogCommentDTO dto){
+
         Blog blog = Blog.builder().postNo(dto.getPostNo()).build();
+
+        Member writer = Member.builder()
+                .id(dto.getWriter().getId())
+                .build();
 
         BlogComment entity = BlogComment.builder()
                 .commentNo(dto.getCommentNo())
                 .blog(blog)
                 .content(dto.getContent())
-                .writer(dto.getWriter())
+                .writer(writer)
                 .build();
         return entity;
     }
@@ -41,6 +47,7 @@ public interface BlogCommentService {
                 .postNo(entity.getBlog().getPostNo())
                 .content(entity.getContent())
                 .writer(entity.getWriter())
+                .regDate(entity.getRegDate())
                 .build();
         return dto;
     }
