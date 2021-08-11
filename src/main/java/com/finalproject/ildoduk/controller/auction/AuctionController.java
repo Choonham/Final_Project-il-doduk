@@ -219,7 +219,8 @@ public class AuctionController {
         Member user = auctionService.getAuction(aucSeq).get().getUser();
 
         //옥션 정보
-        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+        AuctionList auctionList = auctionService.getAuction(aucSeq).get();
+        model.addAttribute("auction", auctionList);
 
         //옥션 유저 값
         model.addAttribute("u", user);
@@ -238,6 +239,23 @@ public class AuctionController {
         }
         model.addAttribute("exist", exist);
 
+        //==========경매차액 리스트 생성 및 보내기=========//
+        int startPrice = auctionList.getStartPrice();
+        int auctionGap = auctionList.getAuctionGap();
+
+        //차액리스트 갯수
+        int n = ((startPrice - 5000) / auctionGap);
+
+        //차액리스트 생성
+        ArrayList<Integer> gaps = new ArrayList<Integer>();
+        //리스트에 값 넣기
+        for(int i=0; i<n; i++){
+            int gap = i*auctionGap;
+            gaps.add(gap);
+        }
+
+        //차액리스트 전달
+        model.addAttribute("gaps",gaps);
     }
 
     //경매상세보기 - 매칭 완료 또는 일 수행 완료

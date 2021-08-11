@@ -233,9 +233,7 @@
 			var check = confirm("미션 경매는 등록 후 수정하실 수 없습니다. 경매를 등록하시겠습니까?");
 
 			if(check === true){
-				/*$("#registerForm").attr("method", "POST");
-				$("#registerForm").attr("action", "/auction/register");*/
-				//$("#registerForm").submit();
+
 				$("#sub").trigger('click');
                 alert("경매가 등록 되었습니다. 미션 시작 30분 전까지 입찰을 해주세요.")
 
@@ -289,23 +287,6 @@
 				} else {
 					document.getElementById("sample4_extraAddress").value = '';
 				}
-
-				/*                var guideTextBox = document.getElementById("guide");
-                                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                                if(data.autoRoadAddress) {
-                                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                                    guideTextBox.style.display = 'block';
-
-                                } else if(data.autoJibunAddress) {
-                                    var expJibunAddr = data.autoJibunAddress;
-                                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                                    guideTextBox.style.display = 'block';
-                                } else {
-                                    guideTextBox.innerHTML = '';
-                                    guideTextBox.style.display = 'none';
-                                }*/
-
 			}
 		}).open();
 	}
