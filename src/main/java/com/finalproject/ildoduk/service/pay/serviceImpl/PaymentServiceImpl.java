@@ -121,17 +121,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.plusPointBidSuccess(difference,userId);
     }
     //3.
-    //경매 완료시에 헬퍼 포인트 차감
+    //경매 완료시에 헬퍼 포인트
     //이때 친절 점수에따라 중간 수수료 다르게 계산
     @Override
-    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto) {
-
-
-        log.info("헬퍼쪽 포인트 업데이트 시작");
-
-        //String userID = dto.getId();
+    public void doneAuction(Long aucSeq) {
         //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
         // Member의 친절 점수로 : 5점 만점에 3.5이상일 경우 우대 수수료 적용??
+
 
         //int point = dto.getPoint();
         int total = 0;
