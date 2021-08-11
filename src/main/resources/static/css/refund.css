@@ -3,7 +3,10 @@
     padding: 0;
     background-color: #FAFAFA;
 }
-
+.site-section{
+    padding-top: 15px;
+    padding-bottom: 0;
+}
 #refund_container {
    margin: 4px;
     font-size: 17px;
@@ -37,6 +40,10 @@
 
 #refund_user #userID {
     margin-left: 18px;
+    width: 210px;
+}
+#refund_user #name{
+    margin-left: 35px;
 }
 
 #refund_terms {
@@ -47,5 +54,14 @@
     margin: 10px;
     line-height: 25px;
 
+}
+#refund_checkBtn{
+    position: relative;
+    left: 86%;
+}
+
+#checkTerms {
+    position: relative;
+    right: 15px;
 }
 

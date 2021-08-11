@@ -71,9 +71,9 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
                                  class="img-fluid" width="80" height="80"><br>
-                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
+                            <span th:href="@{#}" class="badge badge-success" >헤르메스</span>
                             <!--대표 이미지 삽입 예정-->
                         </div>
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -96,7 +96,7 @@
                 <!-- 내역이 하나도 없을 경우 포스팅 -->
                 <div th:if="${matchedAuctionList.getDtoList().size() == 0}">
                     <ul class="job-listings mb-5" th:align="center">
-                        <b> 낙찰이 완료 된 내역이 없습니다! 간편하게 일도둑을 이용해 보세요.</b>
+                        <b> 낙찰이 완료 된 내역이 없습니다! 간편하게 헤르메스를 이용해 보세요.</b>
                     </ul>
                 </div>
 
@@ -109,7 +109,7 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <!--헬퍼 이미지 및 비즈니스 카드 -->
                             <div class="job-listing-logo" th:align="center">
-                                <img th:src="@{dto.helperPhoto}" alt="ildoduk"
+                                <img th:src="@{dto.helperPhoto}" alt="hermes"
                                      class="img-fluid" width="80" height="80">
                                 <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
 <!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
@@ -179,9 +179,9 @@
                 <ul class="job-listings mb-5">
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <div class="job-listing-logo" th:align="center">
-                            <img th:src="@{/img/ildoduk_temp.png}" alt="ildoduk"
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
                                  class="img-fluid" width="80" height="80"><br>
-                            <span th:href="@{#}" class="badge badge-success" >일도둑</span>
+                            <span th:href="@{#}" class="badge badge-success" >헤르메스</span>
                             <!--대표 이미지 삽입 예정-->
                         </div>
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -217,7 +217,7 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <!--헬퍼 이미지 및 비즈니스 카드 -->
                             <div class="job-listing-logo" th:align="center">
-                                <img th:src="@{dto.helperPhoto}" alt="ildoduk"
+                                <img th:src="@{dto.helperPhoto}" alt="hermes"
                                      class="img-fluid" width="80" height="80">
                                 <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
 <!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>

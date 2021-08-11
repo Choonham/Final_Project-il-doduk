@@ -36,43 +36,27 @@
             <div class="row mb-5">
                 <div class="col-lg-12">
 
+
+                    <div>
+                        <h2 class="h2 text-primary"><b>경매 미션 등록</b></h2>
+                    </div>
+
                     <!-- 입력창 시작 : 우선 간단하게 -->
-                    <form class="p-4 p-md-5 border rounded" th:action="@{/auction/register}" th:method="post">
-                        <!-- 부트 스트랩 -->
-
-                        <!-- 제목 부분 -->
-                        <div class="row align-items-center mb-5">
-                            <div class="col-lg-8 mb-4 mb-lg-0">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h2>경매 미션 등록</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="#" class="btn btn-block btn-primary btn-md"><span
-                                                class="icon-open_in_new mr-2"></span>미리보기</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <form class="p-4 p-md-5 border rounded" id="registerForm" th:action="@{/auction/register}" th:method="post">
                         <!-- 유저 아이디 히든값으로 보내기 -->
-                        <input th:type="hidden" name="user" th:value="${session.user.id}">
-
-<!-------------------------------------------------경고문 삽입 예정------------------------------------------------------->
-                        <div>
-                            미션 시작 시간 30분 전까지 낙찰을 하지 않을 경우, 자동으로 경매가 삭제 됩니다.
+                        <input th:type="hidden" name="user" id="user" th:value="${session.user.id}">
+                        <!-------------------------------------------------경고문 삽입------------------------------------------------------->
+                        <div class="text-center">
+                            미션 시작 시간 30분 전까지 낙찰을 하지 않을 경우, 자동으로 경매가 파기 됩니다.<br>
                             미션 등록 후 꼭 낙찰을 해주세요.
                         </div>
-
+                        <br>
                         <!--실제 입력 시작-->
                         <!-- 달력 -->
                         <div class="form-group">
                             <label for="dd">미션 날짜와 시간</label><br>
                             <input th:type="datetime-local" th:name="doDateT" id="dd" th:min="${td}"
-                                   th:required="true"/>
+                                   th:required="required"/>
                         </div>
 
                         <!-- 카테고리 -->
@@ -80,7 +64,7 @@
                             <label for="category">카테고리</label>
                             <select class="form-control" name="category" id="category" data-style="btn-black"
                                     data-width="100%"
-                                    data-live-search="true" th:required="true">
+                                    data-live-search="true" th:required="required">
                                 <option disabled selected>미션 유형을 선택해주세요.</option>
                                 <option th:value="1"> 구매대행</option>
                                 <option th:value="2"> 홈케어</option>
@@ -93,19 +77,19 @@
                         <div class="form-group">
                             <label for="job-title">미션 제목</label>
                             <input type="text" class="form-control" id="job-title" placeholder="미션 제목을 입력해주세요"
-                                   th:required="true" th:name="title">
+                                   required="true" th:name="title">
                         </div>
 
                         <!-- 콘텐츠 -->
                         <!-- summernote 에디터 사용 -->
-                        <textarea class="summernote" id="editordata" th:name="content" th:required="true"></textarea>
+                        <textarea class="summernote" id="editordata" th:name="content" th:required="required"></textarea>
 
 
                         <br>
                         <div class="form-group">
                             <label>미션 주소</label><br>
                             <!-- 주소 API -->
-                            <input type="text" id="sample4_postcode" placeholder="우편번호" th:required="true">
+                            <input type="text" id="sample4_postcode" placeholder="우편번호" th:required="required">
                             <input type="button" class="btn btn-md btn-light" th:align="right"
                                    onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
                             <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
@@ -126,7 +110,7 @@
                         <div class="form-group">
                             <label>미션 소요 시간</label><br>
                             * 최소 시간은 30분 입니다.<br>
-                            <input th:type="number" name="predictHour" th:min="30" th:max="480" th:required="true">분
+                            <input th:type="number" name="predictHour" th:min="30" th:max="480" th:required="required">분
                         </div>
 
                         <br>
@@ -135,7 +119,7 @@
                         <div class="form-group">
                             <label for="level">미션 난이도 </label>
                             <select class="form-control" name="level" id="level" data-style="btn-black"
-                                    data-width="100%" data-live-search="true" th:required="true">
+                                    data-width="100%" data-live-search="true" th:required="required">
                                 <option disabled selected>미션의 난이도를 선택해주세요.</option>
                                 <option th:value="1"> 쉬움</option>
                                 <option th:value="2"> 보통</option>
@@ -148,7 +132,7 @@
                         <div class="form-group">
                             <label>경매 시작가</label><br>
                             * 최소 경매 금액은 5000원 입니다.<br>
-                            <input th:type="number" name="startPrice" th:min="5000" th:required="true">원
+                            <input th:type="number" name="startPrice" th:min="5000" th:required="required">원
                         </div>
 
                         <br><br>
@@ -156,7 +140,7 @@
                         <div class="form-group">
                             <label for="auctionGap">미션 경매 단위</label>
                             <select class="form-control" name="auctionGap" id="auctionGap" data-style="btn-black"
-                                    data-width="100%" data-live-search="true" th:required="true">
+                                    data-width="100%" data-live-search="true" th:required="required">
                                 <option disabled selected>* 설정하신 단위 기준으로 경매가 진행됩니다.</option>
                                 <option th:value="500"> 500원</option>
                                 <option th:value="1000"> 1000원</option>
@@ -193,10 +177,15 @@
                             </div>
                         </div>
 
-                        <br><br>
-
+                        <br>
+                        <div class="text-center">
+                            한 번 등록된 경매는 수정하실 수 없습니다.<br>
+                            신중하게 검토 후 등록해주세요
+                        </div>
+                        <br>
                         <div class="col-6">
-                            <button id="submit-btn" class="btn btn-block btn-primary btn-md">저장하기</button>
+                            <span id="save" class="btn btn-block btn-primary btn-md">저장하기</span>
+                            <button id="sub" type="submit" class="hide"></button>
                         </div>
                     </form>
 
@@ -235,50 +224,73 @@
 <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
 <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
 <script th:inline="javascript">
-    function sample4_execDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function (data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
-                var extraRoadAddr = ''; // 참고 항목 변수
 
-                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                    extraRoadAddr += data.bname;
-                }
-                // 건물명이 있고, 공동주택일 경우 추가한다.
-                if (data.buildingName !== '' && data.apartment === 'Y') {
-                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                }
-                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                if (extraRoadAddr !== '') {
-                    extraRoadAddr = ' (' + extraRoadAddr + ')';
-                }
+	<!-- 글 등록 시 확인 얼럿 -->
+	$(document).ready(function (){
 
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample4_postcode').value = data.zonecode;
-                document.getElementById("sample4_roadAddress").value = roadAddr;
-                //document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+		$('#save').click(function () {
+			var check = confirm("미션 경매는 등록 후 수정하실 수 없습니다. 경매를 등록하시겠습니까?");
 
-                /*sido, sigungu 값 가져와서 hidden으로 보내기 */
-                var sido = data.sido;
-                var sigungu = data.sigungu;
-                document.getElementById("sido").value = data.sido;
-                document.getElementById("sigungu").value = data.sigungu;
-                document.getElementById("address").value = data.address;
+			if(check === true){
+				/*$("#registerForm").attr("method", "POST");
+				$("#registerForm").attr("action", "/auction/register");*/
+				//$("#registerForm").submit();
+				$("#sub").trigger('click');
+                alert("경매가 등록 되었습니다. 미션 시작 30분 전까지 입찰을 해주세요.")
 
-                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-                if (roadAddr !== '') {
-                    document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-                } else {
-                    document.getElementById("sample4_extraAddress").value = '';
-                }
+			}else{
+				this.close();
+			}
 
-                /*                var guideTextBox = document.getElementById("guide");
+		});
+	});
+
+
+	function sample4_execDaumPostcode() {
+		new daum.Postcode({
+			oncomplete: function (data) {
+				// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+				// 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+				// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+				var roadAddr = data.roadAddress; // 도로명 주소 변수
+				var extraRoadAddr = ''; // 참고 항목 변수
+
+				// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+				// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+				if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+					extraRoadAddr += data.bname;
+				}
+				// 건물명이 있고, 공동주택일 경우 추가한다.
+				if (data.buildingName !== '' && data.apartment === 'Y') {
+					extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+				}
+				// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+				if (extraRoadAddr !== '') {
+					extraRoadAddr = ' (' + extraRoadAddr + ')';
+				}
+
+				// 우편번호와 주소 정보를 해당 필드에 넣는다.
+				document.getElementById('sample4_postcode').value = data.zonecode;
+				document.getElementById("sample4_roadAddress").value = roadAddr;
+				//document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+
+				/*sido, sigungu 값 가져와서 hidden으로 보내기 */
+				var sido = data.sido;
+				var sigungu = data.sigungu;
+				document.getElementById("sido").value = data.sido;
+				document.getElementById("sigungu").value = data.sigungu;
+				document.getElementById("address").value = data.address;
+
+				// 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+				if (roadAddr !== '') {
+					document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+				} else {
+					document.getElementById("sample4_extraAddress").value = '';
+				}
+
+				/*                var guideTextBox = document.getElementById("guide");
                                 // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
                                 if(data.autoRoadAddress) {
                                     var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
@@ -294,126 +306,126 @@
                                     guideTextBox.style.display = 'none';
                                 }*/
 
-            }
-        }).open();
-    }
+			}
+		}).open();
+	}
 
-    // 양식 제출 버튼 시작
-    var button = $("#submit-btn");
+	// 양식 제출 버튼 시작
+	var button = $("#submit-btn");
 
-    button.click(function () {
-        $("#postForm").submit();
-    });
-    // 끝
+	button.click(function () {
+		$("#postForm").submit();
+	});
+	// 끝
 
-    // 썸네일 이미지의 이름을 저장할 변수
-    var thumbnail = $("#thumbnail");
+	// 썸네일 이미지의 이름을 저장할 변수
+	var thumbnail = $("#thumbnail");
 
-    // summernote 에디터 설정 시작, 파일 업로드 / 삭제를 위한 콜벡 함수 포함
-    $('.summernote').summernote({
-        height: 500,
-        lang: "ko-KR",
-        focus: true,
-        dialogsInBody: true,
-        toolbar: [
-            // 글꼴 설정
-            ['fontname', ['fontname']],
-            // 글자 크기 설정
-            ['fontsize', ['fontsize']],
-            // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-            ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-            // 글자색
-            ['color', ['forecolor', 'color']],
-            // 표만들기
-            ['table', ['table']],
-            // 글머리 기호, 번호매기기, 문단정렬
-            ['para', ['ul', 'ol', 'paragraph']],
-            // 줄간격
-            ['height', ['height']],
-            // 그림첨부, 링크만들기, 동영상첨부
-            ['insert', ['picture', 'link', 'video']],
-            // 코드보기, 확대해서보기, 도움말
-            ['view', ['codeview', 'fullscreen', 'help']]
-        ],
-        // 추가한 글꼴
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '돋음체', '바탕체'],
-        // 추가한 폰트사이즈
-        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
-        callbacks: {
+	// summernote 에디터 설정 시작, 파일 업로드 / 삭제를 위한 콜벡 함수 포함
+	$('.summernote').summernote({
+		height: 500,
+		lang: "ko-KR",
+		focus: true,
+		dialogsInBody: true,
+		toolbar: [
+			// 글꼴 설정
+			['fontname', ['fontname']],
+			// 글자 크기 설정
+			['fontsize', ['fontsize']],
+			// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+			['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+			// 글자색
+			['color', ['forecolor', 'color']],
+			// 표만들기
+			['table', ['table']],
+			// 글머리 기호, 번호매기기, 문단정렬
+			['para', ['ul', 'ol', 'paragraph']],
+			// 줄간격
+			['height', ['height']],
+			// 그림첨부, 링크만들기, 동영상첨부
+			['insert', ['picture', 'link', 'video']],
+			// 코드보기, 확대해서보기, 도움말
+			['view', ['codeview', 'fullscreen', 'help']]
+		],
+		// 추가한 글꼴
+		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '돋음체', '바탕체'],
+		// 추가한 폰트사이즈
+		fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
+		callbacks: {
 
-            onMediaDelete: function (files, editor, welEditable) {
-                for (var i = files.length - 1; i >= 0; i--) {
-                    deleteFile($(files[i]).attr("src"), this);
-                }
-            },
+			onMediaDelete: function (files, editor, welEditable) {
+				for (var i = files.length - 1; i >= 0; i--) {
+					deleteFile($(files[i]).attr("src"), this);
+				}
+			},
 
-            onImageUpload: function (files, editor, welEditable) {
-                // 파일 업로드(다중업로드를 위해 반복문 사용)
-                for (var i = files.length - 1; i >= 0; i--) {
-                    sendFile(files[i], this);
-                }
-            }
-        }
-    });
-    // summernote 에디터 설정 끝
+			onImageUpload: function (files, editor, welEditable) {
+				// 파일 업로드(다중업로드를 위해 반복문 사용)
+				for (var i = files.length - 1; i >= 0; i--) {
+					sendFile(files[i], this);
+				}
+			}
+		}
+	});
+	// summernote 에디터 설정 끝
 
-    // 양식에서 파일을 삭제했을 때, 서버의 파일과 DB에 파일을 삭제하기 위한 ajax
-    function deleteFile(filePathName, el) {
-        var form_data = new FormData();
-        form_data.append('filePathName', filePathName);
-        $.ajax({
-            data: form_data,
-            type: "POST",
-            url: '/auction/fileDelete',
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                if (thumbnail.attr("value") != null) {
-                    thumbnail.attr(
-                        "value", null
-                    )
-                }
-                console.log(data.removedFileName)
-                const itemToFind = tempFileList.find(function (item) {
-                    return item.savedFileName === data.removedFileName
-                });
-                const idx = tempFileList.indexOf(itemToFind);
-                if (idx > -1) tempFileList.splice(idx, 1);
-                console.log(tempFileList);
-            }
-        });
-    }
+	// 양식에서 파일을 삭제했을 때, 서버의 파일과 DB에 파일을 삭제하기 위한 ajax
+	function deleteFile(filePathName, el) {
+		var form_data = new FormData();
+		form_data.append('filePathName', filePathName);
+		$.ajax({
+			data: form_data,
+			type: "POST",
+			url: '/auction/fileDelete',
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				if (thumbnail.attr("value") != null) {
+					thumbnail.attr(
+						"value", null
+					)
+				}
+				console.log(data.removedFileName)
+				const itemToFind = tempFileList.find(function (item) {
+					return item.savedFileName === data.removedFileName
+				});
+				const idx = tempFileList.indexOf(itemToFind);
+				if (idx > -1) tempFileList.splice(idx, 1);
+				console.log(tempFileList);
+			}
+		});
+	}
 
-    // 끝
+	// 끝
 
-    // 양식에 파일을 올렸을 때, 서버와 DB에 파일을 저장할 ajax
-    function sendFile(file, el) {
-        var form_data = new FormData();
-        form_data.append('file', file);
-        form_data.append('postNo', $("#postNo").val());
-        $.ajax({
-            data: form_data,
-            type: "POST",
-            url: '/auction/fileUpload',
-            cache: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-            processData: false,
-            success: function (data) {
-                if (thumbnail.attr("value") == null) {
-                    thumbnail.attr("value", data.savedFileName);
-                }
-                $(el).summernote('editor.insertImage', data.url);
-                tempFileList.push({
-                    savedFileName: data.savedFileName,
-                    originalFileName: data.originalFileName
-                });
-            }
-        });
-    }
+	// 양식에 파일을 올렸을 때, 서버와 DB에 파일을 저장할 ajax
+	function sendFile(file, el) {
+		var form_data = new FormData();
+		form_data.append('file', file);
+		form_data.append('postNo', $("#postNo").val());
+		$.ajax({
+			data: form_data,
+			type: "POST",
+			url: '/auction/fileUpload',
+			cache: false,
+			contentType: false,
+			enctype: 'multipart/form-data',
+			processData: false,
+			success: function (data) {
+				if (thumbnail.attr("value") == null) {
+					thumbnail.attr("value", data.savedFileName);
+				}
+				$(el).summernote('editor.insertImage', data.url);
+				tempFileList.push({
+					savedFileName: data.savedFileName,
+					originalFileName: data.originalFileName
+				});
+			}
+		});
+	}
 
-    // 끝
+	// 끝
 </script>
 
 

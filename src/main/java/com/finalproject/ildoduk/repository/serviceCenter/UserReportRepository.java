@@ -6,6 +6,7 @@ import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -14,4 +15,13 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     Optional<UserReport> findAllByIdId(String id);
 
     Page<UserReport> findAllByIdId(String id, Pageable pageable);
+
+    //reportState = 1
+    @Query(value = "SELECT u FROM UserReport u WHERE u.reportState = '1'")
+    Page<UserReport> findAllOne(Pageable pageable);
+
+    //reportState = 2
+    @Query(value = "SELECT u FROM UserReport u WHERE u.reportState = '2'")
+    Page<UserReport> findAllTwo(Pageable pageable);
+
 }

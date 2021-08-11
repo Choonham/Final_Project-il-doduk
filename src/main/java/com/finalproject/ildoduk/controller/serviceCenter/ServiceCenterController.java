@@ -3,16 +3,19 @@ package com.finalproject.ildoduk.controller.serviceCenter;
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerBoardDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.serviceCenter.CustomerBoard;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import com.finalproject.ildoduk.service.auction.service.AuctionService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import com.finalproject.ildoduk.service.serviceCenter.service.CustomerAnswerService;
@@ -45,6 +48,7 @@ public class ServiceCenterController {
     private final CustomerBoardService customerBoardService;
     private final CustomerAnswerService customerAnswerService;
     private final UserReportService userReportService;
+    private final HelperInfoService helperInfoService;
 
 
     //결제 및 거래 조회 페이지로 이동
@@ -81,13 +85,10 @@ public class ServiceCenterController {
     public void toRefund(@RequestParam("pointNo") Long pointNo, Model model){
 
         PaymentDTO dto = paymentService.toRefund(pointNo);
-        //해당 유저의 총포인트 값을 같이 넘겨준다
         MemberDto memberDto = memberService.userIdCheck(dto.getUserId());
 
-        int point = dto.getTotalPoint();
-
         model.addAttribute("result",dto);
-        model.addAttribute("userPoint", memberDto.getPoint());
+        model.addAttribute("user", memberDto);
     }
 
     //환불 시작(POST)
@@ -97,7 +98,7 @@ public class ServiceCenterController {
                            @RequestParam("totalPoint") int totalPoint){
         //여기서 해야할 일 1. 결제 이력 y -> n 으로 수정 (완료)
         //              2. 해당 사용자 넘어온 캐쉬만큼 포인트 뺴기 (완료)
-        //              3. 조건 검사 -> 보유 캐쉬보다 많을 경우에만 아래 로직 실행
+        //              3. 조건 검사 -> 보유 캐쉬보다 많을 경우에만 (완료) -> 스크립트에서 실행
 
         PaymentDTO dto = new PaymentDTO();
         //변경할 값의 번호
@@ -112,7 +113,7 @@ public class ServiceCenterController {
         user.setId(member.getId());
         user.setPoint(totalPoint);
 
-        memberService.minusPonit(user);
+        memberService.minusPoint(user);
 
         return "/index";
     }
@@ -154,13 +155,13 @@ public class ServiceCenterController {
         model.addAttribute("cusBoard",result);
     }
 
-//문의작성 폼으로 이동
+    //문의작성 폼으로 이동
     @GetMapping("/customerWriteForm")
     public void cusWriteForm(){
     }
 
 
-//문의글 작성
+    //문의글 작성
     @PostMapping("/postCusWrite")
     public String postWriteForm(CustomerBoardDTO dto){
         //넘어오는 데이터 : 제목, 내용, 작성자, 비밀글 여부, (비밀글일시 비밀번호)
@@ -170,7 +171,7 @@ public class ServiceCenterController {
     }
 
 
-//문의글 상세 보기
+    //문의글 상세 보기
     @GetMapping("/customerGetBoard")
     public String getBoard(CustomerBoardDTO dto
                         ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model,RedirectAttributes redirectAttributes){
@@ -228,7 +229,7 @@ public class ServiceCenterController {
     }
 
 
- //문의글 (비공개글) 열기
+     //문의글 (비공개글) 열기
     @PostMapping("/customerGetBoard")
     public void postGetBoard(CustomerBoardDTO dto,@ModelAttribute("requestDTO") PageRequestDTO requestDTO,Model model){
 
@@ -242,7 +243,7 @@ public class ServiceCenterController {
 
     }
 
-//문의글 수정페이지 이동
+    //문의글 수정페이지 이동
     @GetMapping("/customerUpdateBoard")
     public void updateBoard(@RequestParam("cusNo") Long cusNo
             ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
@@ -253,7 +254,7 @@ public class ServiceCenterController {
         model.addAttribute("board",customerBoardDTO);
     }
 
-//게시글 수정
+    //게시글 수정
     @PostMapping("/update")
     public String update(CustomerBoardDTO dto){
        MemberDto memberDto = memberService.userNickCheck(dto.getCusWriter());
@@ -434,10 +435,11 @@ public class ServiceCenterController {
     //관리자로 접속시에 신고 상황 업데이트
     @GetMapping("/reportBoardMgr")
     public String reportBoardMgr(PageRequestDTO pageRequestDTO,Model model){
+        PageResultsDTO<UserReportDTO, UserReport> reportStateOne = userReportService.getStateOne(pageRequestDTO);
+        PageResultsDTO<UserReportDTO, UserReport> reportStateTwo = userReportService.getStateTwo(pageRequestDTO);
 
-        PageResultsDTO<UserReportDTO, UserReport> reportList =  userReportService.getAllReport(pageRequestDTO);
-
-        model.addAttribute("reportList",reportList);
+        model.addAttribute("reportStateOne",reportStateOne);
+        model.addAttribute("reportStateTwo",reportStateTwo);
 
         return "/manager/badUserReportMgr";
     }
@@ -445,13 +447,57 @@ public class ServiceCenterController {
     @GetMapping("/reportStateUpdate")
     public String reportStateUpdate(Long reportNo,UserReportDTO userReportDTO){
         log.info("관리자 : 신고 버튼");
+        //신고 상황 처리
         userReportDTO.setReportNo(reportNo);
         userReportDTO.setReportState("2");
 
         userReportService.updateReportState(userReportDTO);
 
+        //신고 당한 유저 -> kindness를 깍아야하나..
+
+
+
         return "redirect:/serviceCenter/reportBoardMgr";
     }
 
+//------ 유저  <-> 헬퍼 전환 버튼
+    @GetMapping("/changeState")
+    public String changeState(HttpSession session){
+        //먼저 helperInfo의 agreeHelper를 체크해서 2일 경우에만 해당 로직 실행?? 버튼
+        String id = (String)session.getAttribute("user");
+        HelperInfoDTO helperInfoDTO = new HelperInfoDTO();
+
+        helperInfoDTO.setMemberId(id);
+        HelperInfoDTO info = helperInfoService.helperInfo(helperInfoDTO);
+
+        MemberDto memberDto = memberService.userIdCheck(id);
+
+        if(info.getAgreeHelper() == 2){
+            //member state 가 1 일 경우 -> 2로
+            if(memberDto.getState() == 1){
+                memberDto.setState(2);
+                memberService.updateState(memberDto);
+            } else {
+                //2일 경우 -> 1로
+                memberDto.setState(1);
+                memberService.updateState(memberDto);
+            }
+        }
+
+        return "/index";
+    }
+
+//-----------  FAQ ------------------------
+    //사용자 FAQ
+    @GetMapping("/faq")
+    public void faq(){
+
+    }
+
+    //관리자 FAQ
+    @GetMapping("/faqMgr")
+    public void faqMgr(){
+
+    }
 
 }

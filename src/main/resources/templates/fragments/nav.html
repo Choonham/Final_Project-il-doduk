@@ -45,10 +45,11 @@
                                 contentType: 'application/json; charset=utf8',
                                 dataType: 'text',
                                 success: function(data){
+                                    //console.log(data);  //컨트롤러에서 return 된 값
+                                    //location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동
+
                                     console.log(data);  //컨트롤러에서 return 된 값
-
                                     location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동
-
                                 },error : function(jqXHR, textStatus){
                                     alert(textStatus);
                                 }
@@ -82,7 +83,9 @@
     <div class="site-navbar mt-3">
         <div class="container-fluid">
             <div class="row align-items-center">
-                <div class="site-logo col-6"><a th:href="@{/}">일도둑</a></div>
+                <div class="site-logo col-6">
+                    <a th:href="@{/}"><img th:src="@{/https://cdn.discordapp.com/attachments/861512084009385988/874223984424656916/f64fbc940e43a81b.png}"></a>
+                </div>
 
                 <nav class="mx-auto site-navigation">
                     <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
@@ -100,6 +103,7 @@
                         <li class="has-children">
                             <a href="" >고객센터</a>
                             <ul class="dropdown" th:if="${session.user != null}">
+                                <li><a th:href="@{/serviceCenter/faq}">FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
                                 <li><a th:href="@{/serviceCenter/paymentHistory}">조회</a></li>
                                 <li><a th:href="@{/serviceCenter/badUserReport}">사용자 신고</a></li>
@@ -107,12 +111,10 @@
                         </li>
 
                         <div th:if = "${session.user == null}">
-                            <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> 헬퍼와 일반 사용자 구분해야합니다.</a></li>
                             <li class="d-lg-none"><a th:href="@{/member/kakao}">로그인</a></li>
                         </div>
 
                         <div th:if = "${session.user != null}">
-                            <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> 헬퍼와 일반 사용자 구분해야합니다.</a></li>
                             <li class="d-lg-none"><a th:href="@{/member/userLogout}">로그아웃</a></li>
                         </div>
 

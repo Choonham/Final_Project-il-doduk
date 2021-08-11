@@ -1,10 +1,12 @@
 package com.finalproject.ildoduk.repository.member;
 
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.member.QHelperInfo;
+import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +20,9 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
 
     Optional<HelperInfo> findByMemberId(Member memberId);
 
-    int countHelperInfoByMemberId(String memeberId);
+    Optional<HelperInfo> findByMemberId_Id(String memeberId);
+
+    int countHelperInfoByMemberId(Member memeberId);
 
 
     // =====================BLOG==================//
@@ -30,5 +34,17 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     @Query(value = "select count(h) from HelperInfo h where h.memberId.id in (select distinct b.helper.id from BiddingList b where b.aucSeq.aucSeq in (select a.aucSeq from AuctionList a where a.sigungu = :sigungu))")
     int countDistinctBySigungu(String sigungu);
 
+    //멤버, 헬퍼 정보 전체 조인인
+    @Query(value = "SELECT h, m FROM HelperInfo  h join Member m on h.memberId = m.id WHERE h.memberId = ?1")
+    MemberHelperInfoDTO joinHelperInfo(String memberId);
 
+    //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")
+    Page<HelperInfo> findAllOne(Pageable pageable);
+    //헬퍼 신청 agreeHelper : 2(헬퍼 승인 완료)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 2")
+    Page<HelperInfo> findAllTwo(Pageable pageable);
+    //헬퍼 신청 agreeHelper : 3(헬퍼 신청 반려)
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 3")
+    Page<HelperInfo> findAllThree(Pageable pageable);
 }

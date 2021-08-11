@@ -9,6 +9,7 @@
 
 <body id="top">
 
+
 <div th:if = "${session.user != null}">
 
     <div th:if="${session.user.state == 1}">
@@ -51,7 +52,6 @@
             </div>
         </div>
     </div>
-
     <a href="#next" class="scroll-button smoothscroll">
         <span class=" icon-keyboard_arrow_down"></span>
     </a>

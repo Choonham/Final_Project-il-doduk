@@ -43,7 +43,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     }
 
     @Override
-    public int helperRegisterIdCheck(String memberId) {
+    public int helperRegisterIdCheck(Member memberId) {
 
         int cnt = repository.countHelperInfoByMemberId(memberId);
 
@@ -65,6 +65,18 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }
+
+    //=======================auction 시작==============================//
+
+    //헬퍼 아이디체크 후 헬퍼인포 반환(HelperInfo)
+    @Override
+    public MemberHelperInfoDTO helperFindById2(String memberId) {
+
+        Optional<HelperInfo> helperInfo =  repository.findByMemberId_Id(memberId);
+
+        return helperInfo.isPresent() ? entityToDTO(helperInfo.get()) : null;
+    }
+    //=======================auction 끝================================//
 
     // =========================Blog======================= //
 
@@ -88,17 +100,37 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return repository.countDistinctBySigungu(sigungu);
     }
 
+
     // =========================Blog======================= //
 
 
 //--------- 관리자 : 헬퍼 리스트 ---------------
     //헬퍼 가입을 위한 state 체크
+
     @Override
-    public PageResultsDTO<HelperInfoDTO, HelperInfo> helperRequest(PageRequestDTO pageRequestDTO) {
-
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperOne(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllOne(pageable);
 
-        Page<HelperInfo> result = repository.findAll(pageable);
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperTwo(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllTwo(pageable);
+
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperThree(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.findAllThree(pageable);
 
         Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
 
@@ -111,7 +143,7 @@ public class HelperInfoServiceImpl implements HelperInfoService {
        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
 
        HelperInfo entity = result.get();
-       log.info(entity+"저장될 값의 헬퍼 정보");
+       log.info("저장된 헬퍼 정보 ~~~~~ "+entity);
 
        entity.changeAgreeHelper(2);
        repository.save(entity);
@@ -126,4 +158,14 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         entity.changeAgreeHelper(3);
         repository.save(entity);
     }
+
+    @Override
+    public HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+        HelperInfo entity = result.get();
+
+        return EntityToDTO(entity);
+    }
+
+
 }

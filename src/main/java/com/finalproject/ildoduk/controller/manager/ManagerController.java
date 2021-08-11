@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 @RequestMapping("/manager")
 @Controller
 @RequiredArgsConstructor
@@ -28,9 +29,13 @@ public class ManagerController {
     @GetMapping("/helperManagement")
     public void helperManagement(PageRequestDTO pageRequestDTO, Model model){
         //헬퍼 신청 목록 을 가져와야한다.
-        PageResultsDTO<HelperInfoDTO,HelperInfo> helperInfoDTO = helperInfoService.helperRequest(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateOne = helperInfoService.agreeHelperOne(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateTwo = helperInfoService.agreeHelperTwo(pageRequestDTO);
+        PageResultsDTO<HelperInfoDTO,HelperInfo> stateThree = helperInfoService.agreeHelperThree(pageRequestDTO);
 
-        model.addAttribute("helperManagement", helperInfoDTO);
+        model.addAttribute("stateOne", stateOne);
+        model.addAttribute("stateTwo", stateTwo);
+        model.addAttribute("stateThree", stateThree);
 
     }
 
@@ -38,16 +43,26 @@ public class ManagerController {
     @GetMapping("/accept")
     public String acceptHelper(HelperInfoDTO helperInfoDTO){
 
+        //helperInfo state => 2로 변경
         helperInfoService.accept(helperInfoDTO);
+        //번호를 이용해서 값을 조회해야하나???
+        HelperInfoDTO helperId = helperInfoService.helperInfo(helperInfoDTO);
 
+        log.info("참조 아이디 ~~~~~~ "+helperId.getMemberId());
+
+        //Member state = 2로 변경
+        MemberDto memberDto = memberService.userIdCheck(helperId.getMemberId());
+        memberService.updateState(memberDto);
+        //헬퍼 승인 완료
         return "redirect:/manager/helperManagement";
     }
 
-    //승인 반려
+    //반려
     @GetMapping("/deny")
     public String denyHelper(HelperInfoDTO helperInfoDTO){
-
+        //반려시에 agreeHelper = 3으로 변경
         helperInfoService.deny(helperInfoDTO);
+        //반려 사유...음...
 
         return "redirect:/manager/helperManagement";
     }

@@ -5,6 +5,8 @@ import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.UploadResultDTO;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
+import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.entity.member.QHelperInfo;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -190,7 +194,6 @@ public class MemberController {
 
 
         MemberDto dto = service.kakaoLogin(json);//카카오 JSON에서 꺼낸 아이디, 성별, 닉네임 값
-
         log.info("dto Id:::::: " + dto.getId());
         log.info("dto gender:::: " + dto.getGender());
         log.info("dto nick:::: " + dto.getNickname());
@@ -199,6 +202,7 @@ public class MemberController {
 
         MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
         HttpSession session = request.getSession();
+
 
         if (dto1!=null) {
 
@@ -220,17 +224,24 @@ public class MemberController {
 
     }
     //헬퍼 가입신청
-    @PostMapping("/helperRegister")
-    public void helperRegister(@RequestParam("memberId")String memberId, HelperInfoDTO helperInfoDTO, Model model){
+    @ResponseBody
+    @PostMapping(value="/helperRegister", produces = "application/json; charset=utf8")
+    public void helperRegister(@RequestParam("memberId") String memberId, @RequestParam("img") String img, HelperInfoDTO helperInfoDTO, Model model, HttpSession session){
+
         log.info("helperRegister member id :::: " + memberId);
+        log.info("helperRegister multipartFile ::: " + img);
+
+        //helperRegister에서 받아온 아이디값으로 helperInfo와 member를 조회해야함.
 
         //agreeHelper 신청 내용 DB에 저장
-        helperInfoService.helperRegister(helperInfoDTO);
+     /*   helperInfoService.helperRegister(helperInfoDTO);*/
 
-        int cnt = helperInfoService.helperRegisterIdCheck(memberId);
+        /*int cnt = helperInfoService.helperRegisterIdCheck(memberId);*/
 
 
     }
+
+
 
     //헬퍼 가입확인
 /*    @PostMapping("/helperIdCheck")
