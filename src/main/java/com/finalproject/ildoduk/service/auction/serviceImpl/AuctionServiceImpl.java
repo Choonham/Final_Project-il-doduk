@@ -365,6 +365,15 @@ public class AuctionServiceImpl implements AuctionService {
         return biddingList.getBidSeq();
     }
 
+    //경매참여내역하나만 받아오기
+    @Override
+    public Optional<BiddingList> getOneBid(Long bidSeq){
+
+        Optional<BiddingList> bid = biddingListRepository.findById(bidSeq);
+
+        return bid;
+    }
+
     //================================== blog =========================================//
 
     //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>

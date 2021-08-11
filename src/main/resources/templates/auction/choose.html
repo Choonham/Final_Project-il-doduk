@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <title>낙찰하기</title>
+</head>
+<body>
+
+경매 낙찰은 취소하실 수 없습니다. <br>
+낙찰 하시겠습니까?
+<br>
+비딩정보 / 헬퍼정보 출력 - 출력값 수정 예정
+
+    <table class="table">
+        <tr>
+            <td th:rowspan="2" width="30%"><img th:src="@{helper.photo}" alt="헬퍼사진"
+                                                class="img-fluid mb-4 w-50 rounded-circle"></td>
+            <td width="50%"><h3>[[${helper.nickname}]]</h3></td>
+            <td th:rowspan="2" width="20%">
+                <span class="mb-2">[[${#numbers.formatInteger(bid.offerPrice,3,'COMMA')}]]원
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td><p>[[${helper.appeal}]]</p></td>
+        </tr>
+    </table>
+    <button id="get" class="btn btn-block btn-primary"> 낙찰 </button>
+    <button id="close" class="btn btn-block btn-muted"> 닫기 </button>
+
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script th:inline="javascript">
+	$(document).ready(function () {
+		var aucSeq = [[${bid.aucSeq.aucSeq}]]
+		var bidSeq = [[${bid.bidSeq}]]
+
+        //낙찰
+		$('#get').click(function () {
+
+			//등록
+            location.href="/auction/chooseBid?bidSeq="+bidSeq;
+
+			var check = confirm("미션 헬퍼가 낙찰되었습니다!");
+
+			if(check){
+				//부모창 위치 변경(섭밋 후 변경 되어야 함)
+				opener.location.href="/auction/getAuction?aucSeq="+aucSeq;
+				//창 닫기
+				self.close();
+			} else {
+				//부모창 위치 변경(섭밋 후 변경 되어야 함)
+				opener.location.href="/auction/getAuction?aucSeq="+aucSeq;
+				//창 닫기
+				self.close();
+			}
+
+		});
+
+		//창 닫기
+		$('#close').click(function () {
+			//창 닫기
+			self.close();
+		});
+
+	});
+
+
+</script>
+
+</body>
+</html>

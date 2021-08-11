@@ -237,11 +237,14 @@ public class AuctionController {
             exist = true;
         }
         model.addAttribute("exist", exist);
+
     }
 
     //경매상세보기 - 매칭 완료 또는 일 수행 완료
     @GetMapping("/getAuction")
     public void getAuction2(Long aucSeq, Model model, PageRequestDTO pageRequestDTO) {
+
+        //System.out.println("aucSe======="+aucSeq);
 
         Member user = auctionService.getAuction(aucSeq).get().getUser();
 
@@ -253,18 +256,40 @@ public class AuctionController {
         model.addAttribute("u", user);
 
         //낙찰 비딩 정보
-        Optional<BiddingList> chosenBidding  = auctionService.chosenBidding(aucSeq);
-        model.addAttribute("chosenBidding", chosenBidding.get());
-
+        BiddingList chosenBidding  = auctionService.chosenBidding(aucSeq).get();
         //낙찰 된 헬퍼 정보 (멤버+헬퍼인포)
-        model.addAttribute("helper",helperInfoService.helperFindById2(chosenBidding.get().getHelper().getId()));
+        String helperId = chosenBidding.getHelper().getId();
+
+        if(chosenBidding != null && helperId != null){
+            model.addAttribute("chosenBidding", chosenBidding);
+            model.addAttribute("helper",helperInfoService.helperFindById2(helperId));
+        }
+
     }
 
-    //목록에서 연결되는 버튼 처리 - 낙찰, 삭제, 채팅, 리뷰, 비즈니스카드보기
+    //목록에서 연결되는 버튼 처리 - 채팅, 리뷰, 비즈니스카드보기
 
-    //낙찰
+    @GetMapping("/choose")
+    public void choose(Long bidSeq, Model model){
+
+        //비딩정보 보내기
+        BiddingList biddingList = auctionService.getOneBid(bidSeq).get();
+
+        //해당 헬퍼정보 보내기
+        MemberHelperInfoDTO helper = helperInfoService.helperFindById2(biddingList.getHelper().getId());
+
+        if(biddingList != null && helper != null ){
+            model.addAttribute("bid",biddingList);
+            model.addAttribute("helper", helper);
+        }
+
+    }
+
+    //낙찰 진행
     @GetMapping("/chooseBid")
-    public String chooseBid(Long bidSeq, Long aucSeq){
+    public void chooseBid(Long bidSeq){
+
+        //System.out.println("controller============="+bidSeq);
 
         auctionService.chooseBidding(bidSeq);
 
@@ -273,30 +298,16 @@ public class AuctionController {
         paymentService.biddingSuccess(bidSeq);
 
         //getAuction으로 반환
-        return "redirect:/auction/getAuction?aucSeq="+aucSeq;
+        //return "redirect:/auction/getAuction?aucSeq="+aucSeq;
     }
 
     //경매참여
-
-    @GetMapping("/biddingIn")
-    public void biddingIn(Long aucSeq, Model model){
-        //옥션 정보 보내기
-        AuctionList auction = auctionService.getAuction(aucSeq).get();
-        model.addAttribute("auction", auction);
-        model.addAttribute("aucSeq", auction.getAucSeq());
-        model.addAttribute("StartPrice", auction.getStartPrice());
-        model.addAttribute("auctionGap", auction.getAuctionGap());
-    }
-
     @PostMapping("/biddingIn")
-    public void biddinIn2(BiddingListDTO dto){
-
-        //System.out.println(dto.getAucSeq());
+    public String biddinIn2(BiddingListDTO dto){
 
         auctionService.biddingIn(dto);
 
-        //return "redirect:/auction/getOnAuction?aucSeq="+dto.getAucSeq();
-        //return null;
+        return "redirect:/auction/getOnAuction?aucSeq="+dto.getAucSeq();
     }
 
     //경매삭제
@@ -321,8 +332,9 @@ public class AuctionController {
         //auction.state=3(일 완료)
         auctionService.jobDone(aucSeq);
 
-        /*결제 관련*/
+        /*결제관련*/
         paymentService.doneAuction(aucSeq);
+
         return "redirect:/auction/getAuction?aucSeq="+aucSeq;
     }
 

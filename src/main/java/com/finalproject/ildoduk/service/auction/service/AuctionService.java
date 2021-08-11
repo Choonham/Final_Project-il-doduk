@@ -80,6 +80,9 @@ public interface AuctionService {
     //경매 참여
     Long biddingIn(BiddingListDTO dto);
 
+    //경매참여내역하나만 받아오기
+    Optional<BiddingList> getOneBid(Long bidSeq);
+
     //경매 삭제 - helper가 경매 삭제 불가
     //void deleteBidding(Long bidSeq);
 

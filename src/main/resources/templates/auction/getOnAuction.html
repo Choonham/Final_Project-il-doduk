@@ -237,17 +237,23 @@
                     <td>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</td>
                     <td>
                         <!-- 해당 유저면 선택하기 버튼, 아니면 블로그보기-->
+
                         <div th:if="${session.user.id == u.id}">
-                        <button th:id="chooseBid${dto.bidSeq}" class="btn btn-outline-primary primary">
+                       <!-- <button th:id="chooseBid${dto.bidSeq}" class="btn btn-outline-primary primary">
                             <input th:type="hidden" th:value="${dto.bidSeq}" id="bidSeq" name="bidSeq">
-                            <b>낙찰</b>
-                        </button>
-<!------------------------------------------------ 선택하면 컨펌으로 확인 - 수정필요 ------------------------------------------------------->
+                                                        <b>낙찰</b>
+                        </button>-->
+                            <a th:href="@{/auction/choose(bidSeq=${dto.bidSeq})}"
+                               onclick="window.open(this.href,'경매참여','width=590, height=470, scrollbars=yes, resizeable=yes');return false;"
+                               class="btn btn-outline-primary primary"> 낙찰 </a><!-- 초록버튼 -->
+<!------------------------------------------------ 선택하면 팝업 ------------------------------------------------------->
                         </div>
+
                         <div th:if="${session.user.id != u.id && session.user.state==2}">
                             <button class="btn btn-outline-primary primary" th:href="@{#}"><b>블로그</b></button>
 <!------------------------------------------------ 헬퍼 블로그 이동 ------------------------------------------------------->
                         </div>
+
                     </td>
                 </tr>
             </table>
@@ -256,16 +262,16 @@
             <div style="text-align: center">
                 <div class="custom-pagination ml-auto">
                     <a th:if="${biddingList.prev}"
-                       th:href="@{/auction/getOnAuction(page= ${biddingList.start-1},isAuctionDone=false)}"
+                       th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page= ${biddingList.start-1})}"
                        tabindex="-1" class="prev">Prev</a>
 
                     <div class="d-inline-block">
-                        <a th:href="@{/auction/getOnAuction(page = ${page},isAuctionDone=false)}"
+                        <a th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page = ${page})}"
                            th:class="${biddingList.page == page?'active':''}"
                            th:each="page: ${biddingList.pageList}">[[${page}]]</a>
                     </div>
                     <a th:if="${biddingList.next}"
-                       th:href="@{/auction/getOnAuction(page= ${biddingList.end + 1},isAuctionDone=false)}"
+                       th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page= ${biddingList.end + 1})}"
                        class="next">Next</a>
                 </div>
             </div>
@@ -291,11 +297,47 @@
                 <!-- 회색버튼 -->
             </div>
             <div class="col-6">
-                <a th:href="@{/auction/biddingIn(aucSeq=${auction.aucSeq})}"
-                   onclick="window.open(this.href,'경매참여','width=590, height=470, scrollbars=yes, resizeable=yes');return false;" class="btn btn-block btn-primary btn-md"> 미션 경매 참여 </a><!-- 초록버튼 -->
-<!------------------------------------------ 경매참여 팝업 연결예정 ----------------------------------------------->
+                <a  id="bidIn" th:type="submit" class="btn btn-block btn-primary btn-md"> 미션 경매 참여 </a>
             </div>
         </div>
+
+        <!--경매 신청 폼-->
+        <form id="bidForm" name="bidForm" method="post" action="/auction/biddingIn">
+            <input type="hidden" th:value="${session.user.id}" name="helper">
+            <input type="hidden" th:value="${session.user.nickname}" name="helperNickName">
+            <input type="hidden" th:value="${auction.aucSeq}" name="aucSeq">
+
+            <div class="form-group">
+                <label for="startPrice">미션 시작가</label>
+                <input type="text" class="form-control" id="startPrice" th:name="startPrice" readonly th:value="${auction.StartPrice}">
+            </div>
+
+            <div class="form-group">
+                <label for="auctionGap">경매 단위</label>
+                <select class="form-control" name="auctionGap" id="auctionGap" data-style="btn-black"
+                        data-width="100%" data-live-search="true" th:required="required">
+                    <option disabled selected>* 선택한 금액만큼 시작가에서 차감됩니다.</option>
+                    <option th:value="500"> 500원</option>
+                    <option th:value="1000"> 1000원</option>
+                    <option th:value="1500"> 1500원</option>
+                    <option th:value="2000"> 2000원</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="startPrice">제시가격</label>
+                <input type="text" class="form-control" id="offerPrice" name="offerPrice" th:value="${auction.StartPrice}">
+            </div>
+
+            <div class="text-center">
+                한 번 등록된 경매는 철회가 불가능 합니다.<br>
+                신중하게 검토 후 등록해주세요.
+            </div>
+
+            <div class="col-6">
+                <button th:type="submit" class="btn btn-block btn-primary btn-md">미션 경매 참여</button>
+            </div>
+        </form>
 
     </div>
 </section>
@@ -343,19 +385,7 @@
 
 	}, 1000);
 
-	<!-- 낙찰 시 확인 얼럿 : 수정예정  -->
 	$(document).ready(function (){
-
-		$('#chooseBid').click(function () {
-			var check = confirm("경매 낙찰은 취소 하실 수 없습니다. 낙찰하시겠습니까?");
-			var bidSeq = $('#bidSeq').val();
-
-			if(check === true){
-				location.href="/auction/chooseBid?bidSeq="+bidSeq+"&aucSeq="+[[${auction.aucSeq}]];
-			}else{
-				this.close();
-			}
-		});
 
 		/*경매 삭제 시 확인 얼럿*/
 		$('#deleteAuction').click(function () {
@@ -370,6 +400,28 @@
 		});
 	});
 
+	//경매 참여 관련
+
+    /*미션 경매 참여 시 나타나는 신청폼*/
+	$(document).ready(function () {
+
+        $('#bidForm').hide();
+
+		$('#bidIn').click(function () {
+			$('#bidForm').show();
+		});
+
+	});
+
+	/*미션에 따른 옥션갭 선택값 변화*/
+	$(document).ready(function () {
+
+	});
+
+	/*선택한 옥션갭에 따른 제시액 변화*/
+	$(document).ready(function () {
+
+	});
 
 </script>
 
