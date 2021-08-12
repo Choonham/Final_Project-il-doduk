@@ -59,6 +59,7 @@ public class Member extends BaseEntity{
     @Column(name = "state")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
+
     // ================ Blog Cascade 설정을 위한 연관관계 설정(member 테이블에 추가되는 칼럼 x) ======//
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<Blog> blog;
