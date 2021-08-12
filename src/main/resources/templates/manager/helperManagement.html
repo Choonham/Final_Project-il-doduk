@@ -54,7 +54,7 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
         <div class="job-listing-logo_report">
           <img th:src="${stateOne.img}"  class="img-fluid">
         </div>
@@ -163,7 +163,7 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
         <div class="job-listing-logo_report">
           <img th:src="${stateThree.img}" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
@@ -207,7 +207,7 @@
 
 <script th:inline="javascript">
   function bizCard(id){
-    window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=590, height=750, scrollbars=no, resizeable=no");
+    window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=590, height=895, scrollbars=no, resizeable=no left=1100 top=100");
   }
 </script>
 

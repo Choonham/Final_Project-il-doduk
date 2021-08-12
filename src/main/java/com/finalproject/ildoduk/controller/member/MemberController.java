@@ -302,7 +302,7 @@ public class MemberController {
 
 
     //게시글 아이디(or 닉네임)누르면 해당 헬퍼 정보 가져오기
-    @PostMapping(value="/helperBizCard")
+    @GetMapping(value="/helperBizCard")
     public void helperSearch(@RequestParam("memberId")String memberId, Model model){
         log.info("helperSearch에 넘어온 아이디 확인" + memberId );
 
