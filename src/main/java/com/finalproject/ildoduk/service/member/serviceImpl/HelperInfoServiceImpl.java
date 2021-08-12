@@ -36,20 +36,23 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     @Autowired
     private MemberRepository repo;
     @Override
-    public void helperRegister(HelperInfoDTO helperInfoDTO) {
+    public int helperRegister(HelperInfoDTO helperInfoDTO) {
 
-        repository.save(dtoToEntity(helperInfoDTO));
+            helperInfoDTO.setAgreeHelper(1); //헬퍼 신청하였으니 헬퍼신청대기중 상태로 변경
+        repository.save(dtoToEntity(helperInfoDTO)); // 헬퍼 신청 정보 일단 DB에 저장
+        int cnt = 1;
 
+        return cnt;
     }
 
     @Override
     public int helperRegisterIdCheck(Member memberId) {
 
-        int cnt = repository.countHelperInfoByMemberId(memberId);
+        int i = repository.countHelperInfoByMemberId(memberId);
 
-        log.info("helperRegisterIdCheck :::: " + cnt);
+        log.info("helperRegisterIdCheck :::: " + i);
 
-        return cnt;
+        return i;
     }
 
     @Override
@@ -59,9 +62,11 @@ public class HelperInfoServiceImpl implements HelperInfoService {
 
         // memo by 노영준 : repo에서 Optional<HelperInfo> findByMemberId_Id(String memberId); 로 사용하면 쿼리 두번 안불러도 되지 않을까요...?
 
-        Optional<Member> member= repo.findById(memberId);
+        /*Optional<Member> member= repo.findById(memberId);
 
         Optional<HelperInfo> helperInfo =  repository.findByMemberId(member.get());
+*/
+        Optional<HelperInfo> helperInfo = repository.findByMemberId_Id(memberId);
 
         return helperInfo.isPresent() ? EntityToDTO(helperInfo.get()) : null;
     }
@@ -165,6 +170,23 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         HelperInfo entity = result.get();
 
         return EntityToDTO(entity);
+    }
+
+    //헬퍼 정보 수정
+    @Override
+    public void helperModify(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> helperInfo = repository.findByMemberId_Id(helperInfoDTO.getMemberId());
+
+        if(helperInfo.isPresent()){
+            HelperInfo entity = helperInfo.get();
+
+            entity.changeGoodAtFirst(helperInfoDTO.getGoodAtFirst());
+            entity.changeGoodAtSecond(helperInfoDTO.getGoodAtSecond());
+            entity.changeGoodAtThird(helperInfoDTO.getGoodAtThird());
+            entity.changeAppeal(helperInfoDTO.getAppeal());
+            entity.changeImg(helperInfoDTO.getImg());
+            repository.save(entity);
+        }
     }
 
 

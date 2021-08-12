@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,5 +19,7 @@ public class HelperInfoDTO {
     private String goodAtThird;
     private int kindness;
     private String appeal;
+    private String img;
     private int agreeHelper;
+    private LocalDateTime regDate;  //헬퍼 신청일
 }

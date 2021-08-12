@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.member.MemberDto;
 
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
@@ -49,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
 
         repo.save(dtoToEntity(dto));
 
+
     }
 
     //유저 닉네임 db확인
@@ -92,9 +94,10 @@ public class MemberServiceImpl implements MemberService {
             entity.changeNickname(dto.getNickname());
             entity.changePhone(dto.getPhone());
             entity.changeAddress(dto.getAddress());
+            entity.changeSido(dto.getSido());
+            entity.changeSigungu(dto.getSigungu());
             entity.changePhoto(dto.getPhoto());
             entity.changeIntro(dto.getIntro());
-
             repo.save(entity);
         }
     }
@@ -121,7 +124,16 @@ public class MemberServiceImpl implements MemberService {
     //회원 탈퇴
     @Override
     public void userDelete(String id) {
-        repo.deleteById(id);
+        Optional<Member> member= repo.findById(id);
+        Optional<HelperInfo> byMemberId_id = helperInfoRepository.findByMemberId_Id(id);
+
+        if(byMemberId_id.isPresent() && member.isPresent()){
+            helperInfoRepository.deleteById(byMemberId_id.get().getHelperNo());
+            repo.deleteById(member.get().getId());
+        }else{
+
+        }
+
 
     }
 

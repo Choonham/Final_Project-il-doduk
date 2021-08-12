@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<body>
+
+    <form method="post" action="/member/helperModify" id="form">
+        <!--회원아이디-->
+        <input type="hidden" name="memberId" th:value="${session.user.id}" />
+        경력사항 1 <input type="text" name="goodAtFirst" /> <br />
+        경력사항 2<input type="text" name="goodAtSecond" /> <br />
+        경력사항 3<input type="text" name="goodAtThird" /> <br />
+        각오 <textarea name="appeal" rows="5" ></textarea> <br />
+        <button type="submit">헬퍼정보 수정</button>
+     </form>
+
+</body>
+</html>
