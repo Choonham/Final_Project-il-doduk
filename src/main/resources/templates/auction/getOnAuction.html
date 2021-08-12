@@ -52,9 +52,12 @@
     <div class="container">
         <div>
             <!----------------------------------------- 유저 정보 : 닉네임 & INTRO-------------------------------------------------------------->
+            <h4 class="h4 d-flex mb-4 text-primary">
+                <b>클라이언트 정보</b>
+            </h4>
             <table class="table">
             <tr>
-                <td th:rowspan="2" width="30%"><img th:src="@{u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td th:rowspan="2" width="30%"><img th:src="${u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
                 <td width="50%"><h3>[[${u.nickname}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id != auction.user}" th:align="center">
@@ -305,7 +308,7 @@
 
             <div class="form-group">
                 <label for="startPrice">미션 시작가</label>
-                <input type="text" class="form-control" id="startPrice" th:name="startPrice" readonly th:value="${auction.startPrice}">원
+                <span id="startPrice">[[${#numbers.formatInteger(auction.startPrice,3,'COMMA')}]]원</span>
             </div>
 
             <div class="form-group">
@@ -318,7 +321,7 @@
             </div>
 
             <div class="form-group">
-                <label for="startPrice">제시가격</label>
+                <label for="offerPrice">제시가격</label>
                 <input type="text" class="form-control" id="offerPrice" name="offerPrice" placeholder="경매 제시액">원
             </div>
 
