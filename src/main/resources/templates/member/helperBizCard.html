@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>helperBizCard</title>
+</head>
+<body id="top">
+<div class="site-wrap">
+    <div class="col-lg-4 sidebar pl-lg-5">
+        <div class="sidebar-box">
+            <form action="#" class="search-form">
+                <div class="form-group">
+                    <span class="icon fa fa-search"></span>
+                </div>
+            </form>
+        </div>
+        <div class="sidebar-box">
+            <img th:src="${memberDto.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+            <h3>[[${memberDto.name}]]</h3>
+            <p th:text = "${helperInfo.appeal}"></p>
+        </div>
+
+        <div class="sidebar-box">
+            <div class="categories">
+                <h3>헬퍼정보</h3>
+                <li><a>성별 <span>[[${memberDto.gender}]]</span></a></li>
+                <li><a>친절점수 <span>[[${helperInfo.kindness}]]</span></a></li>
+                <li><a>생년월일<span>[[${memberDto.birth}]]</span></a></li>
+                <li><a>수행지역<span>[[${memberDto.sido}]]</span> &nbsp; <span>[[${memberDto.sigungu}]]</span></a></li>
+                <li><a>경력사항1 <span>[[${helperInfo.goodAtFirst}]]</span></a></li>
+                <li><a>경력사항2 <span>[[${helperInfo.goodAtSecond}]]</span></a></li>
+                <li><a>경력사항3 <span>[[${helperInfo.goodAtThird}]]</span></a></li>
+                <li><a>헬퍼가입일 <div th:text = "${#temporals.format(helperInfo.regDate, 'yyyy/MM/dd')}"></div></a></li>
+            </div>
+        </div>
+
+
+        <div class="sidebar-box">
+            <h3>자기 소개</h3>
+            <p>[[${memberDto.intro}]]</p>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

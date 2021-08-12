@@ -52,7 +52,7 @@ public interface UserReportService {
         UserReport entity = UserReport.builder()
                 .reportNo(dto.getReportNo())
                 .id(id)
-                .reportTarget(reportTarget)
+                .reportTarget(helper)
                 .reportTitle(dto.getReportTitle())
                 .reportContent(dto.getReportContent())
                 .reportKind(dto.getReportKind())
@@ -67,13 +67,12 @@ public interface UserReportService {
         UserReportDTO dto = UserReportDTO.builder()
                 .reportNo(entity.getReportNo())
                 .id(entity.getId().getId())
-                .reportTarget(entity.getReportTarget().getMemberId().getId())
+                .reportTarget(entity.getReportTarget().getId())
                 .reportTitle(entity.getReportTitle())
                 .reportContent(entity.getReportContent())
                 .reportKind(entity.getReportKind())
                 .reportState(entity.getReportState())
                 .regDate(entity.getRegDate())
-                .kindness(entity.getReportTarget().getKindness())
                 .build();
         return dto;
     }

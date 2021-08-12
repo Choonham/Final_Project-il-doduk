@@ -28,7 +28,7 @@ public class UserReport extends BaseEntity {
     private Member id;
 
     @ManyToOne
-    private HelperInfo reportTarget;
+    private Member reportTarget;
 
     private String reportTitle;
     private String reportContent;

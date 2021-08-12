@@ -241,11 +241,9 @@
 			if(check === true){
 			    //포인트가 부족할 경우
                 if(userPoint >= startPrice){
-				/*$("#registerForm").attr("method", "POST");
-				$("#registerForm").attr("action", "/auction/register");*/
-				//$("#registerForm").submit();
-				$("#sub").trigger('click');
-                alert("경매가 등록 되었습니다. 미션 시작 30분 전까지 입찰을 해주세요.");
+
+                    $("#sub").trigger('click');
+                    alert("경매가 등록 되었습니다. 미션 시작 30분 전까지 입찰을 해주세요.");
 
                 } else {
                     alert("보유한 포인트가 부족하여 경매를 진행할 수 없습니다.");
