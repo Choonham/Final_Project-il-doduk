@@ -75,6 +75,7 @@ public interface HelperInfoService {
                 .appeal(entity.getAppeal())
                 .img(entity.getImg())
                 .agreeHelper(entity.getAgreeHelper())
+                .regDate(entity.getRegDate())
                 .build();
         return dto;
     }

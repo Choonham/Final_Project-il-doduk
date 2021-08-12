@@ -311,7 +311,7 @@ public class MemberController {
         HelperInfoDTO helperInfoDTO = helperInfoService.helperFindById(memberId);
         log.info("helperBizCard :::: helperInfoDTO :::: " + helperInfoDTO);
 
-
+        model.addAttribute("memberDto", memberDto);
         model.addAttribute("helperInfo", helperInfoDTO);
 
     }
