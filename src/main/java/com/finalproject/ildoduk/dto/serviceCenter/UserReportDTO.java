@@ -24,5 +24,6 @@ public class UserReportDTO {
     private String reportKind;
     private String reportState;
 
+    private int kindness;
     private LocalDateTime regDate;
 }

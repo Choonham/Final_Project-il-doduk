@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.entity.serviceCenter;
 
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,7 +28,7 @@ public class UserReport extends BaseEntity {
     private Member id;
 
     @ManyToOne
-    private Member reportTarget;
+    private HelperInfo reportTarget;
 
     private String reportTitle;
     private String reportContent;

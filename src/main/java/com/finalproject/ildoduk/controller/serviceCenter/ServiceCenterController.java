@@ -356,6 +356,9 @@ public class ServiceCenterController {
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
         MemberDto user = (MemberDto) session.getAttribute("user");
 
+        //paging 설정
+        pageRequestDTO.setSize(4);
+
         PageResultsDTO<AuctionBiddingDTO, Object[]> list = auctionService.getList4(pageRequestDTO, user.getId());
 
         for(int i=0;i<list.getDtoList().size();i++) {
@@ -450,9 +453,8 @@ public class ServiceCenterController {
 
         userReportService.updateReportState(userReportDTO);
 
-        //신고 당한 유저 -> kindness를 깍아야하나..
-
-
+        //신고 당한 유저 -> kindness를 깍음
+        userReportService.minusKindness(userReportDTO);
 
         return "redirect:/serviceCenter/reportBoardMgr";
     }
@@ -466,7 +468,6 @@ public class ServiceCenterController {
 
         helperInfoDTO.setMemberId(id);
         HelperInfoDTO info = helperInfoService.helperInfo(helperInfoDTO);
-
         MemberDto memberDto = memberService.userIdCheck(id);
 
         if(info.getAgreeHelper() == 2){

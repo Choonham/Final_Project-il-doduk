@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
@@ -37,12 +38,16 @@ public interface UserReportService {
     //신고 처리
     void updateReportState(UserReportDTO userReportDTO);
 
+    //신고에 따른 친절점수 마이너스
+    void minusKindness(UserReportDTO userReportDTO);
 
 
     default UserReport dtoToEntity(UserReportDTO dto){
 
         Member id = Member.builder().id(dto.getId()).build();
-        Member reportTarget = Member.builder().id(dto.getReportTarget()).build();
+        Member helper = Member.builder().id(dto.getReportTarget()).build();
+
+        HelperInfo reportTarget = HelperInfo.builder().memberId(helper).build();
 
         UserReport entity = UserReport.builder()
                 .reportNo(dto.getReportNo())
@@ -62,12 +67,13 @@ public interface UserReportService {
         UserReportDTO dto = UserReportDTO.builder()
                 .reportNo(entity.getReportNo())
                 .id(entity.getId().getId())
-                .reportTarget(entity.getReportTarget().getId())
+                .reportTarget(entity.getReportTarget().getMemberId().getId())
                 .reportTitle(entity.getReportTitle())
                 .reportContent(entity.getReportContent())
                 .reportKind(entity.getReportKind())
                 .reportState(entity.getReportState())
                 .regDate(entity.getRegDate())
+                .kindness(entity.getReportTarget().getKindness())
                 .build();
         return dto;
     }

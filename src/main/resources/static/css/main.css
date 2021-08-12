@@ -1,3 +1,35 @@
+<!-- ---------- 문의 게시판 ------------------- -->
+
+.cusBoardTitle{
+    color: #89ba16 !important;
+}
+
+.cusBoardTitle:hover{
+    cursor: pointer;
+}
+
+#password_val {
+    padding: 0;
+    margin-left: 8px;
+    border: none;
+    border-bottom: 1px solid gray;
+    width: 100px;
+}
+
+#cusBoardWrite_btn{
+    position: relative;
+    left: 95%;
+}
+
+#keyword{
+    width: 200px;
+}
+
+#search_btn {
+    margin-left: 5px;
+}
+
+<!--  여기까지 -->
 
 button {
     background: none;

@@ -113,6 +113,11 @@ public class UserReportServiceImpl implements UserReportService {
 
         userReportRepository.save(entity);
     }
+    //친절 점수 깍음
+    @Override
+    public void minusKindness(UserReportDTO userReportDTO) {
+        userReportRepository.minusKindness(userReportDTO.getReportTarget());
+    }
 
 
 }

@@ -113,25 +113,26 @@
               </td>
             </tr>
           </table>
-        </div>
 
-        <div class="row pagination-wrap mt-5">
-          <div class="col-md-12 text-center ">
-            <div class="custom-pagination ml-auto">
-              <div class="d-inline-block">
-                <ul>
-                  <li th:class=" 'page-item ' + ${tradeList.page == page?'active':''} " th:each="page: ${tradeList.pageList}">
-                    <a th:href="@{/serviceCenter/badUserReportForm(page = ${page})}">
-                      [[${page}]]
-                    </a>
-                  </li>
-                </ul>
+          <div class="row pagination-wrap mt-5">
+            <div class="col-md-12 text-center ">
+              <div class="custom-pagination ml-auto">
+
+                <div class="d-inline-block">
+                  <a th:class=" 'page-item ' + ${tradeList.page == page?'active':''} "
+                     th:each="page: ${tradeList.pageList}"
+                     th:href="@{/serviceCenter/badUserReportForm(page = ${page})}">
+                    [[${page}]]
+                  </a>
+                </div>
+
+              </div>
             </div>
           </div>
-        </div>
 
         </div>
       </div>
+
     </div>
   </div>
 </section>
