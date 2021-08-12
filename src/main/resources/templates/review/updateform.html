@@ -1,11 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!-- NAVBAR -->
+
+<div th:if = "${session.user != null}">
+
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+<section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7" style="text-align: center">
+                <h1 class="text-white font-weight-bold" style="size: ledger">Review update</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="site-section" style="padding-top: 30px">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <br style="clear: both">
+            <form id = "postForm" action = "/review/write" method="post">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
+                </div>
+
+                <!-- summernote 에디터 사용 -->
+                <textarea class="summernote" id = "summernote" name="editordata"></textarea>
+
+                <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
+
+
+
+
+                <hr/>
+
+
+                <input type = "submit" id="submit-btn" class="btn px-4 btn-primary text-white"
+                       style="float: right; margin-top: 15px;"
+                       value="편집하기">
+            </form>
+        </div>
+    </div>
+</section>
+<!--<form method="post" action="/review/update">
+    <input type="text" name="title" placeholder="제목을 입력해 주세요" id="title">
+    <textarea id="summernote" name="editordata"></textarea>
+    <input type =hidden name = "no" id="no">
+    <input type="submit" value="편집하기">
+
+
+</form>-->
 <link rel="stylesheet" th:href="@{/review/css/summernote-lite.css}">
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
@@ -26,17 +89,6 @@
 <script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
 <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
 <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
-
-
-<form method="post" action="/review/update">
-    <input type="text" name="title" placeholder="제목을 입력해 주세요" id="title">
-    <textarea id="summernote" name="editordata"></textarea>
-    <input type =hidden name = "no" id="no">
-    <input type="submit" value="편집하기">
-
-
-</form>
-
 <script  th:src="@{/review/js/summernote.js}"></script>
 <script  th:src="@{/review/js/summernote-lite.js}"></script>
 <script th:src="@{/review/js/summernote-ko-KR.js}"></script>

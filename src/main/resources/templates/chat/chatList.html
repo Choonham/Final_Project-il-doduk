@@ -12,8 +12,8 @@
 
 </script>
     <table>
-        <tr th:each="client : ${clientList}">
-            <td ><a th:onclick="get_chat([[${client}]]);"><span th:text="${client}"></span></a> </td>
+        <tr th:each="chat : ${list}">
+            <td ><a th:href="@{/chat/chatting(id=${chat.recive},auc=${chat.auc_sec} )}"><span th:text="${chat.recive}"></span></a>  <span th:text="${chat.message}"></span> <span th:text="${chat.date}"></span><img th:src="${chat.img}"></td>
 
         </tr>
 

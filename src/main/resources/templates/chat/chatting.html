@@ -179,9 +179,10 @@
 
 <script th:inline="javascript">
     var me=[[${session.userID}]];
+
     var other=[[${id}]];
     var list =[[${list}]];
-
+    var auc_seq=[[${auc}]];
 </script>
 <script th:inline="javascript" th:src="@{/Chat/chatUI.js}"></script>
 

@@ -56,6 +56,6 @@ function showNotification(msg){
 
 
 console.log(Notification.permission);
-function get_chat(id){
+function get_chat(id,auc){
     window.open("https://localhost:9991/chat/chatting?id="+id);
 }

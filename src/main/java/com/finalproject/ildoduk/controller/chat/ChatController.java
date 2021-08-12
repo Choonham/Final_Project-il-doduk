@@ -1,7 +1,9 @@
 package com.finalproject.ildoduk.controller.chat;
 
 
+import com.finalproject.ildoduk.dto.chat.ChatAucDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.service.chat.ChatService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,23 +34,31 @@ MemberService service;
 
 
     @GetMapping("/chatList")
-    public void chatList(Model model){
+    public void chatList(Model model,HttpServletRequest request){
         //헬퍼 와 고객 모두 상관 없이 전리스트 출력중
-        List<String> list=service.getList();
-        model.addAttribute("clientList",list);
+
+    HttpSession session = request.getSession();
+    MemberDto dto=(MemberDto) session.getAttribute("user");
+    List<ChatAucDTO> list=chatService.get_chatUI(dto.getId());
+    model.addAttribute("list",list);
 
     }
 
 
 
     @GetMapping("/chatting")
-    public void chat(@RequestParam("id") String id, Model model, HttpServletRequest request){
+    public void chat(@RequestParam("id") String id, @RequestParam("auc") String auc, Model model, HttpServletRequest request){
         model.addAttribute("id", id);
         HttpSession session = request.getSession();
         model.addAttribute("user", session.getAttribute("user"));
         MemberDto dto =(MemberDto)session.getAttribute("user");
         session.setAttribute("userID", dto.getId());
-        model.addAttribute("list",chatService.get_chatList(dto.getId(),id));
+        System.out.println("sessionID:"+ dto.getId());
+        Member member = Member.builder().id(id).build();
+        Long l_auc= Long.parseLong(auc);
+        model.addAttribute("list",chatService.get_chatList(member,dto.getId(),l_auc));
+        model.addAttribute("auc", l_auc);
+
     }
 
 }

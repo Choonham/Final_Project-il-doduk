@@ -33,12 +33,14 @@ public class SocketHandler extends TextWebSocketHandler {
         try {
             JSONObject object =(JSONObject)parser.parse(msg);
             String to=(String)object.get("recive");
-            String from_=(String)object.get("id");
+            String from_=(String)object.get("send");
             String mess=(String)object.get("text");
             String date =object.get("date").toString();
-            System.out.println(date);
-            System.out.println(object.get("date").getClass());
-            ChatDTO dto = ChatDTO.builder().message(mess).recive(to).send(from_).time(date).build();
+            Long auc = (Long) object.get("auc");
+            System.out.println("규준아 너 열심히 살아라:"+from_);
+
+
+            ChatDTO dto = ChatDTO.builder().message(mess).recive(to).sender(from_).time(date).auc_seq(auc).build();
 
             System.out.println(date);
             System.out.println(from_);

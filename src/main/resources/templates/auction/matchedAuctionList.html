@@ -130,7 +130,7 @@
                                     <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
                                 <div class="job-listing-meta w-25" style = "z-index: 1" >
-                                    <button class="btn btn-outline-primary primary" th:href="@{#}"><b>채팅하기</b></button>
+                                    <button class="btn btn-outline-primary primary" th:href="@{/chat/chatting(id=${dto.helper},auc=${dto.aucSeq})}"><b>채팅하기</b></button>
 <!-----------------------------------------------채팅하기 연결 예정------------------------------------------------------------>
                                 </div>
                             </div>

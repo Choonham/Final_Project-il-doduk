@@ -220,7 +220,7 @@ public class AuctionController {
 
         //옥션 정보
         model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
-
+        
         //옥션 유저 값
         model.addAttribute("u", user);
 

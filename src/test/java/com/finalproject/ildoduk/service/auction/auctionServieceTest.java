@@ -5,9 +5,11 @@ import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
+import com.finalproject.ildoduk.entity.chat.Chat;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.repository.auction.AuctionListRepository;
 import com.finalproject.ildoduk.repository.auction.BiddingListRepository;
+import com.finalproject.ildoduk.repository.chat.ChatRepository;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.auction.service.*;
 import org.junit.jupiter.api.*;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.*;
 
 import javax.jdo.annotations.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -26,11 +29,11 @@ public class auctionServieceTest {
     private AuctionService auctionService;
 @Autowired
     BiddingListRepository repository;
-
+@Autowired
+    ChatRepository chatRepository;
 @Autowired
     MemberRepository mem_repo;
-@Autowired
-BiddingListRepository biddingListRepository;
+
 @Autowired
     AuctionListRepository auc_repo;
     @Test
@@ -66,7 +69,25 @@ BiddingListRepository biddingListRepository;
     }
 
 
+    @Test
+    public void testFindbid(){
 
+        List<Object[]> list=chatRepository.getChatList("pphai@naver.com");
+
+        for (Object c: list
+             ) {
+
+           Object [] result =(Object[]) c;
+            System.out.println(result[0]);
+
+            System.out.println(result[1]);
+
+            System.out.println(result[2]);
+            System.out.println(result[3]);
+        }
+
+
+    }
 
 
 }
