@@ -16,7 +16,6 @@ public class MemberHelperInfoDTO {
 
     /*MemberDto*/
     private String id;          //아이디(이메일)
-    private String pwd;         //패스워드
     private String name;        //이름
     private String gender;      //성별
     private String birth;       //생일
@@ -29,7 +28,6 @@ public class MemberHelperInfoDTO {
     private String photo;       //사진
     private String intro;       //유저 소개
     private int state;          //구분
-    private int state2;        //헬퍼 유저 전환 버튼
     private LocalDateTime regDate;  //가입일
 
 

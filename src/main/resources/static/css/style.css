@@ -1535,7 +1535,7 @@ h1, h2, h3, h4 {
   position: relative;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px dotted #dee2e6;
+  border-bottom: 1px dotted #b2afaf;
   list-style: none; }
   .categories li:last-child, .sidelink li:last-child {
     margin-bottom: 0;
