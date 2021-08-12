@@ -62,8 +62,6 @@ public class ManagerController {
     public String denyHelper(HelperInfoDTO helperInfoDTO){
         //반려시에 agreeHelper = 3으로 변경
         helperInfoService.deny(helperInfoDTO);
-        //반려 사유...음...
-
         return "redirect:/manager/helperManagement";
     }
 

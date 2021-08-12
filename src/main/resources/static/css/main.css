@@ -68,4 +68,13 @@ button {
    color: #7f848c;
 }
 
+<!-- 관리자  신고게시판 -->
+
+.job-listing-logo_report{
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 150px;
+    flex: 0 0 111px;
+    border-right: 1px solid #eee;
+}
+
 

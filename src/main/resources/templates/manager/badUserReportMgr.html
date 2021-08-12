@@ -71,8 +71,9 @@
           </blockquote>
 
           <div class="block__91147 d-flex align-items-center">
-            <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
-
+            <figure class="mr-4">
+              <img src="../images/person_1.jpg" th:src="${stateOne.photo}" alt="Image" class="img-fluid">
+            </figure>
               <div>
                 <span class="position" th:text="${stateOne.id}">신고하는 사람</span> ->
                 <span class="position" th:text="${stateOne.reportTarget}"> 신고 대상</span>
@@ -140,7 +141,7 @@
               &rdquo;</p>
           </blockquote>
           <div class="block__91147 d-flex align-items-center">
-            <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
+            <figure class="mr-4"><img th:src="${stateTwo.photo}" alt="Image" class="img-fluid"></figure>
             <div>
               <span class="position" th:text="${stateTwo.id}">신고하는 사람</span> ->
               <span class="position" th:text="${stateTwo.reportTarget}"> 신고 당하는 놈</span>

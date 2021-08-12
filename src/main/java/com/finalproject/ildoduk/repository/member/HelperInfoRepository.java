@@ -32,9 +32,6 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     @Query(value = "select count(h) from HelperInfo h where h.memberId.id in (select distinct b.helper.id from BiddingList b where b.aucSeq.aucSeq in (select a.aucSeq from AuctionList a where a.sigungu = :sigungu))")
     int countDistinctBySigungu(String sigungu);
 
-    //멤버, 헬퍼 정보 전체 조인인
-    @Query(value = "SELECT m,h FROM Member m join HelperInfo h on m.id = h.memberId.id WHERE h.memberId.id = ?1")
-    Optional<Object[]> joinHelperInfo(String memberId);
 
     //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")

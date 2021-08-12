@@ -20,7 +20,7 @@
       <div class="col-md-7">
         <h1 class="text-white font-weight-bold">관리자 전용</h1>
         <div class="custom-breadcrumbs">
-          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <a th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
           <span class="text-white"><strong>헬퍼 요청 리스트</strong></span>
         </div>
       </div>
@@ -55,8 +55,8 @@
   <div class="container">
     <ul class="job-listings mb-5">
       <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        <div class="job-listing-logo_report">
+          <img th:src="${stateOne.img}"  class="img-fluid">
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -110,9 +110,9 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
+        <div class="job-listing-logo_report">
+          <img th:src="${stateTwo.img}" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -164,8 +164,8 @@
   <div class="container">
     <ul class="job-listings mb-5">
       <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        <div class="job-listing-logo_report">
+          <img th:src="${stateThree.img}" alt="Free Website Template by Free-Template.co" class="img-fluid">
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -204,6 +204,12 @@
 
   </div>
 </section>
+
+<script th:inline="javascript">
+  function bizCard(id){
+    window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=590, height=750, scrollbars=no, resizeable=no");
+  }
+</script>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 
