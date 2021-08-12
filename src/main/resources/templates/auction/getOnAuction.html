@@ -23,7 +23,7 @@
     </div>
 
     <div th:if="${session.user.state != 2 || session.user.id != u.id}">
-        <!-- 메인 페이지로 보내는 코드 필요 -->
+        <!-- 메인 페이지로 보내는 코드 필요 >> 컨트롤러에서 처리 -->
     </div>
 
     <div th:if="${session.user.state == 0}">
@@ -426,7 +426,14 @@
 
 		});
 
+        //미션 올린 유저가 아닌 다른 유저는 접근 불가
+		var state = [[${session.user.state}]]
+        var member = [[${session.user.id}]]
+        var aucUser = [[${auction.user}]]
 
+		if(state === 1 && member !== aucUser){
+			self.location.href = "/index";
+		}
 
 	});
 

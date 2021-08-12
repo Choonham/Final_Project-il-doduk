@@ -53,15 +53,18 @@
 </section>
 
 <section class="site-section">
-    <div>
+    <div class="container" th:if="${auction.state == 4}">
         <!--------------------- AUC.STATE = 4 일 때는 취소 된 미션입니다 출력 -------------->
+        <h4 class="h4 d-flex mb-4 text-info">
+            <b>클라이언트에 의해 삭제된 미션입니다.</b>
+        </h4>
     </div>
-    <div class="container">
+    <div class="container" th:if="${auction.state != 4}" >
         <div>
             <!----------------------------------------- 유저 정보 : 닉네임 & INTRO-------------------------------------------------------------->
-            <h2 class="h2 d-flex mb-4 text-primary">
+            <h4 class="h4 d-flex mb-4 text-primary">
                 <b>클라이언트 정보</b>
-            </h2>
+            </h4>
             <table class="table">
                 <tr>
                     <td th:rowspan="2" width="30%"><img th:src="${u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
@@ -210,7 +213,7 @@
         </h4>
         <table class="table">
             <tr>
-                <td th:rowspan="2" width="30%"><img th:src="${helper.photo}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td th:rowspan="2" width="30%"> <img th:src="${helper.photo}" alt="Image placeholder" class="img-fluid mb-4 w-20 rounded-circle"></td>
                 <td width="50%"><h3>[[${helper.name}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id == auction.user}" th:align="center">
@@ -226,7 +229,7 @@
         <div th:if="${session.user.id == u.id}" class="row mb-5">
             <!-- 미션 수행 전 - 미션 수행 확인 버튼 -->
             <div class="col-6" th:if="${auction.state != 3}">
-                <span id="doneCheck" class="btn btn-block btn-primary btn-md"> 미션 수행 확인 </span><!-- 초록버튼 -->
+                <button id="doneCheck" class="btn btn-block btn-primary btn-md"> 미션 수행 확인 </button><!-- 초록버튼 -->
             </div>
             <!-- 미션 완료 후 - 리뷰쓰기 버튼 -->
             <div class="col-6"th:if="${auction.state == 3}" >
@@ -243,10 +246,7 @@
 </section>
 
 
-<script>
-    function test(){
-        window.open("#","헬퍼카드","width=500, height=584, scrollbars=no, resizeable=no,toolbar=no, left=1000,top=150");
-    }
+<script th:inline="javascript">
 
     $(document).ready(function (){
 
@@ -261,6 +261,15 @@
 		    }
 
 	    });
+
+	    //미션 올린 유저가 아닌 다른 유저는 접근 불가
+	    var state = [[${session.user.state}]]
+	    var member = [[${session.user.id}]]
+	    var aucUser = [[${auction.user}]]
+
+	    if(state == 1 && member != aucUser){
+		    self.location.href = "/index";
+	    }
     });
 </script>
 

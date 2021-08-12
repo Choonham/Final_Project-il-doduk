@@ -185,7 +185,7 @@
                         <br>
                         <div class="col-6">
                             <span id="save" class="btn btn-block btn-primary btn-md">저장하기</span>
-                            <button id="sub" type="submit" class="hide"></button>
+                            <button id="sub" type="submit" class="hide hidden-true"></button>
                         </div>
                     </form>
 
@@ -254,6 +254,13 @@
 			}
 
 		});
+
+		//유저만 접근가능
+		var state = [[${session.user.state}]]
+		if(state != 1){
+			self.location.href = "/index";
+		}
+
 	});
 
 
