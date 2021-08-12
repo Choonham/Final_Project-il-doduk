@@ -51,7 +51,7 @@ public class ServiceCenterController {
     private final HelperInfoService helperInfoService;
 
 
-    //결제 및 거래 조회 페이지로 이동
+    //결제 내역 조회
     @GetMapping("/paymentHistory")
     public void getPaymentHistroy(HttpSession session, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
         MemberDto id = (MemberDto)session.getAttribute("user");
@@ -488,13 +488,6 @@ public class ServiceCenterController {
     //사용자 FAQ
     @GetMapping("/faq")
     public void faq(){
-
-    }
-
-    //관리자 FAQ
-    @GetMapping("/faqMgr")
-    public void faqMgr(){
-
     }
 
 
