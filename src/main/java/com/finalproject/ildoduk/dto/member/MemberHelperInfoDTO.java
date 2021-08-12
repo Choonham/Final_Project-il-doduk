@@ -41,8 +41,7 @@ public class MemberHelperInfoDTO {
     private String goodAtThird;     //경력사항3
     private int kindness;           //친절점수
     private String appeal;          //각오
-    private String facePhoto;       //본인 얼굴사진
-    private String idCard;          //본인 신분증 사진
+    private String img;       //본인 얼굴사진
     private int agreeHelper;
 
 

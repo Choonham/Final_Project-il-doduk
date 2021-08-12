@@ -23,9 +23,6 @@ public interface MemberService {
 
     void userDelete(String id);
 
-    MemberDto userToHelperIdCheck(String memberId);
-
-
 
     //헬퍼 승인 시에 state 2로 변경
     void updateState(MemberDto memberDto);
@@ -53,8 +50,10 @@ public interface MemberService {
                 .phone(dto.getPhone())
                 .point(dto.getPoint())
                 .photo(dto.getPhoto())
+                .phone(dto.getPhone())
                 .intro(dto.getIntro())
                 .state(dto.getState())
+                .photo(dto.getPhoto())
                 .build();
 
         return entity;

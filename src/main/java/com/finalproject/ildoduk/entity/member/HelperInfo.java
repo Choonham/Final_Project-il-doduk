@@ -11,7 +11,7 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class HelperInfo {
+public class HelperInfo extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,15 +36,19 @@ public class HelperInfo {
     private String appeal;
 
     @Column
-    private String facePhoto;
-
-    @Column
-    private String idCard;
+    private String img;
 
     @Column
     @ColumnDefault("1")
     private int agreeHelper;
 
-
+    /**정보수정**/
     public void changeAgreeHelper(int agreeHelper){ this.agreeHelper = agreeHelper;}
+
+    //헬퍼 정보 수정
+    public void changeGoodAtFirst(String goodAtFirst){this.goodAtFirst = goodAtFirst;}
+    public void changeGoodAtSecond(String goodAtSecond){this.goodAtSecond = goodAtSecond;}
+    public void changeGoodAtThird(String goodAtThird){this.goodAtThird = goodAtThird;}
+    public void changeAppeal(String appeal){this.appeal = appeal;}
+    public void changeImg(String img){this.img = img;}
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface HelperInfoService {
 
     //헬퍼 회원가입
-    void helperRegister(HelperInfoDTO helperInfoDTO);
+    int helperRegister(HelperInfoDTO helperInfoDTO);
 
     //헬퍼 회원가입전 DB에 아이디 중복 체크
     int helperRegisterIdCheck(Member memberId);
@@ -42,6 +42,9 @@ public interface HelperInfoService {
     //헬퍼 정보
     HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO);
 
+    //헬퍼 정보 수정
+    void helperModify(HelperInfoDTO helperInfoDTO);
+
     default HelperInfo dtoToEntity(HelperInfoDTO dto){
         Member member = Member.builder().id(dto.getMemberId()).build();
 
@@ -53,6 +56,7 @@ public interface HelperInfoService {
                 .goodAtThird(dto.getGoodAtThird())
                 .kindness(dto.getKindness())
                 .appeal(dto.getAppeal())
+                .img(dto.getImg())
                 .agreeHelper(dto.getAgreeHelper())
                 .build();
         return entity;
@@ -69,7 +73,9 @@ public interface HelperInfoService {
                 .goodAtThird(entity.getGoodAtThird())
                 .kindness(entity.getKindness())
                 .appeal(entity.getAppeal())
+                .img(entity.getImg())
                 .agreeHelper(entity.getAgreeHelper())
+                .regDate(entity.getRegDate())
                 .build();
         return dto;
     }
@@ -154,7 +160,7 @@ public interface HelperInfoService {
                 .goodAtSecond(helper.getGoodAtSecond())
                 .goodAtFirst(helper.getGoodAtFirst())
                 .agreeHelper(helper.getAgreeHelper())
-                .facePhoto(helper.getFacePhoto())
+                .img(helper.getImg())
                 .build();
 
         return dto;
