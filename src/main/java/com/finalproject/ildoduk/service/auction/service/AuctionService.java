@@ -5,7 +5,6 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
-import org.springframework.data.domain.Page;
 
 import java.util.*;
 
@@ -125,7 +124,7 @@ public interface AuctionService {
         AuctionListDTO auctionListDTO = AuctionListDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
+                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userPhoto(auc.getUser().getPhoto()).userNickName(auc.getUser().getNickname())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).build();
         return auctionListDTO;
     }

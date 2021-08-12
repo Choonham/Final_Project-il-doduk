@@ -14,7 +14,7 @@
 <br>
 <!--helper정보-->
 <div class="bg-light p-3 border rounded mb-4 " style="padding: 15px; margin: 20px;">
-    <img th:src="${helper.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+    <img th:src="${helper.photo}" alt="Image placeholder" class="img-fluid mb-4 w-20 rounded-circle">
     <h3  class="text-black  mt-3 h5 pl-3 mb-3 text-center"><b>[[${helper.name}]]</b></h3>
     <p th:text="${helper.appeal}"></p>
 
@@ -30,7 +30,6 @@
     <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>자기소개</b></h3>
     <p>[[${helper.intro}]]</p>
 
-<!--    <a class="btn btn-block btn-primary" th:href="@{/auction/sendSMS(bidSeq=${bid.bidSeq})}" > 낙찰 메시지 보내기 </a>-->
     <button id="get" class="btn btn-block btn-primary"> 낙찰</button>
     <button id="close" class="btn btn-block btn-muted"> 닫기</button>
 </div>

@@ -59,9 +59,12 @@
     <div class="container">
         <div>
             <!----------------------------------------- 유저 정보 : 닉네임 & INTRO-------------------------------------------------------------->
+            <h2 class="h2 d-flex mb-4 text-primary">
+                <b>클라이언트 정보</b>
+            </h2>
             <table class="table">
                 <tr>
-                    <td th:rowspan="2" width="30%"><img th:src="@{u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                    <td th:rowspan="2" width="30%"><img th:src="${u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
                     <td width="50%"><h3>[[${u.nickname}]]</h3></td>
                     <td th:rowspan="2" width="20%">
                         <div th:if="${session.user.id != auction.user}" th:align="center">
@@ -74,10 +77,10 @@
             </table>
             <p></p>
             <!----------------------------------------- 해당 옥션 정보 -------------------------------------------------------------->
-            <h2 class="h2 d-flex align-items-center mb-4 text-primary">
+            <h4 class="h4 d-flex align-items-center mb-4 text-primary">
                 <span class="icon-align-left mr-3"></span>
                 <b>[[${auction.title}]]</b>
-            </h2>
+            </h4>
             <!-- 기본 정보 -->
             <div class="bg-light p-3 border rounded mb-4 text-center">
                 <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>미션 내용</b></h3>
@@ -202,9 +205,12 @@
         <!--옥션정보 끝-->
 
         <!-- 낙찰 헬퍼 정보 - 메소드 만들어서 반환 받아야 함 -->
+        <h4 class="h4 d-flex mb-4 text-primary">
+            <b>헬퍼 정보</b>
+        </h4>
         <table class="table">
             <tr>
-                <td th:rowspan="2" width="30%"><img th:src="@{helper.photo}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td th:rowspan="2" width="30%"><img th:src="${helper.photo}" alt="헬퍼사진" class="img-fluid mb-4 w-50 rounded-circle"></td>
                 <td width="50%"><h3>[[${helper.name}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id == auction.user}" th:align="center">

@@ -10,20 +10,17 @@ import com.finalproject.ildoduk.repository.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.querydsl.core.*;
 import com.querydsl.core.types.dsl.*;
-
 import lombok.*;
 import lombok.extern.log4j.*;
 import net.nurigo.java_sdk.api.*;
 import net.nurigo.java_sdk.exceptions.*;
 import org.json.simple.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.mail.*;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.*;
-
-import javax.jdo.annotations.*;
 
 import java.text.*;
 import java.time.*;
