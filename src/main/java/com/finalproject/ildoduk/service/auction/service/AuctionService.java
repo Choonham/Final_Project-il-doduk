@@ -89,6 +89,12 @@ public interface AuctionService {
     //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
     PageResultsDTO<AuctionListDTO, AuctionList> getAvailableAuctions(String sido, String sigungu, int category, PageRequestDTO pageRequestDTO);
 
+    //============================= sms 문자 보내기 ===================================================//
+    void sendSMS(String userPhoneNumber, String text);
+
+    //==================================== 메일 전송 관련 ==============================================//
+    void sendMail(String userEmail,String title, String text);
+
     //================================== blog =========================================//
     //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
     List<AuctionBiddingDTO> getAllWithState4ForHelper(String helper);
