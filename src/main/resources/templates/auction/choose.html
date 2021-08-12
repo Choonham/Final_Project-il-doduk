@@ -6,28 +6,34 @@
 </head>
 <body>
 
-경매 낙찰은 취소하실 수 없습니다. <br>
-낙찰 하시겠습니까?
+<div class="text-black textbox0 text-center container-sm" width=580 >
+    <br>
+    경매 낙찰은 취소하실 수 없습니다. <br>
+    낙찰 하시겠습니까?
+</div>
 <br>
-비딩정보 / 헬퍼정보 출력 - 출력값 수정 예정
+<!--helper정보-->
+<div class="bg-light p-3 border rounded mb-4 " style="padding: 15px; margin: 20px;">
+    <img th:src="${helper.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
+    <h3  class="text-black  mt-3 h5 pl-3 mb-3 text-center"><b>[[${helper.name}]]</b></h3>
+    <p th:text="${helper.appeal}"></p>
 
-    <table class="table">
-        <tr>
-            <td th:rowspan="2" width="30%"><img th:src="@{helper.photo}" alt="헬퍼사진"
-                                                class="img-fluid mb-4 w-50 rounded-circle"></td>
-            <td width="50%"><h3>[[${helper.nickname}]]</h3></td>
-            <td th:rowspan="2" width="20%">
-                <span class="mb-2">[[${#numbers.formatInteger(bid.offerPrice,3,'COMMA')}]]원
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td><p>[[${helper.appeal}]]</p></td>
-        </tr>
-    </table>
-    <button id="get" class="btn btn-block btn-primary"> 낙찰 </button>
-    <button id="close" class="btn btn-block btn-muted"> 닫기 </button>
+    <div class="categories">
+        <h3  class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>Information</b></h3>
+        <li><a>gender <span class="text-black">[[${helper.gender}]]</span></a></li>
+        <li><a>kindness <span class="text-black">[[${helper.kindness}]]</span></a></li>
+        <li><a>birth <span class="text-black">[[${helper.birth}]]</span></a></li>
+        <li><a>good 1 <span class="text-black">[[${helper.goodAtFirst}]]</span></a></li>
+        <li><a>good 2 <span class="text-black">[[${helper.goodAtSecond}]]</span></a></li>
+        <li><a>good 3 <span class="text-black">[[${helper.goodAtThird}]]</span></a></li>
+    </div>
+    <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>자기소개</b></h3>
+    <p>[[${helper.intro}]]</p>
 
+<!--    <a class="btn btn-block btn-primary" th:href="@{/auction/sendSMS(bidSeq=${bid.bidSeq})}" > 낙찰 메시지 보내기 </a>-->
+    <button id="get" class="btn btn-block btn-primary"> 낙찰</button>
+    <button id="close" class="btn btn-block btn-muted"> 닫기</button>
+</div>
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 
@@ -36,22 +42,22 @@
 		var aucSeq = [[${bid.aucSeq.aucSeq}]]
 		var bidSeq = [[${bid.bidSeq}]]
 
-        //낙찰
+		//낙찰
 		$('#get').click(function () {
 
 			//등록
-            location.href="/auction/chooseBid?bidSeq="+bidSeq;
+			location.href = "/auction/chooseBid?bidSeq=" + bidSeq;
 
 			var check = confirm("미션 헬퍼가 낙찰되었습니다!");
 
-			if(check){
+			if (check) {
 				//부모창 위치 변경(섭밋 후 변경 되어야 함)
-				opener.location.href="/auction/getAuction?aucSeq="+aucSeq;
+				opener.location.href = "/auction/getAuction?aucSeq=" + aucSeq;
 				//창 닫기
 				self.close();
 			} else {
 				//부모창 위치 변경(섭밋 후 변경 되어야 함)
-				opener.location.href="/auction/getAuction?aucSeq="+aucSeq;
+				opener.location.href = "/auction/getAuction?aucSeq=" + aucSeq;
 				//창 닫기
 				self.close();
 			}

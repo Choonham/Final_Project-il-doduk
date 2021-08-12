@@ -10,10 +10,20 @@ import com.finalproject.ildoduk.repository.member.*;
 import com.finalproject.ildoduk.service.auction.service.*;
 import com.querydsl.core.*;
 import com.querydsl.core.types.dsl.*;
+
 import lombok.*;
 import lombok.extern.log4j.*;
+import net.nurigo.java_sdk.api.*;
+import net.nurigo.java_sdk.exceptions.*;
+import org.json.simple.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
+import org.springframework.mail.*;
+import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.*;
+
+import javax.jdo.annotations.*;
 
 import java.text.*;
 import java.time.*;
@@ -28,6 +38,13 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionListRepository auctionListRepository;
     private final MemberRepository userRepository;
     private final BiddingListRepository biddingListRepository;
+
+    //이메일 관련
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String FROM_ADDRESS;
 
     //======================================== 공통메서드 ============================================//
 
@@ -372,6 +389,46 @@ public class AuctionServiceImpl implements AuctionService {
         Optional<BiddingList> bid = biddingListRepository.findById(bidSeq);
 
         return bid;
+    }
+    //==================================== SMS 전송 관련 ==============================================//
+    @Override
+    public void sendSMS(String userPhoneNumber, String text){ // 휴대폰 문자보내기
+
+        String api_key = "NCSBSPNDEX3DOYNZ";
+        String api_secret = "UKRFUOWDXSFYKLLOFEE2J5I0BSDWLOCR";
+
+        Message coolsms = new Message(api_key, api_secret); // 메시지보내기 객체 생성
+
+        HashMap<String, String> set = new HashMap<String, String>();
+        set.put("to", userPhoneNumber); // 수신번호
+        set.put("from", "01099728740"); // 발신번호
+        set.put("text", text); // 문자내용
+        set.put("type", "SMS"); // 문자 타입
+
+        try {
+            //send() 는 메시지를 보내는 함수
+            JSONObject obj = (JSONObject) coolsms.send(set);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println("메세지 전송 에러 ====== "+e.getMessage());
+            System.out.println("메세지 전송 에러 ====== "+e.getCode());
+        }
+    }
+
+    //==================================== 메일 전송 관련 ==============================================//
+    @Override
+    public void sendMail(String userEmail,String title, String text){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userEmail);
+        message.setFrom(FROM_ADDRESS);
+        message.setSubject(title); // 제목
+        message.setText(text); // 내용
+
+        if(mailSender == null){
+            System.out.println("=======================null이래");
+        }else {
+            this.mailSender.send(message);
+        }
     }
 
     //================================== blog =========================================//

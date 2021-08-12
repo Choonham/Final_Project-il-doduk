@@ -151,6 +151,7 @@ public interface HelperInfoService {
                 .nickname(helper.getMemberId().getNickname())
                 .gender(helper.getMemberId().getGender())
                 .photo(helper.getMemberId().getPhoto())
+                .phone(helper.getMemberId().getPhone())
 
                 .appeal(helper.getAppeal())
                 .helperNo(helper.getHelperNo())

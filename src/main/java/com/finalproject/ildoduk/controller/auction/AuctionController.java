@@ -11,7 +11,11 @@ import com.finalproject.ildoduk.service.pay.service.*;
 import com.google.gson.*;
 import lombok.*;
 import lombok.extern.log4j.*;
+import net.nurigo.java_sdk.*;
+import net.nurigo.java_sdk.api.*;
+import net.nurigo.java_sdk.exceptions.*;
 import org.apache.commons.io.*;
+import org.json.simple.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -219,7 +223,8 @@ public class AuctionController {
         Member user = auctionService.getAuction(aucSeq).get().getUser();
 
         //옥션 정보
-        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+        AuctionList auctionList = auctionService.getAuction(aucSeq).get();
+        model.addAttribute("auction", auctionList);
 
         //옥션 유저 값
         model.addAttribute("u", user);
@@ -238,6 +243,23 @@ public class AuctionController {
         }
         model.addAttribute("exist", exist);
 
+        //==========경매차액 리스트 생성 및 보내기=========//
+        int startPrice = auctionList.getStartPrice();
+        int auctionGap = auctionList.getAuctionGap();
+
+        //차액리스트 갯수
+        int n = ((startPrice - 5000) / auctionGap);
+
+        //차액리스트 생성
+        ArrayList<Integer> gaps = new ArrayList<Integer>();
+        //리스트에 값 넣기
+        for(int i=0; i<n; i++){
+            int gap = i*auctionGap;
+            gaps.add(gap);
+        }
+
+        //차액리스트 전달
+        model.addAttribute("gaps",gaps);
     }
 
     //경매상세보기 - 매칭 완료 또는 일 수행 완료
@@ -297,8 +319,19 @@ public class AuctionController {
         //낙찰 후 차액 반환
         paymentService.biddingSuccess(bidSeq);
 
-        //getAuction으로 반환
-        //return "redirect:/auction/getAuction?aucSeq="+aucSeq;
+        /*낙찰 된 헬퍼에게 문자 메세지 보내기*/
+        BiddingList bid = auctionService.getOneBid(bidSeq).get();
+        String helperPhone = bid.getHelper().getPhone();
+        String user = bid.getAucSeq().getUser().getNickname();
+        String text = "안녕하세요, 헤르메스입니다. "+user+"님의 미션에 낙찰되셨습니다!";
+        auctionService.sendSMS(helperPhone,text);
+
+        /*낙찰 된 헬퍼에게 메일 보내기 -> 메일주소가 유니크키여서 테스트를 위해 우선 하드코드로 지정*/
+        String userEmail = bid.getHelper().getId();
+        //String userEmail = "godnjs729417@naver.com";
+        String title = "헤르메스입니다.";
+        auctionService.sendMail(userEmail,title,text);
+        //받는주소와 메일 내용 인자로 전달
     }
 
     //경매참여
@@ -432,5 +465,6 @@ public class AuctionController {
     }
 
     //이미지 관련 컨트롤러 끝
+
 
 }
