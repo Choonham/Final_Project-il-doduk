@@ -24,6 +24,8 @@ public class UserReportDTO {
     private String reportKind;
     private String reportState;
 
+    private String targetNickName;
+
     private String photo;
     private int kindness;
 

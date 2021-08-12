@@ -33,9 +33,11 @@ public class ManagerController {
         PageResultsDTO<HelperInfoDTO,HelperInfo> stateTwo = helperInfoService.agreeHelperTwo(pageRequestDTO);
         PageResultsDTO<HelperInfoDTO,HelperInfo> stateThree = helperInfoService.agreeHelperThree(pageRequestDTO);
 
+        //String[] img = stateOne.getDtoList().get(0).getImg().split("\\*");
         model.addAttribute("stateOne", stateOne);
         model.addAttribute("stateTwo", stateTwo);
         model.addAttribute("stateThree", stateThree);
+
 
     }
 
@@ -47,8 +49,6 @@ public class ManagerController {
         helperInfoService.accept(helperInfoDTO);
         //번호를 이용해서 값을 조회해야하나???
         HelperInfoDTO helperId = helperInfoService.helperInfo(helperInfoDTO);
-
-        log.info("참조 아이디 ~~~~~~ "+helperId.getMemberId());
 
         //Member state = 2로 변경
         MemberDto memberDto = memberService.userIdCheck(helperId.getMemberId());

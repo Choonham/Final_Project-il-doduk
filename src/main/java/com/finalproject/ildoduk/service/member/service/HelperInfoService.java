@@ -35,6 +35,8 @@ public interface HelperInfoService {
     PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperOne(PageRequestDTO pageRequestDTO);
     PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperTwo(PageRequestDTO pageRequestDTO);
     PageResultsDTO<HelperInfoDTO, HelperInfo> agreeHelperThree(PageRequestDTO pageRequestDTO);
+
+    PageResultsDTO<HelperInfoDTO, HelperInfo> requestHelperList(PageRequestDTO pageRequestDTO);
     //헬퍼 가입 승인
     void accept(HelperInfoDTO helperInfoDTO);
     //헬퍼 가입 반려
@@ -75,49 +77,15 @@ public interface HelperInfoService {
                 .appeal(entity.getAppeal())
                 .img(entity.getImg())
                 .agreeHelper(entity.getAgreeHelper())
+                .helperNick(entity.getMemberId().getNickname())
                 .regDate(entity.getRegDate())
                 .build();
         return dto;
     }
 
-    /**
-    default MemberHelperInfoDTO entityToDTO(HelperInfo entity){
 
-        MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
-                .helperNo(entity.getHelperNo())
-                .memberId(entity.getMemberId().getId())
-                .goodAtFirst(entity.getGoodAtFirst())
-                .goodAtSecond(entity.getGoodAtSecond())
-                .goodAtThird(entity.getGoodAtThird())
-                .kindness(entity.getKindness())
-                .appeal(entity.getAppeal())
-                .build();
-
-        return dto;
-    }
-     **/
 
     default MemberHelperInfoDTO entityToDTO(HelperInfo helper, Member member){
-/*
-        MemberDto memberDto = MemberDto.builder()
-                .id(member.getId())
-                .name(member.getName())
-                .address(member.getAddress())
-                .intro(member.getIntro())
-                .nickname(member.getNickname())
-                .gender(member.getGender())
-                .photo(member.getPhoto())
-                .build();
-
-        HelperInfoDTO helperInfoDTO = HelperInfoDTO.builder()
-                .appeal(helper.getAppeal())
-                .helperNo(helper.getHelperNo())
-                .kindness(helper.getKindness())
-                .goodAtThird(helper.getGoodAtThird())
-                .goodAtSecond(helper.getGoodAtSecond())
-                .goodAtFirst(helper.getGoodAtFirst())
-                .agreeHelper(helper.getAgreeHelper())
-                .build();*/
 
         MemberHelperInfoDTO dto = MemberHelperInfoDTO.builder()
                 .id(member.getId())

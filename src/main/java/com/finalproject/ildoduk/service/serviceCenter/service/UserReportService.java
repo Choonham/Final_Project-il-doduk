@@ -7,18 +7,13 @@ import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
-import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 public interface UserReportService {
 
     void insertReport(UserReportDTO userReportDTO);
-
-    //신고를 위한 거래 목록 조회
-    Optional<TradeHistory> getUser(String id);
 
     //신고 내역 조회
     PageResultsDTO<UserReportDTO, UserReport>  getReportList(UserReportDTO userReportDTO,PageRequestDTO pageRequestDTO);
@@ -74,6 +69,7 @@ public interface UserReportService {
                 .reportState(entity.getReportState())
                 .regDate(entity.getRegDate())
                 .photo(entity.getId().getPhoto())
+                .targetNickName(entity.getReportTarget().getNickname())
                 .build();
         return dto;
     }
@@ -96,20 +92,5 @@ public interface UserReportService {
         return dto;
     }
 
-    //거래 내역
-    //반대로 Entity -> DTO로 변환
-    default TradeHistoryDTO entityToDto(TradeHistory entity){
-        TradeHistoryDTO dto = TradeHistoryDTO.builder()
-                .tNo(entity.getTNo())
-                .aucNo(entity.getAucNo().getAucSeq())
-                .id(entity.getId().getId())
-                .userId(entity.getBidSeq().getHelper().getId())
-                .aucTitle(entity.getAucNo().getTitle())
-                .aucContent(entity.getAucNo().getContent())
-                .aucPrice(entity.getBidSeq().getOfferPrice())
-                .aucState(entity.getAucNo().getState())
-                .regDate(entity.getRegDate())
-                .build();
-        return dto;
-    }
+   
 }

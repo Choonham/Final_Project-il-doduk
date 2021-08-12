@@ -142,6 +142,16 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return new PageResultsDTO<>(result,fn);
     }
 
+    @Override
+    public PageResultsDTO<HelperInfoDTO, HelperInfo> requestHelperList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable(Sort.by("helperNo").descending());
+        Page<HelperInfo> result = repository.find(pageable);
+
+        Function<HelperInfo, HelperInfoDTO> fn = (entity -> EntityToDTO(entity));
+
+        return new PageResultsDTO<>(result,fn);
+    }
+
     //승인
     @Override
     public void accept(HelperInfoDTO helperInfoDTO) {

@@ -42,4 +42,7 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     //헬퍼 신청 agreeHelper : 3(헬퍼 신청 반려)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 3")
     Page<HelperInfo> findAllThree(Pageable pageable);
+
+    @Query(value = "SELECT h FROM HelperInfo h")
+    Page<HelperInfo> find(Pageable pageable);
 }
