@@ -1,4 +1,4 @@
-<!-- ---------- 문의 게시판 ------------------- -->
+<!--  문의 게시판  -->
 
 .cusBoardTitle{
     color: #89ba16 !important;
@@ -76,5 +76,10 @@ button {
     flex: 0 0 111px;
     border-right: 1px solid #eee;
 }
+
+
+
+
+<!-- 비즈니스 카드 -->
 
 

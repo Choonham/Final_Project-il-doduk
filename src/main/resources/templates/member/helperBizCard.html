@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
+<head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>helperBizCard</title>
-    <link href="" th:href="@{/css/helperBizCard.css}" rel="stylesheet">
 </head>
+
 <body id="top">
+
+
 <div class="site-wrap">
+
     <section class="site-section" id="next-section" style="padding-top: 3rem">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 sidebar pl-lg-5">
-                    <div class="sidebar-box">
+
+                    <div id="bizCard_img">
                         <img th:src="${helperInfo.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
                         <h3>[[${helperInfo.name}]]</h3>
                         <p th:text = "${helperInfo.appeal}"></p>
@@ -31,8 +35,9 @@
                             <li><a>헬퍼가입일 <span th:text = "${#temporals.format(helperInfo.regDate, 'yyyy/MM/dd')}"></span></a></li>
                         </div>
                     </div>
-                    <div class="sidebar-box">
-                        <h3>자기 소개</h3>
+
+                    <h4>자기 소개</h4>
+                    <div id="intro_helper">
                         <p>[[${helperInfo.intro}]]</p>
                     </div>
                 </div>
