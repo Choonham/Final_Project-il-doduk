@@ -69,8 +69,9 @@ public class AuctionServiceImpl implements AuctionService {
     //타이머 - 경매 남은 시간얻기
     @Override
     public long timer(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        LocalDateTime time = auction.get().getRegDate(); // 등록시간 불러오기
+        //Optional<AuctionList> auction = this.getAuction(aucSeq);
+        AuctionListDTO auction = this.getAuction(aucSeq);
+        LocalDateTime time = auction.getRegDate(); // 등록시간 불러오기
         Date dTime = java.sql.Timestamp.valueOf(time); // 계산하기 위해 형 변형
 
         Calendar cal = Calendar.getInstance();
@@ -86,8 +87,9 @@ public class AuctionServiceImpl implements AuctionService {
     //일 시작까지 남은 시간 구하기
     @Override
     public long leftTime(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        LocalDateTime time = auction.get().getDoDateTime(); //일 시작 시간
+        //Optional<AuctionList> auction = this.getAuction(aucSeq);
+        AuctionListDTO auction = this.getAuction(aucSeq);
+        LocalDateTime time = auction.getDoDateTime(); //일 시작 시간
         Date dTime = java.sql.Timestamp.valueOf(time);
 
         Calendar cal = Calendar.getInstance();
@@ -196,10 +198,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     //aucSeq 옥션 값 하나만 가져오기
     @Override
-    public Optional<AuctionList> getAuction(Long aucSeq) {
+    public AuctionListDTO getAuction(Long aucSeq) {
         System.out.println("======== getAuction =========");
 
-        Optional<AuctionList> auction = auctionListRepository.findById(aucSeq);
+        AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
+        AuctionListDTO auction = entityToDTO(auctionList);
+
         return auction;
     }
 
@@ -284,8 +288,7 @@ public class AuctionServiceImpl implements AuctionService {
     //일 수행 완료 후 state값 변경
     @Override
     public void jobDone(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        AuctionList auctionList = auction.get();
+        AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
         auctionList.changeState(3);
         auctionListRepository.save(auctionList);
     }

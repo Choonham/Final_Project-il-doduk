@@ -44,7 +44,7 @@ public interface AuctionService {
     void chooseBidding(Long bidSeq);
 
     //aucSe옥션 값 하나만 가져오기
-    Optional<AuctionList> getAuction(Long aucSeq);
+    AuctionListDTO getAuction(Long aucSeq);
 
     AuctionListDTO findAuction(Long aucSeq);
 
