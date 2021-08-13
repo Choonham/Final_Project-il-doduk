@@ -43,6 +43,7 @@ public interface HelperInfoService {
     void deny(HelperInfoDTO helperInfoDTO);
     //헬퍼 정보
     HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO);
+    MemberHelperInfoDTO helperInfo_Mgr(String memberId);
 
     //헬퍼 정보 수정
     void helperModify(HelperInfoDTO helperInfoDTO);

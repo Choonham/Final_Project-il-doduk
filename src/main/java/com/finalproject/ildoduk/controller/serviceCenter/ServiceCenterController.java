@@ -375,8 +375,6 @@ public class ServiceCenterController {
 
     }
 
-
-
     //신고 작성
     @PostMapping("/userReportWrite")
     public String writeReport(UserReportDTO reportDTO){

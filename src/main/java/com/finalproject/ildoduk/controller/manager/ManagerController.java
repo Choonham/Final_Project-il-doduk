@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 @RequestMapping("/manager")
@@ -68,18 +70,18 @@ public class ManagerController {
 
     //헬퍼 승인 요청시에 식별
     @GetMapping("/identifyHelpers")
-    public void identify(@RequestParam("memberId") String memberId,HelperInfoDTO helperInfoDTO,ArrayList<String> img,Model model){
+    public void identify(@RequestParam("memberId") String memberId,Model model){
         log.info("계정 : "+memberId);
-        helperInfoDTO.setMemberId(memberId);
+
         //이미지 split
-        HelperInfoDTO helperInfo =helperInfoService.helperInfo(helperInfoDTO);
+        MemberHelperInfoDTO helperInfo = helperInfoService.helperInfo_Mgr(memberId);
+
+        log.info("헬퍼 정보 : "+helperInfo);
         String[] str_img = helperInfo.getImg().split("\\*");
-        log.info("첫번째 : "+str_img[0].toString());
-        log.info("두번째 : "+str_img[1].toString());
-        for (int i=0;i<str_img.length;i++){
-            img.set(i,str_img[i]);
-        }
-        model.addAttribute("img",img);
+
+        model.addAttribute("profile",str_img[0]);
+        model.addAttribute("id_card",str_img[1]);
+
         model.addAttribute("helperInfo",helperInfo);
     }
 

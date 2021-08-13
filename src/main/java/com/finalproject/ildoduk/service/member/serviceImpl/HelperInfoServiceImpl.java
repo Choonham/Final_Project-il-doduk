@@ -182,6 +182,14 @@ public class HelperInfoServiceImpl implements HelperInfoService {
         return EntityToDTO(entity);
     }
 
+    //관리자 : 헬퍼 요청 리스트 - 해당 헬퍼 상세보기
+    @Override
+    public MemberHelperInfoDTO helperInfo_Mgr(String memberId) {
+        Optional<HelperInfo> helper = repository.find(memberId);
+
+        return helper.isPresent() ? entityToDTO(helper.get()) : null;
+    }
+
     //헬퍼 정보 수정
     @Override
     public void helperModify(HelperInfoDTO helperInfoDTO) {
