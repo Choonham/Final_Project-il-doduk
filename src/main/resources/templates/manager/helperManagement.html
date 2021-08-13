@@ -55,8 +55,7 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
-        <a id="helperList"></a>
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" id="helperList" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
         <div class="job-listing-logo_report">
           <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>

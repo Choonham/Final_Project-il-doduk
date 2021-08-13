@@ -7,7 +7,15 @@
 </head>
 
 <body id="top">
+    <style>
+        .cusBoardTitle{
+            color: #89ba16 !important;
+        }
 
+        .cusBoardTitle:hover{
+            cursor: pointer;
+        }
+    </style>
 <div th:if = "${session.user != null}">
 
     <div th:if="${session.user.state == 1}">
