@@ -1519,9 +1519,15 @@ h1, h2, h3, h4 {
     display: block; }
 
 
-<!-- Dahoon css -->
+  <!-- dahoon css -->
 
+.cusBoardTitle{
+  color: #89ba16 !important
+}
 
+.cusBoardTitle:hover{
+  cursor: pointer;
+}
 
 #report_bizCard{
   border: 1px solid gray;
@@ -1549,10 +1555,8 @@ h1, h2, h3, h4 {
 #test{
   position: relative;
   left: 90%;
-  top: -95px;
+  top:-95px;
 }
-
-
 
 
 .sidebar-box {
