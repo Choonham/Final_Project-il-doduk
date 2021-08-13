@@ -18,7 +18,7 @@
 
                     <div id="bizCard_img">
                         <img th:src="${helperInfo.photo}" alt="Image placeholder" class="img-fluid mb-4 w-50 rounded-circle">
-                        <h3>[[${helperInfo.name}]]</h3>
+                        <h3>[[${helperInfo.nickname}]]</h3>
                         <p th:text = "${helperInfo.appeal}"></p>
                     </div>
 
@@ -32,7 +32,7 @@
                             <li><a>경력사항1 <span>[[${helperInfo.goodAtFirst}]]</span></a></li>
                             <li><a>경력사항2 <span>[[${helperInfo.goodAtSecond}]]</span></a></li>
                             <li><a>경력사항3 <span>[[${helperInfo.goodAtThird}]]</span></a></li>
-                            <li><a>헬퍼가입일 <span th:text = "${#temporals.format(helperInfo.regDate, 'yyyy/MM/dd')}"></span></a></li>
+                            <li><a>헬퍼가입일 <span th:text = "${#temporals.format(helperInfo.modDate, 'yyyy/MM/dd')}"></span></a></li>
                         </div>
                     </div>
 

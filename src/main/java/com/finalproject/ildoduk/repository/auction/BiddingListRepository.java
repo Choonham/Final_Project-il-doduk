@@ -32,5 +32,4 @@ public interface BiddingListRepository extends JpaRepository<BiddingList, Long> 
     BiddingList findBiddingListByAucSeq_AucSeq(Long asuSeq);
 
 
-
 }

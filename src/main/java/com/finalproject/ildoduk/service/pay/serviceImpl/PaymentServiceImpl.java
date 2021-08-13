@@ -132,14 +132,15 @@ public class PaymentServiceImpl implements PaymentService {
     public void doneAuction(Long aucSeq) {
         //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
         //Member의 친절 점수로 : 10이상일 경우 우대 수수료 적용
-        BiddingList biddingList = biddingListRepository.findBiddingListByAucSeq_AucSeq(aucSeq);
-        String helper = biddingList.getHelper().getId();
-        log.info("헬퍼 계정~~~~~~~~~~"+helper);
+        Optional<BiddingList> biddingList = biddingListRepository.selectByAucSeq2(aucSeq);
 
+        BiddingList list = biddingList.get();
+        String helper = list.getHelper().getId();
         //헬퍼 전체 정보
         Optional<HelperInfo> helperInfo = helperInfoRepository.findByMemberId_Id(helper);
+
         int total = 0;
-        int point = biddingList.getOfferPrice();
+        int point = list.getOfferPrice();
 
         if(helperInfo.get().getKindness() >= 10){
             total = (int)(Math.ceil(point * 0.93));

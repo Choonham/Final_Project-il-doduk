@@ -54,11 +54,9 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
         <div class="job-listing-logo_report">
-          <div class="img-fluid rounded-circle">
-            <div th:utext="${stateOne.img}" ></div>
-          </div>
+          <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -112,10 +110,9 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}">
         <div class="job-listing-logo_report">
-          <div th:utext="${stateTwo.img}" class="img-fluid rounded-circle">
-          </div>
+          <img class="img-fluid rounded-circle" th:src="${stateTwo.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -168,7 +165,7 @@
     <ul class="job-listings mb-5">
       <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
         <div class="job-listing-logo_report">
-          <div th:utext="${stateThree.img}" class="img-fluid rounded-circle"></div>
+          <img class="img-fluid rounded-circle" th:src="${stateThree.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -209,8 +206,8 @@
 </section>
 
 <script th:inline="javascript">
-  function bizCard(id){
-    window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
+  function requestHelper(id){
+    window.open("/manager/identifyHelpers?memberId="+id,"헬퍼 신청","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
   }
 </script>
 

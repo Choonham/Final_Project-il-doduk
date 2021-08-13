@@ -68,7 +68,6 @@ public interface UserReportService {
                 .reportKind(entity.getReportKind())
                 .reportState(entity.getReportState())
                 .regDate(entity.getRegDate())
-                .photo(entity.getId().getPhoto())
                 .targetNickName(entity.getReportTarget().getNickname())
                 .build();
         return dto;
@@ -86,11 +85,10 @@ public interface UserReportService {
                 .address(entity.getAddress())
                 .phone(entity.getPhone())
                 .intro(entity.getIntro())
-                .photo(entity.getPhoto())
                 .build();
 
         return dto;
     }
 
-   
+
 }

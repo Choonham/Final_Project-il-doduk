@@ -76,6 +76,7 @@ public interface HelperInfoService {
                 .kindness(entity.getKindness())
                 .appeal(entity.getAppeal())
                 .img(entity.getImg())
+                .photo(member.getMemberId().getPhoto())
                 .agreeHelper(entity.getAgreeHelper())
                 .helperNick(entity.getMemberId().getNickname())
                 .regDate(entity.getRegDate())
@@ -103,6 +104,9 @@ public interface HelperInfoService {
                 .goodAtSecond(helper.getGoodAtSecond())
                 .goodAtFirst(helper.getGoodAtFirst())
                 .agreeHelper(helper.getAgreeHelper())
+
+                .regDate(helper.getRegDate())
+                .modDate(helper.getModDate())
                 .build();
 
         return dto;
@@ -125,7 +129,8 @@ public interface HelperInfoService {
                 .photo(helper.getMemberId().getPhoto())
                 .intro(helper.getMemberId().getIntro())
                 .state(helper.getMemberId().getState())
-                .regDate(helper.getMemberId().getRegDate())
+                .regDate(helper.getMemberId().getRegDate()) //회원가입
+                .modDate(helper.getModDate())               //헬퍼가입
 
                 .helperNo(helper.getHelperNo())
                 .goodAtFirst(helper.getGoodAtFirst())

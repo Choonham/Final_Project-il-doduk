@@ -29,6 +29,7 @@ public class MemberHelperInfoDTO {
     private String intro;       //유저 소개
     private int state;          //구분
     private LocalDateTime regDate;  //가입일
+    private LocalDateTime modDate;
 
 
     /*helperInfoDTO*/
