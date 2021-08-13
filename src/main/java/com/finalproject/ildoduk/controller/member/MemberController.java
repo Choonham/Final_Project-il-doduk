@@ -35,8 +35,8 @@ public class MemberController {
 
     //유저 회원가입 이동
     @GetMapping("/userRegister")
-    public void userRegister(){
-
+    public void userRegister(Model model){
+        model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
     }
 
     //유저 마이페이지 이동
@@ -222,7 +222,7 @@ public class MemberController {
         else{
             dto.setState(1);
             session.setAttribute("user12",dto);
-            model.addAttribute("msg", "회원가입 페이지로 이동 합니다");
+
             return "/member/userRegister";
         }
 
