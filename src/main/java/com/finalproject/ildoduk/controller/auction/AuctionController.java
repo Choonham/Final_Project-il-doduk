@@ -341,7 +341,7 @@ public class AuctionController {
         String helperPhone = bid.getHelper().getPhone();
         String user = bid.getAucSeq().getUser().getNickname();
         String text = "안녕하세요, 헤르메스입니다. " + user + "님의 미션에 낙찰되셨습니다!";
-        //auctionService.sendSMS(helperPhone,text);
+        auctionService.sendSMS(helperPhone,text);
 
         /*낙찰 된 헬퍼에게 메일 보내기 -> 메일주소가 유니크키여서 테스트를 위해 우선 하드코드로 지정*/
         String userEmail = bid.getHelper().getId();
