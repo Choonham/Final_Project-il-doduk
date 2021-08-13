@@ -1,12 +1,9 @@
-<!--  문의 게시판  -->
 
-.cusBoardTitle{
-    color: #89ba16 !important;
+button {
+    background: none;
+    border: none;
 }
 
-.cusBoardTitle:hover{
-    cursor: pointer;
-}
 
 #password_val {
     padding: 0;
@@ -31,10 +28,6 @@
 
 <!--  여기까지 -->
 
-button {
-    background: none;
-    border: none;
-}
 
 #cash_status{
     position: relative;

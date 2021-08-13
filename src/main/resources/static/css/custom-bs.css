@@ -8511,7 +8511,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 }
 
 #bizCard_img{
-    margin-bottom: -20px;
+    margin-bottom: -10px;
     text-align: center;
     font-size: 15px;
     width: 100%;
@@ -8531,6 +8531,16 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     background: #fff;
 }
 
+#report_bizCard{
+    display: inline-block;
+    border: 1px solid #ced4da;
+    border-radius: 25px;
+    width: 22%;
+    position: relative;
+    top: -525px;
+    left: 57%;
+    padding: 7px;
+}
 
 .w-25 {
     width: 25% !important

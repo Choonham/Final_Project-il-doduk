@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
@@ -397,7 +398,7 @@ public class ServiceCenterController {
         UserReportDTO reportDetail = userReportService.badUserReportDetail(userReportDTO);
         MemberDto memberDto = memberService.userIdCheck(reportDetail.getReportTarget());
         //님네임으로 변환
-        reportDetail.setReportTarget(memberDto.getNickname());
+       // reportDetail.setReportTarget(memberDto.getNickname());
         // 남은 작업 : 상세보기시에 종류에 따라 해당 값 세팅, 신고 처리 상태에 따라 값 세팅
         if(reportDetail.getReportKind().equals("1")){
             reportDetail.setReportKind("광고");
@@ -414,7 +415,6 @@ public class ServiceCenterController {
         } else {
             reportDetail.setReportKind("기타");
         }
-
 
         model.addAttribute("reportDetail",reportDetail);
     }

@@ -54,14 +54,14 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
         <div class="job-listing-logo_report">
-          <img th:src="${stateOne.img}"  class="img-fluid">
+          <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateOne.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateOne.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateOne.appeal}">각오</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -110,14 +110,14 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}">
         <div class="job-listing-logo_report">
-          <img th:src="${stateTwo.img}" alt="Free Website Template by Free-Template.co" class="img-fluid">
+          <img class="img-fluid rounded-circle" th:src="${stateTwo.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateTwo.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateTwo.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateTwo.appeal}">각오~~~~~~~~~~~~~~</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -163,14 +163,14 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}" th:onclick="bizCard([[${stateTwo.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
         <div class="job-listing-logo_report">
-          <img th:src="${stateThree.img}" alt="Free Website Template by Free-Template.co" class="img-fluid">
+          <img class="img-fluid rounded-circle" th:src="${stateThree.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateThree.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateThree.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateThree.appeal}">각오~~~~~~~~~~~~~~</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -206,8 +206,8 @@
 </section>
 
 <script th:inline="javascript">
-  function bizCard(id){
-    window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=590, height=895, scrollbars=no, resizeable=no left=1100 top=100");
+  function requestHelper(id){
+    window.open("/manager/identifyHelpers?memberId="+id,"헬퍼 신청","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
   }
 </script>
 

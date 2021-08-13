@@ -20,6 +20,8 @@ public class HelperInfoDTO {
     private int kindness;
     private String appeal;
     private String img;
+    private String photo;
     private int agreeHelper;
+    private String helperNick;
     private LocalDateTime regDate;  //헬퍼 신청일
 }
