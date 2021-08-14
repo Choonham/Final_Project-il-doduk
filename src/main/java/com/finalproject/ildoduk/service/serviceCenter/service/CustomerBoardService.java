@@ -22,7 +22,9 @@ public interface CustomerBoardService {
     void updateAnswer(CustomerBoardDTO dto);
 
     default CustomerBoard dtoToEntity(CustomerBoardDTO dto){
+
         Member member = Member.builder().id(dto.getCusWriter()).build();
+
         CustomerBoard entity = CustomerBoard.builder()
                 .cusNo(dto.getCusNo())
                 .cusTitle(dto.getCusTitle())
@@ -32,10 +34,12 @@ public interface CustomerBoardService {
                 .passwordBoard(dto.getPasswordBoard())
                 .answerCheck(dto.getAnswerCheck())
                 .build();
+
         return entity;
     }
 
     default CustomerBoardDTO entityToDTO(CustomerBoard entity){
+
         CustomerBoardDTO dto = CustomerBoardDTO.builder()
                 .cusNo(entity.getCusNo())
                 .cusTitle(entity.getCusTitle())
@@ -44,6 +48,7 @@ public interface CustomerBoardService {
                 .secretBoard(entity.getSecretBoard())
                 .passwordBoard(entity.getPasswordBoard())
                 .answerCheck(entity.getAnswerCheck())
+                .cusNickName(entity.getCusWriter().getNickname())
                 .regDate(entity.getRegDate())
                 .modDate(entity.getModDate())
                 .build();

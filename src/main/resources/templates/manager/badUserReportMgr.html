@@ -34,17 +34,16 @@
 <!-- reportState == 1 부분 -->
 
 <section class="site-section">
-  <div class="row justify-content-center mb-5" data-aos="fade-up">
-    <div id="filters" class="filters text-center col-md-7">
-      <button class="btn btn-primary active" id="report1">처리중인 신고 리스트</button>
-      <button class="btn btn-primary" id="report2">신고 처리 완료 목록</button>
+    <div class="row justify-content-center mb-5" data-aos="fade-up">
+      <div id="filters" class="filters text-center col-md-7">
+        <button class="btn btn-primary" id="report1">처리중인 신고 리스트</button>
+        <button class="btn btn-primary" id="report2">신고 처리 완료 목록</button>
+      </div>
     </div>
-  </div>
 
-  <div class="row justify-content-center mb-5" data-aos="fade-up" id="noSelectList">
-    선택된 리스트가 없습니다.
-  </div>
-
+    <div class="row justify-content-center mb-5" data-aos="fade-up" id="noSelectList">
+      선택된 리스트가 없습니다.
+    </div>
 </section>
 
 
@@ -72,8 +71,9 @@
           </blockquote>
 
           <div class="block__91147 d-flex align-items-center">
-            <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
-
+            <figure class="mr-4">
+              <img src="../images/person_1.jpg" th:src="${stateOne.photo}" alt="Image" class="img-fluid">
+            </figure>
               <div>
                 <span class="position" th:text="${stateOne.id}">신고하는 사람</span> ->
                 <span class="position" th:text="${stateOne.reportTarget}"> 신고 대상</span>
@@ -141,7 +141,7 @@
               &rdquo;</p>
           </blockquote>
           <div class="block__91147 d-flex align-items-center">
-            <figure class="mr-4"><img src="../images/person_1.jpg" alt="Image" class="img-fluid"></figure>
+            <figure class="mr-4"><img th:src="${stateTwo.photo}" alt="Image" class="img-fluid"></figure>
             <div>
               <span class="position" th:text="${stateTwo.id}">신고하는 사람</span> ->
               <span class="position" th:text="${stateTwo.reportTarget}"> 신고 당하는 놈</span>

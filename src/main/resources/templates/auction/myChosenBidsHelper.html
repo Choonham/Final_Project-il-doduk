@@ -196,7 +196,6 @@
                             </div>
                             <div class="job-listing-meta w-25">
                                 <span class=""><b> 낙찰가격 </b></span>
-<!----------------------------------------- 낙찰 된 비딩은 빨간 버튼 쓸 것 ------------------------------------------------------>
                             </div>
                         </div>
                     </li>
@@ -325,6 +324,12 @@
             $('#allDoneMission').hide();
             $('#MWait').show();
         });
+
+	    //헬퍼만 접근가능
+	    var state = [[${session.user.state}]]
+	    if(state != 2){
+		    self.location.href = "/index";
+	    }
 
     });
 

@@ -183,11 +183,14 @@
 <script th:inline="javascript">
 
     var msg = [[${msg}]];
+    var msgDelete = [[${msgDelete}]];
 
         $(document).ready(function(){
 
             if(msg != null) {
                 alert(msg);
+            }else if(msgDelete != null){
+                alert(msgDelete);
             }
             //결제 팝업창으로 띄우기
         $("#btn_submit").on("click",function(){

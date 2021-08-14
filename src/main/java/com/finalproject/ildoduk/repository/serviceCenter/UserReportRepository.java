@@ -6,7 +6,9 @@ import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,5 +25,11 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     //reportState = 2
     @Query(value = "SELECT u FROM UserReport u WHERE u.reportState = '2'")
     Page<UserReport> findAllTwo(Pageable pageable);
+
+    //신고 대상 친절점수
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE HelperInfo h SET h.kindness = h.kindness - 1 WHERE h.memberId = ?1")
+    void minusKindness(String id);
 
 }

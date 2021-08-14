@@ -28,6 +28,7 @@ public class AuctionBiddingDTO {
     private Long bidSeq;
     private String helper;  //Member(id) 외래키
     private String helperNickName;
+    private String helperName;
     private int chosen;
     private int offerPrice;
     private String helperPhoto;

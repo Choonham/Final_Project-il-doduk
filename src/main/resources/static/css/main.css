@@ -4,6 +4,31 @@ button {
     border: none;
 }
 
+
+#password_val {
+    padding: 0;
+    margin-left: 8px;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    width: 100px;
+}
+
+#cusBoardWrite_btn{
+    position: relative;
+    left: 95%;
+}
+
+#keyword{
+    width: 200px;
+}
+
+#search_btn {
+    margin-left: 5px;
+}
+
+<!--  여기까지 -->
+
+
 #cash_status{
     position: relative;
     left: 81%;
@@ -35,5 +60,19 @@ button {
 #trade_user:hover{
    color: #7f848c;
 }
+
+<!-- 관리자  신고게시판 -->
+
+.job-listing-logo_report{
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 150px;
+    flex: 0 0 111px;
+    border-right: 1px solid #eee;
+}
+
+
+
+
+<!-- 비즈니스 카드 -->
 
 

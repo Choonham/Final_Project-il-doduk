@@ -5,7 +5,6 @@ import com.finalproject.ildoduk.dto.*;
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.*;
-import org.springframework.data.domain.Page;
 
 import java.util.*;
 
@@ -44,7 +43,7 @@ public interface AuctionService {
     void chooseBidding(Long bidSeq);
 
     //aucSe옥션 값 하나만 가져오기
-    Optional<AuctionList> getAuction(Long aucSeq);
+    AuctionListDTO getAuction(Long aucSeq);
 
     AuctionListDTO findAuction(Long aucSeq);
 
@@ -78,13 +77,22 @@ public interface AuctionService {
     PageResultsDTO<AuctionBiddingDTO, Object[]> getMyChosenBids(PageRequestDTO pageRequestDTO, String helper, boolean isAllDone);
 
     //경매 참여
-    Long BiddingIn(BiddingListDTO dto);
+    Long biddingIn(BiddingListDTO dto);
+
+    //경매참여내역하나만 받아오기
+    Optional<BiddingList> getOneBid(Long bidSeq);
 
     //경매 삭제 - helper가 경매 삭제 불가
     //void deleteBidding(Long bidSeq);
 
     //비딩 참여 가능한 옥션리스트 test :state = 0, Auction
     PageResultsDTO<AuctionListDTO, AuctionList> getAvailableAuctions(String sido, String sigungu, int category, PageRequestDTO pageRequestDTO);
+
+    //============================= sms 문자 보내기 ===================================================//
+    void sendSMS(String userPhoneNumber, String text);
+
+    //==================================== 메일 전송 관련 ==============================================//
+    void sendMail(String userEmail,String title, String text);
 
     //================================== blog =========================================//
     //헬퍼 기준 일 수행 완료 된 갑 불러오기 state=3, auction-bidding <List>
@@ -103,8 +111,7 @@ public interface AuctionService {
     }
 
     //BiddingList
-    default BiddingList dtoToEntity(BiddingListDTO dto, Member helper){
-        AuctionList auctionList = AuctionList.builder().aucSeq(dto.getAucSeq()).build();
+    default BiddingList dtoToEntity(AuctionList auctionList,BiddingListDTO dto, Member helper){
         BiddingList biddingList = BiddingList.builder().bidSeq(dto.getBidSeq()).aucSeq(auctionList).helper(helper).chosen(dto.getChosen())
                 .offerPrice(dto.getOfferPrice()).build();
         return biddingList;
@@ -117,7 +124,7 @@ public interface AuctionService {
         AuctionListDTO auctionListDTO = AuctionListDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
-                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
+                .address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).userPhoto(auc.getUser().getPhoto()).userNickName(auc.getUser().getNickname())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).build();
         return auctionListDTO;
     }
@@ -139,7 +146,7 @@ public interface AuctionService {
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
-                .userPhoto(auc.getUser().getPhoto()).helperPhoto(helper.getPhoto())
+                .userPhoto(auc.getUser().getPhoto()).helperPhoto(helper.getPhoto()).helperName(bid.getHelper().getName())
                 .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
@@ -150,7 +157,7 @@ public interface AuctionService {
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu()).helperNickName(helper.getNickname())
-                .userPhoto(user.getPhoto()).helper(helper.getPhoto())
+                .userPhoto(user.getPhoto()).helper(helper.getPhoto()).helperName(helper.getName())
                 .userNickName(user.getName()).chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(helper.getId()).offerPrice(bid.getOfferPrice()).build();
         return DTO;
     }
@@ -162,14 +169,15 @@ public interface AuctionService {
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
                 .userNickName(auc.getUser().getNickname()).userPhoto(auc.getUser().getPhoto()).helperPhoto(bid.getHelper().getPhoto()).helperNickName(bid.getHelper().getNickname())
-                .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(bid.getHelper().getId()).offerPrice(bid.getOfferPrice()).build();
+                .chosen(bid.getChosen()).bidSeq(bid.getBidSeq()).helper(bid.getHelper().getId()).offerPrice(bid.getOfferPrice())
+                .helperName(bid.getHelper().getName()).build();
         return DTO;
     }
 
     //BiddingList
     default BiddingListDTO entityToDTO(BiddingList bid){
         BiddingListDTO biddingListDTO = BiddingListDTO.builder().aucSeq(bid.getAucSeq().getAucSeq()).helper(bid.getHelper().getId()).bidSeq(bid.getBidSeq()).chosen(bid.getChosen())
-                .offerPrice(bid.getOfferPrice()).helperNickName(bid.getHelper().getNickname()).helperPhoto(bid.getHelper().getPhoto()).build();
+                .offerPrice(bid.getOfferPrice()).helperNickName(bid.getHelper().getNickname()).helperPhoto(bid.getHelper().getPhoto()).helperName(bid.getHelper().getName()).build();
         return biddingListDTO;
     }
 }

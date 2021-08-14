@@ -12,7 +12,14 @@ import com.querydsl.core.*;
 import com.querydsl.core.types.dsl.*;
 import lombok.*;
 import lombok.extern.log4j.*;
+import net.nurigo.java_sdk.api.*;
+import net.nurigo.java_sdk.exceptions.*;
+import org.json.simple.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
+import org.springframework.mail.*;
+import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.*;
 
 import java.text.*;
@@ -28,6 +35,13 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionListRepository auctionListRepository;
     private final MemberRepository userRepository;
     private final BiddingListRepository biddingListRepository;
+
+    //이메일 관련
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String FROM_ADDRESS;
 
     //======================================== 공통메서드 ============================================//
 
@@ -52,8 +66,9 @@ public class AuctionServiceImpl implements AuctionService {
     //타이머 - 경매 남은 시간얻기
     @Override
     public long timer(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        LocalDateTime time = auction.get().getRegDate(); // 등록시간 불러오기
+        //Optional<AuctionList> auction = this.getAuction(aucSeq);
+        AuctionListDTO auction = this.getAuction(aucSeq);
+        LocalDateTime time = auction.getRegDate(); // 등록시간 불러오기
         Date dTime = java.sql.Timestamp.valueOf(time); // 계산하기 위해 형 변형
 
         Calendar cal = Calendar.getInstance();
@@ -69,8 +84,9 @@ public class AuctionServiceImpl implements AuctionService {
     //일 시작까지 남은 시간 구하기
     @Override
     public long leftTime(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        LocalDateTime time = auction.get().getDoDateTime(); //일 시작 시간
+        //Optional<AuctionList> auction = this.getAuction(aucSeq);
+        AuctionListDTO auction = this.getAuction(aucSeq);
+        LocalDateTime time = auction.getDoDateTime(); //일 시작 시간
         Date dTime = java.sql.Timestamp.valueOf(time);
 
         Calendar cal = Calendar.getInstance();
@@ -179,10 +195,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     //aucSeq 옥션 값 하나만 가져오기
     @Override
-    public Optional<AuctionList> getAuction(Long aucSeq) {
+    public AuctionListDTO getAuction(Long aucSeq) {
         System.out.println("======== getAuction =========");
 
-        Optional<AuctionList> auction = auctionListRepository.findById(aucSeq);
+        AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
+        AuctionListDTO auction = entityToDTO(auctionList);
+
         return auction;
     }
 
@@ -267,8 +285,7 @@ public class AuctionServiceImpl implements AuctionService {
     //일 수행 완료 후 state값 변경
     @Override
     public void jobDone(Long aucSeq) {
-        Optional<AuctionList> auction = this.getAuction(aucSeq);
-        AuctionList auctionList = auction.get();
+        AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
         auctionList.changeState(3);
         auctionListRepository.save(auctionList);
     }
@@ -354,15 +371,64 @@ public class AuctionServiceImpl implements AuctionService {
 
     //옥션에 경매 참여하기
     @Override
-    public Long BiddingIn(BiddingListDTO dto) {
+    public Long biddingIn(BiddingListDTO dto) {
         System.out.println("======== bidding in =========");
         log.info(dto);
         Member helper = this.getMember(dto.getHelper());
-
-        BiddingList biddingList = dtoToEntity(dto, helper);
+        AuctionList auctionList = auctionListRepository.findById(dto.getAucSeq()).get();
+        BiddingList biddingList = dtoToEntity(auctionList, dto, helper);
         biddingListRepository.save(biddingList);
 
         return biddingList.getBidSeq();
+    }
+
+    //경매참여내역하나만 받아오기
+    @Override
+    public Optional<BiddingList> getOneBid(Long bidSeq){
+
+        Optional<BiddingList> bid = biddingListRepository.findById(bidSeq);
+
+        return bid;
+    }
+    //==================================== SMS 전송 관련 ==============================================//
+    @Override
+    public void sendSMS(String userPhoneNumber, String text){ // 휴대폰 문자보내기
+
+        String api_key = "NCSBSPNDEX3DOYNZ";
+        String api_secret = "UKRFUOWDXSFYKLLOFEE2J5I0BSDWLOCR";
+
+        Message coolsms = new Message(api_key, api_secret); // 메시지보내기 객체 생성
+
+        HashMap<String, String> set = new HashMap<String, String>();
+        set.put("to", userPhoneNumber); // 수신번호
+        set.put("from", "01099728740"); // 발신번호
+        set.put("text", text); // 문자내용
+        set.put("type", "SMS"); // 문자 타입
+
+        try {
+            //send() 는 메시지를 보내는 함수
+            JSONObject obj = (JSONObject) coolsms.send(set);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println("메세지 전송 에러 ====== "+e.getMessage());
+            System.out.println("메세지 전송 에러 ====== "+e.getCode());
+        }
+    }
+
+    //==================================== 메일 전송 관련 ==============================================//
+    @Override
+    public void sendMail(String userEmail,String title, String text){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userEmail);
+        message.setFrom(FROM_ADDRESS);
+        message.setSubject(title); // 제목
+        message.setText(text); // 내용
+
+        if(mailSender == null){
+            System.out.println("=======================null이래");
+        }else {
+            this.mailSender.send(message);
+        }
     }
 
     //================================== blog =========================================//

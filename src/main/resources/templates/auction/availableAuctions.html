@@ -185,14 +185,13 @@
 
 
 		// 시/도 선택 박스 초기화
-
 		$("select[name^=sido]").each(function () {
 			$selsido = $(this);
 			$.each(eval(area0), function () {
 
 					$selsido.append("<option value='" + this + "'>" + this + "</option>");
 			});
-			$selsido.next().append("<option value=''>구/군 선택</option>");
+			$selsido.next().append("<option value=''>시/구/군 선택</option>");
 		});
 
 

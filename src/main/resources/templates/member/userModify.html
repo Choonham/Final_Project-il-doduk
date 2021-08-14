@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -112,7 +112,18 @@
             $('#pwd').val("").focus();
         }
     }*/
+    function nickExpEx(){
+        //닉네임 정규식 표현 - 한글과 영어, 숫자만으로 표현
+        var nickNameCheck = RegExp(/^[가-힣a-zA-Z0-9]{2,10}$/);
+        var nickExp = $('#nickname').val();
 
+        if(!nickNameCheck.test(nickExp)){
+            alert("닉네임 형식에 맞게 작성해주세요(한글,영어,숫자만으로 표현)");
+            $('#nickname').val("");
+            /*$('#sample4_postcode').val("").blur();*/
+            $('#nickname').val("").focus();
+        }
+    }
 
     function phoneExpEx (){
         //핸드폰 정규식 표현 - 01로 시작하여 그 다음은 0,1,7,9 중 하나와 매칭되는지 체크한뒤 7~8자리인지 검사
@@ -155,35 +166,117 @@
             }
         });
     }
+
+
 </script>
+
+<!--메세지 창 출력-->
+<script th:inline="javascript">
+    var msg = [[${msg}]];
+
+    $(document).ready(function(){
+        if(msg != null){
+            alert(msg);
+
+        }
+
+    });
+</script>
+
 <body>
-    <form action="/member/userModify" method="post">
-        아이디 <input type="email" name="id" th:value="${session.user.id}" readonly /> <br />
-        이름 <input type="text" name="name" th:value="${session.user.name}"  readonly /> <br />
-        생년월일 <input type="text" name="birth" th:value="${session.user.birth}" readonly /> <br />
-        성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
-        닉네임 <input type="text" name="nickname" /> <br />
-        <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
-        <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
 
-        <!-- 주소 -->
-        <input type="text" id="sample4_postcode" placeholder="우편번호">
-        <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
-        <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
-        <input type="text" id="sample4_jibunAddress" placeholder="지번주소">
-        <span id="guide1" style="color:#999;display:none"></span>
-        <input type="text" id="sample4_detailAddress" placeholder="상세주소">
-        <input type="text" id="sample4_extraAddress" placeholder="참고항목">
-        <span id="guide2" style="color:#999;display:none"></span>
-        <input type="hidden" name="sido" id="sido">
-        <input type="hidden" name="sigungu" id="sigungu">
-        <input type="hidden" name="address" id="address"> <br />
+<div>
+    <!-- 헤드 네비게이션-->
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
 
-        연락처  <input type="tel" name="phone" id="phone" /> * 핸드폰번호(01x-3,4자리-4자리)로 작성해주세요 <br />
-        <input type="hidden" name="photo" id="photo" th:value="${session.user.photo}"  />
-        소개 <textarea name="intro" rows="5" maxlength="50" onfocus="phoneExpEx()" ></textarea> <br />
+    <!-- HOME -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg');" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">User Modify</h1>
+                    <div class="custom-breadcrumbs">
+                        <a href="/index">Home</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>User Modify</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <button type="submit" >개인정보수정</button>
-    </form>
+
+    <section class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class = "col-lg-2"></div>
+                <div class="col-lg-8 mb-5">
+                    <h2 class="mb-4">User Modify To hermes</h2>
+                    <form method="post" action="/member/userModify" class="p-4 border rounded">
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="id">Email</label>
+                                <input type="text" name="id" id="id" th:value="${session.user.id}" readonly class="form-control" > <br />
+                            </div>
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="name">name</label>
+                                <input type="text" name="name" id="name" class="form-control" th:value="${session.user.name}" readonly > <br />
+                            </div>
+
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="gender">gender</label>
+                                <input type="text" name="gender" id="gender" class="form-control" th:value="${session.user.gender}" readonly > <br />
+                            </div>
+
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="birth">birth</label>
+                                <input type="text" name="birth" id="birth" class="form-control" th:value="${session.user.birth}" readonly > <br />
+                            </div>
+
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="nickname">nickname</label>
+                                <input type="text" name="nickname" id="nickname" class="form-control" placeholder=" 2~10자 사이로 한글,영어,숫자" oninput="checkNick()" >
+                                <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
+                                <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
+                            </div>
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="sample4_postcode">주소</label> <br />
+                                <input style = "margin-bottom: 10px;" type="button" onclick="sample4_execDaumPostcode()" class="btn px-4 btn-primary text-white" value="우편번호 찾기" /> <br />
+                                <input style = "margin-bottom: 10px;" type="text" id="sample4_postcode" class="form-control" placeholder="우편번호" onfocus="nickExpEx()" >
+                                <input style = "margin-bottom: 10px;" type="text" id="sample4_roadAddress" class="form-control" placeholder="도로명주소" required />
+                                <input type="text" id="sample4_jibunAddress" class="form-control" placeholder="지번주소" required /> <br />
+                                <span id="guide1" style="color:#999;display:none"></span>
+                                <input style = "margin-bottom: 10px;" type="text" id="sample4_detailAddress" class="form-control" placeholder="상세주소" />
+                                <input style = "margin-bottom: 10px;" type="text" id="sample4_extraAddress" class="form-control" placeholder="(동)"/> <br />
+                                <span id="guide2" style="color:#999;display:none"></span>
+                                <input type="hidden" name="sido" id="sido" />
+                                <input type="hidden" name="sigungu" id="sigungu" />
+                                <input type="hidden" name="address" id="address" />
+                            </div>
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="phone">phone</label>
+                                <input type="tel" name="phone" id="phone" class="form-control" placeholder="01x-0000-0000" > <br />
+                            </div>
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="intro">intro</label>
+                                <textarea id="intro" name="intro" rows="5" class="form-control" placeholder="50자 이내로 작성" onfocus="phoneExpEx()" ></textarea> <br />
+                            </div>
+                            <input type="hidden" name="photo" id="photo" th:value="${session.user.photo}" >
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <input type="submit" value="Sign Up" class="btn px-4 btn-primary text-white">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
 </body>
 </html>

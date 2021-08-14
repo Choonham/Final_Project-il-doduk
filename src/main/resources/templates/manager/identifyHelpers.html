@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>helperBizCard</title>
+</head>
+
+<body id="top">
+
+
+<div class="site-wrap">
+
+    <section class="site-section" id="next-section" style="padding-top: 1.2rem">
+        <div class="container">
+            <h4 class="text-black mb-5 border-bottom pb-2">헬퍼 신청</h4>
+            <button class="btn btn-primary" id="test" onclick="self.close()">확인</button>
+            <div class="row">
+                <div class="col-lg-4 sidebar pl-lg-5">
+                    <div class="sidebar-box">
+                    <div id="img_container">
+                        <div id="profile">
+                            <h4>증명 사진</h4>
+                            <div th:utext="${profile}"></div>
+                        </div>
+                        <div id="id_card">
+                            <h4>주민등록증</h4>
+                            <div th:utext="${id_card}"></div>
+                        </div>
+                    </div>
+                    </div>
+                    <br/><br/>
+
+                    <div th:align="center">본인의 얼굴과 주민등록증 사진이 일치해야합니다.</div>
+
+                    <br/>
+                    <hr/>
+                    <div class="sidebar-box">
+                        <div class="categories">
+                            <h3>헬퍼정보</h3>
+                            <li><a>성별 <span>[[${helperInfo.gender}]]</span></a></li>
+                            <li><a>생년월일 <span>[[${helperInfo.birth}]]</span></a></li>
+                            <li><a>주소지 <span>[[${helperInfo.sido}]]</span><span>[[${helperInfo.sigungu}]]</span></a></li>
+                            <li><a><span><span>[[${helperInfo.regDate}]]</span></span></a></li>
+                        </div>
+                    </div>
+
+                    <br/><br/>
+                    <hr/>
+
+                    <h4>자기 소개</h4>
+                    <div id="intro_helper">
+                        <p>[[${helperInfo.intro}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+</body>
+</html>
