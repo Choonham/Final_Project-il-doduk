@@ -130,7 +130,7 @@
                                     <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <span class="icon-room"></span> [[${dto.sido}]] [[${dto.sigungu}]]<br>
                                 </div>
                                 <div class="job-listing-meta w-25" style="z-index: 1">
                                     <span class="">[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</span>
@@ -243,7 +243,12 @@
                                     <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <div th:if="${dto.chosen == 1}">
+                                        <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    </div>
+                                    <div th:if="${dto.chosen == 0}">
+                                        <span class="icon-room"></span> [[${dto.sido}]] [[${dto.sigungu}]]<br>
+                                    </div>
                                     <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
                                 <div class="job-listing-meta w-25" style="z-index: 1">

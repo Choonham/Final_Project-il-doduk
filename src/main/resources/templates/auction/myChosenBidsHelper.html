@@ -192,7 +192,8 @@
                                 <strong><b style="color:red">미션 수행 일시</b></strong>
                             </div>
                             <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                <span class="icon-room"></span> <b>미션 장소</b>&nbsp;
+                                <button class="btn btn-primary">길찾기</button>
                             </div>
                             <div class="job-listing-meta w-25">
                                 <span class=""><b> 낙찰가격 </b></span>
@@ -242,7 +243,9 @@
                                     <strong><b style="color:red">[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</b></strong>
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                                    <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    <span class="icon-room"></span> [[${dto.address}]]&nbsp;
+                                    <button class="btn btn-primary" style = "z-index: 1">길찾기</button>
+<!--============================================ 길찾기 연결 예정 ==========================================================-->
                                 </div>
                                 <div class="job-listing-meta w-25" style="z-index: 1">
                                     <span class=""><b> [[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b></span>
