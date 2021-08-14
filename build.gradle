@@ -61,6 +61,14 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup => 재난문자 실시간 파싱을 위한 Parser
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
+    //문자메세지 관련
+    // https://mvnrepository.com/artifact/net.nurigo/javaSDK
+    implementation 'net.nurigo:javaSDK:2.2'
+
+    //이메일 관련
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.3'
+
 }
 
 test {
