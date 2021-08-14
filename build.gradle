@@ -58,6 +58,9 @@ dependencies {
     // https://mvnrepository.com/artifact/net.coobird/thumbnailator
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.12'
 
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup => 재난문자 실시간 파싱을 위한 Parser
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
 }
 
 test {
