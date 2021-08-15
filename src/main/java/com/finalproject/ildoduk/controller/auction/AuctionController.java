@@ -37,6 +37,9 @@ public class AuctionController {
     @Autowired
     private final PaymentService paymentService;
 
+    @Autowired
+    private final WeatherService weatherService;
+
     //네비바 정리하고 없어질 컨트롤러~~
     @GetMapping("/main")
     public void main(PageRequestDTO pageRequestDTO) {
@@ -483,5 +486,20 @@ public class AuctionController {
 
     //이미지 관련 컨트롤러 끝
 
+
+    //====================== 날씨 ==========================//
+    @GetMapping("/weather")
+    public void test(String zone,String address, Model model){
+
+        if(zone == null || zone.equals("")) {
+            model.addAttribute("address", "전국");
+        }else{
+            model.addAttribute("address", address);
+        }
+        model.addAttribute("today",weatherService.weather(zone,"0"));
+        model.addAttribute("tmmr",weatherService.weather(zone,"1"));
+        model.addAttribute("dATmmr",weatherService.weather(zone,"2"));
+
+    }
 
 }
