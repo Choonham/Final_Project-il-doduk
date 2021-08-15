@@ -50,7 +50,8 @@ function wsEvt() {
 }
 function showNotification(msg){
     const notification = new Notification(msg.id,{
-        body:msg.text
+        body:msg.text,
+        icon: "https://ibb.co/rcfgnKT"
     });
 }
 

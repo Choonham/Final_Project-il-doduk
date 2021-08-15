@@ -10,10 +10,7 @@ import com.finalproject.ildoduk.webSocket.ChatCompare;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -41,6 +38,13 @@ public class ChatServiceImpl implements ChatService{
 
 
         }
+        //읽음 처리
+        for (Chat chat: list_final) {
+
+            chat.changeState();
+            repo.save(chat);
+        }
+
 
 
     return dtoList;
@@ -81,6 +85,21 @@ public class ChatServiceImpl implements ChatService{
 
 
         return ch_li;
+    }
+
+    @Override
+    public Map<String, Long> get_count(String user) {
+        List<Object[]> list=repo.getCount("vhdvhd0307@naver.com");
+        Map<String ,Long> map = new HashMap<>();
+        for (Object c: list) {
+            Object [] result =(Object[]) c;
+            map.put((String) result[1],(Long) result[0]);
+
+
+        }
+
+
+        return map;
     }
 
     @Override

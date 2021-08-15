@@ -89,5 +89,15 @@ public class auctionServieceTest {
 
     }
 
+    @Test
+    public void chatfind(){
+        List<Object[]> list=chatRepository.getCount("vhdvhd0307@naver.com");
 
+        for (Object c: list) {
+            Object [] result =(Object[]) c;
+            System.out.println(result[1]);
+            System.out.println(result[0]);
+        }
+
+    }
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -26,7 +27,11 @@ public class Chat   {
     private String time;
     @ManyToOne(fetch = FetchType.LAZY)
     private AuctionList list;
-    
+    @ColumnDefault("0")
+    private int state;
+
+
+    public void changeState(){this.state = 1;}
 
 
 }

@@ -41,6 +41,7 @@ MemberService service;
     MemberDto dto=(MemberDto) session.getAttribute("user");
     List<ChatAucDTO> list=chatService.get_chatUI(dto.getId());
     model.addAttribute("list",list);
+    model.addAttribute("map",chatService.get_count(dto.getId()));
 
     }
 
@@ -58,6 +59,7 @@ MemberService service;
         Long l_auc= Long.parseLong(auc);
         model.addAttribute("list",chatService.get_chatList(member,dto.getId(),l_auc));
         model.addAttribute("auc", l_auc);
+        //스테이트 값 변경
 
     }
 
