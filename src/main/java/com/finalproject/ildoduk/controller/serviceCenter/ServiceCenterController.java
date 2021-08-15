@@ -5,6 +5,7 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.CustomerAnswerDTO;
@@ -51,7 +52,7 @@ public class ServiceCenterController {
     private final HelperInfoService helperInfoService;
 
 
-    //결제 및 거래 조회 페이지로 이동
+    //결제 내역 조회
     @GetMapping("/paymentHistory")
     public void getPaymentHistroy(HttpSession session, MemberDto dto, TradeHistoryDTO tradeHistoryDTO, PageRequestDTO pageRequestDTO, Model model){
         MemberDto id = (MemberDto)session.getAttribute("user");
@@ -160,71 +161,62 @@ public class ServiceCenterController {
     public void cusWriteForm(){
     }
 
-
     //문의글 작성
     @PostMapping("/postCusWrite")
     public String postWriteForm(CustomerBoardDTO dto){
-        //넘어오는 데이터 : 제목, 내용, 작성자, 비밀글 여부, (비밀글일시 비밀번호)
-
         customerBoardService.insertCusBoard(dto);
         return "redirect:/serviceCenter/customerBoard";
     }
 
+    //문의글 상세보기
+    @PostMapping("/secretBoard")
+    @ResponseBody
+    public CustomerBoardDTO testBoard(@RequestBody HashMap<String,String> cusNo,Model model){
 
-    //문의글 상세 보기
+        log.info("비동기 테스트 : ~~~~~~" + cusNo.get("cusNo"));
+
+        Long num = Long.parseLong(cusNo.get("cusNo"));
+
+        return customerBoardService.getBoardList(num);
+    }
+
+    //아무 조건이 걸려있지 않은 문의글 상세보기
     @GetMapping("/customerGetBoard")
-    public String getBoard(CustomerBoardDTO dto
-                        ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model,RedirectAttributes redirectAttributes){
-        //이 부분에서 에러
-        //해당 게시글을 눌렀을 경우 번호를 통하여 답글을 불러와야한다.
-        CustomerAnswerDTO answerDTO = customerAnswerService.getAnswer(dto.getCusNo());
+    public void detailBoard(CustomerBoardDTO customerBoardDTO,@ModelAttribute("requestDTO") PageRequestDTO requestDTO
+            ,Model model){
+
+        CustomerBoardDTO board = customerBoardService.getBoardList(customerBoardDTO.getCusNo());
+
+        MemberDto memberDto = memberService.userIdCheck(board.getCusWriter());
+        board.setCusWriter(memberDto.getNickname());
+
+        model.addAttribute("board",board);
+        model.addAttribute("user","check");
+
+        CustomerAnswerDTO answerDTO = customerAnswerService.getAnswer(customerBoardDTO.getCusNo());
         //답글이 존재 할 경우
-       if(answerDTO != null){
+        if(answerDTO != null){
             model.addAttribute("answer",answerDTO);
         }
-        CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
+    }
 
+    //관리자 상세보기 (비밀번호, 작성자와 상관없이 접근 가능)
+    @GetMapping("/mgrBoard")
+    public String mgrboard(CustomerBoardDTO customerBoardDTO, HttpSession session, Model model, @ModelAttribute("requestDTO") PageRequestDTO requestDTO){
 
-        //접속 아이디가 관리자일 경우 모든 글 읽기 가능
-        MemberDto memberDto = memberService.userIdCheck(dto.getCusWriter());
-        //접속한 계정의 닉네임
-        String nickName = memberDto.getNickname();
+        CustomerBoardDTO board = customerBoardService.getBoardList(customerBoardDTO.getCusNo());
 
+        MemberDto memberDto = memberService.userIdCheck(board.getCusWriter());
+        board.setCusWriter(memberDto.getNickname());
 
-        //관리자일 경우 모든 글 확인
-        if(memberDto.getState() == 0){
-            customerBoardDTO.setCusWriter(nickName);
-            model.addAttribute("board",customerBoardDTO);
-            model.addAttribute("user","check");
-            return "/serviceCenter/customerGetBoard";
+        model.addAttribute("board",board);
+        model.addAttribute("user","check");
+
+        CustomerAnswerDTO answerDTO = customerAnswerService.getAnswer(customerBoardDTO.getCusNo());
+        //답글이 존재 할 경우
+        if(answerDTO != null){
+            model.addAttribute("answer",answerDTO);
         }
-
-        // 다음 조건 저 글의 작성자와 넘어온 작성자가 일치하는지 조회
-        String boardWriter = customerBoardDTO.getCusWriter();
-
-        model.addAttribute("board",customerBoardDTO);
-
-        if(dto.getCusWriter().equals(boardWriter)){
-
-            customerBoardDTO.setCusWriter(nickName);
-
-            if(customerBoardDTO.getSecretBoard().equals("y")){
-                redirectAttributes.addFlashAttribute("password",customerBoardDTO.getPasswordBoard());
-                redirectAttributes.addFlashAttribute("pwNo",customerBoardDTO.getCusNo());
-                return "redirect:/serviceCenter/customerBoard";
-             }
-           model.addAttribute("user",customerBoardDTO);
-        } else {
-            //게시글 계정과 로그인 계정이 다른데 그 글이 비공개로 되어있다.그러면 해당 계정을 넘겨주면 되나..
-            if(customerBoardDTO.getSecretBoard().equals("y")){
-                redirectAttributes.addFlashAttribute("noOpen",customerBoardDTO.getCusWriter());
-                return "redirect:/serviceCenter/customerBoard";
-            }
-            model.addAttribute("otherUser",customerBoardDTO);
-        }
-
-
-
         return "/serviceCenter/customerGetBoard";
     }
 
@@ -233,20 +225,26 @@ public class ServiceCenterController {
     @PostMapping("/customerGetBoard")
     public void postGetBoard(CustomerBoardDTO dto,@ModelAttribute("requestDTO") PageRequestDTO requestDTO,Model model){
 
-
         CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(dto.getCusNo());
+
         MemberDto memberDto = memberService.userIdCheck(customerBoardDTO.getCusWriter());
         customerBoardDTO.setCusWriter(memberDto.getNickname());
 
         model.addAttribute("board",customerBoardDTO);
         model.addAttribute("user","check");
 
+        CustomerAnswerDTO answerDTO = customerAnswerService.getAnswer(customerBoardDTO.getCusNo());
+        //답글이 존재 할 경우
+        if(answerDTO != null){
+            model.addAttribute("answer",answerDTO);
+        }
     }
 
     //문의글 수정페이지 이동
     @GetMapping("/customerUpdateBoard")
     public void updateBoard(@RequestParam("cusNo") Long cusNo
             ,@ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
+
         CustomerBoardDTO customerBoardDTO = customerBoardService.getBoardList(cusNo);
         MemberDto memberDto = memberService.userIdCheck(customerBoardDTO.getCusWriter());
         customerBoardDTO.setCusWriter(memberDto.getNickname());
@@ -359,6 +357,9 @@ public class ServiceCenterController {
         //나와 거래 했던 사람들의 정보를 넘겨줘야한다.
         MemberDto user = (MemberDto) session.getAttribute("user");
 
+        //paging 설정
+        pageRequestDTO.setSize(4);
+
         PageResultsDTO<AuctionBiddingDTO, Object[]> list = auctionService.getList4(pageRequestDTO, user.getId());
 
         for(int i=0;i<list.getDtoList().size();i++) {
@@ -397,7 +398,7 @@ public class ServiceCenterController {
         UserReportDTO reportDetail = userReportService.badUserReportDetail(userReportDTO);
         MemberDto memberDto = memberService.userIdCheck(reportDetail.getReportTarget());
         //님네임으로 변환
-        reportDetail.setReportTarget(memberDto.getNickname());
+       // reportDetail.setReportTarget(memberDto.getNickname());
         // 남은 작업 : 상세보기시에 종류에 따라 해당 값 세팅, 신고 처리 상태에 따라 값 세팅
         if(reportDetail.getReportKind().equals("1")){
             reportDetail.setReportKind("광고");
@@ -414,7 +415,6 @@ public class ServiceCenterController {
         } else {
             reportDetail.setReportKind("기타");
         }
-
 
         model.addAttribute("reportDetail",reportDetail);
     }
@@ -453,9 +453,8 @@ public class ServiceCenterController {
 
         userReportService.updateReportState(userReportDTO);
 
-        //신고 당한 유저 -> kindness를 깍아야하나..
-
-
+        //신고 당한 유저 -> kindness를 깍음
+        userReportService.minusKindness(userReportDTO);
 
         return "redirect:/serviceCenter/reportBoardMgr";
     }
@@ -469,7 +468,6 @@ public class ServiceCenterController {
 
         helperInfoDTO.setMemberId(id);
         HelperInfoDTO info = helperInfoService.helperInfo(helperInfoDTO);
-
         MemberDto memberDto = memberService.userIdCheck(id);
 
         if(info.getAgreeHelper() == 2){
@@ -491,13 +489,9 @@ public class ServiceCenterController {
     //사용자 FAQ
     @GetMapping("/faq")
     public void faq(){
-
     }
 
-    //관리자 FAQ
-    @GetMapping("/faqMgr")
-    public void faqMgr(){
 
-    }
+
 
 }

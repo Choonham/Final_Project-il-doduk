@@ -1518,9 +1518,23 @@ h1, h2, h3, h4 {
   .block__18514 .block__47528 li a {
     display: block; }
 
+.cusBoardTitle{
+  color: #89ba16 !important
+}
+
+.cusBoardTitle:hover{
+  cursor: pointer;
+}
+
+#report_bizCard{
+
+
+  border: 1px solid gray;
+}
+
 .sidebar-box {
-  margin-bottom: 30px;
-  padding: 25px;
+  margin-bottom: 20px;
+  padding: 15px;
   font-size: 15px;
   width: 100%;
   float: left;
@@ -1535,7 +1549,7 @@ h1, h2, h3, h4 {
   position: relative;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px dotted #dee2e6;
+  border-bottom: 1px dotted #b2afaf;
   list-style: none; }
   .categories li:last-child, .sidelink li:last-child {
     margin-bottom: 0;

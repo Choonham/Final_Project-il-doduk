@@ -1,5 +1,6 @@
 package com.finalproject.ildoduk.repository.auction;
 
+import com.finalproject.ildoduk.dto.auction.BiddingListDTO;
 import com.finalproject.ildoduk.entity.auction.*;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.data.domain.*;
@@ -33,6 +34,7 @@ public interface BiddingListRepository extends JpaRepository<BiddingList, Long> 
 
 
 
+    BiddingList findBiddingListByAucSeq_AucSeq(Long asuSeq);
 
 
 }

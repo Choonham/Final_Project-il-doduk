@@ -13,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
 
 
 @RequestMapping("/manager")
@@ -48,8 +51,6 @@ public class ManagerController {
         //번호를 이용해서 값을 조회해야하나???
         HelperInfoDTO helperId = helperInfoService.helperInfo(helperInfoDTO);
 
-        log.info("참조 아이디 ~~~~~~ "+helperId.getMemberId());
-
         //Member state = 2로 변경
         MemberDto memberDto = memberService.userIdCheck(helperId.getMemberId());
         memberService.updateState(memberDto);
@@ -62,9 +63,24 @@ public class ManagerController {
     public String denyHelper(HelperInfoDTO helperInfoDTO){
         //반려시에 agreeHelper = 3으로 변경
         helperInfoService.deny(helperInfoDTO);
-        //반려 사유...음...
-
         return "redirect:/manager/helperManagement";
+    }
+
+    //헬퍼 승인 요청시에 식별
+    @GetMapping("/identifyHelpers")
+    public void identify(@RequestParam("memberId") String memberId,HelperInfoDTO helperInfoDTO,ArrayList<String> img,Model model){
+        log.info("계정 : "+memberId);
+        helperInfoDTO.setMemberId(memberId);
+        //이미지 split
+        HelperInfoDTO helperInfo =helperInfoService.helperInfo(helperInfoDTO);
+        String[] str_img = helperInfo.getImg().split("\\*");
+        log.info("첫번째 : "+str_img[0].toString());
+        log.info("두번째 : "+str_img[1].toString());
+        for (int i=0;i<str_img.length;i++){
+            img.set(i,str_img[i]);
+        }
+        model.addAttribute("img",img);
+        model.addAttribute("helperInfo",helperInfo);
     }
 
 }

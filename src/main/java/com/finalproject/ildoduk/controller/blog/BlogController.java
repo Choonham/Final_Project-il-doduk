@@ -170,7 +170,7 @@ public class BlogController {
     public String temp(BlogDTO dto, Model model) {
         log.info(dto.getContent());
         blogService.registerPost(dto);
-        String result = "redirect:/blog/blogList?writer="+dto.getWriter();
+        String result = "redirect:/blog/blogList?writer="+dto.getWriter().getId();
         return result;
     }
 

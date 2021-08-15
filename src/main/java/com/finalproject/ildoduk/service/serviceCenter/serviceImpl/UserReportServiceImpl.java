@@ -2,11 +2,8 @@ package com.finalproject.ildoduk.service.serviceCenter.serviceImpl;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
-import com.finalproject.ildoduk.dto.pay.TradeHistoryDTO;
 import com.finalproject.ildoduk.dto.serviceCenter.UserReportDTO;
-import com.finalproject.ildoduk.entity.pay.TradeHistory;
 import com.finalproject.ildoduk.entity.serviceCenter.UserReport;
-import com.finalproject.ildoduk.repository.pay.TradeRepository;
 import com.finalproject.ildoduk.repository.serviceCenter.UserReportRepository;
 import com.finalproject.ildoduk.service.serviceCenter.service.UserReportService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +22,6 @@ import java.util.function.Function;
 public class UserReportServiceImpl implements UserReportService {
 
     private final UserReportRepository userReportRepository;
-    private final TradeRepository tradeRepository;
-
 
     //신고 작성
     @Override
@@ -38,15 +33,6 @@ public class UserReportServiceImpl implements UserReportService {
     }
 
 
-    //나와 거래했던 유저 정보 검색
-    @Override
-    public Optional<TradeHistory> getUser(String id) {
-
-        //내 거래 목록 조회
-        Optional<TradeHistory> trade = tradeRepository.findAllByIdId(id);
-
-        return trade;
-    }
 
 
     //신고글 리스트
@@ -112,6 +98,11 @@ public class UserReportServiceImpl implements UserReportService {
         entity.changeReportState(userReportDTO.getReportState());
 
         userReportRepository.save(entity);
+    }
+    //친절 점수 깍음
+    @Override
+    public void minusKindness(UserReportDTO userReportDTO) {
+        userReportRepository.minusKindness(userReportDTO.getReportTarget());
     }
 
 

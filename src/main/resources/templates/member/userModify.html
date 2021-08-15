@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -112,7 +112,18 @@
             $('#pwd').val("").focus();
         }
     }*/
+    function nickExpEx(){
+        //닉네임 정규식 표현 - 한글과 영어, 숫자만으로 표현
+        var nickNameCheck = RegExp(/^[가-힣a-zA-Z0-9]{2,10}$/);
+        var nickExp = $('#nickname').val();
 
+        if(!nickNameCheck.test(nickExp)){
+            alert("닉네임 형식에 맞게 작성해주세요(한글,영어,숫자만으로 표현)");
+            $('#nickname').val("");
+            /*$('#sample4_postcode').val("").blur();*/
+            $('#nickname').val("").focus();
+        }
+    }
 
     function phoneExpEx (){
         //핸드폰 정규식 표현 - 01로 시작하여 그 다음은 0,1,7,9 중 하나와 매칭되는지 체크한뒤 7~8자리인지 검사
@@ -155,29 +166,45 @@
             }
         });
     }
+
+
 </script>
+
+<!--메세지 창 출력-->
+<script th:inline="javascript">
+    var msg = [[${msg}]];
+
+    $(document).ready(function(){
+        if(msg != null){
+            alert(msg);
+
+        }
+
+    });
+</script>
+
 <body>
     <form action="/member/userModify" method="post">
         아이디 <input type="email" name="id" th:value="${session.user.id}" readonly /> <br />
         이름 <input type="text" name="name" th:value="${session.user.name}"  readonly /> <br />
         생년월일 <input type="text" name="birth" th:value="${session.user.birth}" readonly /> <br />
         성별 <input type="text" name="gender" th:value="${session.user.gender}" readonly /> <br />
-        닉네임 <input type="text" name="nickname" /> <br />
+        닉네임 <input type="text" name="nickname" id="nickname" minlength="2" maxlength="10" oninput="checkNick()" /> * 닉네임 변경시 2~10자 사이로 한글,영어,숫자를 이용하여 입력해주세요 <br />
         <span style="display:none; color:#0100FF; " class="nick_ok"> 사용 가능한 닉네임 입니다.</span>
         <span style="display:none; color:#FF0000; " class="nick_already">사용 중인 닉네임 입니다.</span> <br />
 
         <!-- 주소 -->
-        <input type="text" id="sample4_postcode" placeholder="우편번호">
-        <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
-        <input type="text" id="sample4_roadAddress" placeholder="도로명주소">
-        <input type="text" id="sample4_jibunAddress" placeholder="지번주소">
+        <input type="text" id="sample4_postcode" placeholder="우편번호" onfocus="nickExpEx()">
+        <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기" /><br>
+        <input type="text" id="sample4_roadAddress" placeholder="도로명주소" />
+        <input type="text" id="sample4_jibunAddress" placeholder="지번주소" />
         <span id="guide1" style="color:#999;display:none"></span>
-        <input type="text" id="sample4_detailAddress" placeholder="상세주소">
-        <input type="text" id="sample4_extraAddress" placeholder="참고항목">
+        <input type="text" id="sample4_detailAddress" placeholder="상세주소" />
+        <input type="text" id="sample4_extraAddress" />
         <span id="guide2" style="color:#999;display:none"></span>
-        <input type="hidden" name="sido" id="sido">
-        <input type="hidden" name="sigungu" id="sigungu">
-        <input type="hidden" name="address" id="address"> <br />
+        <input type="hidden" name="sido" id="sido" />
+        <input type="hidden" name="sigungu" id="sigungu" />
+        <input type="hidden" name="address" id="address" /> <br />
 
         연락처  <input type="tel" name="phone" id="phone" /> * 핸드폰번호(01x-3,4자리-4자리)로 작성해주세요 <br />
         <input type="hidden" name="photo" id="photo" th:value="${session.user.photo}"  />

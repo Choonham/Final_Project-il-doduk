@@ -5,13 +5,16 @@ import com.finalproject.ildoduk.dto.PageResultsDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.auction.AuctionListDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.entity.pay.Payment;
 import com.finalproject.ildoduk.repository.auction.AuctionListRepository;
 import com.finalproject.ildoduk.repository.auction.BiddingListRepository;
+import com.finalproject.ildoduk.repository.member.HelperInfoRepository;
 import com.finalproject.ildoduk.repository.pay.PaymentRepository;
 import com.finalproject.ildoduk.service.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -33,6 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final AuctionListRepository auctionListRepository;
     private final BiddingListRepository biddingListRepository;
+    private final HelperInfoRepository helperInfoRepository;
 
     //포인트 충전
     @Override
@@ -121,32 +126,31 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.plusPointBidSuccess(difference,userId);
     }
     //3.
-    //경매 완료시에 헬퍼 포인트 차감
+    //경매 완료시에 헬퍼 포인트
     //이때 친절 점수에따라 중간 수수료 다르게 계산
     @Override
-    public void doneAuction(AuctionBiddingDTO auctionBiddingDTO, MemberDto memberDto) {
-
-
-        log.info("헬퍼쪽 포인트 업데이트 시작");
-
-        //String userID = dto.getId();
+    public void doneAuction(Long aucSeq) {
         //들어온 포인트 여기서 조건을 통하여 2가지로 분리 User 리뷰 확인
-        // Member의 친절 점수로 : 5점 만점에 3.5이상일 경우 우대 수수료 적용??
+        //Member의 친절 점수로 : 10이상일 경우 우대 수수료 적용
+        Optional<BiddingList> biddingList = biddingListRepository.selectByAucSeq2(aucSeq);
 
-        //int point = dto.getPoint();
+        BiddingList list = biddingList.get();
+        String helper = list.getHelper().getId();
+        //헬퍼 전체 정보
+        Optional<HelperInfo> helperInfo = helperInfoRepository.findByMemberId_Id(helper);
+
         int total = 0;
+        int point = list.getOfferPrice();
 
-        //친절 점수 들어갈 곳
-        String test = null;
+        if(helperInfo.get().getKindness() >= 10){
+            total = (int)(Math.ceil(point * 0.93));
+            log.info("헬퍼가 가져갈 포인트~~~"+total);
+        } else {
+            total = (int)(Math.ceil(point * 0.9));
+            log.info("헬퍼가 가져갈 포인트~~~"+total);
+        }
 
-        // 중개 수수료 기본 : 10%  -> 0.9
-        //    우대 수수료 : 7% -> 0.93
-
-            //우대 수수료 적용
-            //total = (int)(Math.ceil(point * 0.93));
-
-
-            //total = (int)(Math.ceil(point * 0.9));
+        paymentRepository.plusPointBidSuccess(total,helper);
 
     }
 

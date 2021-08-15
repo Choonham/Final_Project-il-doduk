@@ -18,8 +18,6 @@ import java.util.Optional;
 
 public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, QuerydslPredicateExecutor<HelperInfo> {
 
-    Optional<HelperInfo> findByMemberId(Member memberId);
-
     Optional<HelperInfo> findByMemberId_Id(String memeberId);
 
     int countHelperInfoByMemberId(Member memeberId);
@@ -34,9 +32,6 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     @Query(value = "select count(h) from HelperInfo h where h.memberId.id in (select distinct b.helper.id from BiddingList b where b.aucSeq.aucSeq in (select a.aucSeq from AuctionList a where a.sigungu = :sigungu))")
     int countDistinctBySigungu(String sigungu);
 
-    //멤버, 헬퍼 정보 전체 조인인
-    @Query(value = "SELECT h, m FROM HelperInfo  h join Member m on h.memberId = m.id WHERE h.memberId = ?1")
-    MemberHelperInfoDTO joinHelperInfo(String memberId);
 
     //헬퍼 신청 agreeHelper : 1(헬퍼 신청)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 1")
@@ -47,4 +42,7 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
     //헬퍼 신청 agreeHelper : 3(헬퍼 신청 반려)
     @Query(value = "SELECT h FROM HelperInfo h WHERE h.agreeHelper = 3")
     Page<HelperInfo> findAllThree(Pageable pageable);
+
+    @Query(value = "SELECT h FROM HelperInfo h")
+    Page<HelperInfo> find(Pageable pageable);
 }

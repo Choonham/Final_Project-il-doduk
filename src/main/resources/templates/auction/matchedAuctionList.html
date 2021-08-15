@@ -109,9 +109,9 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <!--헬퍼 이미지 및 비즈니스 카드 -->
                             <div class="job-listing-logo" th:align="center">
-                                <img th:src="@{dto.helperPhoto}" alt="hermes"
-                                     class="img-fluid" width="80" height="80">
-                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+                                <img th:src="${dto.helperPhoto}" alt="hermes"
+                                     class="img-fluid mb-4 w-50 rounded-circle"><br>
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperName}]]</span>
 <!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
                             </div>
 
@@ -217,9 +217,9 @@
                             <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
                             <!--헬퍼 이미지 및 비즈니스 카드 -->
                             <div class="job-listing-logo" th:align="center">
-                                <img th:src="@{dto.helperPhoto}" alt="hermes"
-                                     class="img-fluid" width="80" height="80">
-                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperNickName}]]</span>
+                                <img th:src="${dto.helperPhoto}" alt="hermes"
+                                     class="img-fluid mb-4 w-50 rounded-circle" width="80" height="80"><br>
+                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperName}]]</span>
 <!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
                             </div>
 
@@ -316,6 +316,12 @@
             $('#matched').hide();
             $('#allDone').show();
         });
+
+        //유저만 접근 가능
+	    var state = [[${session.user.state}]]
+	    if(state != 1){
+		    self.location.href = "/index";
+	    }
 
     });
 

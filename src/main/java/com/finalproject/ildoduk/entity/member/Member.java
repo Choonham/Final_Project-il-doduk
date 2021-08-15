@@ -1,5 +1,6 @@
 package com.finalproject.ildoduk.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
 import com.finalproject.ildoduk.entity.blog.BlogLike;
@@ -59,13 +60,17 @@ public class Member extends BaseEntity{
     @Column(name = "state")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
+
     // ================ Blog Cascade 설정을 위한 연관관계 설정(member 테이블에 추가되는 칼럼 x) ======//
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<Blog> blog;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<BlogComment> blogComment;
 
+    @JsonIgnore //상호 참조를 없애버리기 위함
     @OneToMany(mappedBy = "liker", cascade = CascadeType.ALL)
     private List<BlogLike> blogLike;
     // ================ Blog Cascade 설정을 위한 연관관계 설정 끝 ======//
@@ -78,10 +83,15 @@ public class Member extends BaseEntity{
 
     public void changeAddress(String address){ this.address = address; }
 
+    public void changeSido(String sido){this.sido= sido;}
+
+    public void changeSigungu(String sigungu){this.sigungu= sigungu;}
+
     public void changePhoto(String photo){ this.photo = photo; }
 
     public void changeIntro(String intro){ this.intro = intro; }
 
     public void changeState(int state){ this.state = state;}
+
 
 }

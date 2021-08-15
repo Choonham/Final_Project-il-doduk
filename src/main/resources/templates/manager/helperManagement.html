@@ -20,7 +20,7 @@
       <div class="col-md-7">
         <h1 class="text-white font-weight-bold">관리자 전용</h1>
         <div class="custom-breadcrumbs">
-          <a href="#">Home</a> <span class="mx-2 slash">/</span>
+          <a th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
           <span class="text-white"><strong>헬퍼 요청 리스트</strong></span>
         </div>
       </div>
@@ -31,7 +31,7 @@
 <section class="site-section">
     <div class="row justify-content-center mb-5" data-aos="fade-up">
       <div id="filters" class="filters text-center col-md-7">
-        <button class="btn btn-primary active" id="requestList">헬퍼 요청 목록</button>
+        <button class="btn btn-primary" id="requestList">헬퍼 요청 목록</button>
         <button class="btn btn-primary" id="acceptList">헬퍼 승인 목록</button>
         <button class="btn btn-primary" id="denyList">반려된 헬퍼 목록</button>
       </div>
@@ -54,14 +54,14 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
+        <div class="job-listing-logo_report">
+          <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateOne.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateOne.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateOne.appeal}">각오</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -111,13 +111,13 @@
   <div class="container">
     <ul class="job-listings mb-5">
       <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateTwo : ${stateTwo.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        <div class="job-listing-logo_report">
+          <img class="img-fluid rounded-circle" th:src="${stateTwo.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateTwo.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateTwo.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateTwo.appeal}">각오~~~~~~~~~~~~~~</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -164,13 +164,13 @@
   <div class="container">
     <ul class="job-listings mb-5">
       <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateThree : ${stateThree.dtoList}">
-        <div class="job-listing-logo">
-          <img src="../images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+        <div class="job-listing-logo_report">
+          <img class="img-fluid rounded-circle" th:src="${stateThree.photo}" />
         </div>
 
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-            <h2 th:text="${stateThree.memberId}">헬퍼아이디</h2>
+            <h2 th:text="${stateThree.helperNick}">헬퍼아이디</h2>
             <strong th:text="${stateThree.appeal}">각오~~~~~~~~~~~~~~</strong>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
@@ -204,6 +204,12 @@
 
   </div>
 </section>
+
+<script th:inline="javascript">
+  function requestHelper(id){
+    window.open("/manager/identifyHelpers?memberId="+id,"헬퍼 신청","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
+  }
+</script>
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 
