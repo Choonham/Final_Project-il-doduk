@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,6 +44,7 @@ MemberService service;
     model.addAttribute("list",list);
     model.addAttribute("map",chatService.get_count(dto.getId()));
 
+
     }
 
 
@@ -51,15 +53,17 @@ MemberService service;
     public void chat(@RequestParam("id") String id, @RequestParam("auc") String auc, Model model, HttpServletRequest request){
         model.addAttribute("id", id);
         HttpSession session = request.getSession();
-        model.addAttribute("user", session.getAttribute("user"));
+
         MemberDto dto =(MemberDto)session.getAttribute("user");
-        session.setAttribute("userID", dto.getId());
+        session.setAttribute("userID", dto);
         System.out.println("sessionID:"+ dto.getId());
         Member member = Member.builder().id(id).build();
         Long l_auc= Long.parseLong(auc);
         model.addAttribute("list",chatService.get_chatList(member,dto.getId(),l_auc));
         model.addAttribute("auc", l_auc);
-        //스테이트 값 변경
+
+        MemberDto reciver=service.userToHelperIdCheck(id);
+        model.addAttribute("reciver",reciver.getPhoto());
 
     }
 

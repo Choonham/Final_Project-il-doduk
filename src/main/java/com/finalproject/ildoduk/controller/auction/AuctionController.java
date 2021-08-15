@@ -239,14 +239,14 @@ public class AuctionController {
         String userId = auctionService.getAuction(aucSeq).getUser();
         Member user = auctionService.getMember(userId);
         //옥션 정보
-<<<<<<< HEAD
-        model.addAttribute("auction", auctionService.getAuction(aucSeq).get());
+
+        model.addAttribute("auction", auctionService.getAuction(aucSeq));
         
-=======
+
         AuctionListDTO auctionList = auctionService.getAuction(aucSeq);
         model.addAttribute("auction", auctionList);
 
->>>>>>> b00d7043d07a9ecb60dd3a2fe3c17c11e7284aaf
+
         //옥션 유저 값
         model.addAttribute("u", user);
 

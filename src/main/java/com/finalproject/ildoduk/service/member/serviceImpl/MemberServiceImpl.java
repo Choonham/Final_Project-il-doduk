@@ -136,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     }
-
+    @Override
     public MemberDto userToHelperIdCheck(String memberId){
         Optional<Member> result = repo.findById(memberId);
 

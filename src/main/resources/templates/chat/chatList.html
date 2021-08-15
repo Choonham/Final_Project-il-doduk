@@ -12,7 +12,7 @@
         width: 30px;
         height: 30px;
         margin: 0 auto;
-        background-color: #ffb611;
+        background-color: red;
         font-size: 20px;
         list-style: none;
         text-align: center;
@@ -54,7 +54,22 @@
 
     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
         th:each="chat : ${list}" th:cellpadding="10">
-        <a th:href="@{/chat/chatting(id=${chat.recive},auc=${chat.auc_sec} )}"></a>
+        <a onclick="open_NewWindow()"></a>
+        <script th:inline="javascript">
+            var window1=null;
+            function open_NewWindow(){
+                var id=[[${chat.recive}]];
+                var auc=[[${chat.auc_sec}]];
+
+                if(window1==null){
+                    window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                }
+                else{
+                    window1.focus();
+                }
+            }
+        </script>
         <div class="job-listing-logo">
             <div  th:align="center">
                 <img th:src="${chat.img}" alt="hermes"
@@ -74,7 +89,7 @@
                 <span class="glyphicon glyphicon-envelope"></span><span th:text="${chat.message}"></span>
             </div>
             <div class="job-listing-meta w-25">
-                <div class="number" data-number="120" th:each="num:${map}" th:if="${num.key ==chat.recive}">[[${num.value}]]</div>
+                <div class="number" th:each="num:${map}" th:if="${num.key==chat.recive}">[[${num.value}]]</div>
 
             </div>
         </div>
