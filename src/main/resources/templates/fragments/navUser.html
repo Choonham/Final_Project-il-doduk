@@ -70,7 +70,7 @@
                                         <li><a th:href = "@{/serviceCenter/changeState}" th:if="${session.user.userCheck == 1}" >헬퍼 전환</a></li>
                                         <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}" th:unless="${session.user.userCheck == 1}">헬퍼신청하기</a></li>
                                         <li><a th:href = "@{/member/userModify}">개인정보수정</a></li>
-                                        <li><a th:href = "@{/member/userDelete(id=${session.user.id})}">회원탈퇴</a></li>
+                                        <li><a>회원탈퇴</a></li>
                                     </ul>
                                 </li>
                             </div>
@@ -82,6 +82,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 </body>
