@@ -34,6 +34,7 @@ function wsEvt() {
 
                     if(msg.from===me){
                         showNotification(msg);
+
                     }
 
 
@@ -50,12 +51,16 @@ function wsEvt() {
 }
 function showNotification(msg){
     const notification = new Notification(msg.id,{
-        body:msg.text
+        body:msg.text,
+        icon: "https://ibb.co/rcfgnKT"
     });
+    notification.onclick = function(event) {
+        event.preventDefault();
+        window.open("https://localhost:9991/chat/chatList");
+    }
+
 }
 
+function get_chat(){
 
-console.log(Notification.permission);
-function get_chat(id){
-    window.open("https://localhost:9991/chat/chatting?id="+id);
 }

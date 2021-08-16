@@ -11,15 +11,15 @@ window.onload = function () {
 //||(list[i].recive==me&&list[i].send==you)
 for (var i = 0; i < list.length; i++) {
     //메세지 받을 떄
-    if (list[i].recive == me && list[i].send == other) {
+    if (list[i].recive == me) {
 
 
-        var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/00034587632094500000000000000000?d=retro\" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ list[i].message +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
+        var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src="+recivePhoto+" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ list[i].message +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
         $('#chatwindow').append(newMessage);
     }//보낼 때
-    else {
+    else{
 
-        var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" + list[i].message + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/56234674574535734573000000000001?d=retro\" /></div></article>";
+        var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" + list[i].message + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src="+myPhoto+" /></div></article>";
         $('#chatwindow').append(newMessage);
     }
 }
@@ -37,9 +37,10 @@ function wsEvt() {
     ws.onmessage = function (data) {
         var msg = JSON.parse(data.data);
         var time = msg.date;
-        if (msg.send == other && msg.recive == me) {
-            var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/00034587632094500000000000000000?d=retro\" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ msg.text +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
+        if (msg.send == other && msg.recive == me&&msg.auc==auc_seq) {
+            var newMessage = "<article class=\"msg-container msg-remote\" id=\"msg-0\"><div class=\"msg-box\"><img class=\"user-img\" id=\"user-0\" src="+recivePhoto+" /><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-0\">"+ msg.text +"</p></div><span class=\"timestamp\"><span class=\"username\">"+other +"</span>&bull;<span class=\"posttime\">3 minutes ago</span></span></div></div></article>";
             $('#chatwindow').append(newMessage);
+            $('#chatwindow').scrollTop=  $('#chatwindow').scrollHeight;
 
         }
 
@@ -47,19 +48,20 @@ function wsEvt() {
 
     document.addEventListener("keypress", function (e) {
         if (e.keyCode == 13) { //enter press
-            send(id, other);
+            send(id, other,auc_seq);
+            $('#chatwindow').scrollTop=  $('#chatwindow').scrollHeight;
         }
     });
 }
 
 
-function send(id, recive) {
-    makeText(id, recive);
+function send(id, recive,auc_seq) {
+    makeText(id, recive,auc_seq);
 
     var msg = msgreal;
     var time = msg.date;
     ws.send(JSON.stringify(msg));
-    var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" +$('#message').val() + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src=\"//gravatar.com/avatar/56234674574535734573000000000001?d=retro\" /></div></article>";
+    var newMessage =" <article class=\"msg-container msg-self\" id=\"msg-0\"><div class=\"msg-box\"><div class=\"flr\"><div class=\"messages\"><p class=\"msg\" id=\"msg-1\">" +$('#message').val() + "</p> </div><span class=\"timestamp\"><span class=\"username\">"+me +"</span>&bull;<span class=\"posttime\">2 minutes ago</span></span></div><img class=\"user-img\" id=\"user-0\" src="+myPhoto+" /></div></article>";
     $('#chatwindow').append(newMessage);
     $('#message').val("");
 }
@@ -89,7 +91,7 @@ function getCurrentDate() {
 }
 
 /*메세지 형태 json으로 만들기*/
-function makeText(id, recive) {
+function makeText(id, recive,auc_seq) {
     // Construct a msg object containing the data the server needs to process the message from the chat client.
 
     msgreal = {
@@ -97,7 +99,8 @@ function makeText(id, recive) {
         text: document.getElementById("message").value,
         send: id,
         date: getCurrentDate().toString(),
-        recive: recive
+        recive: recive,
+        auc: auc_seq
     };
 }
 
@@ -108,7 +111,9 @@ function makeText(id, recive) {
 });*/
 
 $('#send').click(function () {
-    send(me, other);
+
+    send(me, other,auc_seq);
+    $('#chatwindow').scrollTop=  $('#chatwindow').scrollHeight;
 });
 
 

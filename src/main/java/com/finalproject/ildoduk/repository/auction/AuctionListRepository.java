@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.repository.auction;
 
 import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.querydsl.core.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
@@ -70,5 +71,8 @@ public interface AuctionListRepository extends JpaRepository<AuctionList, Long>,
     //헬퍼 기준 일 수행 완료 된 값 불러오기 state=3, auction-bidding <List>
     @Query(value = "SELECT a,b FROM AuctionList a, BiddingList b WHERE a.state=3 and b.helper.id=:helper and a.aucSeq=b.aucSeq.aucSeq and b.chosen=1")
     List<Object[]> getAllWith4ForHelper(String helper);
+    //client 기준 채팅해야할 헬퍼들 구하기
+    @Query(value = "select a.user from AuctionList a where  a.aucSeq in (select b.aucSeq.aucSeq from BiddingList b where b.helper.id=:user)")
+    List<Member> findhlper(String user);
 
 }
