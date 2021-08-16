@@ -1,7 +1,10 @@
 package com.finalproject.ildoduk.service.member.service;
 
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -26,6 +29,9 @@ public interface MemberService {
 
     //헬퍼 승인 시에 state 2로 변경
     void updateState(MemberDto memberDto);
+    void changeUser(MemberHelperInfoDTO memberHelperInfoDTO);
+
+    void userCheck(MemberDto memberDto);
 
 //-------------------- 유저 포인트 관련 ----------------------
     //결제 성공시에 현재 가지고 있는 포인트에서 증가
@@ -33,6 +39,8 @@ public interface MemberService {
     //환불 시에 현재 가지고 있는 포인트에서 차감
     void minusPoint(MemberDto dto);
 
+    //경매 미매칭시에 다시 원래 금액 돌려줌
+    void refundAuctionPay(MemberDto dto);
 
     MemberDto kakaoLogin(@RequestBody String json) ;
 
@@ -54,6 +62,7 @@ public interface MemberService {
                 .intro(dto.getIntro())
                 .state(dto.getState())
                 .photo(dto.getPhoto())
+                .userCheck(dto.getUserCheck())
                 .build();
 
         return entity;
@@ -77,14 +86,11 @@ public interface MemberService {
                 .state(entity.getState())
                 .photo(entity.getPhoto())
                 .regDate(entity.getRegDate())
+                .userCheck(entity.getUserCheck())
                 .build();
 
         return dto;
     }
 
-    //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
-    void minusPonit(MemberDto dto);
 
-    //경매 미매칭시에 다시 원래 금액 돌려줌
-    void refundAuctionPay(MemberDto dto);
 }

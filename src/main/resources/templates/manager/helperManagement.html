@@ -55,7 +55,7 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" id="helperList" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" id="helperList" th:each="stateOne : ${stateOne.dtoList}" >
         <div class="job-listing-logo_report">
           <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>
@@ -76,6 +76,8 @@
         </div>
 
         <div class="job-listing-meta">
+          <button th:onclick="requestHelper([[${stateOne.memberId}]]);"><span class="badge badge-success">확인</span></button>
+          <br/>
           <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
           <br/>
           <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>

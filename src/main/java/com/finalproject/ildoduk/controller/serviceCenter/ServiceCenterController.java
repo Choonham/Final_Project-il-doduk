@@ -397,26 +397,20 @@ public class ServiceCenterController {
 
 //------ 유저  <-> 헬퍼 전환 버튼
     @GetMapping("/changeState")
-    public String changeState(HttpSession session){
+    public String changeState(HelperInfoDTO helperInfoDTO,HttpSession session){
         //먼저 helperInfo의 agreeHelper를 체크해서 2일 경우에만 해당 로직 실행?? 버튼
-        String id = (String)session.getAttribute("user");
-        HelperInfoDTO helperInfoDTO = new HelperInfoDTO();
+        MemberDto id = (MemberDto) session.getAttribute("user");
+        log.info("전환 버튼 아이디~~~~~~~~~"+id.getId());
 
-        helperInfoDTO.setMemberId(id);
-        HelperInfoDTO info = helperInfoService.helperInfo(helperInfoDTO);
-        MemberDto memberDto = memberService.userIdCheck(id);
-
-        if(info.getAgreeHelper() == 2){
+        MemberHelperInfoDTO dto = helperInfoService.helperFindById2(id.getId());
+        log.info("전환 테스ㄴ트~~~~~~~~~~~~~~~~~~"+dto);
+        //유저 -> 헬퍼 // 헬퍼 -> 유저
+        //헬퍼 승인이 난 경우 (2)
+        if(dto.getAgreeHelper() == 2){
             //member state 가 1 일 경우 -> 2로
-            if(memberDto.getState() == 1){
-                memberDto.setState(2);
-                memberService.updateState(memberDto);
-            } else {
-                //2일 경우 -> 1로
-                memberDto.setState(1);
-                memberService.updateState(memberDto);
-            }
+            memberService.changeUser(dto);
         }
+
         return "/index";
     }
 

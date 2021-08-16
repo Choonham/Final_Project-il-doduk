@@ -60,6 +60,9 @@ public class Member extends BaseEntity{
     @Column(name = "state")
     private int state;          // 구분(0: 관리자, 1: 일반, 2: 헬퍼)
 
+    @Column(name = "userCheck")
+    @ColumnDefault(value = "0")
+    private int userCheck;
 
     // ================ Blog Cascade 설정을 위한 연관관계 설정(member 테이블에 추가되는 칼럼 x) ======//
     @JsonIgnore
@@ -92,6 +95,8 @@ public class Member extends BaseEntity{
     public void changeIntro(String intro){ this.intro = intro; }
 
     public void changeState(int state){ this.state = state;}
+
+    public void changeUserCheck(int userCheck){this.userCheck = userCheck;}
 
 
 }

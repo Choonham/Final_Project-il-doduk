@@ -67,7 +67,7 @@
 <script th:inline="javascript">
     //유저 포인트 조회
     var point = [[${result.totalPoint}]];
-    var userPoint = [[${userPoint}]];
+    var userPoint = [[${session.user.point}]];
 
     $(document).ready(function(){
         //환불 작업 시작
@@ -81,10 +81,8 @@
                 if(check){
                     alert("환불 신청되었습니다..")
                     $("#refundForm")[0].submit();
-                    self.close();
                 } else {
                     alert("취소되었습니다.")
-                    self.close();
                     return false;
                 }
             } else {
