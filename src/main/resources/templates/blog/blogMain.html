@@ -40,8 +40,15 @@
       <div th:replace="~{/fragments/nav :: navi}"></div>
     </div>
 
+    <div th:if = "${session.user == null}">
+        <script th:inline="javascript">
+            alert("로그인해주세요!");
+            window.location.href = [[@{/}]];
+        </script>
+    </div>
+
     <!-- HOME -->
-    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg');" id="home-section">
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('../images/blogMain.jpg');" id="home-section">
       <div class="container">
         <div class="row" style="padding-top: 3em; padding-bottom: 15px">
           <div class="col-md-7">
