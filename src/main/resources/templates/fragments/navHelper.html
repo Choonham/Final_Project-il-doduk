@@ -20,8 +20,7 @@
             </div>
             <div class="site-mobile-menu-body"></div>
         </div> <!-- .site-mobile-menu -->
-
-
+        
         <!-- NAVBAR -->
         <div class="site-navbar mt-3">
             <div class="container-fluid">
@@ -65,6 +64,7 @@
                                     <a class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>마이페이지</a>
                                     <li class="has-children">
                                         <ul class="dropdown">
+                                            <li><a th:href = "@{/serviceCenter/changeState}">유저전환</a></li>
                                             <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼정보변경</a></li>
                                             <li><a th:href = "@{/member/userModify}">개인정보수정</a></li>
                                             <li><a  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>

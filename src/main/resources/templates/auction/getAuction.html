@@ -70,12 +70,9 @@
                     <td th:rowspan="2" width="30%"><img th:src="${u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
                     <td width="50%"><h3>[[${u.nickname}]]</h3></td>
                     <td th:rowspan="2" width="20%">
-<<<<<<< HEAD
-                        <div th:if="${session.user.id != auction.user}" th:align="center">
 
-=======
                         <div th:if="${session.user.id != helper.id}" th:align="center">
->>>>>>> b00d7043d07a9ecb60dd3a2fe3c17c11e7284aaf
+
                             <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
 <!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
                         </div>

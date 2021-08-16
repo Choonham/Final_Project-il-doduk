@@ -68,7 +68,8 @@
                                 <a  class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>마이페이지</a>
                                 <li class="has-children">
                                     <ul class="dropdown">
-                                        <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼신청하기</a></li>
+                                        <li><a th:href = "@{/serviceCenter/changeState}" th:if="${session.user.userCheck == 1}" >헬퍼 전환</a></li>
+                                        <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}" th:unless="${session.user.userCheck == 1}">헬퍼신청하기</a></li>
                                         <li><a th:href = "@{/member/userModify}">개인정보수정</a></li>
                                         <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
                                         <li><a th:href = "@{/member/userDelete(id=${session.user.id})}">회원탈퇴</a></li>
@@ -83,6 +84,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 </body>

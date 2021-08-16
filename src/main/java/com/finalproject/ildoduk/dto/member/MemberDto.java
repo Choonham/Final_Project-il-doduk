@@ -29,4 +29,6 @@ public class MemberDto {
     private int state;       //구분
     private LocalDateTime regDate;  //가입일
 
+    private int userCheck;
+
 }

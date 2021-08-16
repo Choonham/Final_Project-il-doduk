@@ -5,11 +5,9 @@ import com.finalproject.ildoduk.dto.auction.*;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.entity.auction.AuctionList;
 import com.finalproject.ildoduk.entity.auction.BiddingList;
-import com.finalproject.ildoduk.entity.chat.Chat;
 import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.repository.auction.AuctionListRepository;
 import com.finalproject.ildoduk.repository.auction.BiddingListRepository;
-import com.finalproject.ildoduk.repository.chat.ChatRepository;
 import com.finalproject.ildoduk.repository.member.MemberRepository;
 import com.finalproject.ildoduk.service.auction.service.*;
 import org.jsoup.*;
@@ -26,11 +24,15 @@ import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Optional;
 =======
 import java.util.*;
 >>>>>>> 7e35fcd82b5dc690ee0ff5aaffeb75eebdf81d72
+=======
+import java.util.*;
+>>>>>>> b874509628108599acfdbee5bad6e66034c50549
 
 @SpringBootTest
 public class auctionServieceTest {
@@ -40,6 +42,7 @@ public class auctionServieceTest {
     @Autowired
     BiddingListRepository repository;
 <<<<<<< HEAD
+<<<<<<< HEAD
 @Autowired
     ChatRepository chatRepository;
 @Autowired
@@ -47,13 +50,18 @@ public class auctionServieceTest {
 
 @Autowired
 =======
+=======
+>>>>>>> b874509628108599acfdbee5bad6e66034c50549
 
     @Autowired
     MemberRepository mem_repo;
     @Autowired
     BiddingListRepository biddingListRepository;
     @Autowired
+<<<<<<< HEAD
 >>>>>>> 7e35fcd82b5dc690ee0ff5aaffeb75eebdf81d72
+=======
+>>>>>>> b874509628108599acfdbee5bad6e66034c50549
     AuctionListRepository auc_repo;
 
     @Test
@@ -154,11 +162,14 @@ public class auctionServieceTest {
                     System.out.println(weatherDTO.toString());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Test
     public void testFindbid(){
 
         List<Object[]> list=chatRepository.getChatList("pphai@naver.com");
 =======
+=======
+>>>>>>> b874509628108599acfdbee5bad6e66034c50549
                     today.add(weatherDTO);
                 }
             }
@@ -227,6 +238,7 @@ public class auctionServieceTest {
         }
 
     }*/
+<<<<<<< HEAD
 >>>>>>> 7e35fcd82b5dc690ee0ff5aaffeb75eebdf81d72
 
         for (Object c: list
@@ -243,16 +255,8 @@ public class auctionServieceTest {
 
 
     }
+=======
+>>>>>>> b874509628108599acfdbee5bad6e66034c50549
 
-    @Test
-    public void chatfind(){
-        List<Object[]> list=chatRepository.getCount("vhdvhd0307@naver.com");
 
-        for (Object c: list) {
-            Object [] result =(Object[]) c;
-            System.out.println(result[1]);
-            System.out.println(result[0]);
-        }
-
-    }
 }

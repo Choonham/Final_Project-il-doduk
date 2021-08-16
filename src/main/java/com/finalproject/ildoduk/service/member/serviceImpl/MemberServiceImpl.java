@@ -212,14 +212,9 @@ public void updatePoint(PaymentDTO dto) {
     }
 }
 
-    @Override
-    public void minusPoint(MemberDto dto) {
-
-    }
-
     //경매 등록시에 포인트 차감(보증금 걸어놓는것처럼)
     @Override
-    public void minusPonit(MemberDto dto) {
+    public void minusPoint(MemberDto dto) {
 
         int point = dto.getPoint();
         String userID = dto.getId();
@@ -257,6 +252,38 @@ public void updatePoint(PaymentDTO dto) {
 
             repo.pointUpdate(totalPoint, entity.getId());
         }
+    }
+
+    //헬퍼 <-> 유저 전환
+    @Override
+    public void changeUser(MemberHelperInfoDTO memberHelperInfoDTO) {
+        log.info("변경 내부 넘어온 데이터~~~~~~~~~"+memberHelperInfoDTO);
+
+        Optional<Member> result = repo.findById(memberHelperInfoDTO.getId());
+
+        Member entity = result.get();
+        if(entity.getState() == 1) {
+            memberHelperInfoDTO.setState(2);
+        } else {
+            memberHelperInfoDTO.setState(1);
+        }
+
+        entity.changeState(memberHelperInfoDTO.getState());
+
+        repo.save(entity);
+    }
+
+    //헬퍼 승인시에 userCheck 1로 변경
+    @Override
+    public void userCheck(MemberDto memberDto) {
+        Optional<Member> result = repo.findById(memberDto.getId());
+
+        Member entity = result.get();
+
+        memberDto.setUserCheck(1);
+        entity.changeUserCheck(memberDto.getUserCheck());
+
+        repo.save(entity);
     }
 
 }

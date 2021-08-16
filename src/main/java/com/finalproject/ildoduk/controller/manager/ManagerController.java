@@ -56,6 +56,7 @@ public class ManagerController {
         //Member state = 2로 변경
         MemberDto memberDto = memberService.userIdCheck(helperId.getMemberId());
         memberService.updateState(memberDto);
+        memberService.userCheck(memberDto);
         //헬퍼 승인 완료
         return "redirect:/manager/helperManagement";
     }
@@ -76,13 +77,15 @@ public class ManagerController {
         //이미지 split
         MemberHelperInfoDTO helperInfo = helperInfoService.helperInfo_Mgr(memberId);
 
-        log.info("헬퍼 정보 : "+helperInfo);
+
+        log.info("헬퍼 정보 : " + helperInfo);
         String[] str_img = helperInfo.getImg().split("\\*");
 
-        model.addAttribute("profile",str_img[0]);
-        model.addAttribute("id_card",str_img[1]);
+        model.addAttribute("profile", str_img[0]);
+        model.addAttribute("id_card", str_img[1]);
 
-        model.addAttribute("helperInfo",helperInfo);
+        model.addAttribute("helperInfo", helperInfo);
+
     }
 
 }

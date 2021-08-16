@@ -214,6 +214,7 @@ public class MemberController {
 
 
         if (dto1!=null) {
+            HelperInfoDTO helperInfoDTO = helperInfoService.helperFindById(dto.getId());
 
             session.setAttribute("user", dto1);
             return "/index";
