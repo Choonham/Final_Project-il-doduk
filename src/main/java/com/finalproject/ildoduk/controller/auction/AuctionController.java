@@ -489,11 +489,16 @@ public class AuctionController {
 
     //====================== 날씨 ==========================//
     @GetMapping("/weather")
-    public void test(String zone,String address, Model model){
+    public void test(String sido, String sigungu, Model model){
+
+        //존 받아오기
+        String zone = weatherService.findZone(sido, sigungu);
+        //String zone = weatherService.findZone("121", "33"); //오류테스트
 
         if(zone == null || zone.equals("")) {
             model.addAttribute("address", "전국");
         }else{
+            String address = sido+" "+sigungu;
             model.addAttribute("address", address);
         }
         model.addAttribute("today",weatherService.weather(zone,"0"));
