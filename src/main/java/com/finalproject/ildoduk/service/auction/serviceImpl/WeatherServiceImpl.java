@@ -1,7 +1,11 @@
 package com.finalproject.ildoduk.service.auction.serviceImpl;
 
 import com.finalproject.ildoduk.dto.auction.*;
+import com.finalproject.ildoduk.entity.auction.*;
+import com.finalproject.ildoduk.repository.auction.*;
 import com.finalproject.ildoduk.service.auction.service.*;
+import com.querydsl.core.*;
+import com.querydsl.core.types.dsl.*;
 import lombok.*;
 import lombok.extern.log4j.*;
 import org.jsoup.*;
@@ -15,6 +19,33 @@ import java.util.*;
 @Log4j2
 @RequiredArgsConstructor
 public class WeatherServiceImpl implements WeatherService {
+
+    private final WeatherCodeRepository weatherCodeRepository;
+
+    @Override
+    public String findZone(String sidoP, String sigunguP){
+
+        String code = null;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        QWeatherCode qWeatherCode = QWeatherCode.weatherCode;
+        BooleanExpression sido = qWeatherCode.sido.contains(sidoP);
+        BooleanExpression sigungu = qWeatherCode.sigungu.matches(sigunguP);
+
+        BooleanExpression exAll = sido.and(sigungu);
+        builder.and(exAll);
+
+        try {
+            WeatherCode weatherCode = weatherCodeRepository.findOne(builder).get();
+            code = weatherCode.getCode();
+        }catch (Exception e){
+            code = null;
+        }
+        System.out.println("code =================== " + code );
+
+        return code;
+
+    }
 
     @Override
     public ArrayList<WeatherDTO> weather(String zone, String date){

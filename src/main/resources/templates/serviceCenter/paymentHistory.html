@@ -41,9 +41,19 @@
 <section class="site-section">
   <div class="container">
     <div class="row align-items-center mb-5">
+      <div class="col-lg-3 mr-auto">
+        <div class="border p-4 rounded">
+          <ul class="list-unstyled block__47528 mb-0">
+            <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
+            <li><a th:href = "@{/serviceCenter/changeState}" onclick="return switchUser()">유저전환</a></li>
+            <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼정보변경</a></li>
+            <li><a  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
+            <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
+          </ul>
+        </div>
+      </div>
       <div class="col-lg-8 mb-4 mb-lg-0">
         <div class="d-flex align-items-center"></div>
-      </div>
       <table class="table">
         <thead>
         <tr>
@@ -73,6 +83,7 @@
         </tr>
         </tbody>
       </table>
+      </div>
     </div>
     <!-- 페이징 -->
     <div class="row pagination-wrap mt-5">
@@ -93,6 +104,16 @@
     </div>
 
   </div>
+  <script>
+    //회원탈퇴 전 confirm
+    function userDeleteCheck(){
+      return confirm("정말 회원 탈퇴하시겠습니까?");
+    }
+
+    function switchUser() {
+      return confirm("회원 유형을 변경하시겠습니까?");
+    }
+  </script>
 </section>
 
 <script th:src="@{/pay/serviceCenter.js}"></script>

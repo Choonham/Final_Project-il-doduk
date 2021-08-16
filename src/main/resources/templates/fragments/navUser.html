@@ -65,17 +65,7 @@
                         <div class="right-cta-menu text-right d-flex align-items-center col-6">
                             <div class="ml-auto" th:if = "${session.user.state == 1}">
                                 <a th:href="@{/member/userLogout}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
-                                <a class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>마이페이지</a>
-                                <li class="has-children">
-                                    <ul class="dropdown">
-                                        <li><a th:href = "@{/serviceCenter/changeState}" th:if="${session.user.userCheck == 1}" >헬퍼 전환</a></li>
-                                        <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}" th:unless="${session.user.userCheck == 1}">헬퍼신청하기</a></li>
-                                        <li><a th:href = "@{/member/userModify}">개인정보수정</a></li>
-                                        <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
-                                        <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
-
-                                    </ul>
-                                </li>
+                                <a th:href="@{/member/userModify}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>마이페이지</a>
                             </div>
                         </div>
                     </ul>
@@ -90,7 +80,6 @@
         //회원탈퇴 전 confirm
         function userDeleteCheck(){
             return confirm("정말 회원 탈퇴하시겠습니까?");
-
         }
     </script>
 </div>
