@@ -50,12 +50,13 @@ function wsEvt() {
 }
 function showNotification(msg){
     const notification = new Notification(msg.id,{
-        body:msg.text
+        body:msg.text,
+        icon: "https://ibb.co/rcfgnKT"
     });
 }
 
 
 console.log(Notification.permission);
-function get_chat(id){
+function get_chat(id,auc){
     window.open("https://localhost:9991/chat/chatting?id="+id);
 }

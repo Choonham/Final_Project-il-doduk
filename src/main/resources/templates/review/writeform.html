@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="~{/fragments/header :: mainHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
 
@@ -8,8 +8,69 @@
 </head>
 <body>
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<link rel="stylesheet" th:href="@{/review/css/summernote-lite.css}">
+
+<!-- NAVBAR -->
+
+<div th:if = "${session.user != null}">
+
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+<!-- HOME -->
+<section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7" style="text-align: center">
+                <h1 class="text-white font-weight-bold" style="size: ledger">Review a post</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section" style="padding-top: 30px">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <br style="clear: both">
+            <form id = "postForm" action = "/review/write" method="post">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
+                </div>
+
+                <!-- summernote 에디터 사용 -->
+                <textarea class="summernote" id = "summernote" name="editordata"></textarea>
+
+                <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
+
+
+
+
+                <hr/>
+
+
+                <input type = "submit" id="submit-btn" class="btn px-4 btn-primary text-white"
+                       style="float: right; margin-top: 15px;"
+                       value="글쓰기">
+            </form>
+        </div>
+    </div>
+</section>
+
+</div>
+
+
+<!-- SCRIPTS -->
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/isotope.pkgd.min.js}"></script>
@@ -29,54 +90,6 @@
 <script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
 <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
 <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
-<!-- HOME -->
-<section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-7" style="text-align: center">
-                <h1 class="text-white font-weight-bold" style="size: ledger">Write a post</h1>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="site-section" style="padding-top: 30px">
-    <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <br style="clear: both">
-            <form id = "postForm" action = "/review/write" method="post">
-
-                <div class="form-group">
-                    <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
-                </div>
-
-                <!-- summernote 에디터 사용 -->
-                <textarea class="summernote" id = "editordata" name="editordata"></textarea>
-
-                <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
-
-
-                <div class="form-group">
-                    <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.user.getId()}" required/>
-                </div>
-
-
-
-                <hr/>
-
-
-                <input type = "submit" id="submit-btn" class="btn px-4 btn-primary text-white"
-                       style="float: right; margin-top: 15px;"
-                       value="글쓰기">
-            </form>
-        </div>
-    </div>
-</section>
-<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
-</div>
-
-
-
 <script  th:src="@{/review/js/summernote.js}"></script>
 <script  th:src="@{/review/js/summernote-lite.js}"></script>
 <script th:src="@{/review/js/summernote-ko-KR.js}"></script>
@@ -86,19 +99,21 @@
     var bid= [[${bid}]];
      var helper= [[${helper}]];
     console.log(auction.content);
-    var str ="<h1>후기 작성</h1>";
-    str+="<table border='1'>";
+    var str ="<h3>후기 작성</h3>";
+    str+="<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'>";
     str+="<tr><td>일 제목</td><td>"+auction.title+"</td></tr>";
     str+="<tr><td>일 내용</td><td>"+auction.content+"</td></tr>";
     str+="<tr><td>낙찰된 가격</td><td>"+bid.offerPrice+"</td></tr>";
-    str+="</table>";
-    str+="<h1>헬퍼 정보</h1>";
-    str+="<table>";
+    str+="</table></div>";
+    str+="<h3>헬퍼 정보</h3>";
+    str+="<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'>";
     str+="<tr><td>헬퍼 id</td><td>"+bid.helper+"</td></tr>";
     str+="<tr><td>헬퍼 닉네임</td><td>"+bid.helperNickName+"</td></tr>";
     str+="<tr><td>헬퍼 photo</td><td><img src='+bid.helperPhoto+'></td></tr>";
-    str+="</table>";
+    str+="</table></div>";
   $('#summernote').summernote('code',str);
 </script>
+
+
 </body>
 </html>

@@ -14,8 +14,8 @@ public class ChatDTO {
     private Long No;
     private String message;
     private String recive;
-    private String send;
+    private String sender;
     private String time;
-
+    private Long auc_seq;
 
 }
