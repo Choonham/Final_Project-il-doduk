@@ -125,12 +125,15 @@ public class MemberController {
 
     //유저 수정 페이지 이동
     @GetMapping("/userModify")
-    public String userModifyPage(HttpSession session){
+    public String userModifyPage(HttpSession session,Model model){
         MemberDto memberDto = (MemberDto)session.getAttribute("user");
 
         if(memberDto.getState() == 1){
             return "/member/userModify";
         } else {
+            //헬퍼 정보 담아서 보내야한다.
+            MemberHelperInfoDTO memberHelperInfoDTO = helperInfoService.helperFindById2(memberDto.getId());
+            model.addAttribute("info", memberHelperInfoDTO);
             return "/member/helperModify";
         }
     }
@@ -206,6 +209,18 @@ public class MemberController {
     @GetMapping("/kakao")
     public void kakao(){
 
+    }
+
+    // 사용자 <-> 헬퍼 전환 시 세션 재조회..
+    @GetMapping("/changeState")
+    public String changeState(HttpSession session){
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
+
+        MemberDto member = service.userIdCheck(memberDto.getId());
+        session.removeAttribute("user");
+        session.setAttribute("user", member);
+
+        return "/index";
     }
 
     //카카오 로그인 세션 전달

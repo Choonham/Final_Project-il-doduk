@@ -410,7 +410,7 @@ public class ServiceCenterController {
             //member state 가 1 일 경우 -> 2로
             memberService.changeUser(dto);
         }
-        return "/index";
+        return "redirect:/member/changeState";
     }
 
 //-----------  FAQ ------------------------
