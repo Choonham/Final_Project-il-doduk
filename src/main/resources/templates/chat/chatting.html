@@ -45,8 +45,9 @@
         .chat-window {
             flex: auto;
             max-height: calc(100% - 60px);
-            background: #7f7f7f;
+            background: whitesmoke;
             overflow: auto;
+            border-color:#7f7f7f;
         }
         .chat-input {
             flex: 0 0 auto;
@@ -148,8 +149,10 @@
         }
         .msg-self .msg-box {
             border-radius: 6px 0 0 6px;
-            background: #89ba16;
+            background: white;
             float: right;
+            border-color: #89ba16;
+
         }
         .msg-self .user-img {
             margin: 0 0 10px 10px;
@@ -178,11 +181,13 @@
 </section>
 
 <script th:inline="javascript">
-    var me=[[${session.userID}]];
+    var me=[[${session.userID.id}]];
 
     var other=[[${id}]];
     var list =[[${list}]];
     var auc_seq=[[${auc}]];
+    var myPhoto=[[${session.userID.photo}]];
+    var recivePhoto=[[${reciver}]];
 </script>
 <script th:inline="javascript" th:src="@{/Chat/chatUI.js}"></script>
 

@@ -26,7 +26,7 @@ public interface MemberService {
 
     void userDelete(String id);
 
-
+    public MemberDto userToHelperIdCheck(String memberId);
     //헬퍼 승인 시에 state 2로 변경
     void updateState(MemberDto memberDto);
     void changeUser(MemberHelperInfoDTO memberHelperInfoDTO);

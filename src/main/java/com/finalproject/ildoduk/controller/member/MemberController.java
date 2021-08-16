@@ -152,11 +152,13 @@ public class MemberController {
 
     //유저 삭제
     @GetMapping("/userDelete")
-    public String userDelete(String id, Model model, HttpSession session){
+    public String userDelete(@RequestParam("id")String id, Model model, HttpSession session){
 
         log.info("userDelete id ::  " + id);
 
+        //state 3번으로 변경(삭제 동일한 기능 = 회원 탈퇴 후 개인정보 db유지);
         service.userDelete(id);
+
         session.invalidate();
 
 
@@ -187,6 +189,12 @@ public class MemberController {
         return "/index";
     }
 
+    @GetMapping("/stateToIndex")
+    public String StateIndex(Model model){
+        model.addAttribute("msg","회원 탈퇴된 계정입니다.");
+
+        return "/index";
+    }
 
     //카카오 로그인 페이지
     @GetMapping("/kakao")
@@ -213,14 +221,15 @@ public class MemberController {
         HttpSession session = request.getSession();
 
 
-        if (dto1!=null) {
-            HelperInfoDTO helperInfoDTO = helperInfoService.helperFindById(dto.getId());
-
+        if (dto1!=null && dto1.getState() != 3) {
             session.setAttribute("user", dto1);
             return "/index";
         }
+        else if(dto1.getState() == 3){
+            model.addAttribute("회원 탈퇴된 계정입니다");
 
-        else{
+            return "/member/stateToIndex";
+        }else{
             dto.setState(1);
             session.setAttribute("user12",dto);
 

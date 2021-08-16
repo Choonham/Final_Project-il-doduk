@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<head th:fragment="mainHeader">
+<head th:fragment="indexHeader">
   <meta charset="utf-8" />
   <title>Hermes</title>
 
@@ -32,9 +32,6 @@
   <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
 
-  <!-- notification -->
-  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
-
   <style>
 
     @font-face {
@@ -53,9 +50,11 @@
 
     div {
       font-family: "ELAND_Choice_L", serif;
+      font-weight: bold;
     }
 
   </style>
+
 
 </head>
 

@@ -81,14 +81,10 @@
     <div class="site-navbar mt-3">
         <div class="container-fluid">
             <div class="row align-items-center">
-                <div class="site-logo col-6">
-                    <a th:href="@{/}"><img th:src="@{/https://cdn.discordapp.com/attachments/861512084009385988/874223984424656916/f64fbc940e43a81b.png}"></a>
-                </div>
-
+                <div class="site-logo col-6"><a th:href="@{/}"><img src="../img/mainLogo.png" style="width: 160px; height: 80px;"/></a></div>
                 <nav class="mx-auto site-navigation">
                     <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-                        <li><a href="index.html" class="nav-link active" th:href="@{/}">메인</a></li>
-                        <li><a href="about.html">일도둑은</a></li>
+                        <li><a class="nav-link active" th:href="@{/}">메인</a></li>
                         <li class="has-children">
                             <a href="job-listings.html">미션</a>
                             <ul class="dropdown">
@@ -98,12 +94,14 @@
                         <li>
                             <a th:href = "@{/blog/}">블로그</a>
                         </li>
+                        <li>
+                            <a th:href = "@{/covidInfo/covidInfo/}">COVID-19 현황</a>
+                        </li>
                         <li class="has-children">
                             <a href="" >고객센터</a>
                             <ul class="dropdown" th:if="${session.user != null}">
                                 <li><a th:href="@{/serviceCenter/faq}">FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
-                                <li><a th:href="@{/serviceCenter/paymentHistory}">조회</a></li>
                                 <li><a th:href="@{/serviceCenter/badUserReport}">사용자 신고</a></li>
                             </ul>
                         </li>
@@ -125,7 +123,7 @@
                     </div>
 
                     <div class="ml-auto" th:if = "${session.user != null}">
-                        <a th:href="@{/member/userMypage}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>MyPage</a>
+                        <a th:href="@{/member/userModify}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>MyPage</a>
                         <a th:href="@{/member/userLogout}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
 
                     </div>

@@ -14,4 +14,9 @@ class IldodukApplicationTests {
     @Test
     void contextLoads() {
     }
+
+    @Test
+    void MemberServiceImplTest(){
+
+    }
 }

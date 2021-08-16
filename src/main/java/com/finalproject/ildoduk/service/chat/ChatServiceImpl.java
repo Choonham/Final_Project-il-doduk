@@ -43,6 +43,8 @@ public class ChatServiceImpl implements ChatService{
 
             chat.changeState();
             repo.save(chat);
+            System.out.println(chat.getState());
+
         }
 
 
