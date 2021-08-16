@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 public class BlogCommentDTO {
     private Long commentNo;
     private Long postNo;
-    private Member writer;
+    private String writer;
     private String content;
     private LocalDateTime regDate;
+    private Member writerInfo;
 }

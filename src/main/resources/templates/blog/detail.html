@@ -100,16 +100,16 @@
               <ul class="comment-list">
                 <li class="comment" th:each="comment : ${comments.dtoList}">
                   <div class = "photoCard" style="float: left; margin-right: 5px">
-                    <img th:src = "${comment.writer.photo}" style="height: 60px; width: 60px; border: 2px solid lawngreen; border-radius: 40px;">
+                    <img th:src = "${comment.writerInfo.photo}" style="height: 60px; width: 60px; border: 2px solid lawngreen; border-radius: 40px;">
                   </div>
                   <div class="comment-body">
-                    <h3>[[${comment.writer.nickname}]]</h3>
+                    <h3>[[${comment.writerInfo.nickname}]]</h3>
                     <input type = "hidden" id = "commentNo" th:value="${comment.commentNo}">
                     <div class="meta">[[${#temporals.format(comment.regDate, 'yyyy/MM/dd')}]]</div>
                     <div th:utext="${comment.content}"></div>
                     <div style="text-align: right;">
-                      <div th:if = "${session.user.id == comment.writer.id or session.user.id == detail.writer.id}" id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
-                      <div th:if = "${session.user.id == comment.writer.id }" id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
+                      <div th:if = "${session.user.id == comment.writerInfo.id or session.user.id == detail.writer.id}" id = "delete" style="float: right"><button class="btn-info">삭제</button></div>
+                      <div th:if = "${session.user.id == comment.writerInfo.id }" id = "modify"><button class="btn-info" style="margin-right:10px">수정</button></div>
                     </div>
                     <p></p>
                   </div>
