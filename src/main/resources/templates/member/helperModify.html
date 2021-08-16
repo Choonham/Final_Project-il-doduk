@@ -31,7 +31,17 @@
     <section class="site-section">
         <div class="container">
             <div class="row">
-                <div class = "col-lg-2"></div>
+                <div class="col-lg-3 mr-auto">
+                    <div class="border p-4 rounded">
+                        <ul class="list-unstyled block__47528 mb-0">
+                            <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
+                            <li><a th:href = "@{/serviceCenter/changeState}">유저전환</a></li>
+                            <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼정보변경</a></li>
+                            <li><a  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
+                            <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="col-lg-8 mb-5">
                     <h2 class="mb-4">HelperModify To hermes</h2>
                     <form method="post" action="/member/helperModify" class="p-4 border rounded">
