@@ -189,6 +189,12 @@ public class MemberController {
         return "/index";
     }
 
+    @GetMapping("/stateToIndex")
+    public String StateIndex(Model model){
+        model.addAttribute("msg","회원 탈퇴된 계정입니다.");
+
+        return "/index";
+    }
 
     //카카오 로그인 페이지
     @GetMapping("/kakao")
@@ -220,8 +226,11 @@ public class MemberController {
             session.setAttribute("user", dto1);
             return "/index";
         }
+        else if(dto1.getState() == 3){
+            model.addAttribute("회원 탈퇴된 계정입니다");
 
-        else{
+            return "/member/stateToIndex";
+        }else{
             dto.setState(1);
             session.setAttribute("user12",dto);
 
