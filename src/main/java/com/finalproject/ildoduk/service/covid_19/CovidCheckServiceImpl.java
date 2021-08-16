@@ -236,8 +236,8 @@ public class CovidCheckServiceImpl implements CovidCheckService{
                 Integer[] resultArray = new Integer[4];
 
                 resultArray[0] = Integer.parseInt(e.getElementsByTagName("firstCnt").item(0).getTextContent());
-                resultArray[1] = Integer.parseInt(e.getElementsByTagName("secondCnt").item(0).getTextContent());
-                resultArray[2] = Integer.parseInt(e.getElementsByTagName("firstTot").item(0).getTextContent());
+                resultArray[1] = Integer.parseInt(e.getElementsByTagName("firstTot").item(0).getTextContent());
+                resultArray[2] = Integer.parseInt(e.getElementsByTagName("secondCnt").item(0).getTextContent());
                 resultArray[3] = Integer.parseInt(e.getElementsByTagName("secondTot").item(0).getTextContent());
 
                 resultMap.put(sido, resultArray);

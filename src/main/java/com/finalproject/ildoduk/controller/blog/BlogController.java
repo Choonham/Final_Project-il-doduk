@@ -301,8 +301,6 @@ public class BlogController {
     // 댓글 작성
     @RequestMapping(method = RequestMethod.POST, value = "/registerC", produces = "application/json; charset=utf8")
     public @ResponseBody ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
-
-        System.out.println("aaa");
         blogCommentService.registerComment(blogCommentDTO);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }
