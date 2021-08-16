@@ -32,4 +32,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query(value = "UPDATE Member u SET u.point = ?1 WHERE u.id = ?2")
     void pointMinus(int userCash,String userID);
 
+    void delete(Member id);
 }
