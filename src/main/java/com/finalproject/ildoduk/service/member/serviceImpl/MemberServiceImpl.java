@@ -124,16 +124,14 @@ public class MemberServiceImpl implements MemberService {
     //회원 탈퇴
     @Override
     public void userDelete(String id) {
-        Optional<Member> member= repo.findById(id);
-        Optional<HelperInfo> byMemberId_id = helperInfoRepository.findByMemberId_Id(id);
+        System.out.println("딜리트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ1");
+        Member member =  repo.findById(id).get();
 
-        if(byMemberId_id.isPresent() && member.isPresent()){
-            helperInfoRepository.deleteById(byMemberId_id.get().getHelperNo());
-            repo.deleteById(member.get().getId());
-        }else{
+        System.out.println("딜리트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ2 :::: "  + member.getState() );
+        member.changeState(3);
+        System.out.println("딜리트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ3 :::: " + member.getState());
 
-        }
-
+        repo.save(member);
 
     }
 

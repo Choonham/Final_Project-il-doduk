@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.service.member.service;
 
 import com.finalproject.ildoduk.dto.member.MemberDto;
 import com.finalproject.ildoduk.dto.pay.PaymentDTO;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
 import com.finalproject.ildoduk.entity.member.Member;
 import org.springframework.web.bind.annotation.RequestBody;
 
