@@ -4,6 +4,17 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+
+#cash_status{
+    position: relative;
+    left: 81%;
+    z-index: 10;
+    color: black;
+    display: block;
+    background: #ffffff;
+}
+
 :root {
     --blue: #007eff;
     --indigo: #6610f2;

@@ -125,8 +125,14 @@ public class MemberController {
 
     //유저 수정 페이지 이동
     @GetMapping("/userModify")
-    public void userModifyPage(){
+    public String userModifyPage(HttpSession session){
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
 
+        if(memberDto.getState() == 1){
+            return "/member/userModify";
+        } else {
+            return "/member/helperModify";
+        }
     }
 
     //유저 수정

@@ -227,9 +227,9 @@
                     <div class="border p-4 rounded">
                         <ul class="list-unstyled block__47528 mb-0">
                             <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
-                            <li><a th:href = "@{/serviceCenter/changeState}" onclick="return switchUser()">유저전환</a></li>
+                            <li><a th:href = "@{/serviceCenter/changeState}" onclick="return switchUser()">헬퍼전환</a></li>
                             <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼정보변경</a></li>
-                            <li><a  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
+                            <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
                             <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
                         </ul>
                     </div>

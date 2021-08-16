@@ -66,6 +66,9 @@
         </thead>
 
         <tbody>
+        <tr>
+          <td colspan="5" th:align="center" th:if="${result.totalPage == 0}">결제  내역이  존재하지  않습니다.</td>
+        </tr>
         <tr scope="row" th:each="dto : ${result.dtoList}" th:if="${result.totalPage != 0}">
           <td>[[${dto.pointNo}]]</td>
           <td>[[${dto.totalPoint}]]</td>
