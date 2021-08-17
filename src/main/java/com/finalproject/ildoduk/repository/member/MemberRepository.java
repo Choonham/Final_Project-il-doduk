@@ -23,12 +23,12 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
     //결제 관련
     @Transactional
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Member u SET u.point = u.point + ?1 WHERE u.id = ?2")
     void pointUpdate(int userCash,String userID);
 
     @Transactional
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Member u SET u.point = ?1 WHERE u.id = ?2")
     void pointMinus(int userCash,String userID);
 
