@@ -164,7 +164,7 @@ public interface AuctionService {
 
     //AuctionList,BiddingList
     default AuctionBiddingDTO entityToDTO(AuctionList auc,BiddingList bid){
-        AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq())
+        AuctionBiddingDTO DTO = AuctionBiddingDTO.builder().auctionGap(auc.getAuctionGap()).age(auc.getAge()).aucSeq(auc.getAucSeq()).user(auc.getUser().getId())
                 .category(auc.getCategory()).content(auc.getContent()).doDateTime(auc.getDoDateTime()).regDate(auc.getRegDate()).driverLicense(auc.getDriverLicense())
                 .gender(auc.getGender()).level(auc.getLevel()).predictHour(auc.getPredictHour()).startPrice(auc.getStartPrice()).state(auc.getState())
                 .title(auc.getTitle()).aucSeq(auc.getAucSeq()).address(auc.getAddress()).sido(auc.getSido()).sigungu(auc.getSigungu())
