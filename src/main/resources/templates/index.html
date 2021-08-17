@@ -173,7 +173,6 @@
 
                     </div>
 
-
                 </div>
             </div>
         </section>
@@ -189,8 +188,8 @@
                 <h2 class="text-white">돈이 전부는 아니지만, 99% 정돈 된다.</h2>
             </div>
             <div class="col-md-3 ml-auto">
-                <a th:if="${session.user != null}" th:href="@{/member/helperRegister}" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
-                <a th:if="${session.user == null}" href="javascript:kakaoLogin();" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
+                <a th:if="${session.user != null && session.user.state == 1}" th:href="@{/member/helperRegister}" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
+                <!--<a th:if="${session.user == null}" href="javascript:kakaoLogin();" class="btn btn-warning btn-block btn-lg">Helper 등록</a>-->
             </div>
         </div>
     </div>
@@ -206,22 +205,8 @@
             <div class="row">
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
-                        <p>&ldquo; 황*준 님</p>
-                        <p><cite>고양이</cite></p>
-                    </blockquote>
-                </div>
-                <div class="col-lg-6 align-self-end text-center text-lg-right">
-                    <img src="https://og.kakaobank.io/view/83bab591-ad20-4b11-b494-03adf88cbcc1" height="auto" alt="Image" class="img-fluid mb-0">
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 align-self-center text-center text-lg-left">
-                    <blockquote>
                         <p>&ldquo; 전*훈 님</p>
-                        <p><cite>고양이</cite></p>
+                        <p><cite>믿고 맡길 수 있는 사람이 생겨서 정말 좋아요!</cite></p>
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
@@ -235,7 +220,7 @@
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
                         <p>&ldquo; 유*현 님</p>
-                        <p><cite>고양이</cite></p>
+                        <p><cite>남는 시간에 쏠쏠하게 용돈벌이 할 수 있어서 좋아요~!</cite></p>
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
@@ -249,7 +234,7 @@
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
                         <p>&ldquo; 노*준 님</p>
-                        <p><cite>강아지</cite></p>
+                        <p><cite>급하게 사람이 필요했는데 빠르게 구인이 가능해서 편리해요~</cite></p>
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
@@ -262,8 +247,24 @@
             <div class="row">
                 <div class="col-lg-6 align-self-center text-center text-lg-left">
                     <blockquote>
+                        <p>&ldquo; 황*준 님</p>
+                        <p><cite>나는 최고다. I'm the best</cite></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://og.kakaobank.io/view/83bab591-ad20-4b11-b494-03adf88cbcc1" height="auto" alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
                         <p>&ldquo; 현*원 님</p>
-                        <p><cite>스킵</cite></p>
+                        <p><cite>누구나 바쁠 때는 청소하기 싫잖아요...</cite></p>
+                        <p><cite>대신 해줄 수 있는 사람이 생겨 좋아요!</cite></p>
+
                     </blockquote>
                 </div>
                 <div class="col-lg-6 align-self-end text-center text-lg-right">
