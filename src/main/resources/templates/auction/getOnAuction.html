@@ -337,7 +337,8 @@
 
             <div class="form-group">
                 <label for="offerPrice">제시가격</label>
-                <input type="text" class="form-control" id="offerPrice" name="offerPrice" placeholder="경매 제시액">원
+                * 최소 제시액은 5,000원 입니다. <br>
+                <input type="number" th:min="5000" class="form-control" id="offerPrice" name="offerPrice" value="5000">원
             </div>
 
             <div class="text-center">
