@@ -96,7 +96,7 @@ public class ServiceCenterController {
     @PostMapping("/postRefund")
     public String postRefund(@RequestParam("pointNo") Long pointNo
                             ,@RequestParam("userID") Member member,
-                           @RequestParam("totalPoint") int totalPoint,MemberDto user){
+                           @RequestParam("totalPoint") int totalPoint,HttpSession session,MemberDto user){
         //여기서 해야할 일 1. 결제 이력 y -> n 으로 수정 (완료)
         //              2. 해당 사용자 넘어온 캐쉬만큼 포인트 뺴기 (완료)
         //              3. 조건 검사 -> 보유 캐쉬보다 많을 경우에만 (완료) -> 스크립트에서 실행
@@ -114,6 +114,12 @@ public class ServiceCenterController {
         user.setPoint(totalPoint);
 
         memberService.minusPoint(user);
+
+        session.removeAttribute("user");
+        MemberDto memberDto = memberService.userIdCheck(member.getId());
+        session.setAttribute("user",memberDto);
+
+
 
         return "/index";
     }
@@ -412,14 +418,6 @@ public class ServiceCenterController {
         }
         return "redirect:/member/changeState";
     }
-
-//-----------  FAQ ------------------------
-    //사용자 FAQ
-    @GetMapping("/faq")
-    public void faq(){
-    }
-
-
 
 
 }

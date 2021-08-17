@@ -46,7 +46,7 @@ public class PayController {
         paymentService.pointCharge(dto);
         memberService.updatePoint(dto);
         MemberDto memberDto = memberService.userIdCheck(member.getId());
-        
+
         session.removeAttribute("user");
         session.setAttribute("user", memberDto);
     }

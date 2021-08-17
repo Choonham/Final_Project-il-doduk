@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:200,300,400,700");
 .site-navbar {
+  font-size: 23px;
   margin-bottom: 0px;
   z-index: 1999;
   position: absolute;
@@ -21,7 +22,7 @@
         position: relative;
         left: auto; } }
     .site-navbar .site-logo a {
-      color: #fff;
+      color: #031452;
       font-size: 1.5rem;
       letter-spacing: .2rem;
       text-transform: uppercase; }
@@ -64,7 +65,7 @@
         display: inline-block; }
         .site-navbar .site-navigation .site-menu > li > a {
           padding: 20px 20px !important;
-          color: rgba(255, 255, 255, 0.5);
+          color: rgba(255, 255, 255, 0.6);
           display: inline-block;
           text-decoration: none !important; }
           .site-navbar .site-navigation .site-menu > li > a:hover {
