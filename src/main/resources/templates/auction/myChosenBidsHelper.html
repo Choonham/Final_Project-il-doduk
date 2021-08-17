@@ -243,8 +243,8 @@
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
                                     <span class="icon-room"></span> [[${dto.address}]]&nbsp;
-                                    <button class="btn btn-primary" style = "z-index: 1">길찾기</button>
-<!--============================================ 길찾기 연결 예정 ==========================================================-->
+                                    <a class="btn btn-primary" style = "z-index: 1" th:href="@{https://localhost:9991/map(address=${dto.address})}" >길찾기</a>
+
                                 </div>
                                 <div class="job-listing-meta w-25" style="z-index: 1">
                                     <span class=""><b> [[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b></span>

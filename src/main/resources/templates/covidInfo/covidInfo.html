@@ -364,6 +364,9 @@
     }
 
   </script>
-
+    <script th:inline="javascript">
+      var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
   </body>
 </html>

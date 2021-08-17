@@ -34,7 +34,7 @@ public class Review extends BaseEntity {
 
     private String title;
 
-    @Column(length = 10000, nullable = false)
+    @Column(length = 20000, nullable = false)
     private String content;
 
 

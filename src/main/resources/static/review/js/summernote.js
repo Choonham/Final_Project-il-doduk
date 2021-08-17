@@ -6,6 +6,7 @@ $(document).ready(function() {
         maxHeight: null,             // 최대 높이
         focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
         lang: "ko-KR",					// 한글 설정
+        dialogsInBody: true,
         placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
 
     });
@@ -43,6 +44,7 @@ function uploadSummernoteImageFile(file, el) {
         contentType : false,
         enctype : 'multipart/form-data',
         processData : false,
+
         success : function(data) {
             $(el).summernote('editor.insertImage', data.url);
             $('#editordata').append("<img src="+'+data.url+'+">")

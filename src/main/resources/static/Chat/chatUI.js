@@ -55,7 +55,7 @@ function wsEvt() {
 }
 
 
-function send(id, recive,auc_seq) {
+function send(id,recive,auc_seq) {
     makeText(id, recive,auc_seq);
 
     var msg = msgreal;

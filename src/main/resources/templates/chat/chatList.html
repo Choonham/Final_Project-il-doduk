@@ -22,11 +22,7 @@
     }
 </style>
 
-<script th:inline="javascript">
-    var me=[[${session.userID}]];
 
-
-</script>
 <div th:replace="~{/fragments/navUser :: naviUser}"></div>
 
 <!-- HOME : 위에 회색 그거 -->
@@ -124,7 +120,9 @@
         </tr>
 
     </table>-->
-
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
     <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
 
 
