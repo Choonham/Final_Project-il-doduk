@@ -42,9 +42,12 @@
 <section class="site-section" style="padding-top: 3rem">
 <div class="container">
 
-    <div class="row"><div class="col-2"></div><div class="col-lg-8 blog-content">
-        <h1>[[${review.title}]]</h1><div id ="content">
+    <div class="row">
+        <div class="col-2"></div>
 
+        <div class="col-lg-8 blog-content">
+            <h1>[[${review.title}]]</h1><div id ="content">
+        </div>
 
     </div>
         <button th:if="${review.id == session.user.id}" id="modify" class="btn px-4 btn-primary text-white">편집하기</button>
@@ -53,10 +56,22 @@
 
 </div>
 </section>
+
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 
-
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
 
 
 <!-- SCRIPTS -->

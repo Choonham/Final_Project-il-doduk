@@ -309,6 +309,20 @@
             return confirm("회원 유형을 변경하시겠습니까?");
         }
     </script>
+
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
 </div>
 
 </body>

@@ -39,6 +39,7 @@
 
     }
 </style>
+
 <script>
     //파일선택버튼 변경
     $(document).ready(function(){
@@ -244,6 +245,19 @@
         });
     });
 </script>
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
 
 
 </body>

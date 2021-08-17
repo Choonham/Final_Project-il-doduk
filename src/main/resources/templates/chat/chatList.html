@@ -94,36 +94,12 @@
 </ul>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!--  <table class="table table-striped">
-        <tr th:each="chat : ${list}">
-
-            <td><a >
-                <span th:text=""></span></a>
-                <span th:text="${chat.message}"></span>
-                <span th:text="${chat.date}"></span>
-                <img th:src="${chat.img}"></td>
-
-        </tr>
-
-    </table>-->
 <script th:inline="javascript">
     var me=[[${session.user.id}]];
 </script>
-    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
 
 
 

@@ -160,6 +160,22 @@
     }
 </style>
 
+
+
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+    <script th:inline="javascript">
+        var me=[[${session.user.id}]];
+    </script>
+    <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
 <script th:inline="javascript">
     //접속중인 계정
     const userId = [[${session.user.id}]];

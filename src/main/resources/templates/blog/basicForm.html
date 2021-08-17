@@ -302,5 +302,18 @@
   // ============== 수행했던 작업 목록 선택창 function 끝 ==========//
 </script>
 
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
   </body>
 </html>

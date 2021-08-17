@@ -211,6 +211,20 @@
 </section>
 
 <script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+<script th:inline="javascript">
   function requestHelper(id){
     window.open("/manager/identifyHelpers?memberId="+id,"헬퍼 신청","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
   }

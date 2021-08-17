@@ -101,6 +101,20 @@
 
 
 <script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+<script th:inline="javascript">
   function bizCard(id){
     window.open("/member/helperBizCard?memberId="+id,"비즈니스 카드","width=575, height=895, scrollbars=no, resizeable=no left=1100 top=80");
   }

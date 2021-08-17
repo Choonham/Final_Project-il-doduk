@@ -61,14 +61,23 @@
         </div>
     </div>
 </section>
-<!--<form method="post" action="/review/update">
-    <input type="text" name="title" placeholder="제목을 입력해 주세요" id="title">
-    <textarea id="summernote" name="editordata"></textarea>
-    <input type =hidden name = "no" id="no">
-    <input type="submit" value="편집하기">
 
 
-</form>-->
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+
+
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
 <link rel="stylesheet" th:href="@{/review/css/summernote-lite.css}">
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
