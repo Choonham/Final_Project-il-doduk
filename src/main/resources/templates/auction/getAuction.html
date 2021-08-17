@@ -70,9 +70,27 @@
                     <td width="50%"><h3>[[${u.nickname}]]</h3></td>
                     <td th:rowspan="2" width="20%">
 
+                        <div th:if="${session.user.id != auction.user}" th:align="center">
+
                         <div th:if="${session.user.id != helper.id}" th:align="center">
 
-                            <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+                            <a th:onclick="open_NewWindow()" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+                            <script th:inline="javascript">
+                                var window1=null;
+                                function open_NewWindow(){
+                                    var id=[[${auction.user}]];
+                                    var auc=[[${auction.aucSeq}]];
+
+                                    if(window1==null){
+                                        window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                                    }
+                                    else{
+                                        window1.focus();
+                                    }
+                                }
+                            </script>
+
 <!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
                         </div>
                     </td>
@@ -123,7 +141,7 @@
                             </div>
                             <div th:if="${session.user.id == u.id || session.user.id == helper.id}">
                                 <span class="mb-2">[[${auction.address}]]</span>&nbsp;&nbsp;
-                                <button class="btn btn-primary" th:href="@{#}">길찾기</button>
+                                <a class="btn btn-primary" th:href="@{/map(address=${auction.address})}">길찾기</a>
     <!--============================================ 길찾기 연결 예정 ==========================================================-->
                             </div>
                         </td>
@@ -225,8 +243,24 @@
                 <td width="50%"><h3>[[${helper.name}]]</h3></td>
                 <td th:rowspan="2" width="20%">
                     <div th:if="${session.user.id == auction.user}" th:align="center">
-                        <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+                        <a th:onclick="open_NewWindow2()" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
 <!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
+                        <script th:inline="javascript">
+                            var window1=null;
+                            function open_NewWindow2(){
+                                var id=[[${helper.id}]];
+                                var auc=[[${auction.aucSeq}]];
+
+                                if(window1==null){
+                                    window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                                }
+                                else{
+                                    window1.focus();
+                                }
+                            }
+                        </script>
+
                     </div>
                 </td>
             </tr>
@@ -279,7 +313,12 @@
 		    self.location.href = "/index";
 	    }
     });
+
+
+
+
 </script>
+
 
 
 <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>

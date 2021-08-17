@@ -129,8 +129,23 @@
                                     <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
                                 </div>
                                 <div class="job-listing-meta w-25" style = "z-index: 1" >
-                                    <button class="btn btn-outline-primary primary" th:href="@{/chat/chatting(id=${dto.helper},auc=${dto.aucSeq})}"><b>채팅하기</b></button>
-<!-----------------------------------------------채팅하기 연결 예정------------------------------------------------------------>
+                                    <button class="btn btn-outline-primary primary" th:onclick="open_NewWindow()"><b>채팅하기</b></button>
+
+                                    <script th:inline="javascript">
+                                        var window1=null;
+                                        function open_NewWindow(){
+                                            var id=[[${dto.helper}]];
+                                            var auc=[[${dto.aucSeq}]];
+
+                                            if(window1==null){
+                                                window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                                            }
+                                            else{
+                                                window1.focus();
+                                            }
+                                        }
+                                    </script>
                                 </div>
                             </div>
                         </li>

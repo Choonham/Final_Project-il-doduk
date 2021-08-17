@@ -104,7 +104,8 @@
                   </div>
                   <div class="comment-body">
                     <h3>[[${comment.writerInfo.nickname}]]</h3>
-                    <input type = "hidden" id = "commentNo" th:value="${comment.commentNo}">
+                    <input type="hidden" class = "commentId" th:value="${comment.writerInfo.id}">
+                    <input type = "hidden" id = "commentNo" class="commentNo" th:value="${comment.commentNo}">
                     <div class="meta">[[${#temporals.format(comment.regDate, 'yyyy/MM/dd')}]]</div>
                     <div th:utext="${comment.content}"></div>
                     <div style="text-align: right;">
@@ -253,7 +254,7 @@
     $("#delete button").click(function() {
 
       var currentRow = $(this).closest("li").children("div"); // 댓글 삭제 버튼이 있는 Row를 찾음
-      var commentNo = currentRow.children("input").val(); // 해당 Row에 존재하는 댓글 번호를 추출
+      var commentNo = currentRow.children(".commentNo").val(); // 해당 Row에 존재하는 댓글 번호를 추출
 
       $.ajax({
         data : commentNo,
@@ -296,8 +297,8 @@
 
       currentRow.find("div:eq(1)").attr("contenteditable", "false");
 
-      var commentNo = currentRow.children("input");
-      var commentWriter = currentRow.children("h3");
+      var commentNo = currentRow.children(".commentNo");
+      var commentWriter = currentRow.children(".commentId");
       var commentContent = currentRow.find("div:eq(1)");
       var postNo = [[${detail.postNo}]];
 
@@ -305,7 +306,7 @@
 
       var jsonData = {
         commentNo : commentNo.val(),
-        writer : commentWriter.text(),
+        writer : commentWriter.val(),
         content : commentContent.html(),
         postNo : postNo
       }

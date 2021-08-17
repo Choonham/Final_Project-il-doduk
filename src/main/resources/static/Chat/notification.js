@@ -49,18 +49,26 @@ function wsEvt() {
     }
 
 }
+var window1=null;
+
 function showNotification(msg){
-    const notification = new Notification(msg.id,{
+    const notification = new Notification(msg.send,{
         body:msg.text,
-        icon: "https://ibb.co/rcfgnKT"
+        icon: "https://i.ibb.co/vZT6bkR/F9bbc0a9764cd542.png"
     });
     notification.onclick = function(event) {
         event.preventDefault();
-        window.open("https://localhost:9991/chat/chatList");
+
+        if(window1==null){
+
+        window1=window.open("https://localhost:9991/chat/chatting?id="+msg.send+"&auc="+msg.auc,'_blank','width=300 , height=400');
+
+        }else {
+            window1.focus();
+        }
+
+
     }
 
 }
 
-function get_chat(){
-
-}
