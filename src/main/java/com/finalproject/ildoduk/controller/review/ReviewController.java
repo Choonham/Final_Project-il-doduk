@@ -169,6 +169,7 @@ public String delete(@RequestParam("no") String no){
 
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
+        System.out.println("안보이면 보지말라그래");
         String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
         System.out.println(savedFileName);
         File targetFile = new File(fileRoot + savedFileName);
@@ -184,7 +185,7 @@ public String delete(@RequestParam("no") String no){
             e.printStackTrace();
         }
         String a = jsonObject.toString();
-        System.out.println(a);
+        System.out.println("시발아");
         return a;
     }
 
