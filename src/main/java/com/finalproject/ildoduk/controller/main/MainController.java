@@ -16,5 +16,9 @@ public class MainController {
         return "redirect:/index";
     }
 
+    @GetMapping("/map")
+    public void map(){
 
+
+    }
 }

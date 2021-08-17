@@ -29,14 +29,6 @@ button {
 <!--  여기까지 -->
 
 
-#cash_status{
-    position: relative;
-    left: 81%;
-    z-index: 10;
-    color: black;
-    display: block;
-    background: #ffffff;
-}
 
 <!-- 문의 답변 영역 -->
 

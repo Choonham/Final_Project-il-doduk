@@ -51,7 +51,6 @@
                             <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
                             <li><a th:href = "@{/serviceCenter/changeState}" onclick="return switchUser()">유저전환</a></li>
                             <li><a th:href = "@{/member/helperRegisterCheck(memberId=${session.user.id})}">헬퍼정보변경</a></li>
-                            <li><a  th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
                             <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
                         </ul>
                     </div>
@@ -65,21 +64,21 @@
 
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="goodAtFirst">goodAtFirst</label>
-                                <input type="text" name="goodAtFirst" id="goodAtFirst" class="form-control" > <br />
+                                <input type="text" name="goodAtFirst" th:value="${info.goodAtFirst}" id="goodAtFirst" class="form-control" > <br />
                             </div>
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="goodAtSecond">goodAtSecond</label>
-                                <input type="text" name="goodAtSecond" id="goodAtSecond" class="form-control" > <br />
+                                <input type="text" name="goodAtSecond"  th:value="${info.goodAtSecond}" id="goodAtSecond" class="form-control" > <br />
                             </div>
 
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="goodAtThird">goodAtThird</label>
-                                <input type="text" name="goodAtThird" id="goodAtThird" class="form-control"  > <br />
+                                <input type="text" name="goodAtThird" th:value="${info.goodAtThird}" id="goodAtThird" class="form-control"  > <br />
                             </div>
 
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="appeal">appeal</label>
-                                <textarea id="appeal" name="appeal" rows="5" class="form-control" placeholder="50자 이내로 작성"  ></textarea> <br />
+                                <textarea id="appeal" name="appeal" th:text="${info.appeal}" rows="5" class="form-control" placeholder="50자 이내로 작성"  ></textarea> <br />
                             </div>
 
                             <div class="row form-group">
