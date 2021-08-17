@@ -86,7 +86,7 @@
                     <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
                         <li><a class="nav-link active" th:href="@{/}">메인</a></li>
                         <li class="has-children">
-                            <a href="job-listings.html">미션</a>
+                            <a href="javascript:kakaoLogin();">미션</a>
                             <ul class="dropdown">
                                 <li><a th:href = "@{/auction/main}">경매 메인</a></li>
                             </ul>
@@ -98,9 +98,8 @@
                             <a th:href = "@{/covidInfo/covidInfo/}">COVID-19 현황</a>
                         </li>
                         <li class="has-children">
-                            <a href="" >고객센터</a>
+                            <a href="javascript:kakaoLogin();" >고객센터</a>
                             <ul class="dropdown" th:if="${session.user != null}">
-                                <li><a th:href="@{/serviceCenter/faq}">FAQ</a></li>
                                 <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
                                 <li><a th:href="@{/serviceCenter/badUserReport}">사용자 신고</a></li>
                             </ul>
