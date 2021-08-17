@@ -62,8 +62,6 @@
     <section class="site-section" style="padding-top: 30px">
       <div class="container">
         <div class="row mb-5 justify-content-center">
-          <br style="clear: both">
-          <h3 style="margin-bottom: 25px;">Post Form</h3>
           <form id = "postForm" action = "modify" method="post">
             <div class="form-group">
               <input type="text" class="form-control" id="title" name="title" placeholder="title" th:value="${detail.title}" required/>
@@ -73,9 +71,9 @@
             <input type = "hidden" id = "content" name = "content"/>
             <input type = "hidden" name = "postNo" id = "postNo" th:value = "${detail.postNo}">
             <div class="form-group">
-              <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" required th:value="${detail.writer}"/>
+              <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" required th:value="${detail.writer.getId()}"/>
             </div>
-            <input type="text" class="form-control" id="thumbnail" name="thumbnail" th:value="${detail.thumbnail}" readonly/>
+            <input type="hidden" class="form-control" id="thumbnail" name="thumbnail" th:value="${detail.thumbnail}" readonly/>
 
             <hr/>
 

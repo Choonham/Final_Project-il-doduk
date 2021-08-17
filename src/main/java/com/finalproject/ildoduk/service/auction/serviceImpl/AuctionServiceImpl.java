@@ -163,7 +163,7 @@ public class AuctionServiceImpl implements AuctionService {
     public Long register(AuctionListDTO dto) {
         System.out.println("======= register ========");
         log.info("게시글을 작성한 유저는??????????"+dto.getUser());
-        System.out.println(dto.getUser());
+        //System.out.println(dto.getUser());
         Member user = this.getMember(dto.getUser());
 
         AuctionList auctionList = dtoToEntity(dto, user);
@@ -196,7 +196,7 @@ public class AuctionServiceImpl implements AuctionService {
     //aucSeq 옥션 값 하나만 가져오기
     @Override
     public AuctionListDTO getAuction(Long aucSeq) {
-        System.out.println("======== getAuction =========");
+        //System.out.println("======== getAuction =========");
 
         AuctionList auctionList = auctionListRepository.findById(aucSeq).get();
         AuctionListDTO auction = entityToDTO(auctionList);
@@ -242,7 +242,7 @@ public class AuctionServiceImpl implements AuctionService {
         Pageable pageable= pageRequestDTO.getPageable(Sort.by("aucSeq").descending());
 
         Page<AuctionList> result = auctionListRepository.getAllWithState1(pageable, user);
-        System.out.println(result.getTotalElements());
+        //System.out.println(result.getTotalElements());
         Function<AuctionList, AuctionListDTO> fn = (entity -> entityToDTO(entity));
         return new PageResultsDTO<>(result, fn);
     }
@@ -425,7 +425,7 @@ public class AuctionServiceImpl implements AuctionService {
         message.setText(text); // 내용
 
         if(mailSender == null){
-            System.out.println("=======================null이래");
+            System.out.println("======================= null이래");
         }else {
             this.mailSender.send(message);
         }

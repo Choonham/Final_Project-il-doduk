@@ -83,8 +83,9 @@
     </script>
 </div>
 
-
-
+<script th:inline="javascript" th:src="@{/Chat/notification.js}">
+    var me=[[${session.user.id}]];
+</script>
 
 </body>
 </html>
