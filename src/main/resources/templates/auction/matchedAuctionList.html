@@ -110,8 +110,9 @@
                             <div class="job-listing-logo" th:align="center">
                                 <img th:src="${dto.helperPhoto}" alt="hermes"
                                      class="img-fluid mb-4 w-50 rounded-circle"><br>
-                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperName}]]</span>
-<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
+                                <span style = "z-index: 1"  th:href="@{/member/helperBizCard(memberId=${dto.helper})}"
+                                      onclick="window.open(this.href,'경매참여','width=540, height=740, scrollbars=yes, resizeable=no');return false;" class="btn badge badge-success" >[[${dto.helperName}]]</span>
+                                <!-----------------------------------비즈니스 카드 보기 연결------------------------------------------------------------>
                             </div>
 
                             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -218,8 +219,9 @@
                             <div class="job-listing-logo" th:align="center">
                                 <img th:src="${dto.helperPhoto}" alt="hermes"
                                      class="img-fluid mb-4 w-50 rounded-circle" width="80" height="80"><br>
-                                <span style = "z-index: 1"  th:href="@{#}" class="btn badge badge-success" >[[${dto.helperName}]]</span>
-<!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
+                                <span style = "z-index: 1"  th:href="@{/member/helperBizCard(memberId=${dto.helper})}"
+                                      onclick="window.open(this.href,'경매참여','width=540, height=740, scrollbars=yes, resizeable=no');return false;" class="btn badge badge-success" >[[${dto.helperName}]]</span>
+                                <!-----------------------------------비즈니스 카드 보기 연결 예정------------------------------------------------------------>
                             </div>
 
                             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
@@ -238,7 +240,7 @@
                                 </div>
                                 <div class="job-listing-meta w-25" style = "z-index: 1" >
                                     <span class="btn btn-outline-primary" th:onclick="'location.href=\''+@{/review/writeform(bid=${dto.bidSeq})}+'\''" ><b>리뷰작성</b></span>
-<!----------------------------------------------- 리뷰쓰기 연결 예정 ------------------------------------------------------------>
+                                    <!----------------------------------------------- 리뷰쓰기 연결 예정 ------------------------------------------------------------>
                                 </div>
                             </div>
                         </li>
