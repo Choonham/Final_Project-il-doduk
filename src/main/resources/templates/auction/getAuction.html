@@ -275,15 +275,14 @@
             </div>
             <!-- 미션 완료 후 - 리뷰쓰기 버튼 -->
             <div class="col-3"th:if="${auction.state == 3}" >
-                <a th:href="@{#}" class="btn btn-block btn-primary btn-md"> 리뷰쓰기 </a><!-- 초록버튼 -->
-<!------------------------------------------ 리뷰쓰기 연결예정 ----------------------------------------------->
+                <a th:onclick="'location.href=\''+@{/review/writeform(bid=${chosenBidding.bidSeq})}+'\''" class="btn btn-block btn-primary btn-md"> 리뷰쓰기 </a><!-- 초록버튼 -->
+                <!------------------------------------------ 리뷰쓰기 연결예정 ----------------------------------------------->
             </div>
         </div>
 
         <!-- 헬퍼일 경우 --><!-- 미션 완료 후 완료 버튼 눌러달라고 메시지 할까 말까 -->
 
         </div>
-
     </div>
 </section>
 
