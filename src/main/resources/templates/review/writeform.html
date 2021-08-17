@@ -87,14 +87,55 @@
 
 <script th:src="@{/js/custom.js}"></script>
 
-<script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
-<script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
+
 <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
-<script  th:src="@{/review/js/summernote.js}"></script>
+
 <script  th:src="@{/review/js/summernote-lite.js}"></script>
-<script th:src="@{/review/js/summernote-ko-KR.js}"></script>
-<script  th:src="@{/review/js/writeform.js}"></script>
 <script th:inline="javascript">
+
+        //여기 아래 부분
+        $('#summernote').summernote({
+            height: 300,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",					// 한글 설정
+            dialogsInBody: true,
+            placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+            callbacks : {
+                onImageUpload : function(files, editor, welEditable) {
+                    // 파일 업로드(다중업로드를 위해 반복문 사용)
+                    for (var i = files.length - 1; i >= 0; i--) {
+                        uploadSummernoteImageFile(files[i],
+                            this);
+                    }
+                }
+            }
+        });
+
+
+
+
+
+    function uploadSummernoteImageFile(file, el) {
+        alert("zzzzzzzzzzzzz")
+        data = new FormData();
+        data.append("file", file);
+        $.ajax({
+            data : data,
+            type : "POST",
+            url : "uploadSummernoteImageFile",
+            contentType : false,
+            enctype : 'multipart/form-data',
+            processData : false,
+
+            success : function(data) {
+                $(el).summernote('editor.insertImage', data.url);
+                $('#editordata').append("<img src="+'+data.url+'+">")
+                console.log(data.url);
+            }
+        });
+    }
     var auction= [[${auction}]];
     var bid= [[${bid}]];
      var helper= [[${helper}]];
@@ -109,11 +150,14 @@
     str+="<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'>";
     str+="<tr><td>헬퍼 id</td><td>"+bid.helper+"</td></tr>";
     str+="<tr><td>헬퍼 닉네임</td><td>"+bid.helperNickName+"</td></tr>";
-    str+="<tr><td>헬퍼 photo</td><td><img src='+bid.helperPhoto+'></td></tr>";
+    str+="<tr><td>헬퍼 photo</td><td><img src='"+bid.helperPhoto+"'></td></tr>";
     str+="</table></div>";
   $('#summernote').summernote('code',str);
 </script>
 
-
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
 </body>
 </html>

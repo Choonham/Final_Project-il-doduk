@@ -91,6 +91,9 @@
                                 }
                             </script>
 
+                        <div th:if="${session.user.id != helper.id}" th:align="center">
+
+                            <a th:href="@{#}" class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
 <!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
                         </div>
                     </td>
