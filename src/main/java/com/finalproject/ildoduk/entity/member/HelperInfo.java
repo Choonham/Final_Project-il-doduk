@@ -32,7 +32,7 @@ public class HelperInfo extends BaseEntity{
     @Column(length = 3)
     private int kindness;
 
-    @Column(length = 30)
+    @Column(length = 150)
     private String appeal;
 
     @Column

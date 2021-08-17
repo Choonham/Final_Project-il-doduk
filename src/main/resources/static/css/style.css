@@ -565,7 +565,7 @@ h1, h2, h3, h4 {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url("/images/123455.png");
+  background-image: url("/images/hero_1.jpg");
 }
   .bg-image.fixed {
     background-attachment: fixed; }
@@ -1518,6 +1518,9 @@ h1, h2, h3, h4 {
   .block__18514 .block__47528 li a {
     display: block; }
 
+
+  <!-- dahoon css -->
+
 .cusBoardTitle{
   color: #89ba16 !important
 }
@@ -1527,10 +1530,34 @@ h1, h2, h3, h4 {
 }
 
 #report_bizCard{
-
-
   border: 1px solid gray;
 }
+
+#helperList:hover{
+  cursor: pointer;
+}
+#img_container{
+  text-align: center;
+  margin: 10px;
+}
+#id_card{
+  display: inline-block;
+}
+#profile{
+  display: inline-block;
+  padding-right: 100px;
+}
+
+#profile img,#id_card img{
+  width: 155px;
+}
+
+#test{
+  position: relative;
+  left: 90%;
+  top:-95px;
+}
+
 
 .sidebar-box {
   margin-bottom: 20px;

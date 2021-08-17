@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+  <head th:replace="~{/blog/blogHeader :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+  </head>
+
+  <body id="top">
+    
+    <div class="site-wrap">
+
+      <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+          <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+          </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+      </div> <!-- .site-mobile-menu -->
+    
+
+    <!-- NAVBAR -->
+
+      <div th:if = "${session.user != null}">
+
+        <div th:if="${session.user.state == 1}">
+          <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+        </div>
+
+        <div th:if="${session.user.state == 2}">
+          <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+        </div>
+
+        <div th:if="${session.user.state == 0}">
+          <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+        </div>
+
+      </div>
+
+      <div th:if = "${session.user == null}">
+        <script th:inline="javascript">
+          alert("로그인해주세요!");
+          window.location.href = [[@{/}]];
+        </script>
+      </div>
+
+    <!-- HOME -->
+    <section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-7">
+            <h1 class="text-white font-weight-bold"><strong>Covid_19 Information</strong></h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section">
+      <div class="container">
+        <div class="row mb-5" id = "listForm">
+          <div class="col-lg-8" style="background-color: #ffffff">
+            <div>
+              <button id="covidBtn" type="button" class="btn btn-primary btn-lg" style="width: 49%;" onclick="goCovidInfo()">코로나19 감염 상황</button>
+              <button id="vaccineBtn" type="button" class="btn btn-primary btn-lg" style="width: 49%;" onclick="goVaccineInfo()">코로나19 예방접종 상황</button>
+            </div>
+            <div id="covid19TotalInfo" style="margin-top: 5%">
+              <div>
+                <h2 class="text-black" align="center" style="font-family: 'EliceDigitalBaeum_Bold'">코로나 19 종합 상황판</h2>
+                <table class = "table table-hover table-secondary">
+                  <tr align = "center">
+                    <th scope="col" colspan="5" >Covid_19 Information</th>
+                  </tr>
+                  <tr align = "center">
+                    <th scope="col">누적 확진자</th>
+                    <th scope="col">누적 확진률</th>
+                    <th scope="col">전일 추가 확진자</th>
+                    <th scope="col">누적 사망자</th>
+                    <th scope="col">전일 사망자</th>
+                  </tr>
+                  <tr align = "center">
+                    <td>[[${totalCovid19InfoResult.accDecideCnt}]] 명</td>
+                    <td>[[${totalCovid19InfoResult.accDefRate}]] %</td>
+                    <td><font color="red">+</font> [[${totalCovid19InfoResult.decideCntDays.get(0)}]] 명</td>
+                    <td>[[${totalCovid19InfoResult.accDeathCnt}]] 명</td>
+                    <td><font color="red">+</font> [[${totalCovid19InfoResult.deathCntToday}]] 명</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="container" style="margin-top: 5%">
+                <h2 class="text-black" align="center">일별 추가 확진자</h2>
+                <canvas id="covidChart"></canvas>
+              </div>
+            </div>
+            <div class="container" id = "vaccineInfo" style="display: none; margin-top: 5%" >
+              <h3 class="text-black" align="center" id="vaccineInfoTitle"></h3>
+              <table class = "table table-hover table-secondary">
+
+                <tr align = "center">
+                  <th scope="col">-</th>
+                  <th scope="col" colspan="2">1차 접종</th>
+                  <th scope="col" colspan="2">완전 접종</th>
+                </tr>
+
+                <tr align = "center">
+                  <th scope="col">지역</th>
+                  <th scope="col">신규</th>
+                  <th scope="col">누적</th>
+                  <th scope="col">신규</th>
+                  <th scope="col">누적</th>
+                </tr>
+
+                <tr align = "center">
+                  <td>서울특별시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('서울특별시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>부산광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('부산광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>대구광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('대구광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>인천광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('인천광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>광주광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('광주광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>대전광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('대전광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>울산광역시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('울산광역시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>세종특별자치시</td>
+                  <div th:each="city : ${vaccineInfoResult.get('세종특별자치시')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>경기도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('경기도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>강원도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('강원도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>충청북도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('충청북도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>충청남도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('충청남도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>전라북도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('전라북도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>전라남도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('전라남도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>경상북도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('경상북도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>경상남도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('경상남도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+                <tr align = "center">
+                  <td>제주특별자치도</td>
+                  <div th:each="city : ${vaccineInfoResult.get('제주특별자치도')}">
+                    <td th:text="${city}"></td>
+                  </div>
+                </tr>
+
+              </table>
+            </div>
+          </div>
+          <div class="col-lg-4" id="disasterMsg">
+            <h5 style="font-weight: bold" align="center">코로나19 실시간 재난 문자 현황판</h5>
+            <div style="margin-top: 3%; margin-bottom: 3%" align="center">
+              <button style="margin: 1px" type="button" class="btn btn-outline-success" onclick="goToTheCity('total')">전체</button>
+              <button style="margin: 1px" type="button" class="btn btn-outline-success" th:each="sido : ${dailyCovid19InfoResult.sidoList}" th:text="${sido}" th:onclick="goToTheCity([[${sido}]])"></button>
+            </div>
+            <div align="center">
+              <form method="get" id="searchForm">
+                <input oninput="search()" placeholder="검색어를 입력해주세요." class="form-control" name="keyword" id = "searchKeyword" style ="width: 95%; margin-bottom:10px;">
+              </form>
+            </div>
+            <div id = "msgBox" class="border border-success" style="overflow:auto; width: 100%; height: 700px">
+              <div th:each="msg : ${dailyCovid19InfoResult.msgList}">
+                <div th:text="${msg}" class="border border-dark rounded" style="margin: 10px; padding: 10px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+</div>
+
+  <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+  <script th:inline="javascript">
+
+    var staticSido = 'total';
+
+    var date = new Date();
+    var days = [];
+
+    var vaccineInfoTitle = document.getElementById('vaccineInfoTitle');
+    vaccineInfoTitle.innerText = date.toLocaleDateString() + " 기준 코로나19 백신 예방접종 상황";
+
+    for(var i = 0; i<10; i++){
+      date.setDate(date.getDate() - 1)
+      days.push(date.toLocaleDateString());
+    }
+
+    var dailyCovidInfo = [[${totalCovid19InfoResult.decideCntDays}]];
+
+    var ctx = document.getElementById('covidChart').getContext('2d');
+    var chart = new Chart(ctx, { // 챠트 종류를 선택
+      type: 'line', // 챠트를 그릴 데이타
+      data: {
+        labels: [days.pop(), days.pop(), days.pop(), days.pop(), days.pop(), days.pop(), days.pop(), days.pop(), days.pop(), days.pop()],
+        datasets: [{
+          label: '일별 추가 확진자수',
+          backgroundColor: 'transparent',
+          borderColor: 'red',
+          data: dailyCovidInfo.reverse()
+        }] },
+      options: {} });
+
+    function goCovidInfo() {
+      $("#covid19TotalInfo").show();
+      $("#vaccineInfo").hide();
+    }
+
+    function goVaccineInfo() {
+      $("#covid19TotalInfo").hide();
+      $("#vaccineInfo").show();
+    }
+
+    function goToTheCity(value) {
+
+      staticSido = value;
+
+      var data = {
+        keyword : $("#searchKeyword").val(),
+        sido : value
+      }
+
+      $.ajax({
+        data: data,
+        type: "get",
+        url: '/covidInfo/searchMsg',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        success: function (result) {
+          $("#msgBox").empty();
+          var msgList = result.msgList;
+          if(msgList.length > 0){
+            msgList.forEach(function (item){
+              str = "";
+              str += "<div><div class='border border-dark rounded' style='margin: 10px; padding: 10px'>" + item + "</div></div>";
+              $("#msgBox").append(str);
+            })
+          }
+         },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
+          }
+       })
+    }
+
+    function search() {
+
+      var data = {
+        keyword : $("#searchKeyword").val(),
+        sido : staticSido
+      }
+
+      $.ajax({
+        data: data,
+        type: "get",
+        url: '/covidInfo/searchMsg',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        success: function (result) {
+          $("#msgBox").empty();
+          var msgList = result.msgList;
+          if(msgList.length > 0){
+            msgList.forEach(function (item){
+              str = "";
+              str += "<div><div class='border border-dark rounded' style='margin: 10px; padding: 10px'>" + item + "</div></div>";
+              $("#msgBox").append(str);
+            })
+          }
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
+        }
+      })
+    }
+
+  </script>
+
+  </body>
+</html>

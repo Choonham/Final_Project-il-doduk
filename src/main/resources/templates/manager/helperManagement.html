@@ -8,6 +8,7 @@
 
 <body id="top">
 
+
 <div th:if = "${session.user != null}">
    <div th:if="${session.user.state == 0}">
     <div th:replace="~{/fragments/navManager :: naviManager}"></div>
@@ -54,7 +55,7 @@
 
   <div class="container">
     <ul class="job-listings mb-5">
-      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" th:each="stateOne : ${stateOne.dtoList}" th:onclick="requestHelper([[${stateOne.memberId}]]);">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center" id="helperList" th:each="stateOne : ${stateOne.dtoList}" >
         <div class="job-listing-logo_report">
           <img class="img-fluid rounded-circle" th:src="${stateOne.photo}" />
         </div>
@@ -62,10 +63,12 @@
         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
           <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
             <h2 th:text="${stateOne.helperNick}">헬퍼아이디</h2>
-            <strong th:text="${stateOne.appeal}">각오</strong>
+            <div>각오 한마디 :
+              <strong th:text="${stateOne.appeal}">각오</strong>
+            </div>
           </div>
           <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-            <span class="icon-contacts"></span>
+            <span class="icon-contacts">특기사항</span>
               <div th:text="${stateOne.goodAtFirst}"></div>
               <div th:text="${stateOne.goodAtSecond}"></div>
               <div th:text="${stateOne.goodAtThird}"></div>
@@ -73,6 +76,8 @@
         </div>
 
         <div class="job-listing-meta">
+          <button th:onclick="requestHelper([[${stateOne.memberId}]]);"><span class="badge badge-success">확인</span></button>
+          <br/>
           <button th:onclick="'location.href=\'' + @{/manager/accept(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">승인</span></button>
           <br/>
           <button th:onclick="'location.href=\'' + @{/manager/deny(helperNo = ${stateOne.helperNo})} + '\''"><span class="badge badge-success">반려</span></button>

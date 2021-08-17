@@ -45,4 +45,7 @@ public interface HelperInfoRepository extends JpaRepository<HelperInfo, Long>, Q
 
     @Query(value = "SELECT h FROM HelperInfo h")
     Page<HelperInfo> find(Pageable pageable);
+
+    @Query(value = "SELECT h FROM HelperInfo h WHERE h.memberId.id = ?1 and h.agreeHelper = 1")
+    Optional<HelperInfo> find(String memberId);
 }

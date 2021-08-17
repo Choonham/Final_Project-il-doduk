@@ -7,7 +7,15 @@
 </head>
 
 <body id="top">
+    <style>
+        .cusBoardTitle{
+            color: #89ba16 !important;
+        }
 
+        .cusBoardTitle:hover{
+            cursor: pointer;
+        }
+    </style>
 <div th:if = "${session.user != null}">
 
     <div th:if="${session.user.state == 1}">
@@ -68,7 +76,7 @@
                     </a></b>
                     <a class="cusBoardTitle" th:if="${session.user.state == 0}" th:href="@{/serviceCenter/mgrBoard(cusNo = ${dto.cusNo})}">[[${dto.cusTitle}]]</a>
                 </td>
-                <td>[[${dto.cusWriter}]]</td>
+                <td>[[${dto.cusNickName}]]</td>
                 <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}"></td>
                 <td>[[${dto.answerCheck}]]</td>
             </tr>

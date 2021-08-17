@@ -18,6 +18,7 @@ public class CustomerBoardDTO {
     private String cusTitle;
     private String cusContent;
     private String cusWriter;
+    private String cusNickName;
 
     private String secretBoard;
     private String passwordBoard;

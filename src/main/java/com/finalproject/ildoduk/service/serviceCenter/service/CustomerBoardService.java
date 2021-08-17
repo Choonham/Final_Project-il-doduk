@@ -48,6 +48,7 @@ public interface CustomerBoardService {
                 .secretBoard(entity.getSecretBoard())
                 .passwordBoard(entity.getPasswordBoard())
                 .answerCheck(entity.getAnswerCheck())
+                .cusNickName(entity.getCusWriter().getNickname())
                 .regDate(entity.getRegDate())
                 .modDate(entity.getModDate())
                 .build();

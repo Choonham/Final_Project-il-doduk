@@ -29,7 +29,7 @@ public interface BlogCommentService {
         Blog blog = Blog.builder().postNo(dto.getPostNo()).build();
 
         Member writer = Member.builder()
-                .id(dto.getWriter().getId())
+                .id(dto.getWriter())
                 .build();
 
         BlogComment entity = BlogComment.builder()
@@ -46,7 +46,8 @@ public interface BlogCommentService {
                 .commentNo(entity.getCommentNo())
                 .postNo(entity.getBlog().getPostNo())
                 .content(entity.getContent())
-                .writer(entity.getWriter())
+                .writer(entity.getWriter().getId())
+                .writerInfo(entity.getWriter())
                 .regDate(entity.getRegDate())
                 .build();
         return dto;

@@ -16,6 +16,7 @@ import com.finalproject.ildoduk.service.blog.service.BlogCommentService;
 import com.finalproject.ildoduk.service.blog.service.BlogFilesService;
 import com.finalproject.ildoduk.service.blog.service.BlogLikeService;
 import com.finalproject.ildoduk.service.blog.service.BlogService;
+import com.finalproject.ildoduk.service.covid_19.CovidCheckService;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.google.gson.JsonObject;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Controller
@@ -90,7 +92,6 @@ public class BlogController {
 
         if(writer.equals("myBlog")){
             MemberDto memberDto = (MemberDto)session.getAttribute("user");
-            log.info(pageRequestDTO.getKeyword());
             String sessionId = memberDto.getId();
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
@@ -300,8 +301,6 @@ public class BlogController {
     // 댓글 작성
     @RequestMapping(method = RequestMethod.POST, value = "/registerC", produces = "application/json; charset=utf8")
     public @ResponseBody ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
-
-        System.out.println("aaa");
         blogCommentService.registerComment(blogCommentDTO);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }
