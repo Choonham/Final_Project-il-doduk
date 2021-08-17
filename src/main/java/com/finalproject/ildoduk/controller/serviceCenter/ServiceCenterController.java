@@ -366,7 +366,7 @@ public class ServiceCenterController {
     @PostMapping("/reportDelete")
     public String reportDelete(UserReportDTO userReportDTO){
 
-        MemberDto memberDto = memberService.userNickCheck(userReportDTO.getReportTarget());
+        MemberDto memberDto = memberService.userIdCheck(userReportDTO.getId());
 
         userReportDTO.setReportTarget(memberDto.getId());
         userReportService.reportDelete(userReportDTO);
