@@ -68,6 +68,7 @@ public interface UserReportService {
                 .reportKind(entity.getReportKind())
                 .reportState(entity.getReportState())
                 .regDate(entity.getRegDate())
+                .photo(entity.getReportTarget().getPhoto())
                 .targetNickName(entity.getReportTarget().getNickname())
                 .build();
         return dto;
