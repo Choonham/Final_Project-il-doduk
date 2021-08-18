@@ -33,6 +33,7 @@
                             <li><a>경력사항2 <span>[[${helperInfo.goodAtSecond}]]</span></a></li>
                             <li><a>경력사항3 <span>[[${helperInfo.goodAtThird}]]</span></a></li>
                             <li><a>헬퍼가입일 <span th:text = "${#temporals.format(helperInfo.modDate, 'yyyy/MM/dd')}"></span></a></li>
+                            <li><a th:href="@{/review/reviewList(id=${helperInfo.memberId})}">헬퍼 후기보기</a></li>
                         </div>
                     </div>
 

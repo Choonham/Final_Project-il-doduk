@@ -40,10 +40,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResultDto<ReviewDTO,Review> getList(RequestDto dto) {
+    public ResultDto<ReviewDTO,Review> getList(RequestDto dto,String id) {
 
         Pageable pageable = dto.getPageable(Sort.by("no").descending());
-        Page<Review> result = repository.findAll(pageable);
+        Member member=Member.builder().id(id).build();
+        Page<Review> result = repository.findAllByBidSeq_Helper(member,  pageable);
         Function<Review,ReviewDTO> fn =(entity->entityToDto(entity));
         return new ResultDto<>(result,fn);
 
