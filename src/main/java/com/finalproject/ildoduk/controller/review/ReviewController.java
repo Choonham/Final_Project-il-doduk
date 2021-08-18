@@ -53,7 +53,6 @@ public class ReviewController {
     /*=======단순히 리스트만=====*/
     @GetMapping("/reviewList")
     public void reviewList(RequestDto dto, Model model){
-
         //model.addAttribute("list",service.getList());
         ResultDto<ReviewDTO,Review> res = service.getList(dto);
         List<ReviewDTO> list=res.getDtoList();
