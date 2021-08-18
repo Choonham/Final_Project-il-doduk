@@ -97,7 +97,7 @@
 
                         <div class="row form-group">
                             <input type="hidden" name="memberId" th:value="${session.user.id}" />
-
+                            <input type="hidden" name="kindness" value="100" />
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="goodAtFirst">goodAtFirst</label>
                                 <input type="text" name="goodAtFirst" id="goodAtFirst" class="form-control" > <br />
@@ -119,7 +119,7 @@
 
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <input type="hidden" name="img" id="img" >
-                                <label class="text-black" for="appeal">Helper authentication img </label>
+                                <label class="text-black" for="appeal">Helper authentication img</label>
                                 <!--<input type="file" name="uploadFiles" id="uploadFiles" class="form-control " multiple required > <br />-->
                                 <div class="filebox">
                                     <label for="file" >파일선택</label>
