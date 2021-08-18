@@ -165,15 +165,22 @@ public class HelperInfoServiceImpl implements HelperInfoService {
     }
 
     //반려
-    @Override
+   /* @Override
     public void deny(HelperInfoDTO helperInfoDTO) {
         Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
         HelperInfo entity = result.get();
 
         entity.changeAgreeHelper(3);
         repository.save(entity);
-    }
+    }*/
 
+    @Override
+    public void deny(HelperInfoDTO helperInfoDTO) {
+        Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());
+        HelperInfo entity = result.get();
+
+        repository.delete(entity);
+    }
     @Override
     public HelperInfoDTO helperInfo(HelperInfoDTO helperInfoDTO) {
         Optional<HelperInfo> result = repository.findById(helperInfoDTO.getHelperNo());

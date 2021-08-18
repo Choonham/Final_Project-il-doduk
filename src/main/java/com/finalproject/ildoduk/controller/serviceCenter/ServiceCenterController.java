@@ -395,8 +395,9 @@ public class ServiceCenterController {
 
         userReportService.updateReportState(userReportDTO);
 
+        UserReportDTO report = userReportService.badUserReportDetail(userReportDTO);
         //신고 당한 유저 -> kindness를 깍음
-        userReportService.minusKindness(userReportDTO);
+        userReportService.minusKindness(report);
 
         return "redirect:/serviceCenter/reportBoardMgr";
     }
