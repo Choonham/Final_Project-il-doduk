@@ -16,7 +16,7 @@ import java.util.List;
 public interface ReviewService {
 
     public void delete(String no);
-    public ResultDto<ReviewDTO,Review> getList(RequestDto dto);
+    public ResultDto<ReviewDTO,Review> getList(RequestDto dto,String id);
 
     public void writeReview(ReviewDTO dto);
 

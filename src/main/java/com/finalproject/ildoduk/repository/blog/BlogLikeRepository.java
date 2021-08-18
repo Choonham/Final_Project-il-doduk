@@ -12,7 +12,5 @@ public interface BlogLikeRepository extends JpaRepository<BlogLike, Long>, Query
     List<BlogLike> findAllByBlog_PostNo(long postNO);
     int countAllByBlog_PostNo(long postNo);
 
-    @Query(value = "SELECT  FROM Blog")
-    List<String> ranking();
 
 }

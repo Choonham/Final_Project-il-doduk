@@ -52,12 +52,11 @@ public class ReviewController {
     MemberService memberService;
     /*=======단순히 리스트만=====*/
     @GetMapping("/reviewList")
-    public void reviewList(RequestDto dto, Model model){
+    public void reviewList(RequestDto dto, Model model, @RequestParam("id") String id){
+
         //model.addAttribute("list",service.getList());
-        ResultDto<ReviewDTO,Review> res = service.getList(dto);
-        List<ReviewDTO> list=res.getDtoList();
-        System.out.println(list.get(1).getContent());
-        model.addAttribute("result",service.getList(dto));
+        model.addAttribute("id",id);
+        model.addAttribute("result",service.getList(dto,id));
 
     }
 

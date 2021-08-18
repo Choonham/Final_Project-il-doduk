@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -335,7 +336,7 @@ public class MemberController {
     @GetMapping(value="/helperBizCard")
     public void helperSearch(@RequestParam("memberId")String memberId, Model model){
         log.info("helperSearch에 넘어온 아이디 확인" + memberId );
-
+        //Member member = Member.builder().id(memberId).build();
         MemberHelperInfoDTO helperInfoDTO = helperInfoService.helperFindById2(memberId);
         log.info("helperBizCard :::: helperInfoDTO :::: " + helperInfoDTO);
 
