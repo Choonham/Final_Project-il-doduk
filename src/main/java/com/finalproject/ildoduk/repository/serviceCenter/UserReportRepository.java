@@ -28,7 +28,7 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
 
     //신고 대상 친절점수
     @Transactional
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE HelperInfo h SET h.kindness = h.kindness - 1 WHERE h.memberId = ?1")
     void minusKindness(String id);
 

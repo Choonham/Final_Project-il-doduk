@@ -186,7 +186,7 @@ public class MemberController {
 
     @GetMapping("/index")
     public String userRegitoTheIndex(Model model){
-        model.addAttribute("msg", "일도둑의 회원이 되신것을 축하합니다~");
+        model.addAttribute("msg", "Hermes의 회원이 되신것을 축하합니다~");
         System.out.println("userRegitoTheIndex 확인");
         return "/index";
     }

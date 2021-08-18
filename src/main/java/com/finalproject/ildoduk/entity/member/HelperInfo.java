@@ -30,6 +30,7 @@ public class HelperInfo extends BaseEntity{
     private String goodAtThird;
 
     @Column(length = 3)
+    @ColumnDefault(value = "100")
     private int kindness;
 
     @Column(length = 150)
