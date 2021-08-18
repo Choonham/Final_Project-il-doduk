@@ -241,12 +241,11 @@ public class MemberController {
         MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
         HttpSession session = request.getSession();
 
-
         if (dto1!=null && dto1.getState() != 3) {
             session.setAttribute("user", dto1);
             return "/index";
         }
-        else if(dto1.getState() == 3){
+        else if(dto1!=null && dto1.getState() == 3){
             model.addAttribute("회원 탈퇴된 계정입니다");
 
             return "/member/stateToIndex";
