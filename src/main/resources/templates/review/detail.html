@@ -48,11 +48,12 @@
         <div class="col-lg-8 blog-content">
             <h1>[[${review.title}]]</h1><div id ="content">
         </div>
+            <button th:if="${review.id == session.user.id}" id="modify" class="btn px-4 btn-primary text-white">편집하기</button>
+            <button th:if="${review.id == session.user.id}" id="delete"  class="btn px-4 btn-primary text-white">삭제하기</button>
+        </div>
 
     </div>
-        <button th:if="${review.id == session.user.id}" id="modify" class="btn px-4 btn-primary text-white">편집하기</button>
-        <button th:if="${review.id == session.user.id}" id="delete"  class="btn px-4 btn-primary text-white">삭제하기</button>
-    </div>
+
 
 </div>
 </section>

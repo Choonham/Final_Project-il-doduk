@@ -54,11 +54,11 @@ public class ReviewController {
     @GetMapping("/reviewList")
     public void reviewList(RequestDto dto, Model model){
 
-    //model.addAttribute("list",service.getList());
-    ResultDto<ReviewDTO,Review> res = service.getList(dto);
-    List<ReviewDTO> list=res.getDtoList();
-    System.out.println(list.get(1).getContent());
-    model.addAttribute("result",service.getList(dto));
+        //model.addAttribute("list",service.getList());
+        ResultDto<ReviewDTO,Review> res = service.getList(dto);
+        List<ReviewDTO> list=res.getDtoList();
+        System.out.println(list.get(1).getContent());
+        model.addAttribute("result",service.getList(dto));
 
     }
 

@@ -39,6 +39,7 @@ public class AuctionController {
 
     @Autowired
     private final WeatherService weatherService;
+    private final MemberService memberService;
 
     //네비바 정리하고 없어질 컨트롤러~~
     @GetMapping("/main")
@@ -407,7 +408,7 @@ public class AuctionController {
     }
 
     @PostMapping("/register")
-    public String registerPost(AuctionListDTO dto, HttpServletRequest request) {
+    public String registerPost(AuctionListDTO dto, HttpServletRequest request,HttpSession session) {
 
         String date = request.getParameter("doDateT");
         LocalDateTime dodateTime = LocalDateTime.parse(date);
@@ -419,6 +420,9 @@ public class AuctionController {
 
         /*결제 관련*/
         paymentService.regAuction(aucSeq);
+        MemberDto memberDto = memberService.userIdCheck(dto.getUser());
+        session.removeAttribute("user");
+        session.setAttribute("user",memberDto);
 
         return "redirect:/auction/onAuctionList";
     }
