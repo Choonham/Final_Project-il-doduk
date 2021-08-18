@@ -77,7 +77,7 @@
                   <button type="button" class="btn btn-primary">Modify</button>
                 </a>
 
-                <a th:href="@{/blog/delete(postNo = ${detail.postNo}, writer = ${detail.writer}, tempPage=${listPageInfo.tempPage})}">
+                <a th:href="@{/blog/delete(postNo = ${detail.postNo}, writer = ${detail.writer.id}, tempPage=${listPageInfo.tempPage})}">
                   <button type="button" class="btn btn-primary">delete</button>
                 </a>
               </span>
