@@ -115,18 +115,21 @@ public class AuctionController {
         PageRequestDTO pageRequestDTO2 = PageRequestDTO.builder().page(1).size(3).build();
         //매칭 완료 경매 isAllDone = false
         if (!isAllDone) {
+            PageResultsDTO<AuctionBiddingDTO, Object[]> matchedAuctionList = auctionService.getList3(pageRequestDTO, user);
+            PageResultsDTO<AuctionBiddingDTO, Object[]> allDoneList = auctionService.getList4(pageRequestDTO2, user);
             model.addAttribute("isAllDone", isAllDone);
-            model.addAttribute("matchedAuctionList", auctionService.getList3(pageRequestDTO, user));
-            model.addAttribute("allDoneList", auctionService.getList4(pageRequestDTO2, user));
+            model.addAttribute("matchedAuctionList", matchedAuctionList);
+            model.addAttribute("allDoneList", allDoneList);
         }
 
         //미션 완료 리스트 isAllDone = true
         else if (isAllDone) {
+            PageResultsDTO<AuctionBiddingDTO, Object[]> matchedAuctionList = auctionService.getList3(pageRequestDTO2, user);
+            PageResultsDTO<AuctionBiddingDTO, Object[]> allDoneList = auctionService.getList4(pageRequestDTO, user);
             model.addAttribute("isAllDone", isAllDone);
-            model.addAttribute("matchedAuctionList", auctionService.getList1(pageRequestDTO2, user));
-            model.addAttribute("allDoneList", auctionService.getList2(pageRequestDTO, user));
+            model.addAttribute("matchedAuctionList", matchedAuctionList);
+            model.addAttribute("allDoneList", allDoneList);
         }
-
     }
 
     /* 사용하지 않음,혹시 실수로 연결될 경우 matchecdAuctionList로 반환 */
