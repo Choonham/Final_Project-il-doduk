@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<link rel="stylesheet" th:href="@{/css/refund.css}">
+
+
+<section class="site-section">
+    <div class="container">
+        <form id="refundForm" target="refundForm" th:action="@{/serviceCenter/postRefund}" method="post">
+            <table class="table">
+                <tr th:align="left">
+                    <th colspan="2" scope="col">사용자 정보</th>
+                </tr>
+                <tr>
+                    <th scope="col">이름</th>
+                    <td th:text="${user.name}">전다훈</td>
+                </tr>
+                <tr>
+                    <th scope="col">이메일</th>
+                    <td th:text="${result.userId}">adsa@asdsa</td>
+                </tr>
+                <tr>
+                    <th scope="col">환불금액</th>
+                    <td th:text="${result.totalPoint}">1000원</td>
+                </tr>
+            </table>
+
+            <div>
+                <span class="btn btn-dark">
+                    환불 안내
+                </span>
+                <div id="refund_terms">
+                    1. <b>환불금액</b>이 가지고 있는 <u>포인트보다 높을 경우</u> 환불이 불가능합니다.
+                    <br/>
+                    2. 카드 취소후 영업일 기준에 따라 <b>1~3일</b>정도 소요될 수 있습니다.
+                    <br/>
+                    * 더 궁금하신 내용은 문의 게시판을 통하여 부탁드립니다.
+                </div>
+                <input type="hidden" name="pointNo" th:value="${result.pointNo}" />
+
+                <div th:align="right" id="checkTerms">
+                    위의 내용을 확인 하였습니다.
+                    <input type="checkbox" name="refund_check" />
+                </div>
+                <button id="refund_checkBtn" class="btn btn-primary"> 진행 </button>
+            </div>
+            <input type="hidden" name="pointNo" th:value="${result.pointNo}"/>
+            <input type="hidden" name="userID" th:value="${result.userId}"/>
+            <input type="hidden" name="totalPoint" th:value="${result.totalPoint}"/>
+        </form>
+    </div>
+</section>
+
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<script th:inline="javascript">
+    //유저 포인트 조회
+    var point = [[${result.totalPoint}]];
+    var userPoint = [[${session.user.point}]];
+
+    $(document).ready(function(){
+        //환불 작업 시작
+        $('#refund_checkBtn').click(function (e) {
+
+            if($("input:checkbox[name=refund_check]").is(":checked") == true){
+                if(userPoint >= point){
+                e.preventDefault();
+                var check = confirm("정말 환불하시겠습니까???");
+
+                if(check){
+                    alert("환불 신청되었습니다..")
+                    $("#refundForm")[0].submit();
+                } else {
+                    alert("취소되었습니다.")
+                    return false;
+                }
+            } else {
+                    alert("보유하고있는 포인트가 부족합니다.");
+                    return false;
+                }
+            } else {
+                alert("약관에 동의 하지 않으셨습니다. 다시 한번 확인해주세요.");
+                return false;
+            }
+
+        });
+
+    });
+</script>
+
+</body>
+</html>

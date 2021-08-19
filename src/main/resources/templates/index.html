@@ -1,17 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/indexHeader :: indexHeader}">
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
-<body>
-index.html
 
-<span th:text="${session.user.id}"></span>님 환영합니다
-<span th:text="${session.user.gender}"></span>
-<span th:text="${session.user.nickname}"></span>
+<body id="top">
 
-<!--<span th:if(session.user.id !="null")></span>-->
-</form>
+
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+
+<div id="cash_status" th:if="${session.user != null}">
+    <span id="user" th:text="${session.user.nickname}"></span> 님
+    <span th:text="${session.user.point}"></span> point
+<button type="button" id="btn_submit">충전하기</button>
+<a href="/chat/chatList">채팅</a>
+</div>
+
+<div th:if = "${session.user == null}">
+    <div th:replace="~{/fragments/nav :: navi}"></div>
+</div>
+
+<section class="home-section section-hero overlay bg-image" id="home-section">
+
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-12">
+                <div class="mb-5 text-center">
+                    <h2 style="color: whitesmoke">
+                        We make a living by working, but we make life by sharing
+                        <p> </p>
+                        <p>
+                            by Winston Churchill
+                        </p>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="site-section" style="margin-top: 10px; padding-top: 10px; padding-bottom: 10px;">
+    <div class="container">
+
+        <div class="row mb-5 justify-content-center">
+            <div class="col-md-7 text-center">
+                <h2 class="section-title mb-2">Hermes FAQ</h2>
+            </div>
+        </div>
+
+        <section class="site-section" id="accordion" style="margin-top: 107px; padding-top: 10px; padding-bottom: 20px;">
+            <div class="container">
+
+                <div class="row accordion justify-content-center block__76208">
+                    <div class="col-lg-6">
+                        <img src="https://images.unsplash.com/photo-1583522478890-b2f0660c1a93?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTd8fGRlbGl2ZXJ5fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" width="400px" height="95%" alt="Image" class="img-fluid rounded">
+                    </div>
+
+                    <div class="col-lg-5 ml-auto">
+
+                        <div class="accordion-item">
+                            <h3 class="mb-0 heading">
+                                <a class="btn-block h4" href = "#collapseFive" data-toggle="collapse"  role="button" aria-expanded="true" aria-controls="collapseFive">헤르메스는 어떤 서비스 인가요?<span class="icon"></span></a>
+                            </h3>
+                            <div  id="collapseFive"  class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="body-text">
+                                    헤르메스는 누구든지 참여할 수 있는 중개플랫폼입니다.<br/><br/>
+
+                                    집에 청소하기가 힘드시나요?<br/>
+
+                                    빨래가 하기 싫어요?<br/>
+
+                                    누군가가 뭐 좀 사다 줬으면 하나요?<br/>
+
+                                    이처럼 귀찮은 일, 여러운 일들이 있을 때,
+
+                                    헤르메스에 요청을 하시면
+
+                                    헤르메스의 헬퍼들이 그 일들을 대신해 드립니다.<br/>
+
+                                    헤르메스는 언제 어디서든지 사용하실 수 있으며,<br/>
+
+                                    헬퍼들의 선택에 의해,
+
+                                    24시간 운영되는 서비스입니다.<br/>
+
+                                    많은 이용 부탁드립니다.
+                                </div>
+                            </div>
+                        </div> <!-- .accordion-item -->
+
+                        <div class="accordion-item">
+                            <h3 class="mb-0 heading">
+                                <a class="btn-block h4" data-toggle="collapse" href="#collapseSeven" role="button" aria-expanded="false" aria-controls="collapseSeven">'헬퍼' 지원은 어떻게 할 수 있나요?<span class="icon"></span></a>
+                            </h3>
+                            <div id="collapseSeven" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="body-text">
+                                    마이페이지에서 헬퍼 신청을 통하여 할수 있습니다.<br/>
+
+                                    신청서는 헬퍼들의 원활한 인증절차를 위해
+
+                                    모든 항목이 필수입력사항이므로,<br/>
+
+                                    상세히 입력해 주시길 바랍니다.<br/>
+
+                                    신청이 완료되면 고객센터를 통하여
+
+                                    인증절차를 진행하게 됩니다.<br/>
+
+                                    인증이 완료 되면 헬퍼로서 활동 해주시면 됩니다.
+                                </div>
+                            </div>
+                        </div> <!-- .accordion-item -->
+
+                        <div class="accordion-item">
+                            <h3 class="mb-0 heading">
+                                <a class="btn-block h4" data-toggle="collapse" href="#collapseSix" role="button" aria-expanded="false" aria-controls="collapseSix">서비스 불편사항은 어떻게 요청하나요?<span class="icon"></span></a>
+                            </h3>
+                            <div id="collapseSix" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="body-text">
+                                    '헤르메스'는 다양한 사람들이 모이는 공간이기 때문에
+
+                                    그만큼 다양한 일들이 발생할 수 있습니다.<br/>
+
+                                    예를 들면, 욕설이나, 불법적인 글, 모욕감을 주는 글 등이
+
+                                    올라오면 누구든지 관련 내용을 문의하실 수 있습니다.<br/>
+
+                                    내부 검토 후 해당 글을 올린 사람에 대한
+
+                                    알맞는 조치를 취할 것입니다.<br/>
+
+                                    문의방법: 앱에서 1:1 문의주시거나 고객센터(사용자신고)로 문의 바랍니다.<br/>
+
+                                    '헤르메스'는 건전하고 안전한 공간이 되도록
+
+                                    최선을 다해 노력하겠습니다.
+                                </div>
+                            </div>
+                        </div> <!-- .accordion-item -->
+
+
+                        <div class="accordion-item">
+                            <h3 class="mb-0 heading">
+                                <a class="btn-block h4" data-toggle="collapse" href="#collapseEight" role="button" aria-expanded="false" aria-controls="collapseEight">'헬퍼'가 된 사용자는 다시 헤르메스를 이용할 수 없나요?<span class="icon"></span></a>
+                            </h3>
+                            <div id="collapseEight" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="body-text">
+                                    아닙니다.<br/>
+                                    한번 헬퍼 인증에 통과한 사용자의 경우, 마이페이지의 사용자 전환을 통하여
+                                    자유롭게 전환하여 헤르메스를 이용할 수 있습니다.
+                                </div>
+                            </div>
+                        </div> <!-- .accordion-item -->
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</section>
+
+
+<section class="py-5 bg-image overlay-primary fixed overlay">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="text-white">돈이 전부는 아니지만, 99% 정돈 된다.</h2>
+            </div>
+            <div class="col-md-3 ml-auto">
+
+                <a th:if="${session.user != null and session.user.userCheck == 0}" th:href="@{/member/helperRegister}" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
+                <a th:if="${session.user == null}" href="javascript:kakaoLogin();" class="btn btn-warning btn-block btn-lg">Helper 등록</a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-light pt-5 testimony-full">
+
+    <div class="owl-carousel single-carousel">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
+                        <p>&ldquo; 전*훈 님</p>
+                        <p><cite>믿고 맡길 수 있는 사람이 생겨서 정말 좋아요!</cite></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://i.pinimg.com/originals/94/7e/26/947e265b4da2f6c2f189bf16331a671b.gif" height="auto" alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
+                        <p>&ldquo; 유*현 님</p>
+                        <p><cite>남는 시간에 쏠쏠하게 용돈벌이 할 수 있어서 좋아요~!</cite></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://www.suto.co.kr/data/file/free/981226651_tb5sfjd8_1464145823414.png" height="auto" alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
+                        <p>&ldquo; 노*준 님</p>
+                        <p><cite>급하게 사람이 필요했는데 빠르게 구인이 가능해서 편리해요~</cite></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://i.pinimg.com/originals/6f/39/f0/6f39f0bbe37c1faf827bc78b221096c9.gif"  alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
+                        <p>&ldquo; 황*준 님</p>
+                        <p><cite>나는 최고다. I'm the best</cite></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://og.kakaobank.io/view/83bab591-ad20-4b11-b494-03adf88cbcc1" height="auto" alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center text-center text-lg-left">
+                    <blockquote>
+                        <p>&ldquo; 현*원 님</p>
+                        <p><cite>누구나 바쁠 때는 청소하기 싫잖아요...</cite></p>
+                        <p><cite>대신 해줄 수 있는 사람이 생겨 좋아요!</cite></p>
+
+                    </blockquote>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-right">
+                    <img src="https://i.pinimg.com/originals/56/2f/ed/562fed1cddb951e04ba2d349733f067f.gif" height="auto" alt="Image" class="img-fluid mb-0">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script th:inline="javascript">
+
+
+    var msg = [[${msg}]];
+    var msgDelete = [[${msgDelete}]];
+
+        $(document).ready(function(){
+
+            if(msg != null) {
+                alert(msg);
+            }else if(msgDelete != null){
+                alert(msgDelete);
+            }
+            //결제 팝업창으로 띄우기
+        $("#btn_submit").on("click",function(){
+
+            window.open("/kakaoPay/kakao","popup_cash","width=500, height=584, scrollbars=no, resizeable=no,toolbar=no, left=420,top=90");
+        });
+    });
+</script>
+
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
 </body>
 </html>

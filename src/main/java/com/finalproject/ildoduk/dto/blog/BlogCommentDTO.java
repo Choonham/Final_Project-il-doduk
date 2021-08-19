@@ -1,9 +1,12 @@
 package com.finalproject.ildoduk.dto.blog;
 
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -14,4 +17,6 @@ public class BlogCommentDTO {
     private Long postNo;
     private String writer;
     private String content;
+    private LocalDateTime regDate;
+    private Member writerInfo;
 }

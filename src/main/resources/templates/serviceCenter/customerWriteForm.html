@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}"></head>
+
+<body>
+
+<link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
+
+
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+
+
+
+    <section class="section-hero overlay inner-page bg-image" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">고객센터</h1>
+                    <div class="custom-breadcrumbs">
+                        <a th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>문의</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="site-section">
+        <div class="container">
+            <form th:action="@{/serviceCenter/postCusWrite}" method="post">
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <h3 class="text-black mb-5 border-bottom pb-2">문의합니다.</h3>
+
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" name="cusTitle" class="form-control" id="title" />
+                    </div>
+
+
+                    <label for="title">내용</label>
+                    <textarea class="summernote" id="editordata" th:name="cusContent" th:required="true"></textarea>
+
+
+                    <div class="form-group">
+                        <label for="check1">공개 여부</label>
+                        <input class="selectpicker border rounded" data-style="btn-black" data-width="100%" data-live-search="true" type="radio" name="secretBoard" id="check1" value="n"/>공개
+                        <input class="selectpicker border rounded" data-style="btn-black" data-width="100%" data-live-search="true" type="radio" name="secretBoard" id="check2" checked value="y"/>비공개
+                    </div>
+                    <div class="form-group" id="inputPass">
+                        <label for="job-title">비밀번호</label>
+                        <input type="password" name="passwordBoard" class="form-control" id="job-title" />
+                    </div>
+
+                    <input type="hidden" name="cusWriter" th:value="${session.user.id}"/>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-4 ml-auto">
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="submit" id="submit_btn" value="작성" class="btn btn-primary btn-md btn-file" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </section>
+
+
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+<script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
+<script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
+
+
+<script>
+
+    //summerNote
+    $('.summernote').summernote({
+        height: 500,
+        lang: "ko-KR",
+        focus: true,
+        toolbar: [
+            // 글꼴 설정
+            ['fontname', ['fontname']],
+            // 글자 크기 설정
+            ['fontsize', ['fontsize']],
+            // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+            ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+            // 글자색
+            ['color', ['forecolor', 'color']],
+            // 표만들기
+            ['table', ['table']],
+            // 글머리 기호, 번호매기기, 문단정렬
+            ['para', ['ul', 'ol', 'paragraph']],
+            // 줄간격
+            ['height', ['height']],
+
+            // 코드보기, 확대해서보기, 도움말
+            ['view', ['codeview', 'fullscreen', 'help']]
+        ],
+        // 추가한 글꼴
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '돋음체', '바탕체'],
+        // 추가한 폰트사이즈
+        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
+        callbacks: {
+
+            onMediaDelete: function (files, editor, welEditable) {
+                for (var i = files.length - 1; i >= 0; i--) {
+                    deleteFile($(files[i]).attr("src"), this);
+                }
+            },
+
+            onImageUpload: function (files, editor, welEditable) {
+                // 파일 업로드(다중업로드를 위해 반복문 사용)
+                for (var i = files.length - 1; i >= 0; i--) {
+                    sendFile(files[i], this);
+                }
+            }
+        }
+    });
+    // summernote 에디터 설정 끝
+    
+</script>
+</body>
+</html>

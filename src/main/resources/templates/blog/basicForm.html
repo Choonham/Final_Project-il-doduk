@@ -1,146 +1,319 @@
-<!-- 블로그 글 쓰기 양식 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
-  <th:block th:fragment="content">
-    <div class="container">
-      <br style="clear: both">
-      <h3 style="margin-bottom: 25px;">Post Form</h3>
-      <form id = "postForm" action = "post" method="post">
-        <div class="form-group">
-          <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
+
+  <head th:replace="~{/blog/blogHeader :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+  </head>
+
+  <body id="top">
+    
+
+<div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
         </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
 
-        <!-- summernote 에디터 사용 -->
-        <textarea class="summernote" id = "editordata" name="content"></textarea>
+    <!-- NAVBAR -->
 
-        <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
-        <input type = "hidden" name = "postNo" id = "postNo" th:value = "${postNo}">
+    <div th:if = "${session.user != null}">
 
-        <div class="form-group">
-          <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.id}" required/>
-        </div>
-        <input type="text" class="form-control" id="thumbnail" name="thumbnail" readonly/>
 
-        <button class = "arrow-button" id = "submit-btn">submit</button>
-      </form>
+      <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+      </div>
+
+      <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+      </div>
+
+      <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+      </div>
+
     </div>
 
-    <script th:inline="javascript">
+    <div th:if = "${session.user == null}">
+      <script th:inline="javascript">
+        alert("로그인해주세요!");
+        window.location.href = [[@{/}]];
+      </script>
+    </div>
 
-      // 양식 제출 버튼 시작
-      var button = $("#submit-btn");
+    <!-- HOME -->
+    <section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/blogMain.jpg'); margin-bottom: 1em" id="home-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-7" style="text-align: center">
+            <h1 class="text-white font-weight-bold" style="size: ledger">Write a post</h1>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      button.click(function (){
-        $("#postForm").submit();
-      });
-      // 끝
+    <section class="site-section" style="padding-top: 30px">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <br style="clear: both">
+          <form id = "postForm" action = "post" method="post">
 
-      // 썸네일 이미지의 이름을 저장할 변수
-      var thumbnail = $("#thumbnail");
+            <div class="form-group">
+              <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
+            </div>
 
-      // summernote 에디터 설정 시작, 파일 업로드 / 삭제를 위한 콜벡 함수 포함
-      $('.summernote').summernote({
-        height: 500,
-        lang: "ko-KR",
-        focus : true,
-        toolbar: [
-          // 글꼴 설정
-          ['fontname', ['fontname']],
-          // 글자 크기 설정
-          ['fontsize', ['fontsize']],
-          // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-          ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-          // 글자색
-          ['color', ['forecolor','color']],
-          // 표만들기
-          ['table', ['table']],
-          // 글머리 기호, 번호매기기, 문단정렬
-          ['para', ['ul', 'ol', 'paragraph']],
-          // 줄간격
-          ['height', ['height']],
-          // 그림첨부, 링크만들기, 동영상첨부
-          ['insert',['picture','link','video']],
-          // 코드보기, 확대해서보기, 도움말
-          ['view', ['codeview','fullscreen', 'help']]
-        ],
-        // 추가한 글꼴
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
-        // 추가한 폰트사이즈
-        fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-        callbacks : {
+            <!-- summernote 에디터 사용 -->
+            <textarea class="summernote" id = "editordata" name="content"></textarea>
 
-          onMediaDelete : function(files, editor, welEditable) {
-            for (var i = files.length - 1; i >= 0; i--) {
-              deleteFile($(files[i]).attr("src"), this);
-            }
-          },
+            <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
+            <input type = "hidden" name = "postNo" id = "postNo" th:value = "${postNo}">
 
-          onImageUpload : function(files, editor, welEditable) {
-            // 파일 업로드(다중업로드를 위해 반복문 사용)
-            for (var i = files.length - 1; i >= 0; i--) {
-              sendFile(files[i], this);
-            }
-          }
+            <div class="form-group">
+              <input type="text" class="form-control" id="writer" name="writer" placeholder="writer" th:value = "${session.user.getId()}" required/>
+            </div>
+
+            <input type="hidden" class="form-control" id="thumbnail" name="thumbnail" readonly/>
+
+            <hr/>
+
+            <select class = "custom-select" id="doneList" name = "doneList" onchange="selectDoneList()">
+              <option>-------</option>
+              <option th:each = "done : ${doneList}">
+                [[${done.title}]] / [[${done.sido}]] [[${done.sigungu}]]
+              </option>
+            </select>
+            <input type = "button" id="submit-btn" class="btn px-4 btn-primary text-white"
+                   style="float: right; margin-top: 15px;"
+                   value="POST">
+          </form>
+        </div>
+      </div>
+    </section>
+  <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+</div>
+
+  <!-- SCRIPTS -->
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/isotope.pkgd.min.js}"></script>
+  <script th:src="@{/js/stickyfill.min.js}"></script>
+  <script th:src="@{/js/jquery.fancybox.min.js}"></script>
+  <script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+  <script th:src="@{/js/jquery.waypoints.min.js}"></script>
+  <script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+  <script th:src="@{/js/owl.carousel.min.js}"></script>
+  <script th:src="@{/js/quill.min.js}"></script>
+
+  <script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+  <script th:src="@{/js/custom.js}"></script>
+
+  <script th:src="@{/vendor/summernote/summernote-lite.js}"></script>
+  <script th:src="@{/vendor/summernote/lang/summernote-ko-KR.js}"></script>
+  <link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
+
+<script th:inline="javascript">
+
+  // 양식 제출 버튼 시작
+  var button = $("#submit-btn");
+
+  button.click(function (){
+
+    $("#postForm").submit();
+
+  });
+  // 끝
+
+  // 썸네일 이미지의 이름을 저장할 변수
+  var thumbnail = $("#thumbnail");
+
+  // summernote 에디터 설정 시작, 파일 업로드 / 삭제를 위한 콜벡 함수 포함
+  $('.summernote').summernote({
+    height: 500,
+    lang: "ko-KR",
+    focus : true,
+    dialogsInBody: true,
+    toolbar: [
+      // 글꼴 설정
+      ['fontname', ['fontname']],
+      // 글자 크기 설정
+      ['fontsize', ['fontsize']],
+      // 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+      ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+      // 글자색
+      ['color', ['forecolor','color']],
+      // 표만들기
+      ['table', ['table']],
+      // 글머리 기호, 번호매기기, 문단정렬
+      ['para', ['ul', 'ol', 'paragraph']],
+      // 줄간격
+      ['height', ['height']],
+      // 그림첨부, 링크만들기, 동영상첨부
+      ['insert',['picture','link','video']],
+      // 코드보기, 확대해서보기, 도움말
+      ['view', ['codeview','fullscreen', 'help']]
+    ],
+    // 추가한 글꼴
+    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+    // 추가한 폰트사이즈
+    fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+    callbacks : {
+
+      onMediaDelete : function(files, editor, welEditable) {
+        for (var i = files.length - 1; i >= 0; i--) {
+          deleteFile($(files[i]).attr("src"), this);
         }
-      });
-      // summernote 에디터 설정 끝
+      },
 
-      // 양식에서 파일을 삭제했을 때, 서버의 파일과 DB에 파일을 삭제하기 위한 ajax
-      function deleteFile(filePathName, el){
-        var form_data = new FormData();
-        form_data.append('filePathName', filePathName);
-        $.ajax({
-          data: form_data,
-          type: "POST",
-          url: '/blog/fileDelete',
-          cache: false,
-          contentType: false,
-          processData: false,
-          success: function (data) {
-            if(thumbnail.attr("value") != null){
-              thumbnail.attr(
-                      "value", null
-              )
-            }
-            console.log(data.removedFileName)
-            const itemToFind = tempFileList.find(function(item) {return item.savedFileName === data.removedFileName});
-            const idx = tempFileList.indexOf(itemToFind);
-            if (idx > -1) tempFileList.splice(idx, 1);
-            console.log(tempFileList);
-          }
-        });
+      onImageUpload : function(files, editor, welEditable) {
+        // 파일 업로드(다중업로드를 위해 반복문 사용)
+        for (var i = files.length - 1; i >= 0; i--) {
+          sendFile(files[i], this);
+        }
+
       }
-      // 끝
+    }
+  });
+  // summernote 에디터 설정 끝
 
-      // 양식에 파일을 올렸을 때, 서버와 DB에 파일을 저장할 ajax
-      function sendFile(file, el) {
-        var form_data = new FormData();
-        form_data.append('file', file);
-        form_data.append('postNo', $("#postNo").val());
-        $.ajax({
-          data: form_data,
-          type: "POST",
-          url: '/blog/fileUpload',
-          cache: false,
-          contentType: false,
-          enctype: 'multipart/form-data',
-          processData: false,
-          success: function (data) {
-            if(thumbnail.attr("value") == null){
-              thumbnail.attr("value", data.savedFileName);
-            }
-            $(el).summernote('editor.insertImage', data.url);
-            tempFileList.push({
-              savedFileName : data.savedFileName,
-              originalFileName : data.originalFileName
-            });
-          }
-        });
+  // 양식에서 파일을 삭제했을 때, 서버의 파일과 DB에 파일을 삭제하기 위한 ajax
+  function deleteFile(filePathName, el){
+    var form_data = new FormData();
+    form_data.append('filePathName', filePathName);
+    $.ajax({
+      data: form_data,
+      type: "POST",
+      url: '/blog/fileDelete',
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        if(thumbnail.attr("value") != null){
+          thumbnail.attr(
+                  "value", null
+          )
+        }
+        //console.log(data.removedFileName)
+        //const itemToFind = tempFileList.find(function(item) {return item.savedFileName === data.removedFileName});
+        //const idx = tempFileList.indexOf(itemToFind);
+        //if (idx > -1) tempFileList.splice(idx, 1);
+        //console.log(tempFileList);
       }
-      // 끝
+    });
+  }
+  // 끝
 
-    </script>
-  </th:block>
-</th:block>.
+  // 양식에 파일을 올렸을 때, 서버와 DB에 파일을 저장할 ajax
+  function sendFile(file, el) {
+    var form_data = new FormData();
+    form_data.append('file', file);
+    form_data.append('postNo', $("#postNo").val());
+    $.ajax({
+      data: form_data,
+      type: "POST",
+      url: '/blog/fileUpload',
+      cache: false,
+      contentType: false,
+      enctype: 'multipart/form-data',
+      processData: false,
+      success: function (data) {
+        if(thumbnail.attr("value") == null){
+          thumbnail.attr("value", data.savedFileName);
+        }
+        $(el).summernote('editor.insertImage', data.url);
+        /**
+        tempFileList.push({
+          savedFileName : data.savedFileName,
+          originalFileName : data.originalFileName
+        });
+         **/
+      }
+    });
+  }
+  // 끝
+
+  // ============== 수행했던 작업 목록 선택창 function 시작==========//
+  function selectDoneList() {
+
+    doneList = [[${doneList}]];
+
+    console.log(doneList);
+    selectedOne = $("#doneList option:selected");
+    contentArea = $(".note-editable");
+    contentArea2 = document.getElementsByClassName("note-editable");
+    //originContent = contentArea.html();
+
+    selectedIndex = $("#doneList option").index(selectedOne); // 선택한 사항의 인덱스
+
+    var category;
+    var doDateTime = doneList[selectedIndex-1].doDateTime;
+
+    var year = doDateTime.substring(0,4);
+    var month = doDateTime.substring(5,7);
+    var day = doDateTime.substring(8,10);
+
+
+    if(doneList[selectedIndex-1].category === 1){
+      category = "구매대행";
+    } else if(doneList[selectedIndex-1].category === 2) {
+      category = "홈 케어";
+    } else if(doneList[selectedIndex-1].category === 3) {
+      category = "펫 케어";
+    } else if(doneList[selectedIndex-1].category === 4) {
+      category = "퀵 서비스";
+    }
+
+    var level;
+
+    if(doneList[selectedIndex-1].level === 1){
+      level = "쉬움";
+    } else if(doneList[selectedIndex-1].level === 2) {
+      level = "보통";
+    } else if(doneList[selectedIndex-1].level === 3) {
+      level = "어려움";
+    }
+
+
+
+    str = "<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'><tr>" +
+            "<h3 class='text-primary  mt-3 h5 pl-3 mb-3 text-center'><b>미션 내용</b></h3>" +
+            "<tr><td><strong class='text-black'>카테고리</strong></td><td><div><span class = 'mb-2'>" + category + "</span></div></td>" +
+            "<td><strong class='text-black'>날짜</strong></td><td><span class='mb-2'>"+ year + "-" + month + "-" + day + "</span></td></tr>" +
+            "<tr><td><strong class='text-black'>미션</strong></td><td colspan='3'><div><span class = 'mb-2'>" + doneList[selectedIndex-1].title + "</span></div></td></tr>" +
+            "<tr><td><strong class='text-black'>장소</strong></td><td colspan='3'><div><span class = 'mb-2'>" + doneList[selectedIndex-1].sido + " " + doneList[selectedIndex-1].sigungu+ "</span></div></td></tr>" +
+            "<tr><td><strong class='text-black'>난이도</strong></td><td><div><span class = 'mb-2'>" + level + "</span></div></td>" +
+            "<td><strong class='text-black'>낙찰가</strong></td><td><div><span class = 'mb-2'>" + doneList[selectedIndex-1].offerPrice + "</span></div></td></tr></table></div>";
+
+
+    originContent = contentArea.html();
+
+    // 서머노트에 html 쓰기
+    $('.summernote').summernote('code', str+originContent);
+
+  }
+
+  // ============== 수행했던 작업 목록 선택창 function 끝 ==========//
+</script>
+
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+  </body>
 </html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div th:if = "${session.user == null}">
+    <div th:replace="~{/fragments/nav :: navi}"></div>
+</div>
+
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+<section class="home-section section-hero overlay bg-image" id="home-section">
+
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-12">
+                <div class="mb-5 text-center">
+                    <h1 class="text-white font-weight-bold">
+                        일도둑 뿜뿜<br/>
+                        뿜뿜
+                    </h1>
+                    <p>뿜뿜</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#next" class="scroll-button smoothscroll">
+        <span class=" icon-keyboard_arrow_down"></span>
+    </a>
+
+</section>
+
+<table class="table table-striped">
+<thead>
+<tr>
+
+    <th scope="col">No</th>
+    <th scope="col">Title</th>
+    <th scope="col">writer</th>
+</tr>
+
+</thead>
+  <tbody>
+  <tr th:each="dto : ${result.dtoList}">
+
+      <th scope="row">[[${dto.no}]]</th>
+      <td><a th:href="@{/review/detail(no=${dto.no})}">[[${dto.title}]]</a></td>
+      <td>[[${dto.id}]]</td>
+  </tr>
+
+
+  </tbody>
+
+</table>
+<div style="text-align: center">
+    <div class="custom-pagination ml-auto">
+
+        <a  th:href="@{/review/reviewList(page=${result.start-1})}" tabindex="-1" th:if="${result.prev}">
+            Pre
+        </a>
+
+
+    <div class=d-inline-block >
+        <a  th:href="@{/review/reviewList(page=${page}) }"
+            th:class ="${result.page == page?'active':''}"
+           th:each="page: ${result.pageList}">
+            [[${page}]]
+        </a>
+
+    </div>
+
+        <a  th:href="@{/review/reviewList(page=${result.end+1})}" th:if="${result.next}">
+            Next
+        </a>
+
+
+    </div>
+</div>
+
+</br></br>
+
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+
+
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+</body>
+</html>

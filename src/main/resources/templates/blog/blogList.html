@@ -1,142 +1,246 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<head th:replace="~{/blog/blogHeader :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
 
-  <th:block th:fragment="content">
+  </head>
 
-    <h1 class="mt-4">Blog List Page
-      <span>
-                <a th:href="@{/blog/basicForm}">
-                    <button type="button" class="btn btn-outline-primary">REGISTER
-                    </button>
-                </a>
-            </span>
-    </h1>
+  <body id="top">
+    
 
+<div class="site-wrap">
 
-    <form action="/blog/blogList" method="get" id="searchForm">
-      <div class="input-group">
-        <input type="hidden" name="page" value = "1">
-        <input type = "hidden" name = "writer" id = "searchWriter" th:value="${host}">
-        <div class="input-group-prepend">
-          <select class="custom-select" name="type">
-            <option th:selected="${pageRequestDTO.type == null}">-------</option>
-            <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
-            <option value="c" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
-            <option value="tc"  th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
-          </select>
-        </div>
-        <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
-        <div class="input-group-append" id="button-addon4">
-          <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
-          <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
         </div>
       </div>
-    </form>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
+
+    <!-- NAVBAR -->
+
+    <div th:if = "${session.user != null}">
 
 
+      <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+      </div>
 
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Writer</th>
-        <th scope="col">Regdate</th>
-      </tr>
-      </thead>
-      <tbody>
+      <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+      </div>
 
-      <tr th:each="dto : ${result.dtoList}" >
-        <th scope="row">
-            [[${dto.postNo}]]
-        </th>
-        <td>
-          <a th:href="@{/blog/detail(postNo = ${dto.postNo},
+      <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+      </div>
+
+    </div>
+
+    <div th:if = "${session.user == null}">
+      <script th:inline="javascript">
+        alert("로그인해주세요!");
+        window.location.href = [[@{/}]];
+      </script>
+    </div>
+
+    <!-- HOME -->
+    <section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/blogMain.jpg'); margin-bottom: 1em" id="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-7">
+            <h1 class="text-white font-weight-bold"><strong th:text="${nick}"></strong>'s blog</h1>
+            <div class="custom-breadcrumbs">
+              <a href="#">Home</a> <span class="mx-2 slash">/</span>
+              <span class="text-white"><strong>About Us</strong></span>
+            </div>
+
+            <a th:if = "${session.user.id == host}" th:href="@{/blog/basicForm}">
+              <button type="button" class="btn btn-outline-primary" style="margin-top: 30px">
+                REGISTER
+              </button>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section">
+      <div class="container">
+        <div class="row mb-5" id = "listForm">
+          <div class="col-md-6 col-lg-4 mb-5" th:each="dto : ${result.dtoList}">
+            <a th:href="@{/blog/detail(postNo = ${dto.postNo},
                     tempPage= ${result.page},
                     tempType=${pageRequestDTO.type} ,
                     tempKeyword = ${pageRequestDTO.keyword})}">
-            [[${dto.title}]]
-          </a>
-        </td>
-        <td>[[${dto.writer}]]</td>
-        <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
-      </tr>
-
-      </tbody>
-    </table>
-
-    <ul class="pagination h-100 justify-content-center align-items-center">
-
-      <li class="page-item " th:if="${result.prev}">
-        <a class="page-link" th:href="@{/blog/blogList(page= ${result.start -1},
+              <img th:if="${dto.thumbnail == ''}" th:src="@{/resources/fileupload/sub-thumbnail.jpg}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
+              <img th:if="${dto.thumbnail != ''}" th:src="@{/resources/fileupload/}+${dto.thumbnail}" alt="Image" class="img-fluid rounded mb-4" style="margin-bottom: 24px; width: 350px; height: 350px;">
+            </a>
+            <h3>
+              <a th:href="@{/blog/detail(postNo = ${dto.postNo},
+                    tempPage= ${result.page},
+                    tempType=${pageRequestDTO.type} ,
+                    tempKeyword = ${pageRequestDTO.keyword})}" class="text-black">
+                [[${dto.title}]]
+              </a>
+            </h3>
+            <div>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]<span class="mx-2">|</span> <a>[[${dto.writer.name}]]</a></div>
+          </div>
+        </div>
+        <div class="row pagination-wrap mt-5">
+          
+          <div class="col-md-12 text-center ">
+            <div class="custom-pagination ml-auto" style="margin-bottom: 20px">
+              <a th:if="${result.prev}"  th:href="@{/blog/blogList(page= ${result.start -1},
                     type=${pageRequestDTO.type},
                     keyword = ${pageRequestDTO.keyword},
                     writer = ${host}
-                     ) }" tabindex="-1">Previous</a>
-      </li>
+                     ) }" tabindex="-1" class="prev">Prev</a>
 
-      <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
-        <a class="page-link" th:href="@{/blog/blogList(page = ${page},
+              <div class="d-inline-block">
+                <a th:href="@{/blog/blogList(page = ${page},
                    type=${pageRequestDTO.type},
                    keyword = ${pageRequestDTO.keyword},
                    writer = ${host}
-                   )}">
-          [[${page}]]
-        </a>
-      </li>
-
-      <li class="page-item" th:if="${result.next}">
-        <a class="page-link" th:href="@{/blog/blogList(page= ${result.end + 1},
-                    type=${pageRequestDTO.type},
+                   )}" th:class="${result.page == page?'active':''}" th:each="page: ${result.pageList}">[[${page}]]</a>
+              </div>
+              <a th:if="${result.next}" th:href="@{/blog/blogList(page= ${result.end + 1},
+                    type=${pageRequestDTO.type},i
                     keyword = ${pageRequestDTO.keyword},
                     writer = ${host}
-                     )}">Next</a>
-      </li>
-
-    </ul>
-
-    <div class="modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Modal body text goes here.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+                     )}" class="next">Next</a>
+            </div>
+            <form method="get" id="searchForm">
+              <div class="input-group">
+                <input type="hidden" name="page" value = "1">
+                <input type = "hidden" name = "writer" id = "searchWriter" th:value="${host}">
+                <div class="input-group-prepend">
+                  <select class="custom-select" name="type">
+                    <option th:selected="${pageRequestDTO.type == null}">-------</option>
+                    <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
+                    <option value="c" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
+                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
+                  </select>
+                </div>
+                <input class="form-control" name="keyword" id = "searchKeyword" oninput="inputEvent()" th:value="${pageRequestDTO.keyword}">
+                <div class="input-group-append" id="button-addon4">
+                  <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+                  <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </div>
 
-    <script th:inline="javascript">
-      var msg = [[${msg}]];
-      console.log(msg);
+    </section>
 
-      if(msg){
-        $(".modal").modal();
-      }
-      var searchForm = $("#searchForm");
+</div>
 
-      $('.btn-search').click(function(e){
-        searchForm.submit();
-      });
+  <footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
 
-      $('.btn-clear').click(function(e){
-        searchForm.empty();
-        $("#searchWriter").val([[${host}]]);
-        searchForm.submit();
-      });
-    </script>
+  <script th:inline="javascript">
 
-  </th:block>
+    /*var msg = [[${msg}]];
+    console.log(msg);
 
-</th:block>
+    if(msg){
+      $(".modal").modal();
+    }*/
+
+    var searchForm = $("#searchForm");
+
+    $('.btn-search').click(function(e){
+      searchForm.submit();
+    });
+
+    $('.btn-clear').click(function(e){
+      searchForm.empty();
+      $("#searchWriter").val([[${host}]]);
+      searchForm.submit();
+    });
+
+
+    function inputEvent() {
+
+      var writer = [[${host}]];
+      var select = $(".custom-select").val();
+      var keyword = $("#searchKeyword").val();
+
+      $.ajax({
+        data: {
+          type : select,
+          keyword : keyword,
+          writer : writer
+        }, //json 데이터를 String으로
+        type: "get",
+        url: '/blog/blogSearch',
+        cache: false,
+        contentType: 'application/json; charset=utf8',
+        dataType: 'json',
+        success: function (result) {
+          console.log(result);
+          $("#listForm").empty();
+          if(result.dtoList.length > 0){
+            result.dtoList.forEach(function(item){
+              str = "<div class='col-md-6 col-lg-4 mb-5'>";
+              var link1 = [[@{/blog/detail}]];
+              str += "<a href = '" + link1 + "?postNo=" + item.postNo + "&tempPage=" + result.page + "&tempType=" + select + "&tempKeyword=" + keyword + "'>";
+
+              var srcLink = [[@{/resources/fileupload}]];
+
+              var dateTime = item.regDate;
+
+              var year = dateTime.substring(0,4);
+              var month = dateTime.substring(5,7);
+              var day = dateTime.substring(8,10);
+
+              var thumbSrc = srcLink;
+              var subThumbnail = "sub-thumbnail.jpg";
+
+              if(item.thumbnail === ""){
+                str += "<img src = '" + thumbSrc + "/" + subThumbnail + "' alt='Image' class='img-fluid rounded mb-4' style='margin-bottom: 24px; width: 350px; height: 350px;'>";
+              } else {
+                str += "<img src = '" + thumbSrc + "/" + item.thumbnail + "' alt='Image' class='img-fluid rounded mb-4' style='margin-bottom: 24px; width: 350px; height: 350px;'>";
+              }
+
+              str += "</a>";
+              str += "<h3><a href = '" + link1 + "?postNo=" + item.postNo + "&tempPage=" + result.page + "&tempType=" + select + "&tempKeyword=" + keyword + "' class = 'test-black'>";
+              str += item.title;
+              str += "</a></h3>";
+              str += "<div>" + year + "/" + month + "/" + day + "<span class='mx-2'>|</span><a>" + writer + "</a>";
+
+              $("#listForm").append(str);
+            })
+          }
+        },
+        error: function(jqXHR, textStatus, errorThorwn){
+          alert("실패");
+        }
+      })
+    }
+
+
+  </script>
+
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+  <script th:inline="javascript">
+    var me=[[${session.user.id}]];
+  </script>
+
+  <script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+  </body>
+</html>

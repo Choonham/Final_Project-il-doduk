@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+</head>
+<body>
+<style>
+    .number {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+        background-color: red;
+        font-size: 20px;
+        list-style: none;
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+        border-radius: 50%;
+    }
+</style>
+
+
+<div th:replace="~{/fragments/navUser :: naviUser}"></div>
+
+<!-- HOME : 위에 회색 그거 -->
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');"
+         id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">My Message</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">미션</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>미션 경매 보기</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<ul class="job-listings mb-5" style="width: 800px" align="center" >
+
+    <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
+        th:each="chat : ${list}" th:cellpadding="10">
+        <a onclick="open_NewWindow()"></a>
+        <script th:inline="javascript">
+            var window1=null;
+            function open_NewWindow(){
+                var id=[[${chat.recive}]];
+                var auc=[[${chat.auc_sec}]];
+
+                if(window1==null){
+                    window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                }
+                else{
+                    window1.focus();
+                }
+            }
+        </script>
+        <div class="job-listing-logo">
+            <div  th:align="center">
+                <img th:src="${chat.img}" alt="hermes"
+                     class="img-fluid" th:width="100" th:height="100" th:align="center">
+            </div>
+
+            <!--카테고리별 이미지 설정-->
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+            <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                <h2>[[${chat.recive}]]</h2>
+
+                <strong>[[${chat.date}]]</strong>
+            </div>
+            <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                <span class="glyphicon glyphicon-envelope"></span><span th:text="${chat.message}"></span>
+            </div>
+            <div class="job-listing-meta w-25">
+                <div class="number" th:each="num:${map}" th:if="${num.key==chat.recive}">[[${num.value}]]</div>
+
+            </div>
+        </div>
+    </li>
+    <!--한개씩 끝-->
+</ul>
+
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+
+
+</body>
+</html>

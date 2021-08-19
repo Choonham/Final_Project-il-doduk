@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<!-- Navigation-->
+<div th:fragment="naviManager">
+
+<!-- 카카오 로그인 -->
+
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+
+<script>
+        <!--bf1bc4277610e01ce736d93571683a3e-->
+        window.Kakao.init("69d6697e0a8e4d6248c163b516a887e8"); //웹어플리케이션 검증
+        kakao.isInitialized(); //카카오 sdk초기화
+
+        function kakaoLogin(){ //로그인시 실제 실행될 function
+
+            window.Kakao.Auth.login({
+                scope:'profile_nickname, account_email, gender', //카카오에서 받아올 정보 고유 id
+                success: function (authObj){      //authObj : 받아온 Obj data
+                    console.log(authObj);
+                    window.Kakao.API.request({
+                        url:'/v2/user/me', //현재 로그인한 사용자의 정보 가져오는 url
+                        success: res => {
+                            const kakao_account = res.kakao_account;
+                            console.log(kakao_account);
+                            console.log(kakao_account.email);
+                            var json=JSON.stringify(kakao_account); //문자열로 바꾸고
+
+                            $.ajax({
+                                type:"post",
+                                url:"/member/kakao2",
+                                data: json,
+                                contentType: 'application/json; charset=utf8',
+                                dataType: 'text',
+                                success: function(data){
+                                    console.log(data);  //컨트롤러에서 return 된 값
+
+                                    location.href=data; //컨트롤러에서 return 된 값으로 페이지 이동
+
+                                },error : function(jqXHR, textStatus){
+                                    alert(textStatus);
+                                }
+                            });
+
+
+                        }
+                    });
+
+                }
+            });
+        }
+
+    </script>
+
+
+
+<div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+
+
+    <!-- NAVBAR -->
+    <div class="site-navbar mt-3">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="site-logo col-6"><a th:href="@{/}"><img src="../img/mainLogo.png" onerror="this.src='/img/mainLogo.png'" style="width: 160px; height: 80px;"/></a></div>
+                <nav class="mx-auto site-navigation">
+                    <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
+
+                        <li>
+                            <a href="index.html" class="nav-link active" th:href="@{/}">메인</a>
+                        </li>
+                        <li class="has-children">
+                            <a>회원관리</a>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/manager/helperManagement}">헬퍼 가입 승인</a></li>
+                                <li><a th:href="@{/serviceCenter/reportBoardMgr}">회원 신고 처리</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-children">
+                            <a href="" >고객센터</a>
+                            <ul class="dropdown">
+                                <li><a th:href="@{/serviceCenter/customerBoard}">문의</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+
+                <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+                    <div class="ml-auto">
+                        <a th:href="@{/member/userLogout}" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log Out</a>
+
+                    </div>
+                    <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+</body>
+</html>

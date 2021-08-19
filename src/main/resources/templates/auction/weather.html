@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/auction.css}">
+
+
+</head>
+
+<body id="top">
+
+<div>
+
+    <!-- 바디 영역 -->
+    <section class="site-section">
+        <div class="container">
+
+            <h3 class="h3 d-flex mb-4 text-black">
+                <b>[[${address}]]의 날씨입니다.</b>
+            </h3>
+            <br><br>
+            <h4 class="h4 d-flex mb-4 text-primary">
+                <b>오늘</b>
+            </h4>
+            <div th:if="${today.size() == 0}">
+                <h4 class="h5 d-flex mb-4 text-muted">
+                    <b>날씨정보가 없습니다.</b>
+                </h4>
+            </div>
+            <!-- 내역 있으면 출력 -->
+            <div th:if="${today.size() != 0}">
+                <table class="text-center table table-bordered">
+                    <tr>
+                        <td class="box control-box control-box textbox0" th:each="dto :${today}"><!-- 반복 -->
+                            <span>[[${dto.hour}]] 시</span><br>
+                            <div th:if="${dto.wfKor == '맑음'}">
+                                <img th:src="@{/img/sunny.png}" alt="sunny" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '구름많음' || dto.wfKor =='구름 많음'}">
+                                <img th:src="@{/img/cloud.png}" alt="cloud" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '흐림'}">
+                                <img th:src="@{/img/cloudy.png}" alt="cloudy" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비'}">
+                                <img th:src="@{/img/rain.png}" alt="rain" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비/눈'}">
+                                <img th:src="@{/img/rainAndSnow.png}" alt="rainAndSnow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '눈'}">
+                                <img th:src="@{/img/snow.png}" alt="snow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '소나기'}">
+                                <img th:src="@{/img/shower.png}" alt="shower" width="100" height="100">
+                            </div>
+                            <br>
+                            <span>[[${dto.temp}]] 도</span><br>
+                            <span>[[${dto.pop}]] %</span><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <br><br>
+
+            <h4 class="h4 d-flex mb-4 text-primary">
+                <b>내일</b>
+            </h4>
+            <div th:if="${tmmr.size() == 0}">
+                <h4 class="h5 d-flex mb-4 text-muted">
+                    <b>날씨정보가 없습니다.</b>
+                </h4>
+            </div>
+            <!-- 내역 있으면 출력 -->
+            <div th:if="${tmmr.size() != 0}">
+                <table class="text-center table table-bordered">
+                    <tr>
+                        <td class="box control-box control-box textbox0" th:each="dto :${tmmr}"><!-- 반복 -->
+                            <span>[[${dto.hour}]] 시</span><br>
+                            <div th:if="${dto.wfKor == '맑음'}">
+                                <img th:src="@{/img/sunny.png}" alt="sunny" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '구름많음' || dto.wfKor =='구름 많음'}">
+                                <img th:src="@{/img/cloud.png}" alt="cloud" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '흐림'}">
+                                <img th:src="@{/img/cloudy.png}" alt="cloudy" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비'}">
+                                <img th:src="@{/img/rain.png}" alt="rain" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비/눈'}">
+                                <img th:src="@{/img/rainAndSnow.png}" alt="rainAndSnow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '눈'}">
+                                <img th:src="@{/img/snow.png}" alt="snow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '소나기'}">
+                                <img th:src="@{/img/shower.png}" alt="shower" width="100" height="100">
+                            </div>
+                            <br>
+                            <span>[[${dto.temp}]] 도</span><br>
+                            <span>[[${dto.pop}]] %</span><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <br><br>
+
+            <h4 class="h4 d-flex mb-4 text-primary">
+                <b>모레</b>
+            </h4>
+            <div th:if="${dATmmr.size() == 0}">
+                <h4 class="h5 d-flex mb-4 text-muted">
+                    <b>날씨정보가 없습니다.</b>
+                </h4>
+            </div>
+            <!-- 내역 있으면 출력 -->
+            <div th:if="${dATmmr.size() != 0}">
+                <table class="text-center table table-bordered">
+                    <tr>
+                        <td class="box control-box control-box textbox0" th:each="dto :${dATmmr}"><!-- 반복 -->
+                            <span>[[${dto.hour}]] 시</span><br>
+                            <div th:if="${dto.wfKor == '맑음'}">
+                                <img th:src="@{/img/sunny.png}" alt="sunny" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '구름많음' || dto.wfKor =='구름 많음'}">
+                                <img th:src="@{/img/cloud.png}" alt="cloud" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '흐림'}">
+                                <img th:src="@{/img/cloudy.png}" alt="cloudy" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비'}">
+                                <img th:src="@{/img/rain.png}" alt="rain" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '비/눈'}">
+                                <img th:src="@{/img/rainAndSnow.png}" alt="rainAndSnow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '눈'}">
+                                <img th:src="@{/img/snow.png}" alt="snow" width="100" height="100">
+                            </div>
+                            <div th:if="${dto.wfKor == '소나기'}">
+                                <img th:src="@{/img/shower.png}" alt="shower" width="100" height="100">
+                            </div>
+                            <br>
+                            <span>[[${dto.temp}]] 도</span><br>
+                            <span>[[${dto.pop}]] %</span><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

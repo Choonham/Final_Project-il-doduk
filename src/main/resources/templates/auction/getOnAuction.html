@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/auction.css}">
+</head>
+<body>
+
+<!------------------------------ AUC.ID = SESSION.ID면 유저 / SESSION.ID.STATE=2 이면 헬퍼  ---------------------------->
+<!------------------------------ 로그인 값에 따라서 네비게이션 따로 출력   ---------------------------->
+
+<div th:if = "${session.user != null}">
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state != 2 || session.user.id == u.id}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state != 2 || session.user.id != u.id}">
+        <!-- 메인 페이지로 보내는 코드 필요 >> 컨트롤러에서 처리 -->
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+
+<!-- HOME : 위에 회색 그거 -->
+<section class="section-hero overlay inner-page bg-image" id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Auctions</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">미션</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>미션 상세보기</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section">
+    <div class="container">
+        <div>
+            <!----------------------------------------- 유저 정보 : 닉네임 & INTRO-------------------------------------------------------------->
+            <h4 class="h4 d-flex mb-4 text-primary">
+                <b>클라이언트 정보</b>
+            </h4>
+            <table class="table">
+            <tr>
+                <td th:rowspan="2" width="30%"><img th:src="${u.photo}" alt="User Default" class="img-fluid mb-4 w-50 rounded-circle"></td>
+                <td width="50%"><h3>[[${u.nickname}]]</h3></td>
+                <td th:rowspan="2" width="20%">
+                    <div th:if="${session.user.id != auction.user}" th:align="center">
+                        <a th:onclick="open_NewWindow()"  class="btn btn-block btn-primary btn-md">채팅하기</a><!-- 초록버튼 -->
+                        <script th:inline="javascript">
+                            var window1=null;
+                            function open_NewWindow(){
+                                var id=[[${auction.user}]];
+                                var auc=[[${auction.aucSeq}]];
+
+                                if(window1==null){
+                                    window1=window.open("https://localhost:9991/chat/chatting?id="+id+"&auc="+auc,'_blank','width=300 , height=400');
+
+                                }
+                                else{
+                                    window1.focus();
+                                }
+                            }
+                        </script>
+<!------------------------------------ 채팅하기 연결예정 ---------------------------------------------------------------------------->
+                    </div>
+                </td>
+            </tr>
+                <tr><td><p>[[${u.intro}]]</p></td></tr>
+            </table>
+            <p></p>
+            <!----------------------------------------- 해당 옥션 정보 -------------------------------------------------------------->
+            <h2 class="h2 d-flex align-items-center mb-4 text-primary">
+                <span class="icon-align-left mr-3"></span>
+                <b>[[${auction.title}]]</b>
+            </h2>
+            <!-- 기본 정보 -->
+            <div class="bg-light p-3 border rounded mb-4 text-center">
+                <h3 class="text-primary  mt-3 h5 pl-3 mb-3 text-center"><b>미션 내용</b></h3>
+                <!--<ul class="list-unstyled pl-3 mb-0 text-center">-->
+                <table class="table">
+                    <tr>
+                        <!--카테고리 조건문 출력-->
+                        <td><strong class="text-black">카테고리</strong></td>
+                        <td>
+                            <div th:if="${auction.category == 1}">
+                                <span class="mb-2">구매대행</span>
+                            </div>
+                            <div th:if="${auction.category == 2}">
+                                <span class="mb-2">홈케어</span>
+                            </div>
+                            <div th:if="${auction.category == 3}">
+                                <span class="mb-2">펫 케어</span>
+                            </div>
+                            <div th:if="${auction.category == 4}">
+                                <span class="mb-2">퀵 서비스</span>
+                            </div>
+                        </td>
+                        <td><strong class="text-black">날짜-시간</strong></td>
+                        <td>
+                                <span class="mb-2">[[${#temporals.format(auction.doDateTime,'yyyy/MM/dd
+                                    - hh:mm')}]]
+                                </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <!---------------------상세주소는 AUC.ID=SESSION.ID일 때만 확인 가능, 그 외는 시도/시군구 출력-------------->
+                        <td><strong class="text-black">장소</strong></td>
+                        <td th:colspan="3" th:align="left">
+                            <div th:if="${session.user.id == u.id}">
+                                <span class="mb-2">[[${auction.address}]]</span>
+                            </div>
+                            <div th:if="${session.user.id != u.id}">
+                                    <span class="mb-2">
+                                        [[${auction.sido}]] [[${auction.sigungu}]]
+                                    </span>
+                            </div>
+                            <br>* 정확한 주소는 낙찰 된 헬퍼에게만 공개 됩니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">시작가</strong></td>
+                        <td>
+                            <span class="mb-2">[[${#numbers.formatInteger(auction.startPrice,3,'COMMA')}]]원
+                            </span>
+                        </td>
+                        <td><strong class="text-black">경매단위</strong></td>
+                        <td>
+                            <span class="mb-2">[[${#numbers.formatInteger(auction.auctionGap,3,'COMMA')}]]원
+                        </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">예상소요시간</strong></td>
+                        <td>
+                            <span class="mb-2">[[${auction.predictHour}]]분
+                            </span>
+                        </td>
+                        <td><strong class="text-black">미션난이도</strong></td>
+                        <td>
+                            <!-- 난이도 -->
+                            <div th:if="${auction.level == 1}">
+                                <span class="mb-2">쉬움</span>
+                            </div>
+                            <div th:if="${auction.level == 2}">
+                                <span class="mb-2">보통</span>
+                            </div>
+                            <div th:if="${auction.level == 3}">
+                                <span class="mb-2">어려움</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td th:colspan="4">
+                            <br>
+                            <strong class="text-primary"><span class="icon-turned_in mr-3"></span>우대사항</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">운전면허여부</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.driverLicense == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.driverLicense == 1}">
+                                <span class="mb-2">소지자 선호</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">성별</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.gender == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.gender == 1}">
+                                <span class="mb-2">여성</span>
+                            </div>
+                            <div th:if="${auction.gender == 2}">
+                                <span class="mb-2">남성</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong class="text-black">성별</strong></td>
+                        <td th:colspan="3">
+                            <div th:if="${auction.age == 0}">
+                                <span class="mb-2">무관</span>
+                            </div>
+                            <div th:if="${auction.age == 1}">
+                                <span class="mb-2">청년층</span>
+                            </div>
+                            <div th:if="${auction.age == 2}">
+                                <span class="mb-2">중년층</span>
+                            </div>
+                            <div th:if="${auction.age == 3}">
+                                <span class="mb-2">장년층</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!--</ul>-->
+            </div>
+            <!--콘텐츠 내용-->
+            <h5 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span><b>미션 내용</b></h5>
+            <div class="mb-5 block__16443">
+                <p th:utext="${auction.content}"></p>
+            </div>
+
+            <!-- 해당 옥션의 남은 시간 --->
+            <div class="btn btn-info btn-block btn-lg text-center">
+                <b>남은 시간</b><br>
+                <span id="timerDemo"></span>
+            </div>
+        </div>
+        <!-- 옥션정보 끝 -->
+        <br>
+        <br>
+
+        <!----------------------------------- 해당 옥션 비딩 목록 ------------------------------------------------------->
+        <input type="hidden" th:value="${auction.aucSeq}" name="aucSeq" id="aucSeq">
+        <div th:unless="${exist}" class="text-center">
+            <h4 class="text-muted"><b>아직 경매 참여 내역이 없습니다.</b></h4>
+        </div>
+        <div th:if="${exist}" class="center-pill">
+            <table border="1" class="table text-center" width="75%">
+                <tr>
+                    <th> 헬퍼 </th>
+                    <th> 제시 가격</th>
+                    <th>
+                        <div th:if="${session.user.id == u.id}">선택하기</div>
+                        <div th:if="${session.user.id != u.id && session.user.state == 2}">블로그보기</div>
+                    </th>
+                </tr>
+                <!-- 리스트 시작-->
+                <tr th:each="dto : ${biddingList.dtoList}">
+                    <td><a th:href="@{/member/helperBizCard(memberId=${dto.helper})}"
+                           onclick="window.open(this.href,'경매참여','width=540, height=740, scrollbars=yes, resizeable=no');return false;">[[${dto.helperName}]]</a></td>
+                <!----------------------------------- 비즈니스 카드로 연결 완료 --------------------------------------------------->
+                    <td>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</td>
+                    <td>
+                        <!-- 해당 유저면 선택하기 버튼, 아니면 블로그보기-->
+
+                        <div th:if="${session.user.id == u.id}">
+                            <a th:href="@{/auction/choose(bidSeq=${dto.bidSeq})}"
+                               onclick="window.open(this.href,'경매참여','width=540, height=740, scrollbars=yes, resizeable=no');return false;"
+                               class="btn btn-outline-primary primary"> 낙찰 </a><!-- 초록버튼 -->
+<!------------------------------------------------ 선택하면 팝업 ------------------------------------------------------->
+                        </div>
+
+                        <div th:if="${session.user.id != u.id && session.user.state==2}">
+                            <button class="btn btn-outline-primary primary" th:onclick="'location.href=\''+@{/blog/blogList(writer=${dto.helper})}+'\''" ><b>블로그</b></button>
+<!------------------------------------------------ 헬퍼 블로그 이동 ------------------------------------------------------->
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+            <!--리스트 끝-->
+            <!-- 페이징 처리 -->
+            <div style="text-align: center">
+                <div class="custom-pagination ml-auto">
+                    <a th:if="${biddingList.prev}"
+                       th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page= ${biddingList.start-1})}"
+                       tabindex="-1" class="prev">Prev</a>
+
+                    <div class="d-inline-block">
+                        <a th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page = ${page})}"
+                           th:class="${biddingList.page == page?'active':''}"
+                           th:each="page: ${biddingList.pageList}">[[${page}]]</a>
+                    </div>
+                    <a th:if="${biddingList.next}"
+                       th:href="@{/auction/getOnAuction(aucSeq=${auction.aucSeq}, page= ${biddingList.end + 1})}"
+                       class="next">Next</a>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+        <!-- AUC.ID = SESSION.ID면 삭제 버튼 / SESSION.ID.STATE=2 이면 참여 버튼  -->
+
+        <div th:if="${session.user.id == u.id}" class="row mb-5">
+            <div class="col-6">
+                <button onclick="history.back()" class="btn btn-block btn-light btn-md"><span class="mr-2 text-danger"></span>목록보기</button>
+                <!-- 회색버튼 -->
+            </div>
+            <div class="col-6">
+                <span id="deleteAuction" class="btn btn-block btn-primary btn-md">미션 경매 철회</span><!-- 초록버튼 -->
+            </div>
+        </div>
+
+        <div th:if="${session.user.id != u.id && session.user.state==2}" class="row mb-5">
+            <div class="col-6">
+                <button onclick="history.back()" class="btn btn-block btn-light btn-md"><span class="mr-2 text-danger"></span>목록보기</button>
+                <!-- 회색버튼 -->
+            </div>
+            <div class="col-6">
+                <a  id="bidIn" th:type="submit" class="btn btn-block btn-primary btn-md"> 미션 경매 참여 </a>
+            </div>
+        </div>
+
+        <!--경매 신청 폼-->
+        <form id="bidForm" name="bidForm" method="post" action="/auction/biddingIn">
+            <input type="hidden" th:value="${session.user.id}" name="helper">
+            <input type="hidden" th:value="${session.user.nickname}" name="helperNickName">
+            <input type="hidden" th:value="${auction.aucSeq}" name="aucSeq">
+
+            <div class="form-group">
+                <label for="startPrice">미션 시작가</label>
+                <span id="startPrice">[[${#numbers.formatInteger(auction.startPrice,3,'COMMA')}]]원</span>
+            </div>
+
+            <div class="form-group">
+                <label for="auctionGap">경매 단위</label>
+                <select class="form-control" name="auctionGap" id="auctionGap" data-style="btn-black"
+                        data-width="100%" data-live-search="true" th:required="required">
+                    <option disabled selected>* 선택한 금액만큼 시작가에서 차감됩니다.</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="offerPrice">제시가격</label>
+                * 최소 제시액은 5,000원 입니다. <br>
+                <input type="number" th:min="5000" class="form-control" id="offerPrice" name="offerPrice" value="5000">원
+            </div>
+
+            <div class="text-center">
+                한 번 등록된 경매는 철회가 불가능 합니다.<br>
+                신중하게 검토 후 등록해주세요.
+            </div>
+
+            <div class="col-3">
+                <button th:type="submit" class="btn btn-block btn-primary btn-md">확인</button>
+            </div>
+        </form>
+
+    </div>
+</section>
+<!-- 공통 footer -->
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+
+<!-- 공통 스크립트 -->
+<!-- SCRIPTS -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/stickyfill.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/quill.min.js}"></script>
+
+<script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+<!--jquery-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+<!-- 타이머 만들기 -->
+<script th:inline="javascript">
+	var time = [[${time}]];
+	var min = "";
+	var sec = "";
+
+	var x = setInterval(function () {
+		min = parseInt(time / 60);
+		sec = time % 60;
+		document.getElementById("timerDemo").innerHTML = min + "분 " + sec + "초";
+		time--;
+
+		if (time < 0) {
+			clearInterval(x);
+			document.getElementById("timerDemo").innerHTML = "경매 완료";
+		}
+
+	}, 1000);
+
+	$(document).ready(function (){
+
+		/*경매 삭제 시 확인 얼럿*/
+		$('#deleteAuction').click(function () {
+			var check = confirm("미션 경매를 삭제 하시겠습니까?");
+
+			if(check === true){
+				location.href="/auction/deleteAuction?aucSeq="+[[${auction.aucSeq}]];
+			}else{
+				this.close();
+			}
+
+		});
+	});
+
+	var gaps = [[${gaps}]]
+	//경매 참여 관련
+	$(document).ready(function () {
+
+		/*미션 경매 참여 시 나타나는 신청폼*/
+        $('#bidForm').hide();
+
+		$('#bidIn').click(function () {
+			$('#bidForm').show();
+		});
+
+		/*미션에 따른 경매 차액 리스트 출력*/
+		$("select[name^=auctionGap]").each(function () {
+			$selGap = $(this);
+			$.each(eval(gaps), function () {
+				$selGap.append("<option value='" + this + "'>" + this + "원</option>");
+			});
+
+			/*선택한 옥션갭에 따른 제시액 변화*/
+			$("#auctionGap").change(function (){
+
+				var startPrice = [[${auction.startPrice}]]
+				var gap = $("#auctionGap option:selected").val();
+				var offerPrice = startPrice-gap;
+
+                $('#offerPrice').val(offerPrice)
+            });
+
+		});
+
+        //미션 올린 유저가 아닌 다른 유저는 접근 불가
+		var state = [[${session.user.state}]]
+        var member = [[${session.user.id}]]
+        var aucUser = [[${auction.user}]]
+
+		if(state === 1 && member !== aucUser){
+			self.location.href = "/index";
+		}
+
+	});
+
+</script>
+
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+</body>
+</html>

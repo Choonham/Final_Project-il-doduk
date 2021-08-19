@@ -2,8 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Insert title here</title>
-</head>s
+</head>
 <body>
 
 <!--라이브러리 include-->
@@ -14,20 +15,23 @@
 
 <script>
     <!--bf1bc4277610e01ce736d93571683a3e-->
-    window.Kakao.init("bf1bc4277610e01ce736d93571683a3e"); //웹어플리케이션 검증
+    window.Kakao.init("69d6697e0a8e4d6248c163b516a887e8"); //웹어플리케이션 검증
     kakao.isInitialized(); //카카오 sdk초기화
 
     function kakaoLogin(){ //로그인시 실제 실행될 function
 
         window.Kakao.Auth.login({
-            scope:'profile_nickname, account_email, gender', //카카오에서 받아올 정보 고유 id
+            scope:'profile_nickname, account_email, gender, profile_image, birthday', //카카오에서 받아올 정보 고유 id
             success: function (authObj){      //authObj : 받아온 Obj data
-                console.log(authObj);
+                console.log(authObj);   //카카오 accessToken확인
                 window.Kakao.API.request({
                     url:'/v2/user/me', //현재 로그인한 사용자의 정보 가져오는 url
                     success: res => {
                         const kakao_account = res.kakao_account;
-                        console.log(kakao_account);
+                        console.log(kakao_account); //이친구가 제일 큰거
+                        console.log(kakao_account.profile); //이안에 프로파일
+                        console.log(kakao_account.profile.profile_image_url);
+                        console.log(kakao_account.profile.prifile_thumbnail_url);
                         console.log(kakao_account.email);
                         var json=JSON.stringify(kakao_account); //문자열로 바꾸고
 
@@ -57,14 +61,11 @@
 
 </script>
 
-
 <a href="javascript:kakaoLogin();" id="kakaoPost"><img src="http://gi.esmplus.com/buybye1/page/kakao-login.png" style=height:70px; width=auto; /></a>
 
-<form action="/member/userCheck" method="post">
-    <input type="text" name="id" />
-    <input type="submit" />
-
+<form action="/member/helperBizCard" method="get">
+    <input type="text" name="memberId" />
+    <input type="submit" value="submit" />
 </form>
-
 </body>
 </html>

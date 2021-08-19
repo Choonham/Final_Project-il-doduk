@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/css/auction.css}">
+
+
+</head>
+
+<body id="top">
+
+<div>
+    <!-- 헤드 네비게이션 -->
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+
+    <!-- HOME : 위에 회색 그거 -->
+    <section class="section-hero overlay inner-page bg-image" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">My biddings</h1>
+                    <div class="custom-breadcrumbs">
+                        <a href="#">미션</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>경매 참여 내역</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section">
+        <div class="container">
+
+            <!--------------------------------------- 경매 진행 중 / 경매 완료 ------------------------------------------------------->
+            <div th:if="${onAuction}"
+                 class="row justify-content-center mb-5" data-aos="fade-up">
+                <div id="filters" class="filters text-center col-md-7">
+                    <button class="btn btn-primary active" id="onAucB">경매 진행 중</button>
+                    <button class="btn btn-primary" id="auctionDoneB">경매 완료</button>
+                </div>
+            </div>
+
+            <div th:unless="${onAuction}"
+                 class="row justify-content-center mb-5" data-aos="fade-up">
+                <div id="filters" class="filters text-center col-md-7">
+                    <button class="btn btn-primary" id="onAucB">경매 진행 중</button>
+                    <button class="btn btn-primary active" id="auctionDoneB">경매 완료</button>
+                </div>
+            </div>
+
+            <!--------------------------------------- 경매 진행 중인 참여 내역 시작------------------------------------------------------->
+            <div id="onAuc">
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-7 text-center">
+
+                        <h2 class="section-title mb-2" th:if="${bidsOn.getDtoList().size() == 0}">
+                            경매 중인 참여 미션이 없습니다.
+                        </h2>
+
+                        <h2 class="section-title mb-2" th:if="${bidsOn.getDtoList().size() != 0}">
+                            [[${bidsOn.getTotalElements()}]]개의 미션 경매가 진행 중입니다.
+                        </h2>
+
+                    </div>
+                </div>
+                <!--경매 진행 중 예시 포스팅-->
+                <ul class="job-listings mb-5">
+                    <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+                        <div class="job-listing-logo" th:align="center">
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
+                                 class="img-fluid" width="80" height="80"><br>
+                        </div>
+                        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                            <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <h2><b>미션 제목</b></h2>
+                                <strong><b>미션 수행 일시</b></strong>
+                            </div>
+                            <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                            </div>
+                            <div class="job-listing-meta w-25">
+                                <span class=""><b> 나의 제시 가격 </b></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- 내역이 하나도 없을 경우 포스팅 -->
+                <div th:if="${bidsOn.getDtoList().size() == 0}">
+                    <ul class="job-listings mb-5" th:align="center">
+                        <b> 헤르메스 미션 경매에 참여해 보세요!</b>
+                    </ul>
+                </div>
+
+                <!-- 내역이 있을 경우 리스트 포스팅 -->
+                <div th:if="${bidsOn.getDtoList().size() != 0}">
+                    <ul class="job-listings mb-5">
+                        <!--한개씩 포스팅-->
+                        <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
+                            th:each="dto : ${bidsOn.dtoList}" th:cellpadding="10">
+                            <a th:href="@{/auction/getOnAuction(aucSeq=${dto.aucSeq})}"></a>
+                            <div class="job-listing-logo">
+                                <div th:if="${dto.category == 1}" th:align="center">
+                                    <img th:src="@{/img/Purchasing.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 2}" th:align="center">
+                                    <img th:src="@{/img/HomeCare.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 3}" th:align="center">
+                                    <img th:src="@{/img/PetCare.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 4}" th:align="center">
+                                    <img th:src="@{/img/QuickService.png}"
+                                         alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <!--카테고리별 이미지 설정-->
+                            </div>
+
+                            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <h2>[[${dto.title}]]</h2>
+                                    <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
+                                </div>
+                                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                    <span class="icon-room"></span> [[${dto.sido}]] [[${dto.sigungu}]]<br>
+                                </div>
+                                <div class="job-listing-meta w-25" style="z-index: 1">
+                                    <span class="">[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!--한개씩 끝-->
+                    </ul>
+
+                    <!-- 리스트 끝 -->
+
+                    <!-- 페이지 전환 처리 -->
+                    <div style="text-align: center">
+                        <div class="custom-pagination ml-auto">
+                            <a th:if="${bidsOn.prev}"
+                               th:href="@{/auction/myBidsHelper(page= ${bidsOn.start-1},onAuction=true)}"
+                               tabindex="-1" class="prev">Prev</a>
+
+                            <div class="d-inline-block">
+                                <a th:href="@{/auction/myBidsHelper(page = ${page},onAuction=true)}"
+                                   th:class="${bidsOn.page == page?'active':''}"
+                                   th:each="page: ${bidsOn.pageList}">[[${page}]]</a>
+                            </div>
+                            <a th:if="${bidsOn.next}"
+                               th:href="@{/auction/myBidsHelper(page= ${bidsOn.end + 1},onAuction=true)}"
+                               class="next">Next</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--------------------------------------- 경매 진행 중인 미션 참여 내역 끝 ------------------------------------------------------->
+
+            <!--------------------------------------- 경매 완료 미션 참여 내역 시작 ------------------------------------------------------->
+            <div id="auctionDone">
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-7 text-center">
+
+                        <h2 class="section-title mb-2" th:if="${bidsDone.getDtoList().size() == 0}">
+                            미션 경매 참여 내역이 없습니다.
+                        </h2>
+
+                        <h2 class="section-title mb-2" th:if="${bidsDone.getDtoList().size() != 0}">
+                            [[${bidsDone.getTotalElements()}]]개의 지난 경매 참여 내역이 있습니다.
+                        </h2>
+
+                    </div>
+                </div>
+                <!--예시 포스팅-->
+                <ul class="job-listings mb-5">
+                    <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
+                        <div class="job-listing-logo" th:align="center">
+                            <img th:src="@{/img/hermes.png}" alt="hermes"
+                                 class="img-fluid" width="80" height="80"><br>
+                            <!--대표 이미지 삽입 예정-->
+                        </div>
+                        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                            <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                <h2><b>미션 제목</b></h2>
+                                <strong><b>미션 수행 일시</b></strong>
+                            </div>
+                            <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                <span class="icon-room"></span> <b>미션 장소</b><br>
+                                <b>최종 가격</b>
+                            </div>
+                            <div class="job-listing-meta w-25">
+                                <span class=""><b>낙찰여부</b></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- 내역이 하나도 없을 경우 포스팅 -->
+                <div th:if="${bidsDone.getDtoList().size() == 0}">
+                    <ul class="job-listings mb-5" th:align="center">
+                        <b>헤르메스 미션 경매에 참여해 보세요!</b>
+                    </ul>
+                </div>
+
+                <!-- 내역이 있을 경우 리스트 포스팅 -->
+                <div th:if="${bidsDone.getDtoList().size() != 0}">
+                    <ul class="job-listings mb-5">
+                        <!--한개씩 포스팅-->
+                        <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center"
+                            th:each="dto : ${bidsDone.dtoList}" th:cellpadding="10">
+                            <a th:href="@{/auction/getAuction(aucSeq=${dto.aucSeq})}"></a>
+                            <div class="job-listing-logo">
+                                <div th:if="${dto.category == 1}" th:align="center">
+                                    <img th:src="@{/img/Purchasing.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 2}" th:align="center">
+                                    <img th:src="@{/img/HomeCare.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 3}" th:align="center">
+                                    <img th:src="@{/img/PetCare.png}" alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <div th:if="${dto.category == 4}" th:align="center">
+                                    <img th:src="@{/img/QuickService.png}"
+                                         alt="hermes"
+                                         class="img-fluid" th:width="100" th:height="100" th:align="center">
+                                </div>
+                                <!--카테고리별 이미지 설정-->
+                            </div>
+
+                            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+                                <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+                                    <h2>[[${dto.title}]]</h2>
+                                    <strong>[[${#temporals.format(dto.doDateTime,'yyyy/MM/dd - hh:mm')}]]</strong>
+                                </div>
+                                <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
+                                    <div th:if="${dto.chosen == 1}">
+                                        <span class="icon-room"></span> [[${dto.address}]]<br>
+                                    </div>
+                                    <div th:if="${dto.chosen == 0}">
+                                        <span class="icon-room"></span> [[${dto.sido}]] [[${dto.sigungu}]]<br>
+                                    </div>
+                                    <b>[[${#numbers.formatInteger(dto.offerPrice,3,'COMMA')}]]원</b>
+                                </div>
+                                <div class="job-listing-meta w-25" style="z-index: 1">
+                                    <div th:if="${dto.chosen == 1}">
+                                        <span class="btn btn-danger"><b>낙찰</b></span>
+                                    </div>
+                                    <div th:if="${dto.chosen == 0}">
+                                        <span class="btn btn-light"><b>유찰</b></span>
+                                    </div>
+<!----------------------------------------------- 낙찰 된 비딩은 빨간버튼, 아닌건 회색 버튼 ------------------------------------------------------------>
+                                </div>
+                            </div>
+                        </li>
+                        <!--한개씩 끝-->
+                    </ul>
+
+                    <!-- 리스트 끝 -->
+
+                    <!-- 페이지 전환 처리 -->
+                    <div style="text-align: center">
+                        <div class="custom-pagination ml-auto">
+                            <a th:if="${bidsDone.prev}"
+                               th:href="@{/auction/myBidsHelper(page= ${bidsDone.start-1},onAuction=false)}"
+                               tabindex="-1" class="prev">Prev</a>
+
+                            <div class="d-inline-block">
+                                <a th:href="@{/auction/myBidsHelper(page = ${page},onAuction=false)}"
+                                   th:class="${bidsDone.page == page?'active':''}"
+                                   th:each="page: ${bidsDone.pageList}">[[${page}]]</a>
+                            </div>
+                            <a th:if="${bidsDone.next}"
+                               th:href="@{/auction/myBidsHelper(page= ${bidsDone.end + 1},onAuction=false)}"
+                               class="next">Next</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- 공통 footer -->
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+
+<!-- 공통 스크립트 -->
+<!-- SCRIPTS -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/stickyfill.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/quill.min.js}"></script>
+
+<script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+<!--jquery-->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script th:inline="javascript">
+    /* 출력 내용 변화 */
+    $(document).ready(function () {
+        //alert("제이쿼리 먹히고 있는걸까?");
+        var onAuction = [[${onAuction}]]
+
+        if (onAuction === true) {
+            $('#onAuc').show();
+            $('#auctionDone').hide();
+        } else {
+            $('#onAuc').hide();
+            $('#auctionDone').show();
+        }
+
+        $('#onAucB').click(function () {
+            $('#onAuc').show();
+            $('#auctionDone').hide();
+        });
+
+        $('#auctionDoneB').click(function () {
+            $('#onAuc').hide();
+            $('#auctionDone').show();
+        });
+
+        //헬퍼만 접근가능
+	    var state = [[${session.user.state}]]
+	    if(state != 2){
+		    self.location.href = "/index";
+	    }
+
+    });
+
+</script>
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+</body>
+</html>

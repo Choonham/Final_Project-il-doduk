@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+
+<body id="top">
+
+<div th:if = "${session.user != null}">
+
+  <div th:if="${session.user.state == 1}">
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 2}">
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 0}">
+    <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+  </div>
+
+</div>
+
+<section class="section-hero overlay inner-page bg-image"  id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">사용자 신고</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#" th:href="@{/}">Home</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>사용자 신고</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="site-section" id="next-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+
+
+        <form method="post" th:action="@{/serviceCenter/userReportWrite}">
+          <input type="hidden" name="id" th:value="${session.user.id}" />
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black" for="fname">신고 대상</label>
+              <input type="text" id="fname" name="reportTarget" class="form-control">
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <label class="text-black"  for="fname">신고 유형</label>
+              <select class="form-control" name="reportKind">
+                <option value="" checked>유형을 선택해주세요.</option>
+                <option value="1">광고</option>
+                <option value="2">도배</option>
+                <option value="3">음란물</option>
+                <option value="4">욕설</option>
+                <option value="5">저작권 침해</option>
+                <option value="6">개인정보 침해</option>
+                <option value="7">기타</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row form-group">
+
+            <div class="col-md-12">
+              <label class="text-black">신고제목</label>
+              <input type="text" name="reportTitle" class="form-control">
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+
+              <label class="text-black" for="message">신고 상세 내용</label>
+              <textarea name="reportContent" id="message" cols="30" rows="7" class="form-control" placeholder="신고 내용을 상세히 적어주세요."></textarea>
+            </div>
+
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-12">
+
+              <input type="button" value="신고접수" id="report" class="btn btn-primary btn-md text-white">
+              <a th:href="@{/serviceCenter/badUserReport}">
+                <input type="button" value="목록으로" class="btn btn-primary btn-md text-white">
+              </a>
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+
+      <div class="col-lg-4">
+        <div class="bg-light p-3 border rounded mb-4">
+          <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">최근 나와 거래한 헬퍼 목록</h3>
+            <p th:align="center" th:if="${tradeList.totalPage == 0}" >최근 거래한 유저가 없습니다.<a href=""></a>
+          <table th:if="${tradeList != null}" id="badUser">
+            <tr class="mb-2"th:each="tradeList : ${tradeList.dtoList}">
+              <td>
+                <strong class="text-black" id="trade_user" th:text="${tradeList.helperNickName}"></strong>
+              </td>
+            </tr>
+          </table>
+
+          <div class="row pagination-wrap mt-5">
+            <div class="col-md-12 text-center ">
+              <div class="custom-pagination ml-auto">
+
+                <div class="d-inline-block">
+                  <a th:class=" 'page-item ' + ${tradeList.page == page?'active':''} "
+                     th:each="page: ${tradeList.pageList}"
+                     th:href="@{/serviceCenter/badUserReportForm(page = ${page})}">
+                    [[${page}]]
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+
+<div th:if = "${session.user != null}">
+
+
+    <div th:if="${session.user.state == 1}">
+        <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 2}">
+        <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+    </div>
+
+    <div th:if="${session.user.state == 0}">
+        <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+    </div>
+
+</div>
+<!-- HOME -->
+<section th:if = "${session.user != null}" class="section-hero overlay inner-page bg-image" style="background-image: url('../images/hero_1.jpg'); margin-bottom: 1em" id="home-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7" style="text-align: center">
+                <h1 class="text-white font-weight-bold" style="size: ledger">Review a post</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="site-section" style="padding-top: 30px">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <br style="clear: both">
+            <form id = "postForm" action = "/review/write" method="post">
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="title" required/>
+                </div>
+
+                <!-- summernote 에디터 사용 -->
+                <textarea class="summernote" id = "summernote" name="editordata"></textarea>
+
+                <!-- 파일 업로드를 위한 임시 포스트 번호를 보낼  hidden input -->
+
+
+
+
+                <hr/>
+
+
+                <input type = "submit" id="submit-btn" class="btn px-4 btn-primary text-white"
+                       style="float: right; margin-top: 15px;"
+                       value="글쓰기">
+            </form>
+        </div>
+    </div>
+</section>
+
+</div>
+
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+<!-- SCRIPTS -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/isotope.pkgd.min.js}"></script>
+<script th:src="@{/js/stickyfill.min.js}"></script>
+<script th:src="@{/js/jquery.fancybox.min.js}"></script>
+<script th:src="@{/js/jquery.easing.1.3.js}"></script>
+
+<script th:src="@{/js/jquery.waypoints.min.js}"></script>
+<script th:src="@{/js/jquery.animateNumber.min.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/quill.min.js}"></script>
+
+<script th:src="@{/js/bootstrap-select.min.js}"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+
+
+<link rel="stylesheet" th:href="@{/vendor/summernote/summernote-lite.css}">
+
+<script  th:src="@{/review/js/summernote-lite.js}"></script>
+<script th:inline="javascript">
+
+        //여기 아래 부분
+        $('#summernote').summernote({
+            height: 300,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",					// 한글 설정
+            dialogsInBody: true,
+            placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+            callbacks : {
+                onImageUpload : function(files, editor, welEditable) {
+                    // 파일 업로드(다중업로드를 위해 반복문 사용)
+                    for (var i = files.length - 1; i >= 0; i--) {
+                        uploadSummernoteImageFile(files[i],
+                            this);
+                    }
+                }
+            }
+        });
+
+
+
+
+
+    function uploadSummernoteImageFile(file, el) {
+        alert("zzzzzzzzzzzzz")
+        data = new FormData();
+        data.append("file", file);
+        $.ajax({
+            data : data,
+            type : "POST",
+            url : "uploadSummernoteImageFile",
+            contentType : false,
+            enctype : 'multipart/form-data',
+            processData : false,
+
+            success : function(data) {
+                $(el).summernote('editor.insertImage', data.url);
+                $('#editordata').append("<img src="+'+data.url+'+">")
+                console.log(data.url);
+            }
+        });
+    }
+    var auction= [[${auction}]];
+    var bid= [[${bid}]];
+     var helper= [[${helper}]];
+    console.log(auction.content);
+    var str ="<h3>후기 작성</h3>";
+    str+="<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'>";
+    str+="<tr><td>일 제목</td><td>"+auction.title+"</td></tr>";
+    str+="<tr><td>일 내용</td><td>"+auction.content+"</td></tr>";
+    str+="<tr><td>낙찰된 가격</td><td>"+bid.offerPrice+"</td></tr>";
+    str+="</table></div>";
+    str+="<h3>헬퍼 정보</h3>";
+    str+="<div class='bg-light p-3 border rounded mb-4 text-center'><table class = 'table' style = 'margin-bottom: 0'>";
+    str+="<tr><td>헬퍼 id</td><td>"+bid.helper+"</td></tr>";
+    str+="<tr><td>헬퍼 닉네임</td><td>"+bid.helperNickName+"</td></tr>";
+    str+="<tr><td>헬퍼 photo</td><td><img src='"+bid.helperPhoto+"'></td></tr>";
+    str+="</table></div>";
+  $('#summernote').summernote('code',str);
+</script>
+
+<script th:inline="javascript">
+    var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+</body>
+</html>

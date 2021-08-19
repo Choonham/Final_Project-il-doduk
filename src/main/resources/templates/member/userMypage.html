@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{/fragments/header :: mainHeader}"><!-- 부트 스트랩 -->
+    <meta charset="UTF-8">
+    <title>mypage</title>
+</head>
+
+<!--카카오 로그인 연결해제하기-->
+
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+    function unlinkApp() {
+        /*kakao.init("69d6697e0a8e4d6248c163b516a887e8");*/
+/*        kakao.isInitialized(); //카카오 sdk초기화*/
+
+        Kakao.API.request({
+            url: '/v1/user/unlink',
+            success: function(res) {
+                console.log(res);
+
+            },
+            fail: function(err) {
+                alert('탈퇴처리가 미완료 되었습니다. \n관리자에게 문의 바랍니다.');
+                console.log(err);
+            },
+        })
+    }
+</script>
+
+<body>
+<!--    <form action="/member/userDelete" method="post">
+        <input type="hidden" name="id" th:value=${session.user.id} />
+    <button type="submit">회원탈퇴</button>-->
+<a href="/member/helperRegister">헬퍼 신청하기</a>
+<a href="/member/userModify">개인정보 수정</a>
+<!--<a href="javascript:unlinkApp()" >회원탈퇴</a>-->
+
+
+</body>
+</html>

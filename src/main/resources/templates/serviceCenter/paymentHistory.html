@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/fragments/header :: mainHeader}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="top">
+
+<div th:if = "${session.user != null}">
+
+  <div th:if="${session.user.state == 1}">
+    <div th:replace="~{/fragments/navUser :: naviUser}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 2}">
+    <div th:replace="~{/fragments/navHelper :: naviHelper}"></div>
+  </div>
+
+  <div th:if="${session.user.state == 0}">
+    <div th:replace="~{/fragments/navManager :: naviManager}"></div>
+  </div>
+
+</div>
+
+
+
+<section class="section-hero overlay inner-page bg-image" id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">결제 내역 조회</h1>
+        <div class="custom-breadcrumbs">
+          <a href="#" th:href="@{/main}">Home</a> <span class="mx-2 slash">/</span>
+          <span class="text-white"><strong>결제 내역 조회</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="site-section">
+  <div class="container">
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-3 mr-auto">
+        <div class="border p-4 rounded">
+          <ul class="list-unstyled block__47528 mb-0">
+            <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
+            <li><a th:href = "@{/serviceCenter/changeState}" onclick="return switchUser()">헬퍼전환</a></li>
+            <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
+            <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-8 mb-4 mb-lg-0">
+        <div class="d-flex align-items-center"></div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>결제금액</th>
+          <th>결제 여부</th>
+          <th>결제한 날짜</th>
+          <th>결제여부</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+          <td colspan="5" th:align="center" th:if="${result.totalPage == 0}">결제  내역이  존재하지  않습니다.</td>
+        </tr>
+        <tr scope="row" th:each="dto : ${result.dtoList}" th:if="${result.totalPage != 0}">
+          <td>[[${dto.pointNo}]]</td>
+          <td>[[${dto.totalPoint}]]</td>
+          <td>[[${dto.payCheck}]]</td>
+          <td th:text="${#temporals.format(dto.regDate, 'yyyy-MM-dd')}"></td>
+
+          <td th:if="${dto.payCheck == '결제완료'}">
+            <a href="" th:href="@{/serviceCenter/toRefund(pointNo = ${dto.pointNo})}"
+               onclick="window.open(this.href,'환불 진행중..','width=590, height=470, scrollbars=no, resizeable=no');return false;">환불신청</a>
+          </td>
+
+          <td th:if="${dto.payCheck == '환불완료'}">
+            <p>환불 완료</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <!-- 페이징 -->
+    <div class="row pagination-wrap mt-5">
+
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+
+          <div class="d-inline-block">
+            <a th:class=" 'page-item ' + ${result.page == page?'active':''} "
+               th:each="page: ${result.pageList}"
+               th:href="@{/serviceCenter/paymentHistory(page = ${page})}">
+              [[${page}]]
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    //회원탈퇴 전 confirm
+    function userDeleteCheck(){
+      return confirm("정말 회원 탈퇴하시겠습니까?");
+    }
+
+    function switchUser() {
+      return confirm("회원 유형을 변경하시겠습니까?");
+    }
+  </script>
+</section>
+
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+<script th:inline="javascript">
+  var me=[[${session.user.id}]];
+</script>
+<script th:inline="javascript" th:src="@{/Chat/notification.js}"></script>
+
+<script th:src="@{/pay/serviceCenter.js}"></script>
+
+<footer th:replace="~{/fragments/footer :: mainFooter}"></footer>
+</body>
+</html>

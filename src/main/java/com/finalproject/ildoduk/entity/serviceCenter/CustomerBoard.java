@@ -2,6 +2,7 @@ package com.finalproject.ildoduk.entity.serviceCenter;
 
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -14,8 +15,8 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "customer_board_tbl")
 @DynamicInsert
+@Table(name = "customer_board_tbl")
 public class CustomerBoard extends BaseEntity {
 
     @Id
@@ -25,15 +26,15 @@ public class CustomerBoard extends BaseEntity {
 
     private String cusTitle;
     private String cusContent;
-    private String cusWriter;
+
+    @ManyToOne
+    private Member cusWriter;
 
     @ColumnDefault("'n'")
     private String secretBoard;
 
     private String passwordBoard;
 
-    @ColumnDefault("'n'")
-    private String deleteCusBoard;
     @ColumnDefault("'n'")
     private String answerCheck;
 
@@ -44,8 +45,6 @@ public class CustomerBoard extends BaseEntity {
     public void changeContent(String cusContent){
         this.cusContent = cusContent;
     }
-
-    public void changeDelete(String deleteCusBoard){ this.deleteCusBoard = deleteCusBoard;}
 
     public void changeAnswerCheck(String answerCheck){ this.answerCheck = answerCheck;}
 }

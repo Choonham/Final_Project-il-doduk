@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.pay;
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,7 +14,6 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "payment_tbl")
 @DynamicInsert
 public class Payment extends BaseEntity {
 
@@ -22,13 +22,12 @@ public class Payment extends BaseEntity {
     @Column(name = "point_no")
     private Long pointNo;
 
-    @Column(name = "user_Id")
-    private String userId;
+    @ManyToOne
+    private Member userId;
 
     @Column(name = "total_point")
     @ColumnDefault("0")
-    private Long totalPoint;
-
+    private int totalPoint;
 
     //y -> 결제완료
     //n -> 환불완료

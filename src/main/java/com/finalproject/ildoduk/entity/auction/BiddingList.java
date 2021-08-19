@@ -24,8 +24,8 @@ public class BiddingList {
     @ManyToOne(fetch = FetchType.LAZY)
     private AuctionList aucSeq;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-     //private Member helper;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member helper;
 
     @Column(nullable = false)
     private int offerPrice;
@@ -33,7 +33,7 @@ public class BiddingList {
     @ColumnDefault(value="0")
     private int chosen;
 
-    public void changetChosen(int chosen){
+    public void changeChosen(int chosen){
         this.chosen = chosen;
     }
 

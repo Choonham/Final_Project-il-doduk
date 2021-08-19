@@ -2,33 +2,40 @@ package com.finalproject.ildoduk.controller.blog;
 
 import com.finalproject.ildoduk.dto.PageRequestDTO;
 import com.finalproject.ildoduk.dto.PageResultsDTO;
+import com.finalproject.ildoduk.dto.auction.AuctionBiddingDTO;
 import com.finalproject.ildoduk.dto.blog.*;
+import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
+import com.finalproject.ildoduk.dto.member.MemberDto;
+import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
 import com.finalproject.ildoduk.entity.blog.Blog;
 import com.finalproject.ildoduk.entity.blog.BlogComment;
-import com.finalproject.ildoduk.entity.blog.BlogLike;
+import com.finalproject.ildoduk.entity.member.HelperInfo;
+import com.finalproject.ildoduk.entity.member.Member;
+import com.finalproject.ildoduk.service.auction.service.AuctionService;
 import com.finalproject.ildoduk.service.blog.service.BlogCommentService;
 import com.finalproject.ildoduk.service.blog.service.BlogFilesService;
 import com.finalproject.ildoduk.service.blog.service.BlogLikeService;
 import com.finalproject.ildoduk.service.blog.service.BlogService;
+import com.finalproject.ildoduk.service.covid_19.CovidCheckService;
+import com.finalproject.ildoduk.service.member.service.HelperInfoService;
+import com.finalproject.ildoduk.service.member.service.MemberService;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Controller
@@ -41,20 +48,37 @@ public class BlogController {
     private final BlogCommentService blogCommentService;
     private final BlogLikeService blogLikeService;
     private final BlogFilesService blogFilesService;
+    private final AuctionService auctionService;
+    private final HelperInfoService helperInfoService;
+    private final MemberService memberService;
 
     //=================================== 메인 관련 시작===================================//
 
     // "/" 요청에 대한 처리
     @GetMapping("/")
     public String main(HttpSession session) {
-        session.setAttribute("id", "choonham");
         return "redirect:/blog/blogMain";
     }
 
     // 메인
     @GetMapping("/blogMain")
-    public void blogMain() {
-        log.info("blogMain");
+    public void blogMain(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, String sigungu, Model model) {
+
+        if(sigungu == null){
+            model.addAttribute("init", 0);
+
+        } else{
+            if(sigungu.contains("/")){
+                String[] sigunguSplit = sigungu.split("/");
+                sigungu = sigunguSplit[1];
+            }
+            model.addAttribute("init", 1);
+            PageResultsDTO<MemberHelperInfoDTO, Object[]> result = helperInfoService.getHelperInfoByLoc(sigungu, pageRequestDTO);
+            model.addAttribute("result", result);
+            model.addAttribute("sigungu", sigungu);
+            model.addAttribute("count", helperInfoService.countHelpersBySigungu(sigungu));
+        }
+
     }
 
     //====================================== 메인 관련 끝 ================================//
@@ -62,59 +86,95 @@ public class BlogController {
 
     //================================ 포스트 관련 시작======================================//
     // 글 목록(아이디별)
-    @GetMapping("/blogList")
-    public void list(@ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, String writer, HttpSession session) {
+    @RequestMapping(value = "/blogList", method = RequestMethod.GET)
+    public void list(String writer, @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO, Model model, HttpSession session) {
+        blogService.deleteTempPost("tempContent");
+
         if(writer.equals("myBlog")){
-            String sessionId = (String)session.getAttribute("id");
-            log.info("세션");
+            MemberDto memberDto = (MemberDto)session.getAttribute("user");
+            String sessionId = memberDto.getId();
             model.addAttribute("result", blogService.getList(sessionId, pageRequestDTO));
             model.addAttribute("host", sessionId);
+            model.addAttribute("nick", memberService.userIdCheck(sessionId).getNickname());
         }else {
-            log.info("안세션");
             model.addAttribute("result", blogService.getList(writer, pageRequestDTO));
             model.addAttribute("host", writer);
+            model.addAttribute("nick", memberService.userIdCheck(writer).getNickname());
         }
-        
     }
+
+    // 글 검색
+    @ResponseBody
+    @RequestMapping(value = "/blogSearch", method = RequestMethod.GET)
+    public PageResultsDTO<BlogDTO, Blog> search(@RequestParam("writer") String writer, @ModelAttribute("pageRequestDTO") PageRequestDTO pageRequestDTO) {
+        return blogService.getList(writer, pageRequestDTO);
+    }
+
 
     // 글 상세보기
     @GetMapping("/detail")
     public void detail(long postNo, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, TempPageRequestDTO tempPageDTO, Model model, HttpSession session){
         BlogDTO blogDTO = blogService.getDetail(postNo);
         PageResultsDTO<BlogCommentDTO, BlogComment> blogCommentDTO = blogCommentService.getComments(postNo, requestDTO);
-        //log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
+        // log.info(blogCommentDTO.getDtoList().get(0).getCommentNo());
         List<String> likerList= blogLikeService.getLiker(postNo);
         int likes = blogLikeService.getLikes(postNo);
+        String writer = blogDTO.getWriter().getId();
+
+        //MemberDto writerInfoMember = memberService.userIdCheck(writer);
+        HelperInfoDTO writerInfoHelper = helperInfoService.helperFindById(writer);
+        //log.info(writerInfoMember.getPhoto());
 
         model.addAttribute("likerList", likerList);
         model.addAttribute("likes", likes);
         model.addAttribute("detail", blogDTO);
         model.addAttribute("comments", blogCommentDTO);
         model.addAttribute("listPageInfo", tempPageDTO);
+
+        //model.addAttribute("writerInfoMember", writerInfoMember);
+        model.addAttribute("writerInfoHelper", writerInfoHelper);
+
     }
 
     // 글 쓰기
     @GetMapping("/basicForm")
-    public void index(Model model) {
+    public void index(Model model, HttpSession session) {
+
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
+        String sessionId = memberDto.getId();
+
+        List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+        Member member = Member.builder()
+                .id(sessionId)
+                .build();
+
+        if(!doneList.isEmpty()){
+            AuctionBiddingDTO doneJob = doneList.get(0);
+            log.info(doneJob.getHelper());
+        }
 
         BlogDTO dto = BlogDTO.builder()
                 .title("tempTitle")
                 .content("tempContent")
-                .writer("tempWriter")
+                .writer(member)
                 .build();
 
         blogService.registerPost(dto);
         Long tempPostNo = blogService.findMaxID();
         model.addAttribute("postNo", tempPostNo);
+        model.addAttribute("doneList", doneList);
+        //model.addAttribute("index", 0);
     }
 
     // 글 쓰기 완료 후, 리다이렉트 기능
     @PostMapping(value = "/post")
     public String temp(BlogDTO dto, Model model) {
+        log.info(dto.getContent());
         blogService.registerPost(dto);
-        String result = "redirect:/blog/blogList?writer="+dto.getWriter();
+        String result = "redirect:/blog/blogList?writer="+dto.getWriter().getId();
         return result;
     }
+
     //=================================== 포스트 관련 끝 ===================================//
 
 
@@ -207,22 +267,31 @@ public class BlogController {
 
     // 글 수정(기능)
     @PostMapping(value = "/modify")
-    public String modifyPost(BlogDTO dto) {
+    public String modifyPost(BlogDTO dto, HttpSession session, Model model) {
+
         blogService.registerPost(dto);
+
+        MemberDto memberDto = (MemberDto)session.getAttribute("user");
+        String sessionId = memberDto.getId();
+
+        List<AuctionBiddingDTO> doneList = auctionService.getAllWithState4ForHelper(sessionId);
+
         String result = "redirect:/blog/blogList?writer="+dto.getWriter();
+        model.addAttribute("doneList", doneList);
         return result;
     }
 
     // 글 삭제
     @GetMapping(value = "/delete")
     public String deletePost(Long postNo, String writer, TempPageRequestDTO tempPageDTO){
-        blogCommentService.deleteAllCommentOnThePost(postNo);
-        blogFilesService.deleteAllFileOnThePost(postNo);
+
         blogService.deletePost(postNo);
 
         String url = "redirect:/blog/blogList?writer=" + writer + "&page=" + tempPageDTO.getTempPage();
+
         return url;
     }
+
 
     //================================== 글 수정/삭제 관련 끝 ====================================//
 
@@ -230,9 +299,8 @@ public class BlogController {
     //================================== 댓글 관련 시작 ====================================//
 
     // 댓글 작성
-    @ResponseBody
-    @PostMapping(value = "/registerComment", produces = "application/json; charset=utf8")
-    public ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
+    @RequestMapping(method = RequestMethod.POST, value = "/registerC", produces = "application/json; charset=utf8")
+    public @ResponseBody ResponseEntity<Long> registerComment(@RequestBody BlogCommentDTO blogCommentDTO) {
         blogCommentService.registerComment(blogCommentDTO);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }

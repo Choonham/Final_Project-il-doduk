@@ -1,6 +1,7 @@
 package com.finalproject.ildoduk.entity.serviceCenter;
 
 import com.finalproject.ildoduk.entity.BaseEntity;
+import com.finalproject.ildoduk.entity.member.Member;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -20,10 +21,12 @@ public class CustomerAnswer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aNo;
 
-    private Long cusNo;
+    @OneToOne
+    private CustomerBoard cusNo;
 
-
-    private String aTitle;
+    @Column(nullable = false)
     private String aContent;
-    private String aWriter;
+
+    @ManyToOne
+    private Member aWriter;
 }
