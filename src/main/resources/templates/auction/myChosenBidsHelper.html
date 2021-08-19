@@ -243,7 +243,7 @@
                                 </div>
                                 <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
                                     <span class="icon-room"></span> [[${dto.address}]]&nbsp;
-                                    <a class="btn btn-primary" style = "z-index: 1" th:href="@{https://localhost:9991/map(address=${dto.address})}" >길찾기</a>
+                                    <span class="btn btn-primary" style = "z-index: 1" th:href="@{https://localhost:9991/map(address=${dto.address})}" >길찾기</span>
 
                                 </div>
                                 <div class="job-listing-meta w-25" style="z-index: 1">
@@ -306,7 +306,7 @@
 <script th:inline="javascript">
     /* 출력 내용 변화 */
     $(document).ready(function () {
-        //alert("제이쿼리 먹히고 있는걸까?");
+
         var allDone = [[${allDone}]]
 
         if (allDone === true) {

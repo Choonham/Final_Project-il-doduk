@@ -229,7 +229,7 @@
                             <li><a th:href = "@{/member/userModify}" class="active">개인정보수정</a></li>
                             <li><a th:href="@{/member/helperRegister}" th:if="${session.user.userCheck == 0}" >헬퍼신청</a></li>
                             <li><a th:href = "@{/serviceCenter/changeState}" th:if="${session.user.userCheck == 1}" onclick="return switchUser()">헬퍼전환</a></li>
-                            <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">조회</a></li>
+                            <li><a th:href="@{/serviceCenter/paymentHistory(member = ${session.user.id})}">결재 내역</a></li>
                             <li><a th:href= "@{/member/userDelete(id=${session.user.id})}" onclick="return userDeleteCheck()">회원탈퇴</a></li>
                         </ul>
                     </div>
@@ -279,7 +279,7 @@
                             </div>
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="phone">phone</label>
-                                <input type="tel" name="phone" id="phone" class="form-control" placeholder="01x-0000-0000" > <br />
+                                <input type="tel" name="phone" id="phone" class="form-control" placeholder="01x00000000" > <br />
                             </div>
                             <div class="col-md-12 mb-3 mb-md-0">
                                 <label class="text-black" for="intro">intro</label>

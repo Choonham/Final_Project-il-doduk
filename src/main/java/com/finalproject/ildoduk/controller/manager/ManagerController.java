@@ -65,7 +65,8 @@ public class ManagerController {
     @GetMapping("/deny")
     public String denyHelper(HelperInfoDTO helperInfoDTO){
         //반려시에 agreeHelper = 3으로 변경
-        helperInfoService.deny(helperInfoDTO);
+        //3이 아닌.. 그냥 delete
+        //helperInfoService.deny(helperInfoDTO);
         return "redirect:/manager/helperManagement";
     }
 

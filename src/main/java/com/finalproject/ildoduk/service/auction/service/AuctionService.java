@@ -181,3 +181,4 @@ public interface AuctionService {
         return biddingListDTO;
     }
 }
+

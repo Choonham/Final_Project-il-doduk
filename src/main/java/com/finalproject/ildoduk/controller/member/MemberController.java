@@ -4,6 +4,7 @@ import com.finalproject.ildoduk.dto.member.HelperInfoDTO;
 import com.finalproject.ildoduk.dto.member.MemberDto;
 
 import com.finalproject.ildoduk.dto.member.MemberHelperInfoDTO;
+import com.finalproject.ildoduk.entity.member.Member;
 import com.finalproject.ildoduk.service.member.service.HelperInfoService;
 import com.finalproject.ildoduk.service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -186,7 +187,7 @@ public class MemberController {
 
     @GetMapping("/index")
     public String userRegitoTheIndex(Model model){
-        model.addAttribute("msg", "일도둑의 회원이 되신것을 축하합니다~");
+        model.addAttribute("msg", "Hermes의 회원이 되신것을 축하합니다~");
         System.out.println("userRegitoTheIndex 확인");
         return "/index";
     }
@@ -241,12 +242,11 @@ public class MemberController {
         MemberDto dto1 = service.userIdCheck(dto.getId());//db에서 꺼낸 아이디에 대한 모든값
         HttpSession session = request.getSession();
 
-
         if (dto1!=null && dto1.getState() != 3) {
             session.setAttribute("user", dto1);
             return "/index";
         }
-        else if(dto1.getState() == 3){
+        else if(dto1!=null && dto1.getState() == 3){
             model.addAttribute("회원 탈퇴된 계정입니다");
 
             return "/member/stateToIndex";
@@ -336,7 +336,7 @@ public class MemberController {
     @GetMapping(value="/helperBizCard")
     public void helperSearch(@RequestParam("memberId")String memberId, Model model){
         log.info("helperSearch에 넘어온 아이디 확인" + memberId );
-
+        //Member member = Member.builder().id(memberId).build();
         MemberHelperInfoDTO helperInfoDTO = helperInfoService.helperFindById2(memberId);
         log.info("helperBizCard :::: helperInfoDTO :::: " + helperInfoDTO);
 

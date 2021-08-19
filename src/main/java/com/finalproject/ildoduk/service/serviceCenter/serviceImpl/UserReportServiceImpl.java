@@ -33,8 +33,6 @@ public class UserReportServiceImpl implements UserReportService {
     }
 
 
-
-
     //신고글 리스트
     @Override
     public PageResultsDTO<UserReportDTO, UserReport> getReportList(UserReportDTO userReportDTO,PageRequestDTO pageRequestDTO) {
